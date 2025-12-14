@@ -1,0 +1,312 @@
+
+> omgsystems-website@0.1.0 prebuild
+> npm run chatbot:build:enhanced
+
+
+> omgsystems-website@0.1.0 chatbot:build:enhanced
+> node scripts/enhancedKnowledgeBuilder.js
+
+🚀 Starting enhanced knowledge base build...
+🚀 Building enhanced knowledge base...
+🔍 Loading all public content...
+📊 Loaded 24 documents:
+  - Static content: 3
+  - Industry pages: 6
+  - App pages: 3
+  - Automations: 5
+  - Blog posts: 3
+  - Case studies: 1
+  - Micro snippets: 3
+✅ Enhanced knowledge base built successfully!
+📊 Processed 24 documents into 24 chunks
+💾 Saved to: /Users/prince/Documents/Omgsystems-Main/omgsystems-website/data/enhanced-chatbot-index.json
+✅ Enhanced knowledge base build completed successfully!
+
+> omgsystems-website@0.1.0 build
+> next build
+
+   ▲ Next.js 16.0.7 (Turbopack)
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 12.4s
+   Skipping validation of types
+   Collecting page data using 9 workers ...
+ ⚠ Using edge runtime on a page currently disables static generation for that page
+   Generating static pages using 9 workers (0/213) ...
+   Generating static pages using 9 workers (53/213) 
+   Generating static pages using 9 workers (106/213) 
+   Generating static pages using 9 workers (159/213) 
+ ✓ Generating static pages using 9 workers (213/213) in 2.5s
+   Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /403
+├ ○ /about
+├ ƒ /admin
+├ ƒ /admin/audit
+├ ƒ /admin/beta
+├ ƒ /admin/content-calendar
+├ ƒ /admin/dashboard
+├ ƒ /admin/demos
+├ ƒ /admin/demos.csv
+├ ƒ /admin/demos/[id]
+├ ƒ /admin/demos/[id]/convert
+├ ƒ /admin/documents
+├ ƒ /admin/email-sequences
+├ ƒ /admin/feature-flags
+├ ƒ /admin/feedback
+├ ƒ /admin/flags
+├ ƒ /admin/governance
+├ ƒ /admin/invoices
+├ ƒ /admin/launch
+├ ƒ /admin/measurement
+├ ƒ /admin/orders
+├ ƒ /admin/orgs
+├ ƒ /admin/orgs/[slug]
+├ ƒ /admin/people
+├ ƒ /admin/projects
+├ ƒ /admin/projects/[id]
+├ ƒ /admin/retargeting
+├ ƒ /admin/settings
+├ ƒ /admin/subscriptions
+├ ƒ /admin/tickets
+├ ƒ /admin/tickets/[id]
+├ ƒ /admin/usage
+├ ○ /ads
+├ ○ /analytics-demo
+├ ƒ /api/admin/activity
+├ ƒ /api/admin/audit
+├ ƒ /api/admin/convert-demo-to-org
+├ ƒ /api/admin/feature-flags
+├ ƒ /api/admin/feedback
+├ ƒ /api/admin/launch-plans
+├ ƒ /api/admin/metrics
+├ ƒ /api/admin/notifications
+├ ƒ /api/admin/organizations
+├ ƒ /api/admin/search
+├ ƒ /api/admin/subscriptions
+├ ƒ /api/admin/tickets
+├ ƒ /api/ai-agents/quote-request
+├ ƒ /api/analytics
+├ ƒ /api/auth/[...nextauth]
+├ ƒ /api/auth/switch-org
+├ ƒ /api/automation-order
+├ ƒ /api/beta-users
+├ ƒ /api/chatbot
+├ ƒ /api/chatbot/enhanced
+├ ƒ /api/chatbot/escalate
+├ ƒ /api/community/signup
+├ ƒ /api/contact
+├ ƒ /api/contact-sales
+├ ƒ /api/contact-sales/accounting
+├ ƒ /api/contact-sales/cleaning
+├ ƒ /api/contact-sales/contractors
+├ ƒ /api/contact-sales/healthcare
+├ ƒ /api/contact-sales/property-management
+├ ƒ /api/contact-sales/real-estate
+├ ƒ /api/csp-report
+├ ƒ /api/custom-apps/spec-submit
+├ ƒ /api/custom-apps/submit
+├ ƒ /api/dashboard/automations
+├ ƒ /api/dashboard/overview
+├ ƒ /api/dashboard/settings/billing
+├ ƒ /api/dashboard/settings/notifications
+├ ƒ /api/dashboard/settings/profile
+├ ƒ /api/dashboard/support
+├ ƒ /api/dashboard/usage
+├ ƒ /api/dashboard/workflows
+├ ƒ /api/demo-request
+├ ƒ /api/demo/crm
+├ ƒ /api/demo/svd
+├ ƒ /api/documents
+├ ƒ /api/feedback
+├ ƒ /api/health
+├ ƒ /api/invoices
+├ ƒ /api/lead-capture
+├ ƒ /api/leadflow-strategy
+├ ƒ /api/leads
+├ ƒ /api/order-automation
+├ ƒ /api/portal/notifications
+├ ƒ /api/projects
+├ ƒ /api/request-analytics-report
+├ ƒ /api/submit-workflow
+├ ƒ /api/test-db
+├ ƒ /api/workflow-checkout
+├ ƒ /api/workflow-order
+├ ○ /apps
+├ ● /apps/[id]
+│ ├ /apps/securevault-docs
+│ ├ /apps/crm
+│ ├ /apps/omg-leads
+│ └ [+2 more paths]
+├ ○ /apps/content-engine
+├ ○ /apps/crm-demo
+├ ○ /apps/demo
+├ ○ /apps/demo/crm
+├ ○ /apps/demo/securevault-docs
+├ ○ /apps/demo/securevault-docs/accounting
+├ ○ /apps/demo/securevault-docs/contractors
+├ ○ /apps/demo/securevault-docs/healthcare
+├ ○ /apps/demo/securevault-docs/property-management
+├ ○ /apps/industry-iq
+├ ○ /apps/leadflow
+├ ○ /apps/leadflow-engine
+├ ○ /apps/omg-iq
+├ ○ /apps/omg-iq/sample
+├ ○ /apps/securevault
+├ ○ /apps/securevault-docs/demo
+├ ○ /automation
+├ ○ /automation/custom
+├ ○ /automation/smart-automations
+├ ƒ /automation/smart-automations/[id]
+├ ○ /automation/smart-automations/checkout
+├ ○ /automation/smart-automations/success
+├ ○ /automation/workflow-builder
+├ ○ /automation/workflow-builder/checkout
+├ ○ /automation/workflow-builder/success
+├ ○ /automations
+├ ○ /blog
+├ ƒ /blog/[slug]
+├ ƒ /campaign/[slug]
+├ ○ /campaign/leadflow
+├ ○ /campaign/leadflow-v2
+├ ○ /campaign/property-automation
+├ ○ /careers
+├ ○ /case-snapshots
+├ ƒ /case-snapshots/[slug]
+├ ○ /case-studies
+├ ○ /community
+├ ○ /community/join
+├ ○ /contact
+├ ○ /contact-sales
+├ ○ /contact-sales/accounting
+├ ○ /contact-sales/cleaning
+├ ○ /contact-sales/contractors
+├ ○ /contact-sales/healthcare
+├ ○ /contact-sales/property-management
+├ ○ /contact-sales/real-estate
+├ ○ /contact-sales/success
+├ ○ /custom-apps
+├ ● /custom-apps/[slug]
+│ ├ /custom-apps/property-inventory-tracker
+│ ├ /custom-apps/tenant-payment-portal
+│ ├ /custom-apps/contractor-work-order-app
+│ └ [+6 more paths]
+├ ○ /custom-apps/builder
+├ ○ /custom-apps/thank-you
+├ ƒ /dashboard
+├ ƒ /dashboard/admin
+├ ƒ /dashboard/admin/mfa-setup
+├ ƒ /dashboard/admin/orders
+├ ƒ /dashboard/admin/organizations
+├ ƒ /dashboard/admin/settings
+├ ƒ /dashboard/admin/usage-events
+├ ƒ /dashboard/client
+├ ƒ /dashboard/client/account
+├ ƒ /dashboard/client/automations
+├ ƒ /dashboard/client/billing
+├ ƒ /dashboard/client/support
+├ ƒ /dashboard/client/usage
+├ ƒ /dashboard/invoices
+├ ƒ /dashboard/projects
+├ ƒ /dashboard/settings
+├ ƒ /dashboard/support
+├ ƒ /dashboard/usage
+├ ƒ /dashboard/workflows
+├ ○ /demos
+├ ○ /demos/crm
+├ ○ /demos/live
+├ ○ /demos/securevault
+├ ○ /implementation
+├ ○ /industries
+├ ● /industries/[slug]
+│ ├ /industries/real-estate
+│ ├ /industries/property-management
+│ ├ /industries/contractors
+│ └ /industries/accounting
+├ ○ /industries/accounting
+├ ○ /industries/cleaning
+├ ○ /industries/contractors
+├ ○ /industries/healthcare
+├ ○ /industries/property-management
+├ ○ /industries/real-estate
+├ ○ /leadflow-strategy
+├ ○ /legal/cookies
+├ ○ /legal/privacy
+├ ○ /login
+├ ○ /offers
+├ ƒ /offers/[slug]
+├ ƒ /og/[slug]
+├ ƒ /portal
+├ ƒ /portal/billing
+├ ƒ /portal/documents
+├ ƒ /portal/onboarding
+├ ƒ /portal/onboarding/[id]
+├ ƒ /portal/profile
+├ ○ /portal/select-org
+├ ƒ /portal/support
+├ ƒ /portal/support/[id]
+├ ○ /press
+├ ○ /resources
+├ ○ /resources/property-management-automation
+├ ○ /robots.txt
+├ ○ /roi
+├ ○ /roi/accounting
+├ ○ /roi/cleaning
+├ ○ /roi/contractors
+├ ○ /roi/healthcare
+├ ○ /roi/property-management
+├ ○ /roi/real-estate
+├ ○ /security-overview
+├ ○ /signup
+├ ○ /sitemap.xml
+├ ○ /smart-automations
+├ ○ /solutions
+├ ƒ /solutions/[slug]
+├ ○ /solutions/ai-agents
+├ ○ /solutions/content-engine
+├ ○ /solutions/custom-apps
+├ ○ /solutions/custom-apps/build
+├ ○ /solutions/custom-apps/request
+├ ƒ /solutions/custom-apps/template/[id]
+├ ○ /solutions/timeguard-ai
+├ ○ /status
+├ ○ /thank-you
+├ ○ /trust
+├ ○ /try-live-demo
+├ ○ /unauthorized
+└ ƒ /workflow-builder
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+
+
+> omgsystems-website@0.1.0 postbuild
+> npm run chatbot:build:enhanced
+
+
+> omgsystems-website@0.1.0 chatbot:build:enhanced
+> node scripts/enhancedKnowledgeBuilder.js
+
+🚀 Starting enhanced knowledge base build...
+🚀 Building enhanced knowledge base...
+🔍 Loading all public content...
+📊 Loaded 24 documents:
+  - Static content: 3
+  - Industry pages: 6
+  - App pages: 3
+  - Automations: 5
+  - Blog posts: 3
+  - Case studies: 1
+  - Micro snippets: 3
+✅ Enhanced knowledge base built successfully!
+📊 Processed 24 documents into 24 chunks
+💾 Saved to: /Users/prince/Documents/Omgsystems-Main/omgsystems-website/data/enhanced-chatbot-index.json
+✅ Enhanced knowledge base build completed successfully!

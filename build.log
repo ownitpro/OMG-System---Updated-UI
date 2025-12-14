@@ -1,0 +1,65 @@
+
+> omgsystems-website@0.1.0 build
+> next build
+
+ ⚠ The config property `experimental.turbo` is deprecated. Move this setting to `config.turbopack` or run `npx @next/codemod@latest next-experimental-turbo-to-turbopack .`
+ ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /Users/prince/Documents/Omgsystems-Website/package-lock.json as the root directory.
+ To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
+ Detected additional lockfiles: 
+   * /Users/prince/Documents/Omgsystems-Website/omgsystems-website/package-lock.json
+
+   ▲ Next.js 15.5.4
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./src/components/ai-chat/quick-replies.tsx
+Error:   [31mx[0m The "use client" directive must be placed before other expressions. Move it to the top of the file to resolve this issue.
+   ,-[[36;1;4m/Users/prince/Documents/Omgsystems-Website/omgsystems-website/src/components/ai-chat/quick-replies.tsx[0m:2:1]
+ [2m1[0m | import React from "react";
+ [2m2[0m | "use client";
+   : [35;1m^^^^^^^^^^^^^[0m
+ [2m3[0m | 
+ [2m4[0m | import { ChatContext } from "./chat-brain";
+   `----
+
+Import trace for requested module:
+./src/components/ai-chat/quick-replies.tsx
+./src/components/ai-chat/chat-window.tsx
+./src/components/ai-chat/chat-launcher.tsx
+
+./src/components/exit-intent/industry-exit-intent.tsx
+Error:   [31mx[0m The "use client" directive must be placed before other expressions. Move it to the top of the file to resolve this issue.
+   ,-[[36;1;4m/Users/prince/Documents/Omgsystems-Website/omgsystems-website/src/components/exit-intent/industry-exit-intent.tsx[0m:2:1]
+ [2m1[0m | import React from "react";
+ [2m2[0m | "use client";
+   : [35;1m^^^^^^^^^^^^^[0m
+ [2m3[0m | 
+ [2m4[0m | import { usePathname } from "next/navigation";
+ [2m5[0m | import { ExitIntentModal } from "./exit-intent-modal";
+   `----
+  [31mx[0m You're importing a component that needs `usePathname`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+  [31m|[0m
+  [31m|[0m  Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+  [31m|[0m
+
+   ,-[[36;1;4m/Users/prince/Documents/Omgsystems-Website/omgsystems-website/src/components/exit-intent/industry-exit-intent.tsx[0m:4:1]
+ [2m1[0m | import React from "react";
+ [2m2[0m | "use client";
+ [2m3[0m | 
+ [2m4[0m | import { usePathname } from "next/navigation";
+   : [35;1m         ^^^^^^^^^^^[0m
+ [2m5[0m | import { ExitIntentModal } from "./exit-intent-modal";
+ [2m6[0m | 
+ [2m7[0m | const industryMap: Record<string, string> = {
+   `----
+
+Import trace for requested module:
+./src/components/exit-intent/industry-exit-intent.tsx
+./src/app/layout.tsx
+
+
+> Build failed because of webpack errors

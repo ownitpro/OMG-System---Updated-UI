@@ -1,0 +1,72 @@
+{
+  "timestamp": "2025-10-13T22:56:38.772Z",
+  "testSuite": "ROI Toolkit & Conversion Lift Bundle QA",
+  "results": {
+    "ROI Calculator Routes": {
+      "passed": true,
+      "message": "All 7 ROI calculator routes exist"
+    },
+    "ROI Calculator Components": {
+      "passed": true,
+      "message": "All ROI calculator components exist"
+    },
+    "ROI Content Data Files": {
+      "passed": true,
+      "message": "All 6 ROI content data files exist"
+    },
+    "Campaign Landing 2.0": {
+      "passed": true,
+      "message": "Campaign Landing 2.0 has all required elements"
+    },
+    "A/B Testing Components": {
+      "passed": true,
+      "message": "A/B testing components exist"
+    },
+    "Exit Intent Components": {
+      "passed": true,
+      "message": "Exit intent components exist"
+    },
+    "Navigation A/B Testing Integration": {
+      "passed": true,
+      "message": "Navigation has A/B testing integration"
+    },
+    "Layout Integration": {
+      "passed": true,
+      "message": "Layout has all required integrations"
+    },
+    "OG Images": {
+      "passed": true,
+      "message": "All OG images exist"
+    },
+    "Lead Capture API": {
+      "passed": true,
+      "message": "Lead capture API has all required features"
+    },
+    "Analytics Integration": {
+      "passed": true,
+      "message": "All components have consent-aware analytics"
+    },
+    "SEO and Metadata": {
+      "passed": true,
+      "message": "All pages have proper SEO metadata"
+    },
+    "Accessibility Features": {
+      "passed": true,
+      "message": "Components have accessibility features"
+    },
+    "Performance Considerations": {
+      "passed": true,
+      "message": "Components have performance optimizations"
+    },
+    "Error Handling": {
+      "passed": true,
+      "message": "Components have proper error handling"
+    }
+  },
+  "summary": {
+    "total": 15,
+    "passed": 15,
+    "failed": 0,
+    "warnings": 0
+  }
+}

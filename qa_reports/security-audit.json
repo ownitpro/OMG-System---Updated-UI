@@ -1,0 +1,129 @@
+{
+  "timestamp": "2025-10-14T04:12:05.421Z",
+  "duration": "68ms",
+  "summary": {
+    "total": 28,
+    "issues": 3,
+    "warnings": 1,
+    "passed": 24,
+    "score": 86
+  },
+  "issues": [
+    {
+      "message": "Missing required environment variable: NEXTAUTH_SECRET",
+      "details": null
+    },
+    {
+      "message": "Missing required environment variable: NEXTAUTH_URL",
+      "details": null
+    },
+    {
+      "message": "Missing required environment variable: DATABASE_URL",
+      "details": null
+    }
+  ],
+  "warnings": [
+    {
+      "message": "Secure session configuration may be missing",
+      "details": null
+    }
+  ],
+  "passed": [
+    {
+      "message": "Security headers configuration file exists",
+      "details": null
+    },
+    {
+      "message": "Security header configured: Strict-Transport-Security",
+      "details": null
+    },
+    {
+      "message": "Security header configured: X-Content-Type-Options",
+      "details": null
+    },
+    {
+      "message": "Security header configured: X-Frame-Options",
+      "details": null
+    },
+    {
+      "message": "Security header configured: X-XSS-Protection",
+      "details": null
+    },
+    {
+      "message": "Security header configured: Referrer-Policy",
+      "details": null
+    },
+    {
+      "message": "Security header configured: Content-Security-Policy",
+      "details": null
+    },
+    {
+      "message": "CSP configuration found in middleware",
+      "details": null
+    },
+    {
+      "message": "CSP violation reporting endpoint exists",
+      "details": null
+    },
+    {
+      "message": "Rate limiting configuration found",
+      "details": null
+    },
+    {
+      "message": "Rate limiting implementation found",
+      "details": null
+    },
+    {
+      "message": "Authentication configuration file exists",
+      "details": null
+    },
+    {
+      "message": "JWT configuration found",
+      "details": null
+    },
+    {
+      "message": "PII redaction function found",
+      "details": null
+    },
+    {
+      "message": "IP address redaction function found",
+      "details": null
+    },
+    {
+      "message": "Privacy policy page exists",
+      "details": null
+    },
+    {
+      "message": "Cookie policy page exists",
+      "details": null
+    },
+    {
+      "message": "Trust & Security page exists",
+      "details": null
+    },
+    {
+      "message": "Consent management component exists",
+      "details": null
+    },
+    {
+      "message": "Consent state management found",
+      "details": null
+    },
+    {
+      "message": "Google Analytics consent integration found",
+      "details": null
+    },
+    {
+      "message": "Health endpoint exists",
+      "details": null
+    },
+    {
+      "message": "Environment validation in health endpoint",
+      "details": null
+    },
+    {
+      "message": "PII redaction in health endpoint",
+      "details": null
+    }
+  ]
+}

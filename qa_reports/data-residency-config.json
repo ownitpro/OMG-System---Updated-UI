@@ -1,0 +1,12 @@
+{
+  "region": "ca-central-1",
+  "compliance": {
+    "PHIPA": "Ontario Personal Health Information Protection Act",
+    "PIPEDA": "Personal Information Protection and Electronic Documents Act"
+  },
+  "dataHandling": {
+    "storage": "Canadian data centers only",
+    "processing": "Within Canada borders",
+    "transfer": "No cross-border data transfer"
+  }
+}

@@ -1,0 +1,1 @@
+Mobile view of Case Snapshots listing: stacked hero, filter pills, snapshot cards, stats banner, CTA.

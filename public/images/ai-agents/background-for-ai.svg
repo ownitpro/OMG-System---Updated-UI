@@ -1,0 +1,40 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Deep blue gradient background -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1e40af;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="lightGradient" cx="50%" cy="20%" r="60%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.8" />
+      <stop offset="70%" style="stop-color:#3b82f6;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#1e40af;stop-opacity:0.3" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="800" fill="url(#bgGradient)"/>
+  
+  <!-- Light source from top -->
+  <rect width="1200" height="400" fill="url(#lightGradient)"/>
+  
+  <!-- Robotic hand (silhouette) -->
+  <g transform="translate(600, 500)">
+    <!-- Hand base -->
+    <rect x="-15" y="0" width="30" height="60" fill="#9ca3af" rx="15"/>
+    <!-- Fingers -->
+    <rect x="-20" y="10" width="8" height="40" fill="#9ca3af" rx="4"/>
+    <rect x="-10" y="5" width="8" height="45" fill="#9ca3af" rx="4"/>
+    <rect x="2" y="5" width="8" height="45" fill="#9ca3af" rx="4"/>
+    <rect x="12" y="10" width="8" height="40" fill="#9ca3af" rx="4"/>
+  </g>
+  
+  <!-- Floating particles -->
+  <circle cx="200" cy="150" r="3" fill="#60a5fa" opacity="0.6"/>
+  <circle cx="800" cy="200" r="2" fill="#3b82f6" opacity="0.7"/>
+  <circle cx="1000" cy="300" r="4" fill="#1d4ed8" opacity="0.5"/>
+  <circle cx="150" cy="400" r="2" fill="#60a5fa" opacity="0.6"/>
+  <circle cx="900" cy="500" r="3" fill="#3b82f6" opacity="0.7"/>
+  <circle cx="300" cy="600" r="2" fill="#1d4ed8" opacity="0.5"/>
+</svg>

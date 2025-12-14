@@ -1,0 +1,15 @@
+{
+  "jwt": {
+    "expiration": "24h",
+    "refreshToken": "7d",
+    "secure": true,
+    "httpOnly": true,
+    "sameSite": "strict"
+  },
+  "session": {
+    "maxAge": 86400,
+    "secure": true,
+    "httpOnly": true,
+    "sameSite": "strict"
+  }
+}

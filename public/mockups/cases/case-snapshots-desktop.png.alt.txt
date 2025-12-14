@@ -1,0 +1,1 @@
+Desktop mockup of Case Snapshots page: hero + filters + grid of snapshot cards + dashboard stat banner + CTA section in accent style.

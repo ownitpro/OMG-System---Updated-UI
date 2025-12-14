@@ -1,0 +1,1 @@
+Desktop mockup of single case detail page: hero image, title, content, metric call-out, CTA.

@@ -1,0 +1,1 @@
+Desktop mockup of Blog homepage with hero banner, search bar, category filters, article cards grid, tag cloud, and bottom CTA in accent style.

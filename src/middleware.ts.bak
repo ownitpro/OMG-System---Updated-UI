@@ -1,0 +1,217 @@
+import { withAuth } from "next-auth/middleware";
+import { NextResponse } from "next/server";
+import { Role } from "./generated/prisma";
+import { 
+  applySecurityHeaders, 
+  logSecurityEvent, 
+  rateLimitConfig,
+  apiRateLimitConfig,
+  formRateLimitConfig,
+  redactIP,
+  redactPII,
+  generateNonce,
+  generateCSP
+} from "./lib/security";
+
+// Rate limiting store (in production, use Redis)
+const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
+
+function checkRateLimit(ip: string, config: typeof rateLimitConfig): boolean {
+  const now = Date.now();
+  const key = `${ip}:${config.windowMs}`;
+  const current = rateLimitStore.get(key);
+  
+  if (!current || now > current.resetTime) {
+    rateLimitStore.set(key, { count: 1, resetTime: now + config.windowMs });
+    return true;
+  }
+  
+  if (current.count >= config.max) {
+    return false;
+  }
+  
+  current.count++;
+  return true;
+}
+
+export default withAuth(
+  function middleware(req) {
+    const token = req.nextauth.token;
+    const pathname = req.nextUrl.pathname;
+    const ip = req.ip || req.headers.get('x-forwarded-for') || 'unknown';
+    
+    // Generate nonce for CSP
+    const nonce = generateNonce();
+    
+    // Apply security headers to all responses
+    const response = NextResponse.next();
+    applySecurityHeaders(req, response);
+    
+    // Set CSP header with nonce
+    const isReportOnly = process.env.CSP_REPORT_ONLY === 'true';
+    const csp = generateCSP(nonce, isReportOnly);
+    response.headers.set(
+      isReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
+      csp
+    );
+    response.headers.set('X-Nonce', nonce);
+    
+    // Rate limiting
+    if (pathname.startsWith('/api/')) {
+      // API rate limiting
+      if (!checkRateLimit(ip, apiRateLimitConfig)) {
+        logSecurityEvent('RATE_LIMIT_EXCEEDED', {
+          path: pathname,
+          ip: redactIP(ip),
+          limit: apiRateLimitConfig.max,
+          window: apiRateLimitConfig.windowMs
+        }, req);
+        
+        return new NextResponse('Rate limit exceeded', { status: 429 });
+      }
+    } else if (pathname.includes('/contact') || pathname.includes('/demo') || pathname.includes('/signup')) {
+      // Form submission rate limiting
+      if (!checkRateLimit(ip, formRateLimitConfig)) {
+        logSecurityEvent('FORM_RATE_LIMIT_EXCEEDED', {
+          path: pathname,
+          ip: redactIP(ip),
+          limit: formRateLimitConfig.max,
+          window: formRateLimitConfig.windowMs
+        }, req);
+        
+        return new NextResponse('Too many form submissions', { status: 429 });
+      }
+    } else {
+      // General rate limiting
+      if (!checkRateLimit(ip, rateLimitConfig)) {
+        logSecurityEvent('GENERAL_RATE_LIMIT_EXCEEDED', {
+          path: pathname,
+          ip: redactIP(ip),
+          limit: rateLimitConfig.max,
+          window: rateLimitConfig.windowMs
+        }, req);
+        
+        return new NextResponse('Rate limit exceeded', { status: 429 });
+      }
+    }
+    
+    // Admin routes protection
+    if (pathname.startsWith('/admin')) {
+      if (!token) {
+        return NextResponse.redirect(new URL('/login', req.url));
+      }
+      
+      const userRole = token.role as Role;
+      if (userRole !== Role.ADMIN && userRole !== Role.STAFF) {
+        logSecurityEvent('UNAUTHORIZED_ADMIN_ACCESS', {
+          path: pathname,
+          userId: token.id,
+          role: userRole,
+          ip: redactIP(ip)
+        }, req);
+        
+        return NextResponse.redirect(new URL('/403', req.url));
+      }
+    }
+    
+    // Portal routes protection
+    if (pathname.startsWith('/portal')) {
+      if (!token) {
+        return NextResponse.redirect(new URL('/login', req.url));
+      }
+      
+      const userRole = token.role as Role;
+      if (userRole === Role.ADMIN) {
+        // Admins can access portal for impersonation
+        return response;
+      }
+      
+      if (userRole !== Role.USER && userRole !== Role.STAFF) {
+        logSecurityEvent('UNAUTHORIZED_PORTAL_ACCESS', {
+          path: pathname,
+          userId: token.id,
+          role: userRole,
+          ip: redactIP(ip)
+        }, req);
+        
+        return NextResponse.redirect(new URL('/403', req.url));
+      }
+    }
+    
+    // Dashboard routes protection
+    if (pathname.startsWith('/dashboard')) {
+      if (!token) {
+        return NextResponse.redirect(new URL('/login', req.url));
+      }
+    }
+    
+    // Security logging for sensitive operations
+    if (pathname.includes('/api/auth/') || pathname.includes('/api/leads') || pathname.includes('/api/demo')) {
+      logSecurityEvent('SENSITIVE_API_ACCESS', {
+        path: pathname,
+        method: req.method,
+        userId: token?.id || 'anonymous',
+        ip: redactIP(ip)
+      }, req);
+    }
+    
+    return response;
+  },
+  {
+    callbacks: {
+      authorized: ({ token, req }) => {
+        const pathname = req.nextUrl.pathname;
+        
+        // Public routes that don't require authentication
+        const publicRoutes = [
+          '/',
+          '/about',
+          '/contact',
+          '/login',
+          '/signup',
+          '/industries',
+          '/apps',
+          '/campaign',
+          '/roi',
+          '/trust',
+          '/legal',
+          '/blog',
+          '/case-snapshots',
+          '/api/health',
+          '/api/contact',
+          '/api/leads',
+          '/api/demo',
+          '/_next',
+          '/favicon.ico',
+          '/robots.txt',
+          '/sitemap.xml'
+        ];
+        
+        // Check if route is public
+        const isPublicRoute = publicRoutes.some(route => 
+          pathname === route || pathname.startsWith(route + '/')
+        );
+        
+        if (isPublicRoute) {
+          return true;
+        }
+        
+        // Protected routes require authentication
+        return !!token;
+      },
+    },
+  }
+);
+
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder
+     */
+    '/((?!_next/static|_next/image|favicon.ico|public/).*)',
+  ],
+};

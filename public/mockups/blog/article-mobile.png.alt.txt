@@ -1,0 +1,1 @@
+Mobile mockup of blog post: image, title, content, tags, CTA.

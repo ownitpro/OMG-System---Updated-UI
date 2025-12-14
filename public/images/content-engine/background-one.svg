@@ -1,0 +1,20 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Light blue background -->
+  <rect width="1200" height="800" fill="#E6F3FF"/>
+  
+  <!-- Lower platform (right side) -->
+  <rect x="400" y="500" width="300" height="40" fill="white" rx="8"/>
+  
+  <!-- Upper platform (left side) -->
+  <rect x="200" y="450" width="250" height="40" fill="white" rx="8"/>
+  
+  <!-- Large white sphere on upper platform -->
+  <circle cx="300" cy="430" r="25" fill="white"/>
+  
+  <!-- Small white sphere on lower platform -->
+  <circle cx="500" cy="480" r="15" fill="white"/>
+  
+  <!-- Subtle shadows -->
+  <ellipse cx="300" cy="460" rx="20" ry="8" fill="#D1D5DB" opacity="0.3"/>
+  <ellipse cx="500" cy="500" rx="12" ry="5" fill="#D1D5DB" opacity="0.3"/>
+</svg>

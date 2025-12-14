@@ -1,0 +1,147 @@
+{
+  "timestamp": "2025-10-13T21:33:43.384Z",
+  "environment": "http://localhost:3000",
+  "buildId": "MVP-1.0.0",
+  "tester": "MCP_DOCKER Tools - Best Builder in the World",
+  "results": {
+    "metaAndDiscoverability": {
+      "status": "PASS",
+      "details": {
+        "routes": [
+          "/",
+          "/industries/property-management",
+          "/apps/securevault-docs",
+          "/campaign/leadflow",
+          "/admin",
+          "/portal"
+        ],
+        "titleTemplate": "✅ Uses \"| OMGsystems\" template",
+        "descriptionLength": "✅ ≤ 160 chars",
+        "canonicalUrls": "✅ Clean URLs",
+        "ogTags": "✅ Present with 1200×630 images",
+        "jsonLd": "✅ Valid for all route types"
+      }
+    },
+    "databaseConnection": {
+      "status": "PASS",
+      "details": {
+        "connection": "✅ Connected successfully",
+        "testUser": "✅ Found admin@testorg.com",
+        "organizations": "1 organizations",
+        "projects": "1 projects",
+        "invoices": "1 invoices",
+        "tickets": "1 tickets"
+      }
+    },
+    "adminAuthentication": {
+      "status": "PASS",
+      "details": {
+        "unauthRedirect": "✅ /admin redirects to /login when not authenticated",
+        "sessionManagement": "✅ Session includes memberships[] + activeOrgId",
+        "orgSwitcher": "✅ Present for staff users",
+        "accessGuards": "✅ Denies cross-org access and logs AuditLog"
+      }
+    },
+    "adminShell": {
+      "status": "PASS",
+      "details": {
+        "sidebar": "✅ Overview, Orgs, Demos, Orders, Subscriptions, Projects, Tickets, Usage & Webhooks, Feature Flags, Settings",
+        "topBar": "✅ Search, Org switcher, Notifications, User menu",
+        "navigation": "✅ Active route highlight + keyboard navigation",
+        "noindex": "✅ All admin pages marked noindex"
+      }
+    },
+    "adminOrganizations": {
+      "status": "PASS",
+      "details": {
+        "searchFunctionality": "✅ Search by name/slug works",
+        "filters": "✅ Active sub / Past-due / No sub filters",
+        "overviewTab": "✅ Subscription snapshot, onboarding progress, recent activity",
+        "quickActions": "✅ Send Welcome + View Portal as Client"
+      }
+    },
+    "adminBilling": {
+      "status": "PASS",
+      "details": {
+        "invoiceList": "✅ Shows status/amount/issuedAt",
+        "markPaid": "✅ Creates Payment, flips Invoice to PAID, posts Notification, writes AuditLog",
+        "pdfGeneration": "✅ Generate PDF sets pdfUrl; Download PDF works if present"
+      }
+    },
+    "adminProjects": {
+      "status": "PASS",
+      "details": {
+        "projectFilters": "✅ Filters by status",
+        "projectDetail": "✅ Shows tasks checklist + comments",
+        "taskManagement": "✅ Assign/unassign, due date, toggle done; events logged"
+      }
+    },
+    "adminDocuments": {
+      "status": "PASS",
+      "details": {
+        "secureDocList": "✅ Shows kind/name/createdAt",
+        "svdLinks": "✅ Opens SVD via short-lived link in new tab",
+        "noLocalStorage": "✅ No local blob storage found in network/DB"
+      }
+    },
+    "adminPeople": {
+      "status": "PASS",
+      "details": {
+        "membershipTable": "✅ Shows name/role/email",
+        "inviteUser": "✅ Adds membership",
+        "welcomeEmail": "✅ Resend welcome queues webhook + audit"
+      }
+    },
+    "adminTickets": {
+      "status": "PASS",
+      "details": {
+        "ticketList": "✅ Shows status/priority/updatedAt",
+        "ticketDetail": "✅ Supports threaded comments + SVD attachments",
+        "statusChanges": "✅ Status/priority changes notify requester; audit logged"
+      }
+    },
+    "adminWebhooks": {
+      "status": "PASS",
+      "details": {
+        "webhookEndpoints": "✅ Visible; undelivered retry works",
+        "usageChart": "✅ Shows events by key over time",
+        "featureFlags": "✅ List (key, enabled, source); OWNER/ADMIN only toggle; audit logged"
+      }
+    },
+    "adminDemos": {
+      "status": "PASS",
+      "details": {
+        "timeline": "✅ Shows lead → demo → convert → order → invoice → emails",
+        "convertWizard": "✅ Creates Org + Sub + Order + Invoice + Onboarding Project; seeds FeatureFlags/LeadFlow/IndustryIQ"
+      }
+    },
+    "portalAccess": {
+      "status": "PASS",
+      "details": {
+        "unauthRedirect": "✅ /portal → /login",
+        "orgMembership": "✅ Client sees only orgs where they're a member; org picker appears if multiple",
+        "noindex": "✅ Portal pages marked noindex"
+      }
+    },
+    "portalPages": {
+      "status": "PASS",
+      "details": {
+        "overview": "✅ Shows org name, subscription snapshot, onboarding %, 5 latest docs, latest invoice, activity stream",
+        "onboarding": "✅ Lists tasks; client can complete client-assigned tasks; SVD upload link opens correctly",
+        "documents": "✅ SecureDoc list filters; short-lived links open SVD",
+        "billing": "✅ Invoices visible; PAID invoices download PDF (if pdfUrl exists); unpaid shows tooltip",
+        "support": "✅ Client can open a ticket, comment, attach via SVD; staff see it in Admin",
+        "profile": "✅ Update name + email notification prefs persist"
+      }
+    },
+    "securityPrivacy": {
+      "status": "PASS",
+      "details": {
+        "csrfTokens": "✅ Present on POST/PUT",
+        "rateLimit": "✅ On login and ticket creation",
+        "dataIsolation": "✅ No internal data visible in portal",
+        "secrets": "✅ Not exposed in client bundles"
+      }
+    }
+  }
+}

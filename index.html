@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMGsystems - Build Once. Profit Forever. | Unified CRM, Documents & Automation</title>
+    <meta name="description" content="One platform to unify your CRM, documents, and automation. Launch in 1–3 weeks. Eliminate admin, scale faster, and reclaim your time.">
+    <meta property="og:title" content="OMGsystems - Build Once. Profit Forever.">
+    <meta property="og:description" content="One platform to unify your CRM, documents, and automation. Launch in 1–3 weeks.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="./assets/og-image.jpg">
+    <link rel="canonical" href="https://omgsystems.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#00D084">
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+</head>
+<body>
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <header class="header" id="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <img src="./assets/logo.svg" alt="OMGsystems Logo" class="nav-logo-img">
+                </div>
+                <div class="nav-menu" id="nav-menu">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="#industries" class="nav-link">Industries</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#apps" class="nav-link">Apps</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#solutions" class="nav-link">Solutions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#resources" class="nav-link">Resources</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#contact" class="nav-link">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-cta">
+                    <button class="btn btn-primary nav-btn" onclick="openDemoModal()">
+                        Try a Live Demo
+                    </button>
+                </div>
+                <div class="nav-toggle" id="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-background">
+                <div class="hero-gradient"></div>
+                <div class="hero-particles"></div>
+            </div>
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1 class="hero-title">
+                            Build Once. <span class="gradient-text">Profit Forever.</span>
+                        </h1>
+                        <p class="hero-subtitle">
+                            One platform to unify your CRM, documents, and automation. Launch in 1–3 weeks. Eliminate admin, scale faster, and reclaim your time.
+                        </p>
+                        <div class="hero-ctas">
+                            <button class="btn btn-primary btn-large" onclick="openDemoModal()">
+                                Try a Live Demo
+                                <span class="btn-icon">→</span>
+                            </button>
+                            <button class="btn btn-secondary btn-large" onclick="scrollToSection('how-it-works')">
+                                See How It Works
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="hero-platform">
+                            <lottie-player 
+                                src="./assets/hero-animation.json" 
+                                background="transparent" 
+                                speed="1" 
+                                loop 
+                                autoplay
+                                class="hero-animation">
+                            </lottie-player>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Trust & Metrics Bar -->
+                <div class="trust-bar">
+                    <div class="trust-metrics">
+                        <div class="metric">
+                            <span class="metric-number" data-target="2500">0</span>
+                            <span class="metric-label">Businesses Served</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-icon">🇨🇦</span>
+                            <span class="metric-label">Canadian Data Residency</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-number" data-target="7">0</span>
+                            <span class="metric-label">× Faster Response</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-number" data-target="60">0</span>
+                            <span class="metric-label">% Less Admin</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-number" data-target="3">0</span>
+                            <span class="metric-label">Weeks to Launch</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results">
+            <div class="container">
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div class="result-icon">📈</div>
+                        <h3 class="result-title">7× Faster Lead Response</h3>
+                        <p class="result-desc">Industry average</p>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-icon">⚡</div>
+                        <h3 class="result-title">40–60% Less Admin Time</h3>
+                        <p class="result-desc">Across all verticals</p>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-icon">🚀</div>
+                        <h3 class="result-title">3 Weeks to Launch</h3>
+                        <p class="result-desc">Setup to go-live</p>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-icon">🏢</div>
+                        <h3 class="result-title">2,500+ Companies</h3>
+                        <p class="result-desc">Consistently growing</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LeadFlow Engine Section -->
+        <section class="leadflow" id="how-it-works">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Stop Running Ads Blindly — Build a Predictable Lead Machine</h2>
+                    <p class="section-subtitle">
+                        LeadFlow Engine™ transforms your campaigns into a steady stream of qualified clients — from first click to closed deal.
+                    </p>
+                    <button class="btn btn-primary" onclick="openStrategyModal()">
+                        Get Your LeadFlow Strategy Call
+                    </button>
+                </div>
+
+                <!-- How It Works Diagram -->
+                <div class="leadflow-diagram">
+                    <div class="flow-step">
+                        <div class="flow-icon">📱</div>
+                        <span class="flow-label">Ads</span>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="flow-icon">👥</div>
+                        <span class="flow-label">Leads</span>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="flow-icon">💼</div>
+                        <span class="flow-label">CRM</span>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="flow-icon">💰</div>
+                        <span class="flow-label">Clients</span>
+                    </div>
+                </div>
+
+                <!-- Problems & Solutions Table -->
+                <div class="problems-solutions">
+                    <div class="ps-header">
+                        <h3>Problems & Smart Solutions</h3>
+                    </div>
+                    <div class="ps-table">
+                        <div class="ps-row">
+                            <div class="problem">
+                                <h4>Lead volume is a roller-coaster</h4>
+                            </div>
+                            <div class="solution">
+                                <h4>LeadFlow Engine™ connects ads to CRM with automation</h4>
+                            </div>
+                        </div>
+                        <div class="ps-row">
+                            <div class="problem">
+                                <h4>Lots of contacts, but few real buyers</h4>
+                            </div>
+                            <div class="solution">
+                                <h4>Automated scoring & follow-up = only the hottest leads</h4>
+                            </div>
+                        </div>
+                        <div class="ps-row">
+                            <div class="problem">
+                                <h4>Ad spend can't be traced to actual ROI</h4>
+                            </div>
+                            <div class="solution">
+                                <h4>End-to-end reporting for true ROI</h4>
+                            </div>
+                        </div>
+                        <div class="ps-row">
+                            <div class="problem">
+                                <h4>CRM is cluttered with unworked leads</h4>
+                            </div>
+                            <div class="solution">
+                                <h4>Automated nurturing & prioritization</h4>
+                            </div>
+                        </div>
+                        <div class="ps-row">
+                            <div class="problem">
+                                <h4>Manual follow-up burns out your team</h4>
+                            </div>
+                            <div class="solution">
+                                <h4>24/7 sales process runs itself</h4>
+                            </div>
+                        </div>
+                        <div class="ps-row">
+                            <div class="problem">
+                                <h4>Revenue is unpredictable</h4>
+                            </div>
+                            <div class="solution">
+                                <h4>Predictable monthly lead flow</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Outcomes -->
+                <div class="key-outcomes">
+                    <h3>Key Outcomes</h3>
+                    <div class="outcomes-grid">
+                        <div class="outcome">
+                            <span class="outcome-number">3×</span>
+                            <span class="outcome-text">higher conversion rate</span>
+                        </div>
+                        <div class="outcome">
+                            <span class="outcome-number">60%</span>
+                            <span class="outcome-text">time savings on follow-up</span>
+                        </div>
+                        <div class="outcome">
+                            <span class="outcome-text">Predictable, consistent pipeline</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6-Step Journey Section -->
+        <section class="journey">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Your 6-Step Journey to Automated Growth</h2>
+                </div>
+                <div class="journey-steps">
+                    <div class="step" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Analyze Performance</h3>
+                            <p>Find critical gaps & surface opportunities.</p>
+                        </div>
+                    </div>
+                    <div class="step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Craft Campaigns</h3>
+                            <p>Design messaging that attracts the right audience.</p>
+                        </div>
+                    </div>
+                    <div class="step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Auto-Capture & Tag Leads</h3>
+                            <p>Feed every lead straight into CRM—no manual data entry.</p>
+                        </div>
+                    </div>
+                    <div class="step" data-step="4">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Automated Nurture Sequences</h3>
+                            <p>Consistent, smart follow-up keeps leads warm.</p>
+                        </div>
+                    </div>
+                    <div class="step" data-step="5">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h3>Focus Sales on Hot Leads</h3>
+                            <p>Let your team close, while automation chases the rest.</p>
+                        </div>
+                    </div>
+                    <div class="step" data-step="6">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <h3>Track & Optimize</h3>
+                            <p>Real-time dashboards for continuous improvement.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">What You Get with OMGsystems</h2>
+                    <p class="section-subtitle">Comprehensive automation tools designed for service industries.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3>LeadFlow Engine™</h3>
+                        <p>Convert ad spend into qualified leads automatically with intelligent scoring and nurturing.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>CRM & Pipelines</h3>
+                        <p>Custom workflows per industry, seamless integration.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>SecureVault Docs</h3>
+                        <p>OCR, auto-filing, secure sharing, audit trails built-in.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🧠</div>
+                        <h3>Industry IQ</h3>
+                        <p>Daily snapshots & trend insights so you stay ahead.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📝</div>
+                        <h3>Content Engine</h3>
+                        <p>Generate + schedule posts, videos, social copy—all automated.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚙️</div>
+                        <h3>Workflow Builder</h3>
+                        <p>Drag-and-drop automations for your business processes.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📈</div>
+                        <h3>Analytics & Reporting</h3>
+                        <p>Real-time dashboards, benchmarks, and reports.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h3>Smart Automations</h3>
+                        <p>Day-one workflows that remove friction and free your team.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Automation Examples Section -->
+        <section class="automation-examples">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Automation Examples</h2>
+                </div>
+                <div class="examples-grid">
+                    <div class="example-card">
+                        <div class="example-icon">💬</div>
+                        <h3>Client Upsert + Chatbot</h3>
+                        <p>Recognize new/existing clients, summarise message, route & reply automatically.</p>
+                        <a href="#" class="learn-more">Learn More →</a>
+                    </div>
+                    <div class="example-card">
+                        <div class="example-icon">📊</div>
+                        <h3>Spreadsheet Sync Lead Capture</h3>
+                        <p>Webhook pushes submissions direct to Google Sheets/Airtable.</p>
+                        <a href="#" class="learn-more">Learn More →</a>
+                    </div>
+                    <div class="example-card">
+                        <div class="example-icon">💰</div>
+                        <h3>Overdue Invoice Notifier</h3>
+                        <p>Auto-emails for unpaid invoices with branded reminders.</p>
+                        <a href="#" class="learn-more">Learn More →</a>
+                    </div>
+                    <div class="example-card">
+                        <div class="example-icon">📝</div>
+                        <h3>Meeting Summary Generator</h3>
+                        <p>After-meeting summary and action list created & delivered automatically.</p>
+                        <a href="#" class="learn-more">Learn More →</a>
+                    </div>
+                    <div class="example-card">
+                        <div class="example-icon">📁</div>
+                        <h3>Auto-Tag & File Docs</h3>
+                        <p>Uploads read & classified → auto-moved to correct folders.</p>
+                        <a href="#" class="learn-more">Learn More →</a>
+                    </div>
+                    <div class="example-card">
+                        <div class="example-icon">⏰</div>
+                        <h3>Expiry/Renewal Alerts</h3>
+                        <p>Reminders at 30/60/90 days ahead of renewals.</p>
+                        <a href="#" class="learn-more">Learn More →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transformation Section -->
+        <section class="transformation">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Transformation: Old Way vs New Way</h2>
+                </div>
+                <div class="transformation-comparison">
+                    <div class="old-way">
+                        <h3>Old Way (Chaos)</h3>
+                        <ul class="comparison-list">
+                            <li>Leads lost in inbox chaos</li>
+                            <li>Manual, scattered document handling</li>
+                            <li>Disconnected tools & data silos</li>
+                            <li>Time-consuming admin</li>
+                            <li>Poor visibility & compliance gaps</li>
+                            <li>Communication breakdowns</li>
+                            <li>Inconsistent customer experience</li>
+                            <li>Growth stalls as you scale</li>
+                        </ul>
+                    </div>
+                    <div class="new-way">
+                        <h3>New Way (with OMGsystems)</h3>
+                        <ul class="comparison-list">
+                            <li>Automated follow-ups & lead nurturing</li>
+                            <li>Secure auto-filing & OCR document workflow</li>
+                            <li>Unified platform, unified data</li>
+                            <li>AI-powered workflows & real-time insights</li>
+                            <li>Built-in compliance & audit trails</li>
+                            <li>Seamless team coordination</li>
+                            <li>Standardised, high-quality service</li>
+                            <li>Automated systems that grow with you</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="key-benefits">
+                    <h3>Key Benefits Summary</h3>
+                    <div class="benefits-grid">
+                        <div class="benefit">Save 40–60% of your time</div>
+                        <div class="benefit">Unified platform & data</div>
+                        <div class="benefit">Built-in compliance & security</div>
+                        <div class="benefit">24/7 reporting & analytics</div>
+                        <div class="benefit">Ready for scalable growth</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Demo Section -->
+        <section class="demo-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Ready to Make the Switch?</h2>
+                </div>
+                <div class="demo-panel">
+                    <div class="demo-ctas">
+                        <button class="btn btn-primary btn-large" onclick="openDemoModal()">
+                            Try Live Demos
+                        </button>
+                        <button class="btn btn-secondary btn-large" onclick="scrollToSection('testimonials')">
+                            View Success Stories
+                        </button>
+                    </div>
+                    <div class="demo-options">
+                        <h3>Interactive Demo Options</h3>
+                        <div class="demo-cards">
+                            <div class="demo-card" onclick="openDemoModal('analytics')">
+                                <div class="demo-icon">📊</div>
+                                <h4>Analytics & Reporting Demo</h4>
+                                <p>Explore industry-specific dashboards, KPIs, custom reports</p>
+                                <span class="demo-time">5-8 min</span>
+                            </div>
+                            <div class="demo-card" onclick="openDemoModal('workflow')">
+                                <div class="demo-icon">⚙️</div>
+                                <h4>Workflow Builder Demo</h4>
+                                <p>Try drag-and-drop automation with pre-built templates</p>
+                                <span class="demo-time">10-15 min</span>
+                            </div>
+                            <div class="demo-card" onclick="openDemoModal('automations')">
+                                <div class="demo-icon">🤖</div>
+                                <h4>Smart Automations Demo</h4>
+                                <p>Choose from ready-to-deploy automations and launch in minutes</p>
+                                <span class="demo-time">8-12 min</span>
+                            </div>
+                        </div>
+                        <div class="demo-highlights">
+                            <div class="highlight">
+                                <span class="highlight-icon">⚡</span>
+                                <span>No Setup Needed — Click and go.</span>
+                            </div>
+                            <div class="highlight">
+                                <span class="highlight-icon">🔒</span>
+                                <span>Secure & Private — Demo data sandboxed & cleaned.</span>
+                            </div>
+                            <div class="highlight">
+                                <span class="highlight-icon">💬</span>
+                                <span>Expert Support — Live help available during demo experience.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials" id="testimonials">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Real Proof: Trusted Across Industries</h2>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-quote">
+                            "OMGsystems has revolutionised how we manage our properties. We saved 20 hours per week; tenant satisfaction jumped by 40%."
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <strong>SJ</strong> — Sarah Johnson, Property Manager
+                            </div>
+                            <div class="author-company">Metro Properties (Property Management)</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-quote">
+                            "SecureVault Docs is a game-changer. Instant sharing and compliance tracking = total peace of mind."
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <strong>MC</strong> — Michael Chen, Real Estate Broker
+                            </div>
+                            <div class="author-company">Premier Realty Group (Real Estate)</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-quote">
+                            "Integration was simple. Now we have 99.9% reporting accuracy in just 2 weeks."
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <strong>ER</strong> — Emily Rodriguez, Accounting Director
+                            </div>
+                            <div class="author-company">Financial Solutions Inc. (Accounting)</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-quote">
+                            "Our contractor business runs like clockwork now. Quoting time dropped from 3 days to 45 minutes; win rate +32%."
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <strong>DT</strong> — David Thompson, Owner
+                            </div>
+                            <div class="author-company">Thompson Construction (Contractors)</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-quote">
+                            "We cut admin by 70% so our doctors spend more time on patient care."
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <strong>DLP</strong> — Dr Lisa Park, Medical Director
+                            </div>
+                            <div class="author-company">Durham Family Clinic (Healthcare)</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-quote">
+                            "Instant billing, automated scheduling, +60% productivity!"
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <strong>MS</strong> — Maria Santos, Operations Manager
+                            </div>
+                            <div class="author-company">CleanPro Services (Cleaning)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonials-cta">
+                    <button class="btn btn-secondary" onclick="scrollToSection('case-studies')">
+                        View All Case Studies
+                    </button>
+                    <button class="btn btn-primary" onclick="openDemoModal()">
+                        Start Your Demo
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA Section -->
+        <section class="final-cta">
+            <div class="container">
+                <div class="final-content">
+                    <h2 class="final-title">Lose the Daily Grind. Build a Business That Runs Without You.</h2>
+                    <p class="final-subtitle">
+                        Grow 40%+ — Gain Back Time and Take Control.<br>
+                        Our expert team re-tools your entire business — from brand to client capture to daily operations. Scale faster, stress less, and finally enjoy work again.
+                    </p>
+                    <button class="btn btn-primary btn-large" onclick="openStrategyModal()">
+                        Schedule Your Strategy Call
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-trust">
+                    <div class="trust-badges">
+                        <div class="trust-badge">Trusted by thousands of businesses</div>
+                        <div class="trust-badge">🇨🇦 Canadian Data Residency</div>
+                        <div class="trust-badge">99.9% Uptime Guarantee</div>
+                        <div class="trust-badge">24/7 Expert Support</div>
+                        <div class="trust-badge">No Setup Fees | Cancel Anytime</div>
+                    </div>
+                </div>
+                <div class="footer-nav">
+                    <div class="footer-links">
+                        <a href="#about">About</a>
+                        <a href="#careers">Careers</a>
+                        <a href="#press">Press</a>
+                        <a href="#contact">Contact</a>
+                        <a href="#privacy">Privacy</a>
+                        <a href="#terms">Terms</a>
+                        <a href="#blog">Blog</a>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 OMGsystems. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Demo Modal -->
+    <div class="modal" id="demo-modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeDemoModal()">&times;</span>
+            <h2>Choose Your Demo Experience</h2>
+            <div class="modal-demos">
+                <div class="modal-demo-card" onclick="startDemo('analytics')">
+                    <h3>📊 Analytics & Reporting Demo</h3>
+                    <p>Explore industry-specific dashboards and KPIs</p>
+                    <span class="demo-duration">5-8 minutes</span>
+                </div>
+                <div class="modal-demo-card" onclick="startDemo('workflow')">
+                    <h3>⚙️ Workflow Builder Demo</h3>
+                    <p>Try drag-and-drop automation with templates</p>
+                    <span class="demo-duration">10-15 minutes</span>
+                </div>
+                <div class="modal-demo-card" onclick="startDemo('automations')">
+                    <h3>🤖 Smart Automations Demo</h3>
+                    <p>Deploy ready-to-use automations instantly</p>
+                    <span class="demo-duration">8-12 minutes</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Strategy Modal -->
+    <div class="modal" id="strategy-modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeStrategyModal()">&times;</span>
+            <h2>Schedule Your Strategy Call</h2>
+            <form class="strategy-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="company">Company</label>
+                    <input type="text" id="company" name="company" required>
+                </div>
+                <div class="form-group">
+                    <label for="industry">Industry</label>
+                    <select id="industry" name="industry" required>
+                        <option value="">Select Industry</option>
+                        <option value="property-management">Property Management</option>
+                        <option value="real-estate">Real Estate</option>
+                        <option value="accounting">Accounting</option>
+                        <option value="contractors">Contractors</option>
+                        <option value="healthcare">Healthcare</option>
+                        <option value="cleaning">Cleaning</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Schedule Call</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Floating CTA -->
+    <div class="floating-cta" id="floating-cta">
+        <button class="btn btn-primary" onclick="openDemoModal()">
+            Try Demo
+        </button>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "enabled": true,
+  "dualApproval": true,
+  "logging": {
+    "level": "audit",
+    "retention": "7 years",
+    "encryption": true
+  },
+  "triggers": [
+    "admin.impersonate",
+    "admin.delete_organization",
+    "admin.bulk_export",
+    "admin.system_config_change"
+  ]
+}

@@ -1,0 +1,237 @@
+{
+  "timestamp": "2025-10-14T04:11:29.589Z",
+  "duration": "3773ms",
+  "summary": {
+    "total": 32,
+    "passed": 31,
+    "warnings": 0,
+    "failed": 1,
+    "score": 97
+  },
+  "results": [
+    {
+      "test": "CSP Header Present",
+      "status": "pass",
+      "message": "Content-Security-Policy header found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.249Z"
+    },
+    {
+      "test": "CSP Directive: default-src",
+      "status": "pass",
+      "message": "Required directive found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.249Z"
+    },
+    {
+      "test": "CSP Directive: script-src",
+      "status": "pass",
+      "message": "Required directive found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.249Z"
+    },
+    {
+      "test": "CSP Directive: style-src",
+      "status": "pass",
+      "message": "Required directive found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.249Z"
+    },
+    {
+      "test": "CSP Directive: img-src",
+      "status": "pass",
+      "message": "Required directive found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.249Z"
+    },
+    {
+      "test": "CSP Directive: connect-src",
+      "status": "pass",
+      "message": "Required directive found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.249Z"
+    },
+    {
+      "test": "CSP Directive: frame-src",
+      "status": "pass",
+      "message": "Required directive found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.249Z"
+    },
+    {
+      "test": "CSP Directive: object-src",
+      "status": "pass",
+      "message": "Required directive found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.249Z"
+    },
+    {
+      "test": "CSP Directive: base-uri",
+      "status": "pass",
+      "message": "Required directive found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.249Z"
+    },
+    {
+      "test": "CSP Directive: form-action",
+      "status": "pass",
+      "message": "Required directive found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.249Z"
+    },
+    {
+      "test": "CSP Directive: frame-ancestors",
+      "status": "pass",
+      "message": "Required directive found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.249Z"
+    },
+    {
+      "test": "CSP Security Check",
+      "status": "pass",
+      "message": "No dangerous wildcards found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.250Z"
+    },
+    {
+      "test": "CSP Security Check",
+      "status": "pass",
+      "message": "No dangerous wildcards found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.250Z"
+    },
+    {
+      "test": "CSP Security Check",
+      "status": "pass",
+      "message": "No dangerous wildcards found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.250Z"
+    },
+    {
+      "test": "CSP Nonce Usage",
+      "status": "pass",
+      "message": "Nonce-based CSP implementation found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.250Z"
+    },
+    {
+      "test": "CSP Unsafe Inline",
+      "status": "pass",
+      "message": "No unsafe-inline found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.250Z"
+    },
+    {
+      "test": "CSP Unsafe Eval",
+      "status": "pass",
+      "message": "No unsafe-eval found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.250Z"
+    },
+    {
+      "test": "Security Header: HSTS header",
+      "status": "pass",
+      "message": "HSTS header found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.251Z"
+    },
+    {
+      "test": "Security Header: X-Content-Type-Options header",
+      "status": "pass",
+      "message": "X-Content-Type-Options header found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.251Z"
+    },
+    {
+      "test": "Security Header: X-Frame-Options header",
+      "status": "pass",
+      "message": "X-Frame-Options header found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.251Z"
+    },
+    {
+      "test": "Security Header: X-XSS-Protection header",
+      "status": "pass",
+      "message": "X-XSS-Protection header found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.251Z"
+    },
+    {
+      "test": "Security Header: Referrer-Policy header",
+      "status": "pass",
+      "message": "Referrer-Policy header found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.251Z"
+    },
+    {
+      "test": "Security Header: Permissions-Policy header",
+      "status": "pass",
+      "message": "Permissions-Policy header found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.251Z"
+    },
+    {
+      "test": "CSP Violation Reporting",
+      "status": "fail",
+      "message": "CSP violation reporting endpoint returned 307",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.265Z"
+    },
+    {
+      "test": "Nonce Generation Function",
+      "status": "pass",
+      "message": "Nonce generation function found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.265Z"
+    },
+    {
+      "test": "Cryptographically Secure Nonce",
+      "status": "pass",
+      "message": "Cryptographically secure nonce generation found",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.265Z"
+    },
+    {
+      "test": "CSP on /",
+      "status": "pass",
+      "message": "CSP header present on /",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.407Z"
+    },
+    {
+      "test": "CSP on /about",
+      "status": "pass",
+      "message": "CSP header present on /about",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:27.911Z"
+    },
+    {
+      "test": "CSP on /contact",
+      "status": "pass",
+      "message": "CSP header present on /contact",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:28.243Z"
+    },
+    {
+      "test": "CSP on /trust",
+      "status": "pass",
+      "message": "CSP header present on /trust",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:28.621Z"
+    },
+    {
+      "test": "CSP on /legal/privacy",
+      "status": "pass",
+      "message": "CSP header present on /legal/privacy",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:29.025Z"
+    },
+    {
+      "test": "CSP on /legal/cookies",
+      "status": "pass",
+      "message": "CSP header present on /legal/cookies",
+      "details": null,
+      "timestamp": "2025-10-14T04:11:29.589Z"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "PHIPA": {
+    "status": "Compliant",
+    "measures": [
+      "Personal health information encrypted",
+      "Access controls implemented",
+      "Audit logging enabled",
+      "Data retention policies enforced"
+    ]
+  },
+  "PIPEDA": {
+    "status": "Compliant",
+    "measures": [
+      "Consent management implemented",
+      "Data minimization practiced",
+      "Purpose limitation enforced",
+      "Individual access rights provided"
+    ]
+  },
+  "dataProcessing": {
+    "lawfulBasis": "Consent and legitimate interest",
+    "dataMinimization": "Only necessary data collected",
+    "purposeLimitation": "Data used only for stated purposes",
+    "retentionLimitation": "Data retained only as long as necessary"
+  }
+}

@@ -1,0 +1,856 @@
+{
+  "total": 0,
+  "passed": 0,
+  "failed": 0,
+  "warnings": 0,
+  "routes": {
+    "/": {
+      "meta": {
+        "passed": 5,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "Title Template",
+            "status": "pass",
+            "message": "Title uses template and matches route intent: \"Automation that pays for itself | OMGsystems\"",
+            "timestamp": "2025-10-13T18:27:23.986Z"
+          },
+          {
+            "name": "Description Length",
+            "status": "pass",
+            "message": "Description ≤ 160 chars and contains benefit: \"Automation and CRM for property management, real estate, contractors, healthcare, accounting, and cleaning\"",
+            "timestamp": "2025-10-13T18:27:23.986Z"
+          },
+          {
+            "name": "Canonical URL",
+            "status": "pass",
+            "message": "Canonical exists and equals clean URL: https://www.omgsystems.com/",
+            "timestamp": "2025-10-13T18:27:23.986Z"
+          },
+          {
+            "name": "OG/Twitter Tags",
+            "status": "pass",
+            "message": "OG/Twitter tags resolve to valid 1200×630 image: /og/home.png",
+            "timestamp": "2025-10-13T18:27:23.986Z"
+          },
+          {
+            "name": "Locale",
+            "status": "pass",
+            "message": "Locale set to en-CA for Canadian context",
+            "timestamp": "2025-10-13T18:27:23.986Z"
+          }
+        ]
+      },
+      "jsonld": {
+        "passed": 5,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "Organization Schema",
+            "status": "pass",
+            "message": "Organization JSON-LD present and valid in Rich Results (0 errors)",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "WebSite Schema",
+            "status": "pass",
+            "message": "WebSite JSON-LD present and valid in Rich Results (0 errors)",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "FAQPage Schema",
+            "status": "pass",
+            "message": "FAQPage JSON-LD present and valid in Rich Results (0 errors)",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "Organization Schema",
+            "status": "pass",
+            "message": "Organization schema includes name OMGsystems, url base, logo absolute URL",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "WebSite Schema",
+            "status": "pass",
+            "message": "WebSite schema includes SearchAction pointing to /search?q={search_term_string}",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          }
+        ]
+      },
+      "content": {
+        "passed": 5,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "H1 Structure",
+            "status": "pass",
+            "message": "One clear H1 present and matches page intent",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "CTA Density",
+            "status": "pass",
+            "message": "At least 3 CTAs visible across hero/mid/footer: Book a demo, See how it works, Calculate ROI, Talk to sales",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "Above-the-fold CTAs",
+            "status": "pass",
+            "message": "Hero has \"Book a demo\" (primary) and \"See how it works\" (secondary)",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "Mid-page CTA",
+            "status": "pass",
+            "message": "Mid-page has \"Calculate ROI\" or \"Try the CRM Sandbox\" link",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "Footer CTA",
+            "status": "pass",
+            "message": "Footer has \"Talk to sales\"",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          }
+        ]
+      },
+      "performance": {
+        "passed": 4,
+        "failed": 1,
+        "tests": [
+          {
+            "name": "LCP Performance",
+            "status": "fail",
+            "message": "LCP 2207ms > 2000ms (4G)",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "CLS Performance",
+            "status": "pass",
+            "message": "CLS 0.033 ≤ 0.05",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "JS Budget",
+            "status": "pass",
+            "message": "Total JS 144KB ≤ 180KB gzipped",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "Image Optimization",
+            "status": "pass",
+            "message": "Images use AVIF/WebP with lazy loading for below-fold content",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "Critical CSS",
+            "status": "pass",
+            "message": "Critical CSS inlined, non-critical CSS deferred",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          }
+        ]
+      },
+      "analytics": {
+        "passed": 5,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "Consent Banner",
+            "status": "pass",
+            "message": "Consent banner shown with Functional (always on) and Analytics (default off) toggles",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "Analytics OFF",
+            "status": "pass",
+            "message": "With Analytics OFF: no analytics network calls occur",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "Analytics ON",
+            "status": "pass",
+            "message": "With Analytics ON: page_view event fires with correct properties",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "page_view Properties",
+            "status": "pass",
+            "message": "page_view includes: {\"page_path\":\"/\",\"page_title\":\"Automation that pays for itself | OMGsystems\",\"section\":\"home\"}",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "CTA Tracking",
+            "status": "pass",
+            "message": "CTA clicks log cta_click events with placement and context",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          }
+        ]
+      },
+      "accessibility": {
+        "passed": 6,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "Skip Link",
+            "status": "pass",
+            "message": "Skip to content link focusable at page start",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "Color Contrast",
+            "status": "pass",
+            "message": "Contrast ratios for body, headings, and CTA states meet WCAG AA",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "Heading Structure",
+            "status": "pass",
+            "message": "One H1 per page with logical heading order",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "Form Labels",
+            "status": "pass",
+            "message": "Forms have labels, helper text, and accessible error messaging",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "ARIA Labels",
+            "status": "pass",
+            "message": "Decorative SVGs marked aria-hidden=\"true\"; informative icons have labels",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "Focus Styles",
+            "status": "pass",
+            "message": "Visible focus styles for keyboard navigation",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          }
+        ]
+      }
+    },
+    "/industries/property-management": {
+      "meta": {
+        "passed": 5,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "Title Template",
+            "status": "pass",
+            "message": "Title uses template and matches route intent: \"Property Management Automation & CRM | OMGsystems\"",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "Description Length",
+            "status": "pass",
+            "message": "Description ≤ 160 chars and contains benefit: \"Ontario property managers\"",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "Canonical URL",
+            "status": "pass",
+            "message": "Canonical exists and equals clean URL: https://www.omgsystems.com/industries/property-management",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "OG/Twitter Tags",
+            "status": "pass",
+            "message": "OG/Twitter tags resolve to valid 1200×630 image: /og/property-management.png",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "Locale",
+            "status": "pass",
+            "message": "Locale set to en-CA for Canadian context",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          }
+        ]
+      },
+      "jsonld": {
+        "passed": 4,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "Service Schema",
+            "status": "pass",
+            "message": "Service JSON-LD present and valid in Rich Results (0 errors)",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "BreadcrumbList Schema",
+            "status": "pass",
+            "message": "BreadcrumbList JSON-LD present and valid in Rich Results (0 errors)",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "FAQPage Schema",
+            "status": "pass",
+            "message": "FAQPage JSON-LD present and valid in Rich Results (0 errors)",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "Service Schema",
+            "status": "pass",
+            "message": "Service schema includes serviceType: \"Property Management automation platform\", areaServed: \"CA-ON\"",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          }
+        ]
+      },
+      "content": {
+        "passed": 4,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "H1 Structure",
+            "status": "pass",
+            "message": "One clear H1 present and matches page intent",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "CTA Density",
+            "status": "pass",
+            "message": "At least 3 CTAs visible across hero/mid/footer: Book a demo, See sample workflow, Get pricing guidance",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "Industry Context",
+            "status": "pass",
+            "message": "Content includes Ontario/Canada relevance for property management",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          },
+          {
+            "name": "Cross-links",
+            "status": "pass",
+            "message": "In-page cross-links to related apps and sibling industries",
+            "timestamp": "2025-10-13T18:27:23.987Z"
+          }
+        ]
+      },
+      "performance": {
+        "passed": 5,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "LCP Performance",
+            "status": "pass",
+            "message": "LCP 858ms ≤ 2000ms (4G)",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "CLS Performance",
+            "status": "pass",
+            "message": "CLS 0.016 ≤ 0.05",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "JS Budget",
+            "status": "pass",
+            "message": "Total JS 117KB ≤ 200KB gzipped",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Image Optimization",
+            "status": "pass",
+            "message": "Images use AVIF/WebP with lazy loading for below-fold content",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Critical CSS",
+            "status": "pass",
+            "message": "Critical CSS inlined, non-critical CSS deferred",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          }
+        ]
+      },
+      "analytics": {
+        "passed": 5,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "Consent Banner",
+            "status": "pass",
+            "message": "Consent banner shown with Functional (always on) and Analytics (default off) toggles",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Analytics OFF",
+            "status": "pass",
+            "message": "With Analytics OFF: no analytics network calls occur",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Analytics ON",
+            "status": "pass",
+            "message": "With Analytics ON: page_view event fires with correct properties",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "page_view Properties",
+            "status": "pass",
+            "message": "page_view includes: {\"page_path\":\"/industries/property-management\",\"page_title\":\"Property Management Automation & CRM | OMGsystems\",\"section\":\"industry\",\"industry\":\"property-management\"}",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "CTA Tracking",
+            "status": "pass",
+            "message": "CTA clicks log cta_click events with placement and context",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          }
+        ]
+      },
+      "accessibility": {
+        "passed": 6,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "Skip Link",
+            "status": "pass",
+            "message": "Skip to content link focusable at page start",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Color Contrast",
+            "status": "pass",
+            "message": "Contrast ratios for body, headings, and CTA states meet WCAG AA",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Heading Structure",
+            "status": "pass",
+            "message": "One H1 per page with logical heading order",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Form Labels",
+            "status": "pass",
+            "message": "Forms have labels, helper text, and accessible error messaging",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "ARIA Labels",
+            "status": "pass",
+            "message": "Decorative SVGs marked aria-hidden=\"true\"; informative icons have labels",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Focus Styles",
+            "status": "pass",
+            "message": "Visible focus styles for keyboard navigation",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          }
+        ]
+      }
+    },
+    "/apps/securevault-docs": {
+      "meta": {
+        "passed": 5,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "Title Template",
+            "status": "pass",
+            "message": "Title uses template and matches route intent: \"SecureVault Docs — the vault that files itself | OMGsystems\"",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Description Length",
+            "status": "pass",
+            "message": "Description ≤ 160 chars and contains benefit: \"Collect, auto-file, and secure documents\"",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Canonical URL",
+            "status": "pass",
+            "message": "Canonical exists and equals clean URL: https://www.omgsystems.com/apps/securevault-docs",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "OG/Twitter Tags",
+            "status": "pass",
+            "message": "OG/Twitter tags resolve to valid 1200×630 image: /og/securevault-docs.png",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Locale",
+            "status": "pass",
+            "message": "Locale set to en-CA for Canadian context",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          }
+        ]
+      },
+      "jsonld": {
+        "passed": 4,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "Product Schema",
+            "status": "pass",
+            "message": "Product JSON-LD present and valid in Rich Results (0 errors)",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "BreadcrumbList Schema",
+            "status": "pass",
+            "message": "BreadcrumbList JSON-LD present and valid in Rich Results (0 errors)",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "FAQPage Schema",
+            "status": "pass",
+            "message": "FAQPage JSON-LD present and valid in Rich Results (0 errors)",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Product Schema",
+            "status": "pass",
+            "message": "Product schema includes name: \"SecureVault Docs\", brand: \"OMGsystems\", category",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          }
+        ]
+      },
+      "content": {
+        "passed": 4,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "H1 Structure",
+            "status": "pass",
+            "message": "One clear H1 present and matches page intent",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "CTA Density",
+            "status": "pass",
+            "message": "At least 3 CTAs visible across hero/mid/footer: Get started, See pricing, See business solutions",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "App Value Prop",
+            "status": "pass",
+            "message": "Content highlights primary value proposition clearly",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Security Callout",
+            "status": "pass",
+            "message": "Security section includes Canada residency and encryption specifics",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          }
+        ]
+      },
+      "performance": {
+        "passed": 5,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "LCP Performance",
+            "status": "pass",
+            "message": "LCP 1439ms ≤ 2000ms (4G)",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "CLS Performance",
+            "status": "pass",
+            "message": "CLS 0.019 ≤ 0.05",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "JS Budget",
+            "status": "pass",
+            "message": "Total JS 136KB ≤ 200KB gzipped",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Image Optimization",
+            "status": "pass",
+            "message": "Images use AVIF/WebP with lazy loading for below-fold content",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Critical CSS",
+            "status": "pass",
+            "message": "Critical CSS inlined, non-critical CSS deferred",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          }
+        ]
+      },
+      "analytics": {
+        "passed": 5,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "Consent Banner",
+            "status": "pass",
+            "message": "Consent banner shown with Functional (always on) and Analytics (default off) toggles",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Analytics OFF",
+            "status": "pass",
+            "message": "With Analytics OFF: no analytics network calls occur",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Analytics ON",
+            "status": "pass",
+            "message": "With Analytics ON: page_view event fires with correct properties",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "page_view Properties",
+            "status": "pass",
+            "message": "page_view includes: {\"page_path\":\"/apps/securevault-docs\",\"page_title\":\"SecureVault Docs — the vault that files itself | OMGsystems\",\"section\":\"app\",\"app\":\"securevault-docs\"}",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "CTA Tracking",
+            "status": "pass",
+            "message": "CTA clicks log cta_click events with placement and context",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          }
+        ]
+      },
+      "accessibility": {
+        "passed": 6,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "Skip Link",
+            "status": "pass",
+            "message": "Skip to content link focusable at page start",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Color Contrast",
+            "status": "pass",
+            "message": "Contrast ratios for body, headings, and CTA states meet WCAG AA",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Heading Structure",
+            "status": "pass",
+            "message": "One H1 per page with logical heading order",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Form Labels",
+            "status": "pass",
+            "message": "Forms have labels, helper text, and accessible error messaging",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "ARIA Labels",
+            "status": "pass",
+            "message": "Decorative SVGs marked aria-hidden=\"true\"; informative icons have labels",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Focus Styles",
+            "status": "pass",
+            "message": "Visible focus styles for keyboard navigation",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          }
+        ]
+      }
+    },
+    "/campaign/leadflow": {
+      "meta": {
+        "passed": 5,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "Title Template",
+            "status": "pass",
+            "message": "Title uses template and matches route intent: \"LeadFlow Engine™ — Predictable leads from Meta ads | OMGsystems\"",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Description Length",
+            "status": "pass",
+            "message": "Description ≤ 160 chars and contains benefit: \"Turn Facebook/Instagram campaigns into qualified clients\"",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Canonical URL",
+            "status": "pass",
+            "message": "Canonical exists and equals clean URL: https://www.omgsystems.com/campaign/leadflow",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "OG/Twitter Tags",
+            "status": "pass",
+            "message": "OG/Twitter tags resolve to valid 1200×630 image: /og/leadflow.png",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Locale",
+            "status": "pass",
+            "message": "Locale set to en-CA for Canadian context",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          }
+        ]
+      },
+      "jsonld": {
+        "passed": 2,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "Service Schema",
+            "status": "pass",
+            "message": "Service JSON-LD present and valid in Rich Results (0 errors)",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "BreadcrumbList Schema",
+            "status": "pass",
+            "message": "BreadcrumbList JSON-LD present and valid in Rich Results (0 errors)",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          }
+        ]
+      },
+      "content": {
+        "passed": 4,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "H1 Structure",
+            "status": "pass",
+            "message": "One clear H1 present and matches page intent",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "CTA Density",
+            "status": "pass",
+            "message": "At least 3 CTAs visible across hero/mid/footer: Get Your LeadFlow Strategy Call",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Campaign Layout",
+            "status": "pass",
+            "message": "Minimal layout with no global nav (logo + \"Book a demo\" only)",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Form Fields",
+            "status": "pass",
+            "message": "Form includes name, email, phone, company, industry, budget range",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          }
+        ]
+      },
+      "performance": {
+        "passed": 5,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "LCP Performance",
+            "status": "pass",
+            "message": "LCP 1577ms ≤ 1800ms (4G)",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "CLS Performance",
+            "status": "pass",
+            "message": "CLS 0.027 ≤ 0.05",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "JS Budget",
+            "status": "pass",
+            "message": "Total JS 105KB ≤ 120KB gzipped",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Image Optimization",
+            "status": "pass",
+            "message": "Images use AVIF/WebP with lazy loading for below-fold content",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Critical CSS",
+            "status": "pass",
+            "message": "Critical CSS inlined, non-critical CSS deferred",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          }
+        ]
+      },
+      "analytics": {
+        "passed": 5,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "Consent Banner",
+            "status": "pass",
+            "message": "Consent banner shown with Functional (always on) and Analytics (default off) toggles",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Analytics OFF",
+            "status": "pass",
+            "message": "With Analytics OFF: no analytics network calls occur",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Analytics ON",
+            "status": "pass",
+            "message": "With Analytics ON: page_view event fires with correct properties",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "page_view Properties",
+            "status": "pass",
+            "message": "page_view includes: {\"page_path\":\"/campaign/leadflow\",\"page_title\":\"LeadFlow Engine™ — Predictable leads from Meta ads | OMGsystems\",\"section\":\"campaign\",\"campaign\":\"leadflow\"}",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "CTA Tracking",
+            "status": "pass",
+            "message": "CTA clicks log cta_click events with placement and context",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          }
+        ]
+      },
+      "accessibility": {
+        "passed": 6,
+        "failed": 0,
+        "tests": [
+          {
+            "name": "Skip Link",
+            "status": "pass",
+            "message": "Skip to content link focusable at page start",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Color Contrast",
+            "status": "pass",
+            "message": "Contrast ratios for body, headings, and CTA states meet WCAG AA",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Heading Structure",
+            "status": "pass",
+            "message": "One H1 per page with logical heading order",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Form Labels",
+            "status": "pass",
+            "message": "Forms have labels, helper text, and accessible error messaging",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "ARIA Labels",
+            "status": "pass",
+            "message": "Decorative SVGs marked aria-hidden=\"true\"; informative icons have labels",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          },
+          {
+            "name": "Focus Styles",
+            "status": "pass",
+            "message": "Visible focus styles for keyboard navigation",
+            "timestamp": "2025-10-13T18:27:23.988Z"
+          }
+        ]
+      }
+    }
+  }
+}

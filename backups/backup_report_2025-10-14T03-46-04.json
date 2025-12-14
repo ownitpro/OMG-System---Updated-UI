@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-10-14T03-46-04",
+  "type": "db",
+  "results": [
+    {
+      "type": "database",
+      "file": "db_backup_2025-10-14T03-46-04.db.gz",
+      "size": 6095,
+      "checksum": "f6a16e46edf9798d5b9e5772b1ea6e797b97ade13eae5aae45e62e515c34a1ef"
+    }
+  ],
+  "totalSize": 6095
+}

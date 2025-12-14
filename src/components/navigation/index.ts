@@ -1,0 +1,9 @@
+export { Header } from './header';
+export { Footer } from './footer';
+export { IndustriesDropdown } from './dropdowns/industries-dropdown';
+export { AppsDropdown } from './dropdowns/apps-dropdown';
+export { DemosDropdown } from './dropdowns/demos-dropdown';
+export { SolutionsDropdown } from './dropdowns/solutions-dropdown';
+export { AutomationDropdown } from './dropdowns/automation-dropdown';
+export { MarketingAgencyDropdown } from './dropdowns/marketing-agency-dropdown';
+export { UserProfileDropdown } from './dropdowns/user-profile-dropdown';

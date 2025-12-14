@@ -1,0 +1,153 @@
+
+> omgsystems-website@0.1.0 build
+> next build
+
+ ⚠ The config property `experimental.turbo` is deprecated. Move this setting to `config.turbopack` or run `npx @next/codemod@latest next-experimental-turbo-to-turbopack .`
+ ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /Users/prince/Documents/Omgsystems-Main/package-lock.json as the root directory.
+ To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
+ Detected additional lockfiles: 
+   * /Users/prince/Documents/Omgsystems-Main/omgsystems-website/package-lock.json
+
+   ▲ Next.js 15.5.4
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 4.3s
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+ ⚠ Using edge runtime on a page currently disables static generation for that page
+   Generating static pages (0/83) ...
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+   Generating static pages (20/83) 
+   Generating static pages (41/83) 
+   Generating static pages (62/83) 
+ ✓ Generating static pages (83/83)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                                    Size  First Load JS
+┌ ○ /                                                       3.66 kB         114 kB
+├ ○ /_not-found                                               230 B         102 kB
+├ ○ /403                                                    1.37 kB         107 kB
+├ ○ /about                                                  5.02 kB         107 kB
+├ ƒ /admin                                                    230 B         102 kB
+├ ○ /admin/content-calendar                                 6.51 kB         108 kB
+├ ƒ /admin/demos                                            3.28 kB         108 kB
+├ ƒ /admin/demos.csv                                          230 B         102 kB
+├ ƒ /admin/demos/[id]                                       2.81 kB         108 kB
+├ ƒ /admin/demos/[id]/convert                               4.53 kB         106 kB
+├ ƒ /admin/documents                                         4.3 kB         106 kB
+├ ○ /admin/email-sequences                                  8.15 kB         110 kB
+├ ƒ /admin/flags                                            3.86 kB         106 kB
+├ ○ /admin/governance                                       7.25 kB         124 kB
+├ ƒ /admin/invoices                                         3.56 kB         109 kB
+├ ○ /admin/measurement                                      5.73 kB         108 kB
+├ ƒ /admin/orders                                           3.47 kB         109 kB
+├ ƒ /admin/orgs                                             3.26 kB         108 kB
+├ ƒ /admin/orgs/[slug]                                      4.45 kB         106 kB
+├ ƒ /admin/people                                           3.95 kB         106 kB
+├ ƒ /admin/projects                                         4.03 kB         109 kB
+├ ƒ /admin/projects/[id]                                    4.78 kB         107 kB
+├ ○ /admin/retargeting                                      6.46 kB         108 kB
+├ ƒ /admin/settings                                         3.84 kB         106 kB
+├ ƒ /admin/subscriptions                                    3.62 kB         109 kB
+├ ƒ /admin/tickets                                          3.75 kB         109 kB
+├ ƒ /admin/tickets/[id]                                     4.08 kB         106 kB
+├ ƒ /admin/usage                                            4.22 kB         106 kB
+├ ƒ /api/admin/convert-demo-to-org                            230 B         102 kB
+├ ƒ /api/admin/notifications                                  230 B         102 kB
+├ ƒ /api/admin/search                                         230 B         102 kB
+├ ƒ /api/analytics                                            230 B         102 kB
+├ ƒ /api/auth/[...nextauth]                                   230 B         102 kB
+├ ƒ /api/auth/switch-org                                      230 B         102 kB
+├ ƒ /api/contact                                              230 B         102 kB
+├ ƒ /api/csp-report                                           230 B         102 kB
+├ ƒ /api/demo/crm                                             230 B         102 kB
+├ ƒ /api/demo/svd                                             230 B         102 kB
+├ ƒ /api/documents                                            230 B         102 kB
+├ ƒ /api/health                                               230 B         102 kB
+├ ƒ /api/invoices                                             230 B         102 kB
+├ ƒ /api/leads                                                230 B         102 kB
+├ ƒ /api/portal/notifications                                 230 B         102 kB
+├ ƒ /api/projects                                             230 B         102 kB
+├ ○ /apps/content-engine                                      199 B         105 kB
+├ ○ /apps/crm                                               6.41 kB         119 kB
+├ ○ /apps/demo                                              4.24 kB         117 kB
+├ ○ /apps/demo/crm                                          6.47 kB         119 kB
+├ ○ /apps/demo/securevault-docs                             6.64 kB         120 kB
+├ ○ /apps/industry-iq                                         199 B         105 kB
+├ ○ /apps/leadflow                                          5.96 kB         119 kB
+├ ○ /apps/securevault                                         199 B         105 kB
+├ ○ /apps/securevault-docs                                  6.22 kB         119 kB
+├ ○ /blog                                                     182 B         111 kB
+├ ● /blog/[slug]                                            1.14 kB         111 kB
+├   ├ /blog/property-management-owner-statements
+├   ├ /blog/contractor-fast-quote-playbook
+├   └ /blog/healthcare-careflow-automation
+├ ƒ /campaign/[slug]                                          133 B         118 kB
+├ ○ /campaign/leadflow                                      4.36 kB         117 kB
+├ ○ /campaign/leadflow-v2                                   4.52 kB         106 kB
+├ ○ /campaign/property-automation                             133 B         118 kB
+├ ○ /case-snapshots                                           182 B         111 kB
+├ ● /case-snapshots/[id]                                     2.9 kB         113 kB
+├   ├ /case-snapshots/property-management-3-day-turnaround
+├   ├ /case-snapshots/contractors-80-percent-quote-time
+├   ├ /case-snapshots/real-estate-showing-automation
+├   └ [+3 more paths]
+├ ○ /case-studies                                             199 B         105 kB
+├ ○ /contact                                                3.48 kB         105 kB
+├ ○ /dashboard                                              2.93 kB         114 kB
+├ ○ /dashboard/invoices                                     4.79 kB         127 kB
+├ ○ /dashboard/projects                                     4.56 kB         127 kB
+├ ○ /industries                                               166 B         105 kB
+├ ○ /industries/accounting                                  8.27 kB         121 kB
+├ ○ /industries/cleaning                                    8.19 kB         121 kB
+├ ○ /industries/contractors                                   199 B         105 kB
+├ ○ /industries/healthcare                                    199 B         105 kB
+├ ○ /industries/property-management                           199 B         105 kB
+├ ○ /industries/real-estate                                    8 kB         121 kB
+├ ○ /legal/cookies                                            230 B         102 kB
+├ ○ /legal/privacy                                            230 B         102 kB
+├ ○ /login                                                  1.96 kB         113 kB
+├ ƒ /og/[slug]                                                230 B         102 kB
+├ ƒ /portal                                                   230 B         102 kB
+├ ƒ /portal/billing                                         3.43 kB         105 kB
+├ ƒ /portal/documents                                       3.34 kB         105 kB
+├ ƒ /portal/onboarding                                      3.75 kB         109 kB
+├ ƒ /portal/onboarding/[id]                                 3.81 kB         106 kB
+├ ƒ /portal/profile                                         3.15 kB         105 kB
+├ ○ /portal/select-org                                      1.82 kB         116 kB
+├ ƒ /portal/support                                         2.91 kB         108 kB
+├ ƒ /portal/support/[id]                                    2.98 kB         105 kB
+├ ○ /resources                                              3.48 kB         109 kB
+├ ○ /resources/property-management-automation                 199 B         105 kB
+├ ○ /robots.txt                                               230 B         102 kB
+├ ○ /roi                                                      199 B         105 kB
+├ ○ /roi/accounting                                           123 B         114 kB
+├ ○ /roi/cleaning                                             122 B         114 kB
+├ ○ /roi/contractors                                          123 B         114 kB
+├ ○ /roi/healthcare                                           123 B         114 kB
+├ ○ /roi/property-management                                  123 B         114 kB
+├ ○ /roi/real-estate                                          123 B         114 kB
+├ ○ /signup                                                 5.29 kB         127 kB
+├ ○ /sitemap.xml                                              230 B         102 kB
+├ ○ /status                                                   230 B         102 kB
+├ ○ /thank-you                                                199 B         105 kB
+└ ○ /trust                                                    230 B         102 kB
++ First Load JS shared by all                                102 kB
+  ├ chunks/1255-02350b776e8cb818.js                         45.5 kB
+  ├ chunks/4bd1b696-100b9d70ed4e49c1.js                     54.2 kB
+  └ other shared chunks (total)                             1.99 kB
+
+
+ƒ Middleware                                                 115 kB
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+

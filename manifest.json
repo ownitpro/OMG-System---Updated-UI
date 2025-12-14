@@ -1,0 +1,25 @@
+{
+  "name": "OMGsystems - Build Once. Profit Forever.",
+  "short_name": "OMGsystems",
+  "description": "One platform to unify your CRM, documents, and automation. Launch in 1–3 weeks. Eliminate admin, scale faster, and reclaim your time.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#111111",
+  "theme_color": "#00D084",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["business", "productivity", "utilities"],
+  "lang": "en",
+  "dir": "ltr"
+}

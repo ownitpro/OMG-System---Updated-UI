@@ -1,0 +1,20 @@
+{
+  "rateLimiting": {
+    "login": "5 attempts per 15 minutes",
+    "ticketCreation": "10 per hour",
+    "apiCalls": "100 per minute",
+    "fileUpload": "5 per minute"
+  },
+  "csrfProtection": {
+    "enabled": true,
+    "tokenValidation": "All POST/PUT requests",
+    "sameSite": "strict",
+    "secure": true
+  },
+  "inputValidation": {
+    "sanitization": "All user inputs sanitized",
+    "validation": "Zod schema validation",
+    "sqlInjection": "Parameterized queries only",
+    "xssProtection": "Output encoding enabled"
+  }
+}
