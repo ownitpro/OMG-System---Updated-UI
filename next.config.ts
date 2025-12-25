@@ -7,8 +7,8 @@ const nextConfig: NextConfig = {
   // Note: cacheComponents is incompatible with dynamic route segment config
   // If you need cacheComponents, remove all `export const dynamic` statements
   // cacheComponents: true,
-  // Add empty turbopack config to use webpack for builds
-  turbopack: {},
+  // Turbopack disabled - using webpack instead (fixes Turbopack panic errors)
+  // turbopack: {},
   serverExternalPackages: ['@swc/helpers'],
   // Suppress HMR module errors
   onDemandEntries: {
