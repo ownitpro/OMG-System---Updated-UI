@@ -28,39 +28,39 @@ export default function WhyLeadFlowMatters() {
       value: 78,
       suffix: "%",
       label: "of businesses lose leads due to slow follow-up",
-      color: "text-red-600"
     },
     {
       value: 45,
       suffix: "%",
       label: "higher client retention with integrated CRM",
-      color: "text-green-600"
     },
     {
       value: 3,
       suffix: "×",
       label: "average ROI on optimized ad spend",
-      color: "text-emerald-600"
     },
     {
       value: 60,
       suffix: "%",
       label: "less manual entry after automation",
-      color: "text-blue-600"
     },
     {
       value: 20,
       suffix: "+",
       label: "industries served from real estate to healthcare",
-      color: "text-purple-600"
     }
   ];
 
   return (
-    <section ref={sectionRef} className="py-16 md:py-24 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section ref={sectionRef} className="relative py-16 md:py-24 bg-black">
+      {/* Emerald glow effects */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[120px] h-[200px] bg-gradient-to-r from-[#47BD79]/10 via-emerald-500/6 to-transparent rounded-full blur-2xl"></div>
+        <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[120px] h-[200px] bg-gradient-to-l from-[#47BD79]/10 via-emerald-500/6 to-transparent rounded-full blur-2xl"></div>
+      </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl mb-4">
+          <h2 className="text-3xl font-extrabold text-white sm:text-4xl mb-4">
             The numbers don't lie. See how businesses transform their lead generation.
           </h2>
         </div>
@@ -69,10 +69,10 @@ export default function WhyLeadFlowMatters() {
           {metrics.map((metric, index) => (
             <div
               key={index}
-              className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+              className="bg-white/5 backdrop-blur-xl rounded-xl p-6 border border-white/10 hover:border-[#47BD79]/30 transition-all duration-300 transform hover:-translate-y-1"
             >
               <div className="text-center">
-                <div className={`text-4xl font-bold ${metric.color} mb-2`}>
+                <div className="text-4xl font-bold text-[#47BD79] mb-2">
                   {isVisible ? (
                     <CountUpAnimation
                       end={metric.value}
@@ -84,7 +84,7 @@ export default function WhyLeadFlowMatters() {
                   )}
                   <span className="text-2xl">{metric.suffix}</span>
                 </div>
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <p className="text-white/70 text-sm leading-relaxed">
                   {metric.label}
                 </p>
               </div>
@@ -117,7 +117,7 @@ function CountUpAnimation({ end, duration, delay }: { end: number; duration: num
     const animate = (currentTime: number) => {
       if (!startTime) startTime = currentTime;
       const progress = Math.min((currentTime - startTime) / duration, 1);
-      
+
       setCount(Math.floor(progress * end));
 
       if (progress < 1) {

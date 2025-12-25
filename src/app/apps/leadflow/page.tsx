@@ -237,69 +237,69 @@ export default function LeadFlowPage() {
           </div>
         </section>
 
-      {/* Frustrations - Redesigned with AI Agent Style */}
-      <section className="py-20 bg-gray-50">
+      {/* Frustrations - Dark Glass Theme */}
+      <section className="py-20 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-bold text-white mb-4">
               We've heard this before
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-white/70 max-w-3xl mx-auto">
               If this sounds familiar, LeadFlow fixes it.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {frustrations.map((frustration, index) => (
               <div
                 key={index}
-                className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100"
+                className="group bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10 hover:bg-white/10 hover:border-[#47BD79]/30 transition-all duration-600 ease-premium-out transform hover:-translate-y-2"
               >
                 <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-200 transition-colors duration-300">
+                  <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-500/30 transition-colors duration-300">
                     <span className="text-2xl">😤</span>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900">{frustration.title}</h3>
+                  <h3 className="text-lg font-semibold text-white">{frustration.title}</h3>
                 </div>
-                <p className="text-gray-600 leading-relaxed">{frustration.description}</p>
+                <p className="text-white/70 leading-relaxed">{frustration.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* How it works - Redesigned with AI Agent Style */}
-      <section className="py-20 bg-white">
+      {/* How it works - Dark Glass Theme */}
+      <section className="py-20 bg-gradient-to-br from-[#2B2A2A] via-[#1f1e1e] to-[#2B2A2A]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-bold text-white mb-4">
               How it works
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-white/70 max-w-3xl mx-auto">
               Six steps from nothing to something.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {steps.map((step, index) => (
               <div
                 key={index}
-                className="group relative bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-8 border border-emerald-100 hover:border-emerald-200 transition-all duration-300 transform hover:-translate-y-1"
+                className="group relative bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-[#47BD79]/20 hover:border-[#47BD79]/40 transition-all duration-600 ease-premium-out transform hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(71,189,121,0.15)]"
               >
                 <div className="flex items-start mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300 shadow-[0_0_20px_rgba(71,189,121,0.3)]">
                     <span className="text-2xl font-bold text-white">{index + 1}</span>
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{step.title}</h3>
-                    <p className="text-gray-600 leading-relaxed">{step.description}</p>
+                    <h3 className="text-xl font-bold text-white mb-2">{step.title}</h3>
+                    <p className="text-white/70 leading-relaxed">{step.description}</p>
                   </div>
                 </div>
-                
+
                 {/* Step indicator line */}
                 {index < steps.length - 1 && (
-                  <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-white rounded-full border-4 border-emerald-200 flex items-center justify-center">
-                    <ArrowRightIcon className="w-4 h-4 text-emerald-500" />
+                  <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-[#2B2A2A] rounded-full border-4 border-[#47BD79]/30 flex items-center justify-center">
+                    <ArrowRightIcon className="w-4 h-4 text-[#47BD79]" />
                   </div>
                 )}
               </div>
@@ -308,32 +308,32 @@ export default function LeadFlowPage() {
         </div>
       </section>
 
-      {/* Deliverables - Redesigned with AI Agent Style */}
-      <section className="py-20 bg-gray-50">
+      {/* Deliverables - Dark Glass Theme */}
+      <section className="py-20 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-bold text-white mb-4">
               What you get
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-white/70 max-w-3xl mx-auto">
               Clear handoffs, working assets, measurable outcomes.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {deliverables.map((deliverable, index) => (
               <div
                 key={index}
-                className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100"
+                className="group bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10 hover:bg-white/10 hover:border-[#47BD79]/30 transition-all duration-600 ease-premium-out transform hover:-translate-y-2"
               >
                 <div className="flex items-center mb-6">
-                  <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300 shadow-[0_0_20px_rgba(71,189,121,0.3)]">
                     <CheckCircleIcon className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900">{deliverable.title}</h3>
+                  <h3 className="text-xl font-bold text-white">{deliverable.title}</h3>
                 </div>
-                <p className="text-gray-600 leading-relaxed mb-4">{deliverable.description}</p>
-                <div className="flex items-center text-emerald-600 font-semibold">
+                <p className="text-white/70 leading-relaxed mb-4">{deliverable.description}</p>
+                <div className="flex items-center text-[#47BD79] font-semibold">
                   <span className="mr-2">✓</span>
                   <span>Included in your package</span>
                 </div>
@@ -346,55 +346,55 @@ export default function LeadFlowPage() {
       {/* App Pairings Strip */}
       <AppPairingsStrip app={getAppById("leads")} />
 
-      {/* Proof - Redesigned with AI Agent Style */}
-      <section className="py-20 bg-white">
+      {/* Proof - Dark Glass Theme */}
+      <section className="py-20 bg-gradient-to-br from-[#2B2A2A] via-[#1f1e1e] to-[#2B2A2A]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-bold text-white mb-4">
               Proof & results
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-white/70 max-w-3xl mx-auto">
               Real results from real businesses using LeadFlow.
             </p>
           </div>
-          
-          <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-3xl p-12 border border-emerald-100">
+
+          <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-12 border border-[#47BD79]/20 shadow-[0_0_30px_rgba(71,189,121,0.1)]">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h3 className="text-3xl font-bold text-gray-900 mb-6">{proof.title}</h3>
-                <p className="text-lg text-gray-600 mb-8 leading-relaxed">{proof.description}</p>
-                
+                <h3 className="text-3xl font-bold text-white mb-6">{proof.title}</h3>
+                <p className="text-lg text-white/70 mb-8 leading-relaxed">{proof.description}</p>
+
                 <div className="grid grid-cols-2 gap-6">
                   <div className="text-center">
-                    <div className="text-4xl font-bold text-emerald-600 mb-2">{proof.metric1}</div>
-                    <div className="text-gray-600">{proof.label1}</div>
+                    <div className="text-4xl font-bold text-[#47BD79] mb-2">{proof.metric1}</div>
+                    <div className="text-white/60">{proof.label1}</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-4xl font-bold text-teal-600 mb-2">{proof.metric2}</div>
-                    <div className="text-gray-600">{proof.label2}</div>
+                    <div className="text-4xl font-bold text-teal-400 mb-2">{proof.metric2}</div>
+                    <div className="text-white/60">{proof.label2}</div>
                   </div>
                 </div>
               </div>
-              
-              <div className="bg-white rounded-2xl p-8 shadow-lg">
+
+              <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-white/10">
                 <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center mr-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center mr-4 shadow-[0_0_15px_rgba(71,189,121,0.3)]">
                     <ChartBarIcon className="w-6 h-6 text-white" />
                   </div>
-                  <h4 className="text-xl font-bold text-gray-900">Success Metrics</h4>
+                  <h4 className="text-xl font-bold text-white">Success Metrics</h4>
                 </div>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Lead Conversion Rate</span>
-                    <span className="font-bold text-emerald-600">+{proof.metric1}</span>
+                    <span className="text-white/70">Lead Conversion Rate</span>
+                    <span className="font-bold text-[#47BD79]">+{proof.metric1}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Response Time</span>
-                    <span className="font-bold text-teal-600">-{proof.metric2}</span>
+                    <span className="text-white/70">Response Time</span>
+                    <span className="font-bold text-teal-400">-{proof.metric2}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Customer Satisfaction</span>
-                    <span className="font-bold text-emerald-600">95%+</span>
+                    <span className="text-white/70">Customer Satisfaction</span>
+                    <span className="font-bold text-[#47BD79]">95%+</span>
                   </div>
                 </div>
               </div>
@@ -406,45 +406,45 @@ export default function LeadFlowPage() {
       {/* App Industries Strip */}
       <AppIndustriesStrip appId="leads" />
 
-      {/* Final CTA - Redesigned with AI Agent Style */}
-      <section className="py-20 bg-gradient-to-br from-emerald-50 to-teal-50">
+      {/* Final CTA - Dark Glass Theme */}
+      <section className="py-20 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-bold text-white mb-4">
               Ready to turn ads into clients on autopilot?
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-white/70 max-w-3xl mx-auto">
               Onboarding typically completes in 1–3 weeks depending on complexity.
             </p>
           </div>
-          
-          <div className="bg-white rounded-3xl p-12 shadow-xl border border-emerald-100">
+
+          <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-12 border border-[#47BD79]/20 shadow-[0_0_30px_rgba(71,189,121,0.1)]">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                <h3 className="text-2xl font-bold text-white mb-4">
                   Get Your LeadFlow Strategy Call
                 </h3>
-                <p className="text-gray-600 mb-6 leading-relaxed">
+                <p className="text-white/70 mb-6 leading-relaxed">
                   Book a free consultation to see how LeadFlow can transform your lead management.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Link
                     href="/book-demo?app=leadflow"
-                    className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-2xl hover:from-emerald-600 hover:to-teal-600 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                    className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-2xl hover:from-emerald-600 hover:to-teal-600 transition-all duration-300 transform hover:scale-105 shadow-[0_0_20px_rgba(71,189,121,0.4)]"
                   >
                     <span className="mr-2">Get Started</span>
                     <ArrowRightIcon className="w-5 h-5" />
                   </Link>
                   <Link
                     href="/contact"
-                    className="inline-flex items-center justify-center px-8 py-4 border-2 border-emerald-200 text-emerald-700 font-semibold rounded-2xl hover:bg-emerald-50 transition-all duration-300"
+                    className="inline-flex items-center justify-center px-8 py-4 border-2 border-[#47BD79]/30 text-[#47BD79] font-semibold rounded-2xl hover:bg-[#47BD79]/10 hover:border-[#47BD79]/50 transition-all duration-300"
                   >
                     Talk to Sales
                   </Link>
                 </div>
               </div>
-              
-              <div className="bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl p-8 text-white">
+
+              <div className="bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl p-8 text-white shadow-[0_0_30px_rgba(71,189,121,0.3)]">
                 <div className="flex items-center mb-6">
                   <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
                     <BoltIcon className="w-6 h-6 text-white" />
@@ -475,34 +475,34 @@ export default function LeadFlowPage() {
         </div>
       </section>
 
-      {/* FAQ Section - Redesigned with AI Agent Style */}
-      <section className="py-20 bg-gray-50">
+      {/* FAQ Section - Dark Glass Theme */}
+      <section className="py-20 bg-gradient-to-br from-[#2B2A2A] via-[#1f1e1e] to-[#2B2A2A]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-bold text-white mb-4">
               Frequently asked questions
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-white/70 max-w-3xl mx-auto">
               Everything you need to know about LeadFlow.
             </p>
           </div>
-          
+
           <div className="max-w-4xl mx-auto">
             <div className="space-y-6">
               {faqs.map((faq, index) => (
                 <div
                   key={index}
-                  className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-emerald-200"
+                  className="group bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10 hover:bg-white/10 hover:border-[#47BD79]/30 transition-all duration-600 ease-premium-out"
                 >
                   <div className="flex items-start">
-                    <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center mr-4 mt-1 group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center mr-4 mt-1 group-hover:scale-110 transition-transform duration-300 shadow-[0_0_10px_rgba(71,189,121,0.3)]">
                       <span className="text-white font-bold text-sm">?</span>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-emerald-700 transition-colors duration-300">
+                      <h3 className="text-lg font-bold text-white mb-3 group-hover:text-[#47BD79] transition-colors duration-300">
                         {faq.q}
                       </h3>
-                      <p className="text-gray-600 leading-relaxed">{faq.a}</p>
+                      <p className="text-white/70 leading-relaxed">{faq.a}</p>
                     </div>
                   </div>
                 </div>

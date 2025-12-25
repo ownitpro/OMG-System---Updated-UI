@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { PortalShell } from "@/components/PortalShell";
 import { getAdminNav } from "@/config/portalNav";
 import CouponsTable from "./CouponsTable";
@@ -17,7 +18,16 @@ export default function AdminCouponsPage() {
           </p>
         </div>
 
-        <CouponsTable />
+        <Suspense fallback={
+          <div className="rounded-xl border bg-white p-8">
+            <div className="animate-pulse space-y-4">
+              <div className="h-10 w-full bg-slate-100 rounded-lg"></div>
+              <div className="h-64 w-full bg-slate-50 rounded-lg"></div>
+            </div>
+          </div>
+        }>
+          <CouponsTable />
+        </Suspense>
       </div>
     </PortalShell>
   );

@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   ShieldCheckIcon, 
   DocumentTextIcon, 
@@ -58,70 +57,70 @@ export default function SecureVaultDocsDemoPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-[#2B2A2A] via-[#1f1e1e] to-[#2B2A2A]">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Try SecureVault Docs Demo
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Try <span className="text-[#47BD79]">SecureVault Docs</span> Demo
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Experience how SecureVault Docs can transform your document management. 
+          <p className="text-xl text-white/70 max-w-2xl mx-auto">
+            Experience how SecureVault Docs can transform your document management.
             Choose your industry to see tailored workflows and features.
           </p>
         </div>
 
-        <Card className="max-w-2xl mx-auto mb-12">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center">Start Your Demo</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
+        <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 max-w-2xl mx-auto mb-12 overflow-hidden">
+          <div className="p-6 border-b border-white/10">
+            <h2 className="text-2xl font-bold text-center text-white">Start Your Demo</h2>
+          </div>
+          <div className="p-6 space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-white/70 mb-2">
                 Select Your Industry
               </label>
               <Select value={selectedIndustry} onValueChange={setSelectedIndustry}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full bg-white/5 border-white/20 text-white">
                   <SelectValue placeholder="Choose your industry" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-[#2B2A2A] border-white/20">
                   {industries.map((industry) => (
-                    <SelectItem key={industry} value={industry}>
+                    <SelectItem key={industry} value={industry} className="text-white hover:bg-white/10">
                       {industry}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-            
-            <Button 
+
+            <Button
               onClick={handleDemoStart}
               disabled={!selectedIndustry}
-              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 text-lg"
+              className="w-full bg-[#47BD79] hover:bg-[#3da86a] text-white py-3 text-lg shadow-[0_0_20px_rgba(71,189,121,0.4)] transition-all duration-600 ease-premium-out"
             >
               Launch {selectedIndustry} Demo
               <ArrowRightIcon className="ml-2 h-5 w-5" />
             </Button>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {features.map((feature, index) => (
-            <div key={index} className="bg-white rounded-xl p-6 shadow-md text-center">
-              <div className="flex items-center justify-center w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full mx-auto mb-4">
+            <div key={index} className="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 hover:border-[#47BD79]/30 transition-all duration-600 ease-premium-out text-center">
+              <div className="flex items-center justify-center w-12 h-12 bg-[#47BD79]/20 text-[#47BD79] rounded-full mx-auto mb-4">
                 <feature.icon className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
-              <p className="text-gray-600 text-sm">{feature.description}</p>
+              <h3 className="text-lg font-semibold text-white mb-2">{feature.title}</h3>
+              <p className="text-white/60 text-sm">{feature.description}</p>
             </div>
           ))}
         </div>
 
         <div className="text-center">
-          <p className="text-gray-600 mb-4">
-            Need help choosing? <a href="/contact" className="text-blue-600 hover:underline">Contact our team</a> for personalized guidance.
+          <p className="text-white/60 mb-4">
+            Need help choosing? <a href="/contact" className="text-[#47BD79] hover:underline">Contact our team</a> for personalized guidance.
           </p>
-          <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
-            <CheckCircleIcon className="h-4 w-4 text-green-500" />
+          <div className="flex items-center justify-center space-x-2 text-sm text-white/50">
+            <CheckCircleIcon className="h-4 w-4 text-[#47BD79]" />
             <span>No registration required</span>
             <span>•</span>
             <span>5-minute demo</span>

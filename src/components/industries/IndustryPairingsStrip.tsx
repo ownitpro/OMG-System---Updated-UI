@@ -11,8 +11,13 @@ type Props = {
 };
 
 export function IndustryPairingsStrip({ industry }: Props) {
-  const appIds = industry.recommendedAppIds ?? [];
-  const solutionIds = industry.recommendedSolutionIds ?? [];
+  // Extract appIds from apps array (each item has appId property)
+  const appRelations = industry.apps ?? industry.recommendedApps ?? [];
+  const appIds = appRelations.map((rel) => rel.appId);
+
+  // Extract solutionIds from recommendedSolutions array (each item has solutionId property)
+  const solutionRelations = industry.recommendedSolutions ?? industry.solutions ?? [];
+  const solutionIds = solutionRelations.map((rel) => rel.solutionId);
 
   if (appIds.length === 0 && solutionIds.length === 0) {
     return null;

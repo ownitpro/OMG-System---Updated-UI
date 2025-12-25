@@ -1,9 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
-import { 
-  UserIcon, 
-  CogIcon, 
-  LifebuoyIcon, 
+import {
+  UserIcon,
+  CogIcon,
+  LifebuoyIcon,
   ArrowRightOnRectangleIcon,
   BellIcon,
   CreditCardIcon
@@ -20,38 +20,45 @@ interface UserProfileDropdownProps {
 export function UserProfileDropdown({ user }: UserProfileDropdownProps) {
   return (
     <div className="relative">
-      <button className="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-50/50 transition-colors duration-300">
-        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+      <button className="flex items-center space-x-2 px-3 py-1.5 rounded-xl hover:bg-white/[0.08] hover:shadow-[0_0_12px_rgba(71,189,121,0.15)] transition-all duration-400 ease-premium-out">
+        <div className="w-7 h-7 bg-[#47BD79] rounded-lg flex items-center justify-center">
           {user.avatar ? (
-            <img 
-              src={user.avatar} 
+            <img
+              src={user.avatar}
               alt={user.name}
-              className="w-8 h-8 rounded-full object-cover"
+              className="w-7 h-7 rounded-lg object-cover"
             />
           ) : (
-            <span className="text-white font-semibold text-sm">
+            <span className="text-white font-semibold text-xs">
               {user.name.charAt(0).toUpperCase()}
             </span>
           )}
         </div>
         <div className="hidden lg:block text-left">
-          <p className="text-gray-900 font-medium text-sm">{user.name}</p>
-          <p className="text-gray-600 text-xs">{user.email}</p>
+          <p className="text-white/90 font-medium text-[13px]">{user.name}</p>
         </div>
-        <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-3.5 h-3.5 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-      
-      <div className="absolute right-0 top-full mt-2 w-64 bg-white/95 backdrop-blur-md rounded-xl border border-gray-200/50 shadow-2xl overflow-hidden">
-        <div className="p-4 border-b border-gray-200/50">
+
+      <div
+        className="absolute right-0 top-full mt-3 w-64 rounded-2xl border border-[#47BD79]/25 overflow-hidden animate-fade-in-slow"
+        style={{
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.05) 100%)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 30px rgba(71, 189, 121, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+        }}
+      >
+        <div className="p-4 border-b border-white/[0.1]">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-[#47BD79] rounded-xl flex items-center justify-center">
               {user.avatar ? (
-                <img 
-                  src={user.avatar} 
+                <img
+                  src={user.avatar}
                   alt={user.name}
-                  className="w-10 h-10 rounded-full object-cover"
+                  className="w-10 h-10 rounded-xl object-cover"
                 />
               ) : (
                 <span className="text-white font-semibold">
@@ -60,61 +67,61 @@ export function UserProfileDropdown({ user }: UserProfileDropdownProps) {
               )}
             </div>
             <div>
-              <p className="text-gray-900 font-semibold">{user.name}</p>
-              <p className="text-gray-600 text-sm">{user.email}</p>
+              <p className="text-white font-semibold text-sm">{user.name}</p>
+              <p className="text-white/50 text-xs">{user.email}</p>
             </div>
           </div>
         </div>
-        
+
         <div className="p-2">
           <Link
             href="/account"
-            className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-blue-50/50 transition-colors duration-300"
+            className="group flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.08] hover:shadow-[0_0_10px_rgba(71,189,121,0.1)] transition-all duration-400 ease-premium-out"
           >
-            <UserIcon className="w-5 h-5 text-gray-600" />
-            <span className="text-gray-800">Account</span>
+            <UserIcon className="w-4 h-4 text-white/50 group-hover:text-[#47BD79] transition-colors duration-400" />
+            <span className="text-white/90 text-sm">Account</span>
           </Link>
-          
+
           <Link
             href="/settings"
-            className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-blue-50/50 transition-colors duration-300"
+            className="group flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.08] hover:shadow-[0_0_10px_rgba(71,189,121,0.1)] transition-all duration-400 ease-premium-out"
           >
-            <CogIcon className="w-5 h-5 text-gray-600" />
-            <span className="text-gray-800">Settings</span>
+            <CogIcon className="w-4 h-4 text-white/50 group-hover:text-[#47BD79] transition-colors duration-400" />
+            <span className="text-white/90 text-sm">Settings</span>
           </Link>
-          
+
           <Link
             href="/billing"
-            className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-blue-50/50 transition-colors duration-300"
+            className="group flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.08] hover:shadow-[0_0_10px_rgba(71,189,121,0.1)] transition-all duration-400 ease-premium-out"
           >
-            <CreditCardIcon className="w-5 h-5 text-gray-600" />
-            <span className="text-gray-800">Billing</span>
+            <CreditCardIcon className="w-4 h-4 text-white/50 group-hover:text-[#47BD79] transition-colors duration-400" />
+            <span className="text-white/90 text-sm">Billing</span>
           </Link>
-          
+
           <Link
             href="/notifications"
-            className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-blue-50/50 transition-colors duration-300"
+            className="group flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.08] hover:shadow-[0_0_10px_rgba(71,189,121,0.1)] transition-all duration-400 ease-premium-out"
           >
-            <BellIcon className="w-5 h-5 text-gray-600" />
-            <span className="text-gray-800">Notifications</span>
+            <BellIcon className="w-4 h-4 text-white/50 group-hover:text-[#47BD79] transition-colors duration-400" />
+            <span className="text-white/90 text-sm">Notifications</span>
           </Link>
-          
+
           <Link
             href="/support"
-            className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-blue-50/50 transition-colors duration-300"
+            className="group flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.08] hover:shadow-[0_0_10px_rgba(71,189,121,0.1)] transition-all duration-400 ease-premium-out"
           >
-            <LifebuoyIcon className="w-5 h-5 text-gray-600" />
-            <span className="text-gray-800">Support</span>
+            <LifebuoyIcon className="w-4 h-4 text-white/50 group-hover:text-[#47BD79] transition-colors duration-400" />
+            <span className="text-white/90 text-sm">Support</span>
           </Link>
         </div>
-        
-        <div className="p-2 border-t border-gray-200/50">
+
+        <div className="p-2 border-t border-white/[0.1]">
           <Link
             href="/logout"
-            className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-red-50/50 transition-colors duration-300"
+            className="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-red-500/10 hover:shadow-[0_0_10px_rgba(239,68,68,0.15)] transition-all duration-400 ease-premium-out"
           >
-            <ArrowRightOnRectangleIcon className="w-5 h-5 text-red-500" />
-            <span className="text-red-500">Logout</span>
+            <ArrowRightOnRectangleIcon className="w-4 h-4 text-red-400" />
+            <span className="text-red-400 text-sm">Logout</span>
           </Link>
         </div>
       </div>

@@ -18,9 +18,16 @@ export function AppSolutionsStrip({ app, appId }: Props) {
   if (!solutions.length) return null;
 
   return (
-    <section className="border-t border-slate-100 bg-slate-50 py-6">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-3">
+    <section className="relative py-6 bg-slate-950">
+      {/* Emerald glow effects */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[100px] h-[150px] bg-gradient-to-r from-[#47BD79]/10 via-emerald-500/6 to-transparent rounded-full blur-2xl"></div>
+        <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[100px] h-[150px] bg-gradient-to-l from-[#47BD79]/10 via-emerald-500/6 to-transparent rounded-full blur-2xl"></div>
+        {/* Center glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[120px] bg-gradient-to-br from-[#47BD79]/8 via-emerald-500/5 to-transparent rounded-full blur-2xl"></div>
+      </div>
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">
           Works best with these Solutions
         </p>
 
@@ -32,11 +39,11 @@ export function AppSolutionsStrip({ app, appId }: Props) {
             return (
               <div
                 key={solution.id}
-                className="inline-flex items-center gap-2 rounded-full bg-white border border-slate-200 px-4 py-2 shadow-sm hover:shadow-md transition-shadow"
+                className="inline-flex items-center gap-2 rounded-full bg-slate-900/80 border border-slate-700 px-4 py-2 hover:border-emerald-400/50 transition-colors"
               >
                 <Link
                   href={solution.href}
-                  className="text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors"
+                  className="text-sm font-medium text-slate-100 hover:text-emerald-300 transition-colors"
                 >
                   {solution.label}
                 </Link>

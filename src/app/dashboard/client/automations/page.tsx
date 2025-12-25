@@ -11,8 +11,7 @@ import {
   PlusIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/auth";
+import { auth } from "@/auth";
 
 // Mock data fallback
 const mockAutomations = [
@@ -49,7 +48,7 @@ const mockAutomations = [
 ];
 
 export default async function AutomationsPage() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   // Fetch real data from API
   let automations = mockAutomations;

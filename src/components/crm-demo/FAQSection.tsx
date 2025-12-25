@@ -34,13 +34,13 @@ export default function FAQSection() {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-gray-50">
+    <section className="py-16 md:py-24 bg-black">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Frequently Asked Questions
           </h2>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-white/70">
             Everything you need to know about our CRM
           </p>
         </div>
@@ -49,26 +49,26 @@ export default function FAQSection() {
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden"
+              className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden hover:border-[#47BD79]/30 transition-all duration-600 ease-premium-out"
             >
               <button
                 onClick={() => toggleFAQ(index)}
-                className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-inset transition-colors"
+                className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#47BD79]/50 focus:ring-inset transition-colors"
                 aria-expanded={openIndex === index}
               >
-                <span className="text-lg font-semibold text-gray-900 pr-4">
+                <span className="text-lg font-semibold text-white pr-4">
                   {faq.question}
                 </span>
                 <ChevronDownIcon
-                  className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
+                  className={`w-5 h-5 text-white/50 transition-transform duration-200 ${
                     openIndex === index ? 'rotate-180' : ''
                   }`}
                 />
               </button>
-              
+
               {openIndex === index && (
                 <div className="px-6 pb-4">
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-white/70 leading-relaxed">
                     {faq.answer}
                   </p>
                 </div>
@@ -98,23 +98,23 @@ export default function FAQSection() {
 
         {/* Contact CTA */}
         <div className="mt-12 text-center">
-          <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-lg">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+          <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10">
+            <h3 className="text-2xl font-bold text-white mb-4">
               Still have questions?
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-white/70 mb-6">
               Our team is here to help you get the most out of your CRM
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="/contact"
-                className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors"
+                className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#47BD79] hover:bg-[#3da86a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#47BD79] transition-all duration-600 ease-premium-out shadow-[0_0_20px_rgba(71,189,121,0.4)]"
               >
                 Contact Support
               </a>
               <a
                 href="/try-live-demo"
-                className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors"
+                className="inline-flex items-center justify-center px-6 py-3 border border-white/20 text-base font-medium rounded-lg text-white bg-white/5 hover:bg-white/10 hover:border-[#47BD79]/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#47BD79] transition-all duration-600 ease-premium-out"
               >
                 Try Live Demo
               </a>

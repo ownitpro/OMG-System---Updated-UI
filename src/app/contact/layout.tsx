@@ -18,18 +18,5 @@ export const metadata: Metadata = {
 };
 
 export default function ContactLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="min-h-screen bg-off text-ink">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <nav aria-label="Breadcrumb" className="mb-8 text-sm text-neutral-600">
-          <ol className="flex items-center gap-2">
-            <li><a href="/" className="hover:text-primary">Home</a></li>
-            <li aria-hidden>›</li>
-            <li><a href="/contact" className="text-neutral-900 font-medium">Contact</a></li>
-          </ol>
-        </nav>
-        {children}
-      </div>
-    </div>
-  );
+  return <>{children}</>;
 }

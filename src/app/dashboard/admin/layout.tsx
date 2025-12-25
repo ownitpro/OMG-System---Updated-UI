@@ -1,6 +1,5 @@
-import { getServerSession } from "next-auth";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/auth";
 import { Role } from "@/generated/prisma";
 import { AdminSidebar } from "@/components/dashboard/AdminSidebar";
 import { AdminMinimalHeader } from "@/components/dashboard/AdminMinimalHeader";
@@ -11,7 +10,7 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if (!session) {
     redirect("/login");

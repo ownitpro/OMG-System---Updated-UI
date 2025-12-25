@@ -1,8 +1,8 @@
 import React from 'react';
 import { Metadata } from 'next';
 import { SEO_CONFIG, generateOrganizationSchema, generateWebsiteSchema, generateFAQSchema } from '@/lib/seo';
-import { HeroSection } from '@/components/homepage/hero-section';
-import { MetricsBar, defaultMetrics } from '@/components/homepage/metrics-bar';
+import { HeroWithGalaxy } from '@/components/homepage/hero-with-galaxy';
+import { defaultMetrics } from '@/components/homepage/metrics-bar';
 import HomepageBenefitsSection from '@/components/homepage/BenefitsSection';
 import HomepageProcessSection from '@/components/homepage/ProcessSection';
 import StrategySessionSection from '@/components/homepage/StrategySessionSection';
@@ -13,9 +13,7 @@ import HomepageFounderOfferSection from '@/components/homepage/FounderOfferSecti
 import { FinalCTASection, defaultFinalCTAData } from '@/components/homepage/final-cta-section';
 import { GracefulExitPopup } from '@/components/exit-intent/graceful-exit-popup';
 import { HomeAutomationAndWorkflowsSection } from '@/components/home/HomeAutomationAndWorkflowsSection';
-import { SecureVaultDocsSection } from '@/components/homepage/securevault-docs-section';
-import { OMGIQMiniSection } from '@/components/homepage/omg-iq-mini-section';
-import { CRMSection } from '@/components/homepage/crm-section';
+import { ProductsRowSection } from '@/components/homepage/products-row-section';
 import { HomeRecommendedStackByIndustry } from '@/components/home/HomeRecommendedStackByIndustry';
 
 export const metadata: Metadata = {
@@ -75,17 +73,17 @@ export default function HomePage() {
         }}
       />
 
-      <div className="min-h-screen bg-white">
-        {/* Hero Section - Keep original */}
-        <HeroSection
-          headline={SEO_CONFIG.brand.tagline}
-          subhead={SEO_CONFIG.brand.description}
-          primaryCTA={{ label: "Try a Live Demo", href: "/demos/live" }}
-          secondaryCTA={{ label: "See How It Works", href: "#benefits" }}
+      <div className="min-h-screen bg-black">
+        {/* Hero with Galaxy - Client component that wraps hero and metrics with galaxy background */}
+        <HeroWithGalaxy
+          heroProps={{
+            headline: SEO_CONFIG.brand.tagline,
+            subhead: SEO_CONFIG.brand.description,
+            primaryCTA: { label: "Try a Live Demo", href: "/demos/live" },
+            secondaryCTA: { label: "See How It Works", href: "#benefits" }
+          }}
+          metrics={defaultMetrics}
         />
-
-        {/* Trust / Metrics Bar - Keep original */}
-        <MetricsBar metrics={defaultMetrics} />
 
         {/* Benefits Section - AI Agent style */}
         <HomepageBenefitsSection />
@@ -93,14 +91,8 @@ export default function HomePage() {
         {/* Strategy Session Section - Replaces "How we transform your business" */}
         <StrategySessionSection />
 
-        {/* SecureVault Docs Section */}
-        <SecureVaultDocsSection />
-
-        {/* CRM Section */}
-        <CRMSection />
-
-        {/* OMGIQ Mini Section */}
-        <OMGIQMiniSection />
+        {/* Products Row - SecureVault, CRM, OMGIQ */}
+        <ProductsRowSection />
 
         {/* Case Studies Section - AI Agent style */}
         <HomepageCaseStudiesSection />

@@ -37,16 +37,13 @@ export function FinalCTASection({
   };
 
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} className={`py-20 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 text-white relative overflow-hidden ${className}`}>
-      {/* Modern Background Pattern with subtle animation */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}></div>
-      </div>
-      
-      {/* Subtle gradient overlay for depth */}
-      <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 via-transparent to-transparent"></div>
+    <section ref={ref as React.RefObject<HTMLElement>} className={`py-20 bg-black text-white relative overflow-hidden ${className}`}>
+      {/* Pure black background to blend seamlessly */}
+      <div className="absolute inset-0 bg-black" />
+
+      {/* Glow orbs - subtle background elements */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#47BD79]/8 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#A855F7]/8 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Icon */}
@@ -57,8 +54,8 @@ export function FinalCTASection({
               : 'opacity-0 scale-75 rotate-12'
           }`}
         >
-          <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white/30 transition-colors duration-300">
-            <SparklesIcon className="h-10 w-10 text-white" />
+          <div className="w-20 h-20 bg-[#47BD79]/20 backdrop-blur-glass-medium rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(71,189,121,0.3)] hover:bg-[#47BD79]/30 hover:shadow-[0_0_40px_rgba(71,189,121,0.5)] transition-all duration-600 ease-premium-out border border-[#47BD79]/30">
+            <SparklesIcon className="h-10 w-10 text-[#47BD79]" />
           </div>
         </div>
 
@@ -75,10 +72,10 @@ export function FinalCTASection({
         </h2>
 
         {/* Subheadline */}
-        <p 
-          className={`text-xl md:text-2xl text-blue-100 mb-8 leading-relaxed transition-all duration-1000 ease-out ${
-            isInView 
-              ? 'opacity-100 translate-y-0' 
+        <p
+          className={`text-xl md:text-2xl text-white/70 mb-8 leading-relaxed transition-all duration-1000 ease-premium-out ${
+            isInView
+              ? 'opacity-100 translate-y-0'
               : 'opacity-0 translate-y-8'
           }`}
           style={{ transitionDelay: '300ms' }}
@@ -91,9 +88,9 @@ export function FinalCTASection({
           <div className="mb-12">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
               {benefits.map((benefit, index) => (
-                <div key={index} className="flex items-center justify-center">
-                  <CheckCircleIcon className="h-6 w-6 text-green-400 mr-3 flex-shrink-0" />
-                  <span className="text-blue-100 font-medium">{benefit}</span>
+                <div key={index} className="flex items-center justify-center bg-white/5 backdrop-blur-glass-subtle px-4 py-3 rounded-xl border border-white/10 hover:border-[#47BD79]/30 hover:bg-white/10 transition-all duration-400 ease-premium-out">
+                  <CheckCircleIcon className="h-6 w-6 text-[#47BD79] mr-3 flex-shrink-0" />
+                  <span className="text-white/80 font-medium">{benefit}</span>
                 </div>
               ))}
             </div>
@@ -104,16 +101,16 @@ export function FinalCTASection({
         <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
           <Link
             href={safePrimaryCTA.href}
-            className="inline-flex items-center justify-center px-10 py-5 bg-white text-blue-600 font-bold text-lg rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg group"
+            className="inline-flex items-center justify-center px-10 py-5 bg-[#47BD79] text-white font-bold text-lg rounded-xl hover:bg-[#3da86a] transition-all duration-600 ease-premium-out transform hover:scale-105 shadow-lg shadow-[#47BD79]/30 hover:shadow-[0_0_40px_rgba(71,189,121,0.5)] group"
           >
             {safePrimaryCTA.label}
-            <ArrowRightIcon className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform" />
+            <ArrowRightIcon className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform duration-300" />
           </Link>
-          
+
           {secondaryCTA && secondaryCTA.href && (
             <Link
               href={secondaryCTA.href}
-              className="inline-flex items-center justify-center px-10 py-5 bg-white/10 backdrop-blur-sm text-white font-semibold text-lg rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/30"
+              className="inline-flex items-center justify-center px-10 py-5 bg-white/10 backdrop-blur-glass-medium text-white font-semibold text-lg rounded-xl hover:bg-white/20 transition-all duration-600 ease-premium-out border border-white/30 hover:border-[#47BD79]/50 hover:shadow-[0_0_25px_rgba(71,189,121,0.2)]"
             >
               {secondaryCTA.label}
             </Link>
@@ -122,48 +119,48 @@ export function FinalCTASection({
 
         {/* Trust Indicators */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-            <div className="text-3xl font-bold text-white mb-2">1-3 Weeks</div>
-            <div className="text-blue-100">Launch Time</div>
-            <div className="text-blue-100 text-sm">From setup to go-live</div>
+          <div className="bg-white/5 backdrop-blur-glass-light rounded-2xl p-6 border border-[#47BD79]/20 hover:border-[#47BD79]/40 hover:bg-white/10 transition-all duration-600 ease-premium-out hover:shadow-[0_0_20px_rgba(71,189,121,0.2)]">
+            <div className="text-3xl font-bold text-[#47BD79] mb-2">1-3 Weeks</div>
+            <div className="text-white/80">Launch Time</div>
+            <div className="text-white/50 text-sm">From setup to go-live</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-            <div className="text-3xl font-bold text-white mb-2">5+</div>
-            <div className="text-blue-100">Industries Supported</div>
-            <div className="text-blue-100 text-sm">From day one</div>
+          <div className="bg-white/5 backdrop-blur-glass-light rounded-2xl p-6 border border-[#A855F7]/20 hover:border-[#A855F7]/40 hover:bg-white/10 transition-all duration-600 ease-premium-out hover:shadow-[0_0_20px_rgba(168,85,247,0.2)]">
+            <div className="text-3xl font-bold text-[#A855F7] mb-2">5+</div>
+            <div className="text-white/80">Industries Supported</div>
+            <div className="text-white/50 text-sm">From day one</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-            <div className="text-3xl font-bold text-white mb-2">5+</div>
-            <div className="text-blue-100">Industries</div>
-            <div className="text-blue-100 text-sm">Live with custom automations</div>
+          <div className="bg-white/5 backdrop-blur-glass-light rounded-2xl p-6 border border-[#3B82F6]/20 hover:border-[#3B82F6]/40 hover:bg-white/10 transition-all duration-600 ease-premium-out hover:shadow-[0_0_20px_rgba(59,130,246,0.2)]">
+            <div className="text-3xl font-bold text-[#3B82F6] mb-2">5+</div>
+            <div className="text-white/80">Industries</div>
+            <div className="text-white/50 text-sm">Live with custom automations</div>
           </div>
         </div>
 
         {/* Additional Info */}
         <div className="mt-12 text-center">
-          <p className="text-blue-200 text-sm mb-4">
+          <p className="text-white/50 text-sm mb-4">
             Join thousands of businesses already transforming their operations
           </p>
-          <div className="flex flex-wrap justify-center gap-8 text-blue-200 text-sm">
+          <div className="flex flex-wrap justify-center gap-8 text-white/60 text-sm">
             <div className="flex items-center">
-              <CheckCircleIcon className="h-4 w-4 mr-2" />
+              <CheckCircleIcon className="h-4 w-4 mr-2 text-[#47BD79]" />
               Setup fees may vary by product.
             </div>
             <div className="flex items-center">
-              <CheckCircleIcon className="h-4 w-4 mr-2" />
+              <CheckCircleIcon className="h-4 w-4 mr-2 text-[#47BD79]" />
               Cancel anytime
             </div>
             <div className="flex items-center">
-              <CheckCircleIcon className="h-4 w-4 mr-2" />
+              <CheckCircleIcon className="h-4 w-4 mr-2 text-[#47BD79]" />
               Canadian data residency
             </div>
           </div>
-          
+
           {/* Ad Landing Page Link */}
           <div className="mt-8">
             <Link
               href="/ads"
-              className="inline-flex items-center text-blue-200 hover:text-white transition-colors duration-300 text-sm font-medium"
+              className="inline-flex items-center text-[#47BD79] hover:text-[#5fd492] transition-colors duration-400 ease-premium-out text-sm font-medium"
             >
               See Our Full Offering
               <ArrowRightIcon className="ml-2 h-4 w-4" />
@@ -172,10 +169,6 @@ export function FinalCTASection({
         </div>
       </div>
 
-      {/* Subtle floating elements - performance optimized */}
-      <div className="absolute top-20 left-10 w-16 h-16 bg-white/5 rounded-full blur-xl"></div>
-      <div className="absolute bottom-20 right-10 w-12 h-12 bg-white/5 rounded-full blur-xl"></div>
-      <div className="absolute top-1/2 left-5 w-8 h-8 bg-white/5 rounded-full blur-xl"></div>
     </section>
   );
 }

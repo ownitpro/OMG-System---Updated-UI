@@ -1,5 +1,4 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/auth";
+import { auth } from "@/auth";
 import { Role } from "../generated/prisma";
 import { redirect } from "next/navigation";
 
@@ -21,9 +20,9 @@ export interface UserSession {
 }
 
 export async function getCurrentUser(): Promise<UserSession | null> {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session?.user) return null;
-  
+
   return session.user as UserSession;
 }
 

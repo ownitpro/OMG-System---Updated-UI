@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
+import { auth } from '@/auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -15,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardSupportPage() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const activeOrgId = (session?.user as any)?.activeOrgId;
 
   // Placeholder data - in a real app, this would come from API calls

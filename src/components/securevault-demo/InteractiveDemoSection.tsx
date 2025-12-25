@@ -31,29 +31,29 @@ export default function InteractiveDemoSection() {
   const selectedIndustryData = industries.find(industry => industry.value === selectedIndustry);
 
   return (
-    <section className="py-16 md:py-24 bg-white">
+    <section className="py-16 md:py-24 bg-gradient-to-br from-[#2B2A2A] via-[#1f1e1e] to-[#2B2A2A]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Launch a Demo Tailored to Your Industry
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-white/70 max-w-3xl mx-auto">
             See how SecureVault Docs works specifically for your business type
           </p>
         </div>
 
         <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-3xl p-8 border border-gray-200 shadow-xl">
+          <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
               {/* Demo Selection */}
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                <h3 className="text-2xl font-bold text-white mb-6">
                   Choose Your Industry
                 </h3>
-                
+
                 <div className="space-y-4">
                   <div>
-                    <label htmlFor="demo-industry-select" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="demo-industry-select" className="block text-sm font-medium text-white/70 mb-2">
                       Select Industry
                     </label>
                     <div className="relative">
@@ -61,26 +61,26 @@ export default function InteractiveDemoSection() {
                         id="demo-industry-select"
                         value={selectedIndustry}
                         onChange={(e) => setSelectedIndustry(e.target.value)}
-                        className="w-full px-4 py-3 pr-10 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent appearance-none"
+                        className="w-full px-4 py-3 pr-10 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#47BD79] focus:border-transparent appearance-none"
                         aria-label="Select your industry for demo"
                       >
-                        <option value="">Choose your industry...</option>
+                        <option value="" className="bg-[#2B2A2A] text-white">Choose your industry...</option>
                         {industries.map((industry) => (
-                          <option key={industry.value} value={industry.value}>
+                          <option key={industry.value} value={industry.value} className="bg-[#2B2A2A] text-white">
                             {industry.label}
                           </option>
                         ))}
                       </select>
-                      <ChevronDownIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                      <ChevronDownIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/50 pointer-events-none" />
                     </div>
                   </div>
 
                   {selectedIndustryData && (
-                    <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
-                      <h4 className="font-semibold text-emerald-800 mb-2">
+                    <div className="bg-[#47BD79]/10 border border-[#47BD79]/30 rounded-lg p-4">
+                      <h4 className="font-semibold text-[#47BD79] mb-2">
                         {selectedIndustryData.label} Demo
                       </h4>
-                      <p className="text-emerald-700 text-sm">
+                      <p className="text-white/70 text-sm">
                         {selectedIndustryData.description}
                       </p>
                     </div>
@@ -89,7 +89,7 @@ export default function InteractiveDemoSection() {
                   <button
                     onClick={handleDemoLaunch}
                     disabled={!selectedIndustry || isLoading}
-                    className="w-full inline-flex items-center justify-center px-6 py-4 border border-transparent text-lg font-medium rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    className="w-full inline-flex items-center justify-center px-6 py-4 border border-transparent text-lg font-medium rounded-lg text-white bg-[#47BD79] hover:bg-[#3da86a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#47BD79] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-600 ease-premium-out transform hover:scale-105 shadow-[0_0_20px_rgba(71,189,121,0.4)]"
                   >
                     {isLoading ? (
                       <>
@@ -108,22 +108,22 @@ export default function InteractiveDemoSection() {
 
               {/* Demo Preview */}
               <div className="space-y-6">
-                <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-lg">
-                  <h4 className="font-semibold text-gray-900 mb-4">Demo Preview</h4>
+                <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
+                  <h4 className="font-semibold text-white mb-4">Demo Preview</h4>
                   <div className="space-y-3">
-                    <div className="flex items-center text-sm text-gray-600">
-                      <div className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></div>
+                    <div className="flex items-center text-sm text-white/70">
+                      <div className="w-2 h-2 bg-[#47BD79] rounded-full mr-3"></div>
                       Upload documents with drag & drop
                     </div>
-                    <div className="flex items-center text-sm text-gray-600">
+                    <div className="flex items-center text-sm text-white/70">
                       <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
                       AI-powered categorization
                     </div>
-                    <div className="flex items-center text-sm text-gray-600">
+                    <div className="flex items-center text-sm text-white/70">
                       <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
                       Automated workflow setup
                     </div>
-                    <div className="flex items-center text-sm text-gray-600">
+                    <div className="flex items-center text-sm text-white/70">
                       <div className="w-2 h-2 bg-indigo-500 rounded-full mr-3"></div>
                       Compliance & audit features
                     </div>
@@ -131,15 +131,15 @@ export default function InteractiveDemoSection() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-emerald-50 rounded-lg p-4 text-center">
-                    <ClockIcon className="w-6 h-6 text-emerald-600 mx-auto mb-2" />
-                    <div className="text-sm font-medium text-emerald-800">5 minutes</div>
-                    <div className="text-xs text-emerald-600">Interactive demo</div>
+                  <div className="bg-[#47BD79]/10 rounded-lg p-4 text-center border border-[#47BD79]/20">
+                    <ClockIcon className="w-6 h-6 text-[#47BD79] mx-auto mb-2" />
+                    <div className="text-sm font-medium text-white">5 minutes</div>
+                    <div className="text-xs text-white/60">Interactive demo</div>
                   </div>
-                  <div className="bg-blue-50 rounded-lg p-4 text-center">
-                    <UserGroupIcon className="w-6 h-6 text-blue-600 mx-auto mb-2" />
-                    <div className="text-sm font-medium text-blue-800">No signup</div>
-                    <div className="text-xs text-blue-600">Required</div>
+                  <div className="bg-blue-500/10 rounded-lg p-4 text-center border border-blue-500/20">
+                    <UserGroupIcon className="w-6 h-6 text-blue-400 mx-auto mb-2" />
+                    <div className="text-sm font-medium text-white">No signup</div>
+                    <div className="text-xs text-white/60">Required</div>
                   </div>
                 </div>
               </div>

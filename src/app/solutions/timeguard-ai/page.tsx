@@ -1,4 +1,6 @@
-import { Metadata } from "next";
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { SolutionRelationsStrip } from "@/components/solutions/SolutionRelationsStrip";
 import {
@@ -10,7 +12,6 @@ import {
   CheckCircleIcon,
   ArrowRightIcon,
   PhoneIcon,
-  EnvelopeIcon,
   ChatBubbleBottomCenterTextIcon,
   SparklesIcon,
   ShieldCheckIcon,
@@ -19,53 +20,8 @@ import {
   HomeIcon,
   BuildingOfficeIcon,
   BriefcaseIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
-
-export const metadata: Metadata = {
-  title: "TimeGuard AI – Your 24/7 Client Concierge | OMGsystems",
-  description:
-    "An AI assistant that handles your messages, books your appointments, filters your leads, and protects your time—across every platform you use.",
-  keywords: [
-    "AI assistant",
-    "appointment scheduling",
-    "client concierge",
-    "automated messaging",
-    "time management",
-    "AI scheduling",
-    "business automation",
-  ],
-  authors: [{ name: "OMGsystems" }],
-  creator: "OMGsystems",
-  publisher: "OMGsystems",
-  robots: "index, follow",
-  alternates: {
-    canonical: "https://www.omgsystems.com/solutions/timeguard-ai",
-  },
-  openGraph: {
-    title: "TimeGuard AI – Your 24/7 Client Concierge | OMGsystems",
-    description:
-      "An AI assistant that handles your messages, books your appointments, filters your leads, and protects your time—across every platform you use.",
-    url: "https://www.omgsystems.com/solutions/timeguard-ai",
-    siteName: "OMGsystems",
-    images: [
-      {
-        url: "https://www.omgsystems.com/images/timeguard-ai/timeguard-preview.png",
-        width: 1200,
-        height: 630,
-        alt: "TimeGuard AI – 24/7 Client Concierge",
-      },
-    ],
-    locale: "en_CA",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "TimeGuard AI – Your 24/7 Client Concierge | OMGsystems",
-    description:
-      "An AI assistant that handles your messages, books your appointments, filters your leads, and protects your time—across every platform you use.",
-    images: ["https://www.omgsystems.com/images/timeguard-ai/timeguard-preview.png"],
-  },
-};
 
 const painPoints = [
   {
@@ -192,118 +148,255 @@ const steps = [
 ];
 
 export default function TimeGuardAIPage() {
+  // Generate particle positions on client side only to avoid hydration mismatch
+  const [particles, setParticles] = useState<Array<{ left: number; delay: number; duration: number }>>([]);
+
+  useEffect(() => {
+    // Generate random positions only on client side
+    setParticles(
+      Array.from({ length: 20 }, () => ({
+        left: Math.random() * 100,
+        delay: Math.random() * 8,
+        duration: 8 + Math.random() * 4,
+      }))
+    );
+  }, []);
+
   return (
-    <main className="min-h-screen bg-[#F8FAFF] text-[#0C0F14]">
+    <main className="min-h-screen bg-slate-950 text-white">
+      {/* CSS Keyframes for animations */}
+      <style jsx global>{`
+        @keyframes float-particle {
+          0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+        }
+        @keyframes pulse-glow {
+          0%, 100% { opacity: 0.3; transform: scale(1); }
+          50% { opacity: 0.6; transform: scale(1.05); }
+        }
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes float-calendar {
+          0%, 100% { transform: translateY(0px) rotateY(0deg); }
+          50% { transform: translateY(-10px) rotateY(5deg); }
+        }
+        @keyframes timeline-dot {
+          0%, 100% { opacity: 0.3; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.2); }
+        }
+        @keyframes path-flow {
+          0% { stroke-dashoffset: 1000; }
+          100% { stroke-dashoffset: 0; }
+        }
+        .animate-float-particle { animation: float-particle 8s linear infinite; }
+        .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+        .animate-marquee { animation: marquee 30s linear infinite; }
+        .animate-float-calendar { animation: float-calendar 4s ease-in-out infinite; }
+        .animate-timeline-dot { animation: timeline-dot 2s ease-in-out infinite; }
+        .animate-path-flow { animation: path-flow 3s linear infinite; }
+        .marquee-container:hover .animate-marquee { animation-play-state: paused; }
+
+        /* 3D Flip Card Effect */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-preserve-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .group:hover .group-hover\\:rotate-y-180 { transform: rotateY(180deg); }
+
+        /* 3D Card Tilt Effect on Hover */
+        .step-card-3d {
+          transition: transform 0.5s ease, box-shadow 0.5s ease;
+        }
+        .group:hover .step-card-3d {
+          transform: rotateX(-8deg) rotateY(8deg) translateY(-10px);
+        }
+        .group:nth-child(2):hover .step-card-3d {
+          transform: rotateX(-8deg) rotateY(0deg) translateY(-10px);
+        }
+        .group:nth-child(3):hover .step-card-3d {
+          transform: rotateX(-8deg) rotateY(-8deg) translateY(-10px);
+        }
+      `}</style>
+
       {/* SECTION 1 — HERO SECTION */}
-      <section className="relative overflow-hidden bg-[#F8FAFF]">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-32">
+      <section className="relative overflow-hidden bg-slate-950 pt-40 sm:pt-52 pb-20 sm:pb-32">
+        {/* Grid Pattern Background */}
+        <div className="absolute inset-0 opacity-20">
+          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+                <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(28, 110, 242, 0.3)" strokeWidth="1"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)" />
+          </svg>
+        </div>
+
+        {/* Floating Particles */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {particles.map((particle, i) => (
+            <div
+              key={i}
+              className="absolute w-2 h-2 bg-blue-400 rounded-full animate-float-particle"
+              style={{
+                left: `${particle.left}%`,
+                bottom: `-20px`,
+                animationDelay: `${particle.delay}s`,
+                animationDuration: `${particle.duration}s`,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Glow Orbs */}
+        <div className="absolute top-20 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-[120px] animate-pulse-glow" />
+        <div className="absolute bottom-20 right-1/4 w-80 h-80 bg-cyan-400/15 rounded-full blur-[100px] animate-pulse-glow" style={{ animationDelay: '1.5s' }} />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left: Headline + CTAs */}
             <div className="space-y-8">
               <div>
-                <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-[#0C0F14] mb-6">
-                  Meet TimeGuard AI — Your 24/7 Client Concierge
+                <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-6">
+                  <span className="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
+                    Meet TimeGuard AI
+                  </span>
+                  <br />
+                  <span className="text-white">Your 24/7 Client Concierge</span>
                 </h1>
-                <p className="text-xl md:text-2xl text-[#5F697A] leading-relaxed">
+                <p className="text-xl md:text-2xl text-white/70 leading-relaxed">
                   An AI assistant that handles your messages, books your appointments, filters your leads, and protects your time—across every platform you use.
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/contact?solution=timeguard-ai"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-[#1C6EF2] text-white font-bold rounded-lg hover:bg-[#1557C0] transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold rounded-lg hover:from-blue-600 hover:to-cyan-500 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/25"
                 >
                   Book Your Time Assessment Call
                   <ArrowRightIcon className="w-5 h-5 ml-2" />
                 </Link>
                 <Link
                   href="#how-it-works"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#1C6EF2] border-2 border-[#1C6EF2] font-semibold rounded-lg hover:bg-[#DCE8FF] transition-all duration-300"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-white/5 backdrop-blur-xl text-white border border-blue-500/30 font-semibold rounded-lg hover:bg-white/10 hover:border-blue-400/50 transition-all duration-300"
                 >
                   See How It Works
                 </Link>
               </div>
             </div>
-            {/* Right: Placeholder for AI chat widget mockup */}
+
+            {/* Right: AI Chat Widget Mockup */}
             <div className="relative">
-              <div className="bg-white rounded-2xl shadow-2xl p-8 border border-[#DCE8FF]">
+              <div className="backdrop-blur-xl bg-slate-900/60 rounded-2xl p-8 border border-blue-500/20 shadow-[0_0_60px_rgba(28,110,242,0.15)]">
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 bg-[#1C6EF2] rounded-full flex items-center justify-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30">
                       <SparklesIcon className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <p className="font-bold text-[#0C0F14]">TimeGuard AI</p>
-                      <p className="text-sm text-[#5F697A]">Online • 24/7</p>
+                      <p className="font-bold text-white">TimeGuard AI</p>
+                      <p className="text-sm text-green-400 flex items-center gap-1">
+                        <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                        Online • 24/7
+                      </p>
                     </div>
                   </div>
                   <div className="space-y-3">
-                    <div className="bg-[#DCE8FF] rounded-lg p-4">
-                      <p className="text-sm text-[#0C0F14]">
+                    <div className="bg-slate-800/80 rounded-lg p-4 border border-blue-500/10">
+                      <p className="text-sm text-white/90">
                         I can help you schedule your appointment. What time works best for you?
                       </p>
                     </div>
-                    <div className="bg-[#1C6EF2] rounded-lg p-4 text-white ml-auto max-w-[80%]">
+                    <div className="bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg p-4 text-white ml-auto max-w-[80%]">
                       <p className="text-sm">
                         How about Tuesday at 2 PM?
                       </p>
                     </div>
-                    <div className="bg-[#DCE8FF] rounded-lg p-4">
-                      <p className="text-sm text-[#0C0F14]">
+                    <div className="bg-slate-800/80 rounded-lg p-4 border border-blue-500/10">
+                      <p className="text-sm text-white/90">
                         Perfect! I've booked you for Tuesday, March 15th at 2:00 PM. You'll receive a confirmation shortly.
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
-              {/* Decorative accent */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#33F3E5] opacity-20 rounded-full blur-2xl"></div>
+              {/* Decorative accents */}
+              <div className="absolute -top-4 -right-4 w-32 h-32 bg-cyan-400/30 rounded-full blur-3xl" />
+              <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-blue-500/30 rounded-full blur-2xl" />
             </div>
           </div>
         </div>
       </section>
 
       {/* SECTION 2 — PROBLEM SECTION */}
-      <section className="bg-white py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-[#0C0F14] mb-4">
-              You're Losing Hours Every Week on Tasks You Shouldn't Be Doing
+      <section className="relative bg-slate-950 py-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900/50 to-slate-950" />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              You're Losing Hours Every Week on Tasks
+              <br />
+              <span className="text-red-400">You Shouldn't Be Doing</span>
             </h2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {painPoints.map((point, index) => {
-              const Icon = point.icon;
-              return (
-                <div
-                  key={index}
-                  className="bg-[#DCE8FF] rounded-xl p-6 border border-[#1C6EF2]/20"
-                >
-                  <div className="w-12 h-12 bg-[#1C6EF2] rounded-lg flex items-center justify-center mb-4">
-                    <Icon className="w-6 h-6 text-white" />
+
+          {/* Timeline with Pain Points */}
+          <div className="relative">
+            {/* Connecting Line */}
+            <div className="hidden lg:block absolute top-[60px] left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-red-500/50 via-red-400/50 to-red-500/50" />
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {painPoints.map((point, index) => {
+                const Icon = point.icon;
+                return (
+                  <div key={index} className="relative flex flex-col items-center">
+                    {/* Timeline Node */}
+                    <div className="hidden lg:flex w-8 h-8 bg-red-500/20 border-2 border-red-500 rounded-full items-center justify-center mb-4 z-10">
+                      <div className="w-3 h-3 bg-red-500 rounded-full animate-timeline-dot" style={{ animationDelay: `${index * 0.5}s` }} />
+                    </div>
+
+                    {/* Card */}
+                    <div className="backdrop-blur-xl bg-slate-900/60 rounded-xl p-6 border border-red-500/20 hover:border-red-500/40 transition-all duration-300 w-full group hover:shadow-[0_0_30px_rgba(239,68,68,0.15)]">
+                      <div className="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center mb-4 group-hover:bg-red-500/30 transition-colors">
+                        <XMarkIcon className="w-6 h-6 text-red-400" />
+                      </div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Icon className="w-5 h-5 text-white/60" />
+                        <span className="text-xs text-white/40 font-medium">Problem #{index + 1}</span>
+                      </div>
+                      <p className="text-lg font-semibold text-white">
+                        {point.title}
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-lg font-semibold text-[#0C0F14]">
-                    {point.title}
-                  </p>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-          <p className="text-center text-lg text-[#5F697A] max-w-2xl mx-auto">
-            TimeGuard AI removes all of this so you can focus on the work that matters.
+
+          <p className="text-center text-lg text-white/60 max-w-2xl mx-auto mt-12">
+            <span className="text-blue-400 font-semibold">TimeGuard AI</span> removes all of this so you can focus on the work that matters.
           </p>
         </div>
       </section>
 
       {/* SECTION 3 — INTRO TO TIMEGUARD AI */}
-      <section className="bg-[#F8FAFF] py-20">
+      <section className="relative bg-slate-950 py-20 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-4xl md:text-5xl font-bold text-[#0C0F14] mb-6">
-                Your Business Runs Smoother When Your Schedule Runs Itself
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                Your Business Runs Smoother When Your{" "}
+                <span className="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
+                  Schedule Runs Itself
+                </span>
               </h2>
-              <p className="text-xl text-[#5F697A] mb-8 leading-relaxed">
+              <p className="text-xl text-white/60 mb-8 leading-relaxed">
                 Imagine having an assistant who never sleeps, never forgets, and always stays polite. That's TimeGuard AI. It handles your communication, coordinates your appointments, and routes clients to the right place—automatically.
               </p>
               <ul className="space-y-4">
@@ -314,54 +407,87 @@ export default function TimeGuardAIPage() {
                   "Sends reminders so no one forgets",
                   "Works across website, WhatsApp, SMS, and more",
                 ].map((point, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <CheckCircleIcon className="w-6 h-6 text-[#1C6EF2] flex-shrink-0 mt-0.5" />
-                    <span className="text-lg text-[#0C0F14]">{point}</span>
+                  <li key={index} className="flex items-start gap-3 group">
+                    <div className="w-6 h-6 bg-blue-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-blue-500/30 transition-colors">
+                      <CheckCircleIcon className="w-4 h-4 text-blue-400" />
+                    </div>
+                    <span className="text-lg text-white/80">{point}</span>
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="bg-white rounded-2xl p-8 shadow-xl border border-[#DCE8FF]">
-              <div className="space-y-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#1C6EF2] to-[#33F3E5] rounded-xl flex items-center justify-center">
-                    <CalendarIcon className="w-8 h-8 text-white" />
+
+            {/* 3D Floating Calendar */}
+            <div className="relative">
+              <div className="backdrop-blur-xl bg-slate-900/60 rounded-2xl p-8 border border-blue-500/20 shadow-[0_0_60px_rgba(28,110,242,0.15)] animate-float-calendar" style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}>
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+                      <CalendarIcon className="w-8 h-8 text-white" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-white">Auto-Scheduling</p>
+                      <p className="text-sm text-blue-400">24/7 availability</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-bold text-[#0C0F14]">Auto-Scheduling</p>
-                    <p className="text-sm text-[#5F697A]">24/7 availability</p>
+                  <div className="h-48 bg-gradient-to-br from-slate-800/80 to-slate-900/80 rounded-lg border border-blue-500/10 flex items-center justify-center relative overflow-hidden">
+                    {/* Calendar Grid Preview */}
+                    <div className="grid grid-cols-7 gap-1 p-4 w-full">
+                      {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
+                        <div key={i} className="text-center text-xs text-white/40 font-medium">{day}</div>
+                      ))}
+                      {[...Array(28)].map((_, i) => (
+                        <div
+                          key={i}
+                          className={`text-center text-xs py-1 rounded ${
+                            [8, 12, 15, 22].includes(i)
+                              ? 'bg-blue-500/30 text-blue-300'
+                              : 'text-white/40 hover:bg-white/5'
+                          }`}
+                        >
+                          {i + 1}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-                <div className="h-48 bg-gradient-to-br from-[#DCE8FF] to-white rounded-lg flex items-center justify-center">
-                  <p className="text-[#5F697A] text-sm">Calendar visualization</p>
                 </div>
               </div>
+              {/* Glow effect */}
+              <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/10 to-cyan-400/10 rounded-3xl blur-2xl -z-10" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* SECTION 4 — FEATURES SECTION */}
-      <section className="bg-white py-20">
+      {/* SECTION 4 — FEATURES SECTION (Bento Grid) */}
+      <section className="relative bg-slate-950 py-20 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl md:text-5xl font-bold text-[#0C0F14] text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-4">
             What TimeGuard AI Does For You
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <p className="text-xl text-white/60 text-center mb-12 max-w-2xl mx-auto">
+            Powerful features that work together to save you time
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-6">
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
                 <div
                   key={index}
-                  className="bg-[#DCE8FF] rounded-xl p-6 border border-[#1C6EF2]/20 hover:border-[#1C6EF2] transition-all"
+                  className="group backdrop-blur-xl bg-slate-900/60 rounded-xl p-8 border border-blue-500/20 hover:border-blue-400/40 transition-all duration-500 hover:shadow-[0_0_40px_rgba(28,110,242,0.2)] hover:-translate-y-1"
                 >
-                  <div className="w-12 h-12 bg-[#1C6EF2] rounded-lg flex items-center justify-center mb-4">
-                    <Icon className="w-6 h-6 text-white" />
+                  <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                      <Icon className="w-7 h-7 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-2">
+                        {feature.title}
+                      </h3>
+                      <p className="text-white/60">{feature.description}</p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-bold text-[#0C0F14] mb-3">
-                    {feature.title}
-                  </h3>
-                  <p className="text-[#5F697A]">{feature.description}</p>
                 </div>
               );
             })}
@@ -369,83 +495,159 @@ export default function TimeGuardAIPage() {
         </div>
       </section>
 
-      {/* SECTION 5 — INDUSTRIES SERVED */}
-      <section className="bg-[#F8FAFF] py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl md:text-5xl font-bold text-[#0C0F14] text-center mb-4">
+      {/* SECTION 5 — INDUSTRIES SERVED (Marquee) */}
+      <section className="relative bg-slate-950 py-20 overflow-hidden">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-4">
             Built for Professionals Who Value Their Time
           </h2>
-          <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-6 mt-12">
-            {industries.map((industry, index) => {
+        </div>
+
+        {/* Marquee Container */}
+        <div className="marquee-container relative overflow-hidden py-4">
+          {/* Gradient Fades */}
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-950 to-transparent z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-950 to-transparent z-10" />
+
+          <div className="flex animate-marquee">
+            {[...industries, ...industries].map((industry, index) => {
               const Icon = industry.icon;
               return (
                 <div
                   key={index}
-                  className="bg-white rounded-xl p-6 text-center border border-[#DCE8FF] hover:border-[#1C6EF2] hover:shadow-lg transition-all"
+                  className="flex-shrink-0 mx-3 backdrop-blur-xl bg-slate-900/60 rounded-xl p-6 text-center border border-blue-500/20 hover:border-blue-400/40 hover:shadow-[0_0_30px_rgba(28,110,242,0.15)] transition-all duration-300 min-w-[160px] group"
                 >
-                  <div className="w-12 h-12 bg-[#1C6EF2] rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <Icon className="w-6 h-6 text-white" />
+                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
+                    <Icon className="w-7 h-7 text-white" />
                   </div>
-                  <p className="font-semibold text-[#0C0F14]">{industry.name}</p>
+                  <p className="font-semibold text-white">{industry.name}</p>
                 </div>
               );
             })}
           </div>
-          <p className="text-center text-lg text-[#5F697A] max-w-2xl mx-auto mt-8">
-            If your business runs on appointments or client communication, TimeGuard AI is built for you.
-          </p>
         </div>
+
+        <p className="text-center text-lg text-white/60 max-w-2xl mx-auto mt-8 px-4">
+          If your business runs on appointments or client communication, TimeGuard AI is built for you.
+        </p>
       </section>
 
-      {/* SECTION 6 — REAL-LIFE USE CASES */}
-      <section className="bg-white py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl md:text-5xl font-bold text-[#0C0F14] text-center mb-12">
-            Real Situations TimeGuard AI Handles Every Day
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8">
+      {/* SECTION 6 — USE CASES (Scenario Cards with Before/After) */}
+      <section className="relative bg-slate-950 py-20 overflow-hidden">
+        {/* Subtle background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/5 via-transparent to-cyan-900/5" />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              Real Situations TimeGuard AI Handles{" "}
+              <span className="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
+                Every Day
+              </span>
+            </h2>
+            <p className="text-white/60 text-lg max-w-2xl mx-auto">
+              See how TimeGuard AI transforms everyday business challenges into seamless experiences
+            </p>
+          </div>
+
+          {/* 2x2 Grid of Scenario Cards */}
+          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {useCases.map((useCase, index) => {
               const Icon = useCase.icon;
               return (
                 <div
                   key={index}
-                  className="bg-[#DCE8FF] rounded-xl p-8 border border-[#1C6EF2]/20"
+                  className="group relative h-[280px] perspective-1000"
                 >
-                  <div className="w-12 h-12 bg-[#1C6EF2] rounded-lg flex items-center justify-center mb-4">
-                    <Icon className="w-6 h-6 text-white" />
+                  {/* Card Container with Flip Effect */}
+                  <div className="relative w-full h-full transition-transform duration-700 transform-style-preserve-3d group-hover:rotate-y-180">
+                    {/* Front of Card - The Scenario */}
+                    <div className="absolute inset-0 backface-hidden">
+                      <div className="h-full backdrop-blur-xl bg-gradient-to-br from-slate-900/80 via-slate-900/60 to-slate-800/40 rounded-2xl p-8 border border-blue-500/20 flex flex-col justify-between overflow-hidden">
+                        {/* Decorative corner accent */}
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-blue-500/10 to-transparent rounded-bl-full" />
+
+                        {/* Scenario Number */}
+                        <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
+                          <span className="text-blue-400 text-sm font-bold">{index + 1}</span>
+                        </div>
+
+                        <div>
+                          <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-blue-500/25">
+                            <Icon className="w-7 h-7 text-white" />
+                          </div>
+                          <h3 className="text-2xl font-bold text-white mb-3">
+                            {useCase.title}
+                          </h3>
+                          <p className="text-white/50 text-sm">Hover to see how TimeGuard AI handles this</p>
+                        </div>
+
+                        {/* Arrow indicator */}
+                        <div className="flex items-center gap-2 text-blue-400">
+                          <span className="text-sm font-medium">See the solution</span>
+                          <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Back of Card - The Solution */}
+                    <div className="absolute inset-0 backface-hidden rotate-y-180">
+                      <div className="h-full bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-500 rounded-2xl p-8 flex flex-col justify-center overflow-hidden">
+                        {/* Decorative elements */}
+                        <div className="absolute top-0 left-0 w-full h-full opacity-10">
+                          <div className="absolute top-4 left-4 w-20 h-20 border-2 border-white rounded-full" />
+                          <div className="absolute bottom-4 right-4 w-32 h-32 border-2 border-white rounded-full" />
+                        </div>
+
+                        <div className="relative">
+                          <div className="flex items-center gap-3 mb-4">
+                            <CheckCircleIcon className="w-8 h-8 text-white" />
+                            <span className="text-white/90 font-semibold text-lg">TimeGuard AI Response</span>
+                          </div>
+                          <p className="text-white text-xl leading-relaxed font-medium">
+                            {useCase.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-bold text-[#0C0F14] mb-3">
-                    {useCase.title}
-                  </h3>
-                  <p className="text-[#5F697A]">{useCase.description}</p>
                 </div>
               );
             })}
           </div>
+
         </div>
       </section>
 
       {/* SECTION 7 — BENEFITS SECTION */}
-      <section className="bg-[#F8FAFF] py-20">
+      <section className="relative bg-slate-950 py-20 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl md:text-5xl font-bold text-[#0C0F14] text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-12">
             Why Businesses Love TimeGuard AI
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
+
+          <div className="space-y-6 max-w-4xl mx-auto">
             {benefits.map((benefit, index) => {
               const Icon = benefit.icon;
               return (
                 <div
                   key={index}
-                  className="bg-white rounded-xl p-8 border border-[#DCE8FF] hover:shadow-xl transition-all"
+                  className="group backdrop-blur-xl bg-slate-900/60 rounded-xl p-6 border border-blue-500/20 hover:border-blue-400/40 transition-all duration-300 hover:shadow-[0_0_40px_rgba(28,110,242,0.15)] relative overflow-hidden"
                 >
-                  <div className="w-16 h-16 bg-[#1C6EF2] rounded-xl flex items-center justify-center mb-6">
-                    <Icon className="w-8 h-8 text-white" />
+                  {/* Left Accent Bar */}
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 to-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                  <div className="flex items-center gap-6 pl-4">
+                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500/20 to-cyan-400/20 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:from-blue-500/30 group-hover:to-cyan-400/30 transition-colors">
+                      <Icon className="w-8 h-8 text-blue-400" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-white mb-2">
+                        {benefit.title}
+                      </h3>
+                      <p className="text-lg text-white/60">{benefit.description}</p>
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-[#0C0F14] mb-4">
-                    {benefit.title}
-                  </h3>
-                  <p className="text-lg text-[#5F697A]">{benefit.description}</p>
                 </div>
               );
             })}
@@ -454,65 +656,94 @@ export default function TimeGuardAIPage() {
       </section>
 
       {/* SECTION 8 — HOW IT WORKS */}
-      <section id="how-it-works" className="bg-white py-20">
+      <section id="how-it-works" className="relative bg-slate-950 py-20 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl md:text-5xl font-bold text-[#0C0F14] text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-16">
             How TimeGuard AI Gets Set Up
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {steps.map((step, index) => (
-              <div key={index} className="relative">
-                <div className="bg-[#DCE8FF] rounded-xl p-8 border border-[#1C6EF2]/20">
-                  <div className="w-16 h-16 bg-[#1C6EF2] rounded-full flex items-center justify-center mb-6 mx-auto">
-                    <span className="text-2xl font-bold text-white">{step.number}</span>
+
+          <div className="relative">
+            {/* Connecting Path */}
+            <div className="hidden md:block absolute top-[60px] left-[20%] right-[20%]">
+              <svg className="w-full h-4" viewBox="0 0 100 10" preserveAspectRatio="none">
+                <path
+                  d="M0,5 L100,5"
+                  stroke="url(#pathGradient)"
+                  strokeWidth="2"
+                  strokeDasharray="8 4"
+                  fill="none"
+                  className="animate-path-flow"
+                />
+                <defs>
+                  <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#3B82F6" />
+                    <stop offset="100%" stopColor="#22D3EE" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              {steps.map((step, index) => (
+                <div key={index} className="relative group h-full" style={{ perspective: '1000px' }}>
+                  <div
+                    className="step-card-3d backdrop-blur-xl bg-slate-900/60 rounded-xl p-8 border border-blue-500/20 hover:border-blue-400/40 transition-all duration-500 hover:shadow-[0_0_40px_rgba(28,110,242,0.25)] h-full min-h-[280px] flex flex-col"
+                    style={{ transformStyle: 'preserve-3d' }}
+                  >
+                    {/* Step Number */}
+                    <div className="flex justify-center mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:shadow-[0_0_30px_rgba(28,110,242,0.5)] group-hover:scale-110 transition-all duration-500">
+                        <span className="text-2xl font-bold text-white">{step.number}</span>
+                      </div>
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-4 text-center">
+                      {step.title}
+                    </h3>
+                    <p className="text-lg text-white/60 text-center flex-grow">
+                      {step.description}
+                    </p>
                   </div>
-                  <h3 className="text-2xl font-bold text-[#0C0F14] mb-4 text-center">
-                    {step.title}
-                  </h3>
-                  <p className="text-lg text-[#5F697A] text-center">
-                    {step.description}
-                  </p>
                 </div>
-                {index < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
-                    <ArrowRightIcon className="w-8 h-8 text-[#1C6EF2]" />
-                  </div>
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* SECTION 9 — SOCIAL PROOF */}
-      <section className="bg-[#F8FAFF] py-20">
+      <section className="relative bg-slate-950 py-20 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl md:text-5xl font-bold text-[#0C0F14] text-center mb-12">
-            Trusted by Busy Professionals Who Need Their Time Back
+          <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-12">
+            Trusted by Busy Professionals
+            <br />
+            <span className="text-white/60">Who Need Their Time Back</span>
           </h2>
+
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <div className="bg-white rounded-xl p-8 border border-[#DCE8FF] shadow-lg">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-[#F3C55B] text-xl">★</span>
-                ))}
+            {[
+              { quote: "This system saved me 10 hours a week within the first month.", author: "Business Owner" },
+              { quote: "These automations changed how we handle clients.", author: "Service Provider" },
+            ].map((testimonial, index) => (
+              <div key={index} className="relative backdrop-blur-xl bg-slate-900/60 rounded-xl p-8 border border-blue-500/20 hover:border-blue-400/40 transition-all duration-300 hover:shadow-[0_0_40px_rgba(28,110,242,0.15)] group overflow-hidden">
+                {/* Quote Icon Background */}
+                <div className="absolute -right-4 -top-4 text-8xl text-blue-500/10 font-serif select-none">"</div>
+
+                {/* Top Accent Border */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-cyan-400" />
+
+                <div className="relative">
+                  <div className="flex items-center gap-1 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <span key={i} className="text-amber-400 text-xl">★</span>
+                    ))}
+                  </div>
+                  <p className="text-xl text-white mb-4 italic leading-relaxed">
+                    "{testimonial.quote}"
+                  </p>
+                  <p className="text-white/60 font-medium">— {testimonial.author}</p>
+                </div>
               </div>
-              <p className="text-lg text-[#0C0F14] mb-4 italic">
-                "This system saved me 10 hours a week within the first month."
-              </p>
-              <p className="text-sm text-[#5F697A]">— Business Owner</p>
-            </div>
-            <div className="bg-white rounded-xl p-8 border border-[#DCE8FF] shadow-lg">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-[#F3C55B] text-xl">★</span>
-                ))}
-              </div>
-              <p className="text-lg text-[#0C0F14] mb-4 italic">
-                "These automations changed how we handle clients."
-              </p>
-              <p className="text-sm text-[#5F697A]">— Service Provider</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -521,55 +752,38 @@ export default function TimeGuardAIPage() {
       <SolutionRelationsStrip solutionId="ai_scheduler" />
 
       {/* SECTION 10 — FINAL CTA SECTION */}
-      <section className="bg-gradient-to-br from-[#1C6EF2] to-[#1557C0] py-20 text-white">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+      <section className="relative py-20 overflow-hidden">
+        {/* Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-500" />
+
+        {/* Animated Glow Orbs */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-white/10 rounded-full blur-[120px] animate-pulse-glow" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-cyan-300/20 rounded-full blur-[100px] animate-pulse-glow" style={{ animationDelay: '1s' }} />
+
+        <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Ready to Get Your Time Back?
           </h2>
-          <p className="text-xl md:text-2xl mb-8 opacity-90">
+          <p className="text-xl md:text-2xl text-white/90 mb-8">
             Let's build your own TimeGuard AI system and free up hours every week.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/contact?solution=timeguard-ai"
-              className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#1C6EF2] font-bold rounded-lg hover:bg-[#F8FAFF] transition-all duration-300 transform hover:scale-105 shadow-lg"
+              className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 font-bold rounded-lg hover:bg-white/90 transition-all duration-300 transform hover:scale-105 shadow-xl shadow-blue-900/20"
             >
               Book Your Time Assessment Call
               <ArrowRightIcon className="w-5 h-5 ml-2" />
             </Link>
             <Link
               href="#how-it-works"
-              className="inline-flex items-center justify-center px-8 py-4 bg-transparent text-white border-2 border-white font-semibold rounded-lg hover:bg-white/10 transition-all duration-300"
+              className="inline-flex items-center justify-center px-8 py-4 bg-transparent text-white border-2 border-white/50 font-semibold rounded-lg hover:bg-white/10 hover:border-white transition-all duration-300"
             >
               Learn More About TimeGuard AI
             </Link>
           </div>
         </div>
       </section>
-
-      {/* SECTION 11 — FOOTER */}
-      <footer className="bg-[#0C0F14] text-white py-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div>
-              <p className="text-2xl font-bold">OMGsystems</p>
-              <p className="text-sm text-gray-400 mt-2">TimeGuard AI by OMGsystems</p>
-            </div>
-            <div className="flex flex-wrap gap-6 text-sm">
-              <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">
-                Privacy Policy
-              </Link>
-              <Link href="/terms" className="text-gray-400 hover:text-white transition-colors">
-                Terms
-              </Link>
-              <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">
-                Contact
-              </Link>
-            </div>
-          </div>
-        </div>
-      </footer>
     </main>
   );
 }
-

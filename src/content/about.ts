@@ -186,10 +186,10 @@ export const about: AboutContent = {
         headshot: "/team/jamie.jpg",
       },
       {
-        name: "Siobhan",
+        name: "Chevon",
         role: "Creative Director",
         bio: "Leads design and user experience across all products and client interfaces.",
-        headshot: "/team/siobhan.jpg",
+        headshot: "/team/chevon.jpg",
       },
     ],
     values: [

@@ -2,12 +2,13 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { 
+import {
   HeartIcon,
   ShieldCheckIcon,
   ClockIcon,
   ChatBubbleLeftRightIcon
 } from '@heroicons/react/24/outline';
+import { usePageTheme } from '@/hooks/usePageTheme';
 
 // Social Media Icon Components
 const InstagramIcon = ({ className }: { className?: string }) => (
@@ -58,7 +59,7 @@ const footerLinks = {
     { name: 'Blog', href: '/blog' },
     { name: 'Help Center', href: '/help' },
     { name: 'Documentation', href: '/docs' },
-    { name: 'API', href: '/api' }
+    { name: 'API', href: '/api-reference' }
   ],
   social: [
     { name: 'Instagram', href: 'https://instagram.com/omgsystems', Icon: InstagramIcon, color: 'hover:bg-pink-500/20 hover:text-pink-400' },
@@ -93,137 +94,246 @@ const trustBadges = [
 ];
 
 export function Footer() {
+  const { rgb: themeRgb, hex: themeHex } = usePageTheme();
+
   return (
-    <footer className="bg-gray-900 border-t border-gray-700">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Trust Badges */}
-        <div className="mb-12">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {trustBadges.map((badge, index) => (
-              <div key={index} className="flex items-center space-x-3 p-4 bg-gray-800/50 rounded-lg border border-gray-700/50 hover:bg-gray-800/70 transition-colors duration-300">
-                <div className="flex-shrink-0">
-                  <div className="w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center">
-                    <badge.icon className="w-4 h-4 text-blue-400" />
+    <footer className="relative py-16 overflow-hidden">
+      {/* Background matching nav - dark slate */}
+      <div className="absolute inset-0 bg-slate-950" />
+
+      {/* Subtle glow orbs - dynamic color */}
+      <div
+        className="absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl pointer-events-none transition-all duration-500"
+        style={{ backgroundColor: `rgba(${themeRgb}, 0.05)` }}
+      />
+      <div
+        className="absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl pointer-events-none transition-all duration-500"
+        style={{ backgroundColor: `rgba(${themeRgb}, 0.03)` }}
+      />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Main Glass Container - matching nav style */}
+        <div
+          className="rounded-3xl border p-8 md:p-10 transition-all duration-500"
+          style={{
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            borderColor: `rgba(${themeRgb}, 0.25)`,
+            boxShadow: `0 0 30px rgba(${themeRgb}, 0.15), inset 0 1px 0 rgba(255,255,255,0.1)`,
+          }}
+        >
+          {/* Trust Badges */}
+          <div className="mb-10">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {trustBadges.map((badge, index) => (
+                <div
+                  key={index}
+                  className="flex items-center space-x-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/[0.08] transition-all duration-500 group"
+                  style={{
+                    // @ts-expect-error CSS custom properties for hover state
+                    '--hover-border-color': `rgba(${themeRgb}, 0.3)`,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = `rgba(${themeRgb}, 0.3)`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                  }}
+                >
+                  <div className="flex-shrink-0">
+                    <div
+                      className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-500"
+                      style={{
+                        backgroundColor: `rgba(${themeRgb}, 0.2)`,
+                      }}
+                    >
+                      <badge.icon
+                        className="w-4 h-4 transition-all duration-500"
+                        style={{ color: themeHex }}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-white font-medium text-xs">{badge.text}</p>
+                    <p className="text-white/50 text-[10px]">{badge.description}</p>
                   </div>
                 </div>
-                <div>
-                  <p className="text-white font-medium text-sm">{badge.text}</p>
-                  <p className="text-gray-300 text-xs">{badge.description}</p>
-                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="w-full h-px bg-white/10 mb-8" />
+
+          {/* Main Footer Content */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+            {/* Company Links */}
+            <div>
+              <h3 className="text-white/90 font-semibold mb-4 text-[13px] uppercase tracking-wider">Company</h3>
+              <ul className="space-y-2.5">
+                {footerLinks.company.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      className="text-white/60 transition-all duration-500 text-[13px] inline-block"
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = themeHex;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '';
+                      }}
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Legal Links */}
+            <div>
+              <h3 className="text-white/90 font-semibold mb-4 text-[13px] uppercase tracking-wider">Legal</h3>
+              <ul className="space-y-2.5">
+                {footerLinks.legal.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      className="text-white/60 transition-all duration-500 text-[13px] inline-block"
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = themeHex;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '';
+                      }}
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Resources Links */}
+            <div>
+              <h3 className="text-white/90 font-semibold mb-4 text-[13px] uppercase tracking-wider">Resources</h3>
+              <ul className="space-y-2.5">
+                {footerLinks.resources.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      className="text-white/60 transition-all duration-500 text-[13px] inline-block"
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = themeHex;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '';
+                      }}
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Social Links */}
+            <div>
+              <h3 className="text-white/90 font-semibold mb-4 text-[13px] uppercase tracking-wider">Connect with Us</h3>
+              <div className="flex space-x-2">
+                {footerLinks.social.map((social) => {
+                  const IconComponent = social.Icon;
+                  return (
+                    <Link
+                      key={social.name}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-white/60 ${social.color} hover:scale-105 transition-all duration-300 border border-white/10 hover:border-white/20`}
+                      title={social.name}
+                      aria-label={social.name}
+                    >
+                      <IconComponent className="w-4.5 h-4.5" />
+                    </Link>
+                  );
+                })}
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-          {/* Company Links */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">Company</h3>
-            <ul className="space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-300 hover:text-blue-400 transition-colors duration-300"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Legal Links */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">Legal</h3>
-            <ul className="space-y-3">
-              {footerLinks.legal.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-300 hover:text-blue-400 transition-colors duration-300"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Resources Links */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">Resources</h3>
-            <ul className="space-y-3">
-              {footerLinks.resources.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-300 hover:text-blue-400 transition-colors duration-300"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Social Links */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">Connect with Us</h3>
-            <div className="flex space-x-3">
-              {footerLinks.social.map((social) => {
-                const IconComponent = social.Icon;
-                return (
-                  <Link
-                    key={social.name}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center text-gray-400 ${social.color} hover:scale-110 transition-all duration-300 group`}
-                    title={social.name}
-                    aria-label={social.name}
-                  >
-                    <IconComponent className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
-                  </Link>
-                );
-              })}
             </div>
           </div>
-        </div>
 
-        {/* Newsletter Signup */}
-        <div className="mb-8 p-6 bg-gradient-to-r from-gray-800 to-gray-700 rounded-xl border border-gray-600">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="mb-4 md:mb-0">
-              <h3 className="text-white font-semibold mb-2">Stay Updated</h3>
-              <p className="text-gray-300 text-sm">Get the latest automation tips and industry insights</p>
-            </div>
-            <div className="flex w-full md:w-auto">
-              <input
-                type="email"
-                id="footer-newsletter-email"
-                name="newsletter-email"
-                autoComplete="email"
-                placeholder="Enter your email"
-                className="flex-1 md:w-64 px-4 py-2 bg-gray-800 border border-gray-600 rounded-l-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
-              />
-              <button className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-r-lg hover:bg-blue-600 transition-colors duration-300">
-                Subscribe
-              </button>
+          {/* Divider */}
+          <div className="w-full h-px bg-white/10 mb-8" />
+
+          {/* Newsletter Signup */}
+          <div
+            className="relative p-5 bg-white/5 rounded-2xl border border-white/10 transition-all duration-500 overflow-hidden group mb-8"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = `rgba(${themeRgb}, 0.3)`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+            }}
+          >
+            {/* Subtle glow on hover */}
+            <div
+              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+              style={{
+                background: `linear-gradient(to right, rgba(${themeRgb}, 0), rgba(${themeRgb}, 0.05))`,
+              }}
+            />
+            <div className="relative flex flex-col md:flex-row items-center justify-between gap-4">
+              <div>
+                <h3 className="text-white font-semibold text-sm mb-0.5">Stay Updated</h3>
+                <p className="text-white/50 text-[13px]">Get the latest automation tips and industry insights</p>
+              </div>
+              <div className="flex w-full md:w-auto">
+                <input
+                  type="email"
+                  id="footer-newsletter-email"
+                  name="newsletter-email"
+                  autoComplete="email"
+                  placeholder="Enter your email"
+                  className="flex-1 md:w-64 px-4 py-2.5 bg-white/5 border border-white/10 rounded-l-xl text-white text-[13px] placeholder-white/40 focus:outline-none transition-all duration-500"
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = `rgba(${themeRgb}, 0.5)`;
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                  }}
+                />
+                <button
+                  className="px-5 py-2.5 text-white text-[13px] font-semibold rounded-r-xl transition-all duration-500 active:scale-[0.98]"
+                  style={{
+                    backgroundColor: themeHex,
+                    boxShadow: `0 2px 12px rgba(${themeRgb}, 0.3)`,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow = `0 4px 20px rgba(${themeRgb}, 0.4)`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = `0 2px 12px rgba(${themeRgb}, 0.3)`;
+                  }}
+                >
+                  Subscribe
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-gray-700">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="flex items-center space-x-3 mb-4 md:mb-0">
-              <Logo width={80} variant="png" darkMode={true} />
-              <span className="text-white font-bold text-lg" style={{ letterSpacing: '-0.05em' }}>OMGSystems</span>
+          {/* Bottom Bar */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center group">
+              <div
+                className="transition-all duration-500"
+                style={{
+                  filter: `drop-shadow(0 0 8px rgba(${themeRgb}, 0.4))`,
+                }}
+              >
+                <Logo width={100} variant="svg" letterColor="white" />
+              </div>
             </div>
-            
-            <div className="flex items-center space-x-6 text-sm text-gray-300">
+
+            <div className="flex items-center text-[12px] text-white/40">
               <span>© 2025 OMGsystems. All rights reserved. Proudly developed in Canada.</span>
             </div>
           </div>

@@ -1,11 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
-import { 
-  UserGroupIcon, 
-  DocumentTextIcon, 
-  ChartBarIcon, 
-  LightBulbIcon, 
-  AcademicCapIcon 
+import {
+  UserGroupIcon,
+  DocumentTextIcon,
+  ChartBarIcon,
+  LightBulbIcon,
+  AcademicCapIcon
 } from '@heroicons/react/24/outline';
 import { appsConfig } from '@/config/apps_config';
 
@@ -16,36 +16,36 @@ const appIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   leads: ChartBarIcon,
   iq: LightBulbIcon,
   learn: AcademicCapIcon,
-  ai_mastery: AcademicCapIcon, // OMG AI Mastery uses same icon as learn
+  ai_mastery: AcademicCapIcon,
 };
 
 export function AppsDropdown() {
   return (
-    <div className="p-6">
-      <div className="mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">Apps</h3>
-        <p className="text-gray-600 text-sm">Powerful tools for your business</p>
+    <div className="p-4">
+      <div className="mb-3">
+        <h3 className="text-base font-semibold text-white mb-1">Apps</h3>
+        <p className="text-white/60 text-sm">Powerful tools for your business</p>
       </div>
-      
-      <div className="space-y-2">
+
+      <div className="space-y-1">
         {appsConfig
-          .filter((app) => app.id !== 'timeguard') // Remove TimeGuard AI from Apps dropdown
+          .filter((app) => app.id !== 'timeguard')
           .map((app) => {
             const Icon = appIcons[app.id] || DocumentTextIcon;
             const colorMap: Record<string, string> = {
-              svd: 'text-green-400',
+              svd: 'text-[#47BD79]',
               crm: 'text-blue-400',
               leads: 'text-purple-400',
               iq: 'text-purple-400',
               learn: 'text-yellow-400',
               ai_mastery: 'text-yellow-400',
             };
-            
+
             return (
               <Link
                 key={app.id}
                 href={app.href}
-                className="group flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50/50 transition-colors duration-200 cursor-pointer"
+                className="group flex items-center space-x-3 p-2.5 rounded-xl hover:bg-white/[0.10] hover:shadow-[0_0_12px_rgba(71,189,121,0.15)] transition-all duration-400 ease-premium-out cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
                   if (typeof window !== 'undefined') {
@@ -54,33 +54,33 @@ export function AppsDropdown() {
                   }
                 }}
               >
-                <div className={`flex-shrink-0 w-6 h-6 rounded bg-gray-100 flex items-center justify-center`}>
-                  <Icon className={`w-3 h-3 ${colorMap[app.id] || 'text-gray-400'}`} />
+                <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-white/[0.10] flex items-center justify-center group-hover:bg-white/[0.15] group-hover:scale-105 transition-all duration-400 ease-premium-out">
+                  <Icon className={`w-5 h-5 ${colorMap[app.id] || 'text-white/60'}`} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2">
-                    <h4 className="text-gray-900 font-medium group-hover:text-blue-600 transition-colors duration-200">
+                    <h4 className="text-white text-[15px] font-medium group-hover:text-[#47BD79] transition-colors duration-400 ease-premium-out">
                       {app.label}
                     </h4>
                     {app.status === 'coming_soon' && (
-                      <span className="px-1.5 py-0.5 text-xs font-medium bg-orange-500 text-white rounded">
-                        Coming Soon
+                      <span className="px-1.5 py-0.5 text-[10px] font-medium bg-orange-500 text-white rounded">
+                        Soon
                       </span>
                     )}
                   </div>
                   {app.tagline && (
-                    <p className="text-xs text-gray-500 mt-0.5">{app.tagline}</p>
+                    <p className="text-xs text-white/50 mt-0.5 line-clamp-1">{app.tagline}</p>
                   )}
                 </div>
               </Link>
             );
           })}
       </div>
-      
-      <div className="mt-6 pt-4 border-t border-gray-200/50">
+
+      <div className="mt-3 pt-3 border-t border-white/[0.15]">
         <Link
           href="/apps"
-          className="flex items-center justify-center w-full px-4 py-2 text-blue-600 hover:text-blue-700 font-medium transition-colors duration-300 cursor-pointer"
+          className="flex items-center justify-center w-full px-3 py-2.5 text-[#47BD79] hover:text-[#5fd492] text-[15px] font-medium transition-all duration-400 ease-premium-out cursor-pointer rounded-lg hover:bg-white/[0.08] hover:shadow-[0_0_10px_rgba(71,189,121,0.2)]"
           onClick={(e) => {
             e.stopPropagation();
             if (typeof window !== 'undefined') {
@@ -90,7 +90,7 @@ export function AppsDropdown() {
           }}
         >
           See All Apps
-          <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </Link>

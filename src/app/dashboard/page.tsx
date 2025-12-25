@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
+import { auth } from '@/auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardOverviewPage() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const userName = session?.user?.name || session?.user?.email || 'Client';
   const activeOrgId = (session?.user as any)?.activeOrgId;
 

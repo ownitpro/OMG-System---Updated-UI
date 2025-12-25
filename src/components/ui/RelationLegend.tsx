@@ -17,36 +17,36 @@ export function RelationLegend({
   return (
     <div
       className={clsx(
-        "inline-flex flex-wrap items-center gap-3 text-xs sm:text-sm text-slate-500",
+        "flex flex-wrap items-center justify-center gap-3 text-xs sm:text-sm text-white/50 w-full",
         variant === "default" && "mt-4",
         className
       )}
     >
       {/* Title (only on default) */}
       {!isCompact && (
-        <span className="font-medium text-slate-600 mr-1">Legend:</span>
+        <span className="font-medium text-white/60 mr-1">Legend:</span>
       )}
 
       {/* Primary */}
       <span className="inline-flex items-center gap-1">
         <span className="text-base">{getRoleIcon("primary")}</span>
-        <span className="font-medium text-slate-700">Primary</span>
+        <span className="font-medium text-white/80">Primary</span>
         {!isCompact && (
-          <span className="hidden sm:inline">
+          <span className="hidden sm:inline text-white/50">
             = {getRoleDescription("primary")}
           </span>
         )}
       </span>
 
       {/* Divider dot */}
-      <span className="text-slate-300">•</span>
+      <span className="text-white/30">•</span>
 
       {/* Secondary */}
       <span className="inline-flex items-center gap-1">
         <span className="text-base">{getRoleIcon("secondary")}</span>
-        <span className="font-medium text-slate-700">Secondary</span>
+        <span className="font-medium text-white/80">Secondary</span>
         {!isCompact && (
-          <span className="hidden sm:inline">
+          <span className="hidden sm:inline text-white/50">
             = {getRoleDescription("secondary")}
           </span>
         )}

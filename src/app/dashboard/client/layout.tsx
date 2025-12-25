@@ -1,6 +1,5 @@
-import { getServerSession } from "next-auth";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/auth";
 import { Role } from "@/generated/prisma";
 import { ClientSidebar } from "@/components/dashboard/ClientSidebar";
 import { ClientHeader } from "@/components/dashboard/ClientHeader";
@@ -10,7 +9,7 @@ export default async function ClientLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if (!session) {
     redirect("/login");

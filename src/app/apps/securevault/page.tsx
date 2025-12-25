@@ -247,7 +247,7 @@ export default function SecureVaultPage() {
   }, [isVisible]);
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-[#2B2A2A] via-[#1f1e1e] to-[#2B2A2A]">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-emerald-500/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
@@ -390,7 +390,7 @@ export default function SecureVaultPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 md:py-24 bg-gray-800">
+      <section className="py-16 md:py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div className="text-center mb-16">
@@ -443,46 +443,46 @@ export default function SecureVaultPage() {
         </div>
       </section>
 
-      {/* Capabilities Section */}
-      <section className="py-16 md:py-24 bg-white">
+      {/* Capabilities Section - Dark Glass Theme */}
+      <section className="py-16 md:py-24 bg-gradient-to-br from-[#2B2A2A] via-[#1f1e1e] to-[#2B2A2A]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Everything You Need to Keep Documents Safe
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-white/70 max-w-3xl mx-auto">
               We've thought of everything so you don't have to. Here's how SecureVault makes document security simple.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {capabilities.map((capability, index) => (
-              <div 
-                key={index} 
-                className={`bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 ${
+              <div
+                key={index}
+                className={`bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10 hover:border-[#47BD79]/30 transition-all duration-600 ease-premium-out transform hover:-translate-y-1 ${
                   isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                 }`}
                 style={{ transitionDelay: `${index * 200}ms` }}
               >
                 <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-xl flex items-center justify-center mr-4">
-                    {index === 0 && <DocumentTextIcon className="w-6 h-6 text-white" />}
-                    {index === 1 && <ShieldCheckIcon className="w-6 h-6 text-white" />}
-                    {index === 2 && <UserGroupIcon className="w-6 h-6 text-white" />}
-                    {index === 3 && <CogIcon className="w-6 h-6 text-white" />}
+                  <div className="w-12 h-12 bg-[#47BD79]/20 rounded-xl flex items-center justify-center mr-4">
+                    {index === 0 && <DocumentTextIcon className="w-6 h-6 text-[#47BD79]" />}
+                    {index === 1 && <ShieldCheckIcon className="w-6 h-6 text-[#47BD79]" />}
+                    {index === 2 && <UserGroupIcon className="w-6 h-6 text-[#47BD79]" />}
+                    {index === 3 && <CogIcon className="w-6 h-6 text-[#47BD79]" />}
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <h3 className="text-xl font-semibold text-white">
                     {capability.category}
                   </h3>
                 </div>
-                
+
                 <ul className="space-y-4">
                   {capability.items.map((item, itemIndex) => (
                     <li key={itemIndex} className="flex items-start group">
-                      <div className="flex-shrink-0 w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mr-3 mt-0.5 group-hover:bg-emerald-200 transition-colors">
-                        <CheckIcon className="h-4 w-4 text-emerald-600" />
+                      <div className="flex-shrink-0 w-6 h-6 bg-[#47BD79]/20 rounded-full flex items-center justify-center mr-3 mt-0.5 group-hover:bg-[#47BD79]/30 transition-colors">
+                        <CheckIcon className="h-4 w-4 text-[#47BD79]" />
                       </div>
-                      <span className="text-gray-600 group-hover:text-gray-900 transition-colors">{item}</span>
+                      <span className="text-white/70 group-hover:text-white transition-colors">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -491,107 +491,107 @@ export default function SecureVaultPage() {
           </div>
 
           {/* How It Works - Simple Steps */}
-          <div className="mt-16 bg-gradient-to-r from-emerald-50 to-blue-50 rounded-2xl p-8">
+          <div className="mt-16 bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10">
             <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">How SecureVault Works</h3>
-              <p className="text-gray-600">Three simple steps to secure your documents</p>
+              <h3 className="text-2xl font-bold text-white mb-4">How SecureVault Works</h3>
+              <p className="text-white/70">Three simple steps to secure your documents</p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-xl">
+                <div className="w-16 h-16 bg-[#47BD79] rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-xl shadow-[0_0_20px_rgba(71,189,121,0.4)]">
                   1
                 </div>
-                <h4 className="font-semibold text-gray-900 mb-2">Upload Your Documents</h4>
-                <p className="text-gray-600 text-sm">Drag and drop your files. We'll organize them automatically.</p>
+                <h4 className="font-semibold text-white mb-2">Upload Your Documents</h4>
+                <p className="text-white/60 text-sm">Drag and drop your files. We'll organize them automatically.</p>
               </div>
-              
+
               <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-xl">
+                <div className="w-16 h-16 bg-[#47BD79] rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-xl shadow-[0_0_20px_rgba(71,189,121,0.4)]">
                   2
                 </div>
-                <h4 className="font-semibold text-gray-900 mb-2">We Secure Everything</h4>
-                <p className="text-gray-600 text-sm">Military-grade encryption keeps your documents safe from prying eyes.</p>
+                <h4 className="font-semibold text-white mb-2">We Secure Everything</h4>
+                <p className="text-white/60 text-sm">Military-grade encryption keeps your documents safe from prying eyes.</p>
               </div>
-              
+
               <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-xl">
+                <div className="w-16 h-16 bg-[#47BD79] rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-xl shadow-[0_0_20px_rgba(71,189,121,0.4)]">
                   3
                 </div>
-                <h4 className="font-semibold text-gray-900 mb-2">Share When Needed</h4>
-                <p className="text-gray-600 text-sm">Give access to the right people, when they need it.</p>
+                <h4 className="font-semibold text-white mb-2">Share When Needed</h4>
+                <p className="text-white/60 text-sm">Give access to the right people, when they need it.</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Use Cases Section */}
-      <section className="py-16 md:py-24 bg-gray-50">
+      {/* Use Cases Section - Dark Glass Theme */}
+      <section className="py-16 md:py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Perfect for Every Business
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-white/70 max-w-3xl mx-auto">
               No matter what industry you're in, your documents need protection. Here's how different businesses use SecureVault.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {useCases.map((useCase, index) => (
-              <div 
-                key={index} 
-                className={`bg-white rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 ${
+              <div
+                key={index}
+                className={`group bg-white/5 backdrop-blur-xl rounded-2xl p-8 text-center border border-white/10 hover:border-[#47BD79]/30 transition-all duration-600 ease-premium-out transform hover:-translate-y-2 ${
                   isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                 }`}
                 style={{ transitionDelay: `${index * 200}ms` }}
               >
-                <div className="text-6xl mb-6 transform hover:scale-110 transition-transform duration-300">
+                <div className="text-6xl mb-6 transform group-hover:scale-110 transition-transform duration-300">
                   {useCase.icon}
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                <h3 className="text-xl font-semibold text-white mb-4">
                   {useCase.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-white/60 leading-relaxed">
                   {useCase.description}
                 </p>
-                
+
                 {/* Hover Effect */}
                 <div className="mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="w-full h-1 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full"></div>
+                  <div className="w-full h-1 bg-gradient-to-r from-[#47BD79] to-blue-500 rounded-full"></div>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Industry Stats */}
-          <div className="mt-16 bg-white rounded-2xl p-8 shadow-lg">
+          <div className="mt-16 bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10">
             <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Trusted Across Industries</h3>
-              <p className="text-gray-600">See how different businesses protect their documents</p>
+              <h3 className="text-2xl font-bold text-white mb-4">Trusted Across Industries</h3>
+              <p className="text-white/70">See how different businesses protect their documents</p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center">
-                <div className="text-3xl font-bold text-emerald-600 mb-2">500+</div>
-                <div className="text-gray-600">Businesses Protected</div>
+                <div className="text-3xl font-bold text-[#47BD79] mb-2">500+</div>
+                <div className="text-white/70">Businesses Protected</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-2">1M+</div>
-                <div className="text-gray-600">Documents Secured</div>
+                <div className="text-3xl font-bold text-blue-400 mb-2">1M+</div>
+                <div className="text-white/70">Documents Secured</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600 mb-2">99.9%</div>
-                <div className="text-gray-600">Uptime Guarantee</div>
+                <div className="text-3xl font-bold text-purple-400 mb-2">99.9%</div>
+                <div className="text-white/70">Uptime Guarantee</div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Security Features Section */}
-      <section className="py-16 md:py-24 bg-gray-800">
+      {/* Security Features Section - Dark Glass Theme */}
+      <section className="py-16 md:py-24 bg-gradient-to-br from-[#2B2A2A] via-[#1f1e1e] to-[#2B2A2A]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
@@ -656,62 +656,62 @@ export default function SecureVaultPage() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section className="py-16 md:py-24 bg-white">
+      {/* Pricing Section - Dark Glass Theme */}
+      <section className="py-16 md:py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Simple Pricing That Makes Sense
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-white/70 max-w-3xl mx-auto">
               No hidden fees, no complicated tiers. Just honest pricing for document security that works.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {pricing.map((plan, index) => (
-              <div 
-                key={index} 
-                className={`relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border-2 ${
-                  plan.popular ? 'border-emerald-500 bg-gradient-to-b from-emerald-50 to-white' : 'border-gray-200'
+              <div
+                key={index}
+                className={`relative bg-white/5 backdrop-blur-xl rounded-2xl p-8 border transition-all duration-600 ease-premium-out transform hover:-translate-y-2 ${
+                  plan.popular ? 'border-[#47BD79]/50 shadow-[0_0_30px_rgba(71,189,121,0.2)]' : 'border-white/10 hover:border-[#47BD79]/30'
                 }`}
               >
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-6 py-2 rounded-full text-sm font-medium shadow-lg">
+                    <span className="bg-[#47BD79] text-white px-6 py-2 rounded-full text-sm font-medium shadow-[0_0_20px_rgba(71,189,121,0.4)]">
                       Most Popular
                     </span>
                   </div>
                 )}
-                
+
                 <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                  <div className="text-4xl font-bold text-emerald-600 mb-2">
+                  <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
+                  <div className="text-4xl font-bold text-[#47BD79] mb-2">
                     {plan.price}
-                    <span className="text-lg font-normal text-gray-500">/{plan.period}</span>
+                    <span className="text-lg font-normal text-white/50">/{plan.period}</span>
                   </div>
-                  <p className="text-gray-600 mb-2 font-medium">{plan.storage} Storage</p>
-                  <p className="text-gray-600">{plan.users}</p>
+                  <p className="text-white/70 mb-2 font-medium">{plan.storage} Storage</p>
+                  <p className="text-white/60">{plan.users}</p>
                 </div>
-                
+
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start group">
-                      <div className="flex-shrink-0 w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mr-3 mt-0.5 group-hover:bg-emerald-200 transition-colors">
-                        <CheckIcon className="h-4 w-4 text-emerald-600" />
+                      <div className="flex-shrink-0 w-6 h-6 bg-[#47BD79]/20 rounded-full flex items-center justify-center mr-3 mt-0.5 group-hover:bg-[#47BD79]/30 transition-colors">
+                        <CheckIcon className="h-4 w-4 text-[#47BD79]" />
                       </div>
-                      <span className="text-gray-600 group-hover:text-gray-900 transition-colors">{feature}</span>
+                      <span className="text-white/70 group-hover:text-white transition-colors">{feature}</span>
                     </li>
                   ))}
                 </ul>
-                
-                <Button 
-                  asChild 
+
+                <Button
+                  asChild
                   className={`w-full ${
-                    plan.popular 
-                      ? 'bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white' 
-                      : 'bg-gray-900 hover:bg-gray-800 text-white'
-                  } transition-all duration-300 transform hover:scale-105`}
+                    plan.popular
+                      ? 'bg-[#47BD79] hover:bg-[#3da86a] text-white shadow-[0_0_20px_rgba(71,189,121,0.4)]'
+                      : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'
+                  } transition-all duration-600 ease-premium-out transform hover:scale-105`}
                 >
                   <Link href="/signup">Get Started</Link>
                 </Button>
@@ -721,13 +721,13 @@ export default function SecureVaultPage() {
 
           {/* Money Back Guarantee */}
           <div className="mt-16 text-center">
-            <div className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-emerald-50 to-blue-50 rounded-2xl border border-emerald-200">
-              <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full flex items-center justify-center mr-4">
+            <div className="inline-flex items-center px-8 py-4 bg-white/5 backdrop-blur-xl rounded-2xl border border-[#47BD79]/30">
+              <div className="w-8 h-8 bg-[#47BD79] rounded-full flex items-center justify-center mr-4 shadow-[0_0_15px_rgba(71,189,121,0.4)]">
                 <ShieldCheckIcon className="w-5 h-5 text-white" />
               </div>
               <div className="text-left">
-                <div className="text-gray-900 font-semibold">7-Day Free Trial</div>
-                <div className="text-gray-600 text-sm">Try SecureVault risk-free for 7 days—no commitment required.</div>
+                <div className="text-white font-semibold">7-Day Free Trial</div>
+                <div className="text-white/60 text-sm">Try SecureVault risk-free for 7 days—no commitment required.</div>
               </div>
             </div>
           </div>

@@ -14,24 +14,36 @@ export default function Deliverables() {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-16 md:py-24 bg-gradient-to-br from-[#2B2A2A] via-[#1f1e1e] to-[#2B2A2A]">
+      {/* Emerald glow effects */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[120px] h-[200px] bg-gradient-to-r from-[#47BD79]/10 via-emerald-500/6 to-transparent rounded-full blur-2xl"></div>
+        <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[120px] h-[200px] bg-gradient-to-l from-[#47BD79]/10 via-emerald-500/6 to-transparent rounded-full blur-2xl"></div>
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl mb-4">
-            What You Get
+          <h2 className="text-3xl font-extrabold text-white sm:text-4xl mb-4">
+            What you get
           </h2>
+          <p className="text-xl text-white/70 max-w-3xl mx-auto">
+            Clear handoffs, working assets, measurable outcomes.
+          </p>
         </div>
 
         <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {deliverables.map((deliverable, index) => (
-              <div key={index} className="flex items-start bg-gray-50 rounded-lg p-4 hover:bg-emerald-50 transition-colors duration-200">
+              <div
+                key={index}
+                className="flex items-start bg-white/5 backdrop-blur-xl rounded-xl p-4 border border-white/10 hover:border-[#47BD79]/30 transition-all duration-200"
+              >
                 <div className="flex-shrink-0">
-                  <svg className="h-6 w-6 text-emerald-500 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-6 w-6 text-[#47BD79] mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <p className="ml-3 text-gray-700 font-medium">
+                <p className="ml-3 text-white/90 font-medium">
                   {deliverable}
                 </p>
               </div>

@@ -29,26 +29,35 @@ export default function FAQSection() {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-white">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-16 md:py-24 bg-gradient-to-br from-[#2B2A2A] via-[#1f1e1e] to-[#2B2A2A]">
+      {/* Emerald glow effects */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[120px] h-[200px] bg-gradient-to-r from-[#47BD79]/10 via-emerald-500/6 to-transparent rounded-full blur-2xl"></div>
+        <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[120px] h-[200px] bg-gradient-to-l from-[#47BD79]/10 via-emerald-500/6 to-transparent rounded-full blur-2xl"></div>
+      </div>
+
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl mb-4">
+          <h2 className="text-3xl font-extrabold text-white sm:text-4xl mb-4">
             Common questions about lead generation & automation
           </h2>
         </div>
 
         <div className="space-y-4">
           {faqs.map((faq, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg">
+            <div
+              key={index}
+              className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 hover:border-[#47BD79]/30 transition-all duration-200 overflow-hidden"
+            >
               <button
-                className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-inset transition-colors duration-200"
+                className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#47BD79]/50 focus:ring-inset transition-colors duration-200"
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
               >
-                <span className="text-lg font-semibold text-gray-900">
+                <span className="text-lg font-semibold text-white">
                   {faq.question}
                 </span>
                 <svg
-                  className={`w-5 h-5 text-gray-500 transform transition-transform duration-200 ${
+                  className={`w-5 h-5 text-[#47BD79] transform transition-transform duration-200 ${
                     openIndex === index ? 'rotate-180' : ''
                   }`}
                   fill="none"
@@ -58,10 +67,10 @@ export default function FAQSection() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              
+
               {openIndex === index && (
-                <div className="px-6 pb-4">
-                  <p className="text-gray-700 leading-relaxed">
+                <div className="px-6 pb-4 border-t border-white/10">
+                  <p className="text-white/70 leading-relaxed pt-4">
                     {faq.answer}
                   </p>
                 </div>

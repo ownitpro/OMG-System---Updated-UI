@@ -3,6 +3,7 @@
 import Link from "next/link";
 import * as React from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { Suspense } from "react";
 import { applyCouponStack, type AppliedCoupon } from "@/lib/checkout/rulesEngine";
 import { trackCouponEvent } from "@/lib/analytics/couponAnalytics";
 import { readCoupons } from "@/lib/admin/couponStore";
@@ -23,7 +24,7 @@ function parsePrice(priceStr: string): number {
   return match ? parseInt(match[1], 10) * 100 : 0; // Convert to cents
 }
 
-export default function CheckoutStartPage() {
+function CheckoutStartContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -150,6 +151,119 @@ export default function CheckoutStartPage() {
   }
 
   return (
+    <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+      <div className="text-xl font-semibold">{productName}</div>
+      <div className="mt-2 text-sm text-zinc-600">
+        Product: <span className="font-semibold">{productId}</span>
+      </div>
+
+      {/* Price Display + "saved $X" pill */}
+      <div className="mt-4 space-y-1">
+        {savedCents > 0 ? (
+          <>
+            <div className="text-sm text-muted-foreground line-through">
+              {(priceCents / 100).toFixed(2)}
+            </div>
+            <div className="text-2xl font-semibold">
+              {(finalCents / 100).toFixed(2)}
+            </div>
+
+            <div className="mt-2 inline-flex items-center rounded-full border bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+              This coupon saved you{" "}
+              {new Intl.NumberFormat(undefined, { style: "currency", currency }).format(savedCents / 100)}
+            </div>
+          </>
+        ) : (
+          <div className="text-2xl font-semibold">
+            {(priceCents / 100).toFixed(2)}
+          </div>
+        )}
+      </div>
+
+      {/* Coupon UI (input + apply + stack chips) */}
+      <div className="mt-4 rounded-xl border bg-slate-50 p-3">
+        <div className="flex gap-2">
+          <input
+            value={couponInput}
+            onChange={(e) => setCouponInput(e.target.value)}
+            placeholder="Coupons (comma separated) e.g. OMG10,VIP5"
+            className="flex-1 rounded-lg border px-3 py-2 text-sm"
+          />
+          <button
+            type="button"
+            onClick={() => applyStack(couponInput.split(","), "manual")}
+            className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
+          >
+            Apply
+          </button>
+
+          {stack.length ? (
+            <button
+              type="button"
+              onClick={() => {
+                setCouponInput("");
+                applyStack([], "manual");
+              }}
+              className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
+              title="Remove coupons"
+            >
+              Clear
+            </button>
+          ) : null}
+        </div>
+
+        {couponMsg ? <div className="mt-2 text-xs text-muted-foreground">{couponMsg}</div> : null}
+
+        {applied.length ? (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {applied.map((a) => (
+              <span
+                key={a.code}
+                className="inline-flex items-center rounded-full border bg-white px-2.5 py-1 text-xs font-medium"
+                title={`-${a.discountCents}¢`}
+              >
+                {a.code} • {a.percentOff}% off
+              </span>
+            ))}
+          </div>
+        ) : null}
+
+        {rejected.length ? (
+          <div className="mt-3 space-y-1">
+            {rejected.slice(0, 3).map((r) => (
+              <div key={r.code} className="text-xs text-amber-700">
+                {r.code}: {r.reason}
+              </div>
+            ))}
+          </div>
+        ) : null}
+      </div>
+
+      <div className="mt-6 flex flex-wrap gap-2">
+        <button
+          onClick={proceedToCheckout}
+          className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-semibold text-white hover:bg-zinc-800"
+        >
+          Complete Purchase
+        </button>
+
+        <button
+          onClick={() => router.push(`/checkout/cancel?product=${encodeURIComponent(productId)}`)}
+          className="rounded-xl border border-zinc-200 bg-white px-4 py-2 text-sm font-semibold hover:bg-zinc-50"
+        >
+          Cancel
+        </button>
+      </div>
+
+      <div className="mt-4 text-xs text-zinc-500">
+        Week 1 testing: mock checkout flow. Later: real Stripe Checkout + webhook unlock.
+      </div>
+    </div>
+  );
+}
+
+export default function CheckoutStartPage() {
+  return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900">
       <header className="border-b border-zinc-200 bg-white">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-5">
@@ -167,116 +281,19 @@ export default function CheckoutStartPage() {
       </header>
 
       <main className="mx-auto max-w-3xl px-4 py-10">
-        <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-          <div className="text-xl font-semibold">{productName}</div>
-          <div className="mt-2 text-sm text-zinc-600">
-            Product: <span className="font-semibold">{productId}</span>
-          </div>
-
-          {/* Price Display + "saved $X" pill */}
-          <div className="mt-4 space-y-1">
-            {savedCents > 0 ? (
-              <>
-                <div className="text-sm text-muted-foreground line-through">
-                  {(priceCents / 100).toFixed(2)}
-                </div>
-                <div className="text-2xl font-semibold">
-                  {(finalCents / 100).toFixed(2)}
-                </div>
-
-                <div className="mt-2 inline-flex items-center rounded-full border bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
-                  This coupon saved you{" "}
-                  {new Intl.NumberFormat(undefined, { style: "currency", currency }).format(savedCents / 100)}
-                </div>
-              </>
-            ) : (
-              <div className="text-2xl font-semibold">
-                {(priceCents / 100).toFixed(2)}
-              </div>
-            )}
-          </div>
-
-          {/* Coupon UI (input + apply + stack chips) */}
-          <div className="mt-4 rounded-xl border bg-slate-50 p-3">
-            <div className="flex gap-2">
-              <input
-                value={couponInput}
-                onChange={(e) => setCouponInput(e.target.value)}
-                placeholder="Coupons (comma separated) e.g. OMG10,VIP5"
-                className="flex-1 rounded-lg border px-3 py-2 text-sm"
-              />
-              <button
-                type="button"
-                onClick={() => applyStack(couponInput.split(","), "manual")}
-                className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
-              >
-                Apply
-              </button>
-
-              {stack.length ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCouponInput("");
-                    applyStack([], "manual");
-                  }}
-                  className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
-                  title="Remove coupons"
-                >
-                  Clear
-                </button>
-              ) : null}
+        <Suspense fallback={
+          <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+            <div className="animate-pulse space-y-4">
+              <div className="h-6 w-48 bg-zinc-200 rounded"></div>
+              <div className="h-4 w-32 bg-zinc-200 rounded"></div>
+              <div className="h-8 w-24 bg-zinc-200 rounded"></div>
+              <div className="h-20 w-full bg-zinc-100 rounded-xl"></div>
             </div>
-
-            {couponMsg ? <div className="mt-2 text-xs text-muted-foreground">{couponMsg}</div> : null}
-
-            {applied.length ? (
-              <div className="mt-3 flex flex-wrap gap-2">
-                {applied.map((a) => (
-                  <span
-                    key={a.code}
-                    className="inline-flex items-center rounded-full border bg-white px-2.5 py-1 text-xs font-medium"
-                    title={`-${a.discountCents}¢`}
-                  >
-                    {a.code} • {a.percentOff}% off
-                  </span>
-                ))}
-              </div>
-            ) : null}
-
-            {rejected.length ? (
-              <div className="mt-3 space-y-1">
-                {rejected.slice(0, 3).map((r) => (
-                  <div key={r.code} className="text-xs text-amber-700">
-                    {r.code}: {r.reason}
-                  </div>
-                ))}
-              </div>
-            ) : null}
           </div>
-
-          <div className="mt-6 flex flex-wrap gap-2">
-            <button
-              onClick={proceedToCheckout}
-              className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-semibold text-white hover:bg-zinc-800"
-            >
-              Complete Purchase
-            </button>
-
-            <button
-              onClick={() => router.push(`/checkout/cancel?product=${encodeURIComponent(productId)}`)}
-              className="rounded-xl border border-zinc-200 bg-white px-4 py-2 text-sm font-semibold hover:bg-zinc-50"
-            >
-              Cancel
-            </button>
-          </div>
-
-          <div className="mt-4 text-xs text-zinc-500">
-            Week 1 testing: mock checkout flow. Later: real Stripe Checkout + webhook unlock.
-          </div>
-        </div>
+        }>
+          <CheckoutStartContent />
+        </Suspense>
       </main>
     </div>
   );
 }
-

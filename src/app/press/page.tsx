@@ -1,20 +1,16 @@
-import React from "react";
-import { Metadata } from "next";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Container } from "@/components/layout/container";
-import { Section } from "@/components/common/section";
-import { ArrowRightIcon, DocumentTextIcon, PhotoIcon, CalendarIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Press & Media – OMGsystems",
-  description: "Find the latest company news, media kit and press releases from OMGsystems – industry-specific automation & SaaS.",
-  openGraph: {
-    title: "Press & Media – OMGsystems",
-    description: "Find the latest company news, media kit and press releases from OMGsystems – industry-specific automation & SaaS.",
-    type: "website",
-  },
-};
+import Link from "next/link";
+import {
+  ArrowRightIcon,
+  DocumentTextIcon,
+  PhotoIcon,
+  CalendarIcon,
+  EnvelopeIcon,
+  NewspaperIcon,
+  ArrowDownTrayIcon,
+  BuildingOfficeIcon,
+} from "@heroicons/react/24/outline";
 
 const featuredCoverage = [
   {
@@ -22,25 +18,19 @@ const featuredCoverage = [
     publication: "Canadian Property Management Today",
     date: "October 15, 2024",
     excerpt: "Ontario-based automation platform reduces manual processes by 90% for property management companies.",
-    image: "/images/press/property-management-article.jpg",
-    link: "#"
   },
   {
     title: "Healthcare automation startup secures $2M in funding",
     publication: "TechCrunch Canada",
-    date: "September 28, 2024", 
+    date: "September 28, 2024",
     excerpt: "OMGsystems raises Series A to expand automation solutions across Canadian healthcare sector.",
-    image: "/images/press/healthcare-funding-article.jpg",
-    link: "#"
   },
   {
     title: "The future of business automation in Canada",
     publication: "Canadian Business Review",
     date: "September 10, 2024",
     excerpt: "How OMGsystems is transforming traditional industries with intelligent automation workflows.",
-    image: "/images/press/business-automation-article.jpg", 
-    link: "#"
-  }
+  },
 ];
 
 const pressReleases = [
@@ -48,26 +38,22 @@ const pressReleases = [
     date: "October 10, 2024",
     title: "OMGsystems Launches Industry IQ Beta for Healthcare Providers",
     summary: "New AI-powered module helps healthcare providers automate patient intake and compliance workflows.",
-    link: "#"
   },
   {
-    date: "September 15, 2024", 
+    date: "September 15, 2024",
     title: "OMGsystems Secures $2M Series A Funding Round",
     summary: "Funding will accelerate product development and expand team across engineering and customer success.",
-    link: "#"
   },
   {
     date: "August 20, 2024",
     title: "OMGsystems Partners with Leading Property Management Companies",
     summary: "Strategic partnerships bring automation to 500+ properties across Ontario and British Columbia.",
-    link: "#"
   },
   {
     date: "July 5, 2024",
     title: "OMGsystems Achieves SOC 2 Type II Compliance",
     summary: "Security certification demonstrates commitment to protecting client data and maintaining highest security standards.",
-    link: "#"
-  }
+  },
 ];
 
 const mediaAssets = [
@@ -75,338 +61,395 @@ const mediaAssets = [
     title: "Company Logo & Brand Assets",
     description: "High-resolution logos, brand guidelines, and style guide",
     icon: DocumentTextIcon,
-    download: "#"
   },
   {
     title: "Executive Headshots",
     description: "Professional photos of leadership team",
     icon: PhotoIcon,
-    download: "#"
   },
   {
     title: "Company Fact Sheet",
     description: "Key statistics, milestones, and company overview",
     icon: DocumentTextIcon,
-    download: "#"
   },
   {
     title: "Product Screenshots",
     description: "High-resolution images of our platform in action",
     icon: PhotoIcon,
-    download: "#"
-  }
+  },
 ];
 
 const milestones = [
   {
     year: "2024",
     title: "500+ Companies Onboarded",
-    description: "Reached milestone of 500+ businesses using our automation platform"
+    description: "Reached milestone of 500+ businesses using our automation platform",
   },
   {
-    year: "2024", 
+    year: "2024",
     title: "SOC 2 Type II Certified",
-    description: "Achieved highest security standards for data protection"
+    description: "Achieved highest security standards for data protection",
   },
   {
     year: "2024",
     title: "Series A Funding Secured",
-    description: "Raised $2M to accelerate growth and product development"
+    description: "Raised $2M to accelerate growth and product development",
   },
   {
     year: "2023",
     title: "Platform Launch",
-    description: "Launched comprehensive automation platform for Canadian businesses"
-  }
+    description: "Launched comprehensive automation platform for Canadian businesses",
+  },
 ];
 
-const publicationLogos = [
+const publications = [
   "TechCrunch Canada",
-  "Canadian Business Review", 
+  "Canadian Business Review",
   "Property Management Today",
   "Healthcare Innovation",
   "Canadian Tech Weekly",
-  "Business Automation News"
 ];
 
 export default function PressPage() {
   return (
-    <main className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900">
-        <div className="absolute inset-0 bg-black/40"></div>
-        <Container className="relative py-20 lg:py-24">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 
-              className="font-bold leading-tight mb-6 bg-gradient-to-r from-white via-blue-100 to-indigo-200 bg-clip-text text-transparent"
-              style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)' }}
-            >
-              In the media
+    <div className="min-h-screen bg-slate-950">
+      {/* ===== MAIN CONTENT WRAPPER ===== */}
+      <div className="relative">
+        {/* Background Elements */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-[10%] left-1/4 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[150px] animate-pulse" />
+          <div className="absolute top-[40%] right-1/4 w-[400px] h-[400px] bg-teal-500/10 rounded-full blur-[120px] animate-pulse" />
+          <div className="absolute top-[70%] left-1/3 w-[350px] h-[350px] bg-emerald-500/10 rounded-full blur-[100px] animate-pulse" />
+        </div>
+
+        {/* ===== HERO SECTION ===== */}
+        <div className="relative z-10 pt-32 sm:pt-40 pb-20 sm:pb-28">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-medium mb-6">
+              <NewspaperIcon className="w-4 h-4" />
+              Press & Media
+            </div>
+
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+              In the{" "}
+              <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                Media
+              </span>
             </h1>
-            <p className="text-xl text-gray-200 mb-8">
+            <p className="text-xl text-white/70 max-w-2xl mx-auto mb-10">
               See how OMGsystems is featured, innovating the future of vertical-business automation.
             </p>
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg rounded-2xl">
-                <Link href="#media-kit">
-                  View Media Kit
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg rounded-2xl">
-                <Link href="#press-contact">
-                  Contact Media Relations
-                </Link>
-              </Button>
+              <Link
+                href="#media-kit"
+                className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-lg hover:from-emerald-400 hover:to-teal-400 transition-all duration-300 shadow-[0_0_30px_rgba(16,185,129,0.4)]"
+              >
+                <ArrowDownTrayIcon className="w-5 h-5 mr-2" />
+                Download Media Kit
+              </Link>
+              <Link
+                href="#press-contact"
+                className="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/5 hover:border-white/40 transition-all duration-300"
+              >
+                Contact Media Relations
+              </Link>
+            </div>
+
+            {/* Publications Strip */}
+            <div className="mt-16 pt-8 border-t border-white/10">
+              <p className="text-white/40 text-sm mb-6">As featured in</p>
+              <div className="flex flex-wrap justify-center gap-x-8 gap-y-4">
+                {publications.map((pub, index) => (
+                  <span key={index} className="text-white/50 font-medium text-sm hover:text-white/70 transition-colors">
+                    {pub}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
-        </Container>
-      </section>
+        </div>
 
-      {/* Media Kit & Resources */}
-      <Section id="media-kit" className="py-16 bg-gray-50">
-        <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Media Kit Downloads
+        {/* ===== FEATURED COVERAGE ===== */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 sm:pb-28">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Featured{" "}
+              <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                Coverage
+              </span>
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Use our official branding assets for editorial use. Contact us for additional assets.
+            <p className="text-white/60 max-w-2xl mx-auto">
+              Recent press mentions and media coverage.
             </p>
           </div>
-          
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {mediaAssets.map((asset, index) => (
-              <div key={index} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-                <div className="flex items-start">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                    <asset.icon className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900 mb-2">{asset.title}</h3>
-                    <p className="text-gray-600 text-sm mb-4">{asset.description}</p>
-                    <Button asChild variant="outline" size="sm">
-                      <Link href={asset.download}>
-                        Download
-                        <ArrowRightIcon className="ml-2 h-4 w-4" />
-                      </Link>
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Container>
-      </Section>
 
-      {/* Featured Press Mentions */}
-      <Section className="py-16 bg-white">
-        <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Featured Press Mentions
-            </h2>
-            <div className="flex flex-wrap justify-center gap-8 mb-12">
-              {publicationLogos.map((publication, index) => (
-                <div key={index} className="text-gray-600 font-medium text-sm">
-                  {publication}
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6">
             {featuredCoverage.map((article, index) => (
-              <div key={index} className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-                <div className="h-48 bg-gray-200 flex items-center justify-center">
-                  <PhotoIcon className="h-12 w-12 text-gray-400" />
+              <div
+                key={index}
+                className="backdrop-blur-xl bg-white/5 rounded-2xl border border-white/10 overflow-hidden hover:border-emerald-500/40 hover:shadow-[0_0_40px_rgba(16,185,129,0.15)] transition-all duration-500 group"
+              >
+                {/* Image Placeholder */}
+                <div className="h-48 bg-gradient-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center">
+                  <PhotoIcon className="w-12 h-12 text-white/30 group-hover:text-emerald-400/50 transition-colors" />
                 </div>
                 <div className="p-6">
-                  <div className="text-sm text-gray-500 mb-2">{article.publication} • {article.date}</div>
-                  <h3 className="font-semibold text-gray-900 mb-3 line-clamp-2">{article.title}</h3>
-                  <p className="text-gray-600 text-sm mb-4">{article.excerpt}</p>
-                  <Button asChild variant="outline" size="sm" className="w-full">
-                    <Link href={article.link} target="_blank" rel="noopener noreferrer">
-                      Read More
-                      <ArrowRightIcon className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Container>
-      </Section>
-
-      {/* Press Releases */}
-      <Section className="py-16 bg-gray-50">
-        <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Recent Releases
-            </h2>
-          </div>
-          
-          <div className="max-w-4xl mx-auto space-y-6">
-            {pressReleases.map((release, index) => (
-              <div key={index} className="bg-white rounded-2xl p-6 hover:shadow-md transition-shadow">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center mb-2">
-                      <CalendarIcon className="h-4 w-4 text-gray-500 mr-2" />
-                      <span className="text-sm text-gray-500">{release.date}</span>
-                    </div>
-                    <h3 className="font-semibold text-gray-900 mb-2">{release.title}</h3>
-                    <p className="text-gray-600 mb-4">{release.summary}</p>
-                    <Button asChild variant="outline" size="sm">
-                      <Link href={release.link}>
-                        Read More
-                        <ArrowRightIcon className="ml-2 h-4 w-4" />
-                      </Link>
-                    </Button>
+                  <div className="flex items-center gap-2 text-sm text-white/50 mb-3">
+                    <span className="text-emerald-400">{article.publication}</span>
+                    <span>•</span>
+                    <span>{article.date}</span>
                   </div>
+                  <h3 className="font-semibold text-white mb-3 line-clamp-2 group-hover:text-emerald-400 transition-colors">
+                    {article.title}
+                  </h3>
+                  <p className="text-sm text-white/60 mb-4">{article.excerpt}</p>
+                  <Link
+                    href="#"
+                    className="inline-flex items-center text-sm text-emerald-400 hover:text-emerald-300 transition-colors"
+                  >
+                    Read Article
+                    <ArrowRightIcon className="w-4 h-4 ml-1" />
+                  </Link>
                 </div>
               </div>
             ))}
           </div>
-          
-          <div className="text-center mt-8">
-            <Button asChild variant="outline">
-              <Link href="#">
-                View All Press Releases
-              </Link>
-            </Button>
-          </div>
-        </Container>
-      </Section>
+        </div>
 
-      {/* Media Kit */}
-      <Section id="media-kit" className="py-16 bg-gray-50">
-        <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Media Kit
+        {/* ===== PRESS RELEASES ===== */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 sm:pb-28">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Press{" "}
+              <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                Releases
+              </span>
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Download high-resolution assets, brand guidelines, and company information for your coverage.
+          </div>
+
+          <div className="max-w-4xl mx-auto space-y-4">
+            {pressReleases.map((release, index) => (
+              <div
+                key={index}
+                className="backdrop-blur-xl bg-white/5 rounded-xl border border-white/10 p-6 hover:border-emerald-500/40 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] transition-all duration-500 group"
+              >
+                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 text-sm text-white/50 mb-2">
+                      <CalendarIcon className="w-4 h-4" />
+                      <span>{release.date}</span>
+                    </div>
+                    <h3 className="font-semibold text-white mb-2 group-hover:text-emerald-400 transition-colors">
+                      {release.title}
+                    </h3>
+                    <p className="text-white/60 text-sm">{release.summary}</p>
+                  </div>
+                  <Link
+                    href="#"
+                    className="inline-flex items-center justify-center px-4 py-2 text-sm text-emerald-400 border border-emerald-500/30 rounded-lg hover:bg-emerald-500/10 transition-all"
+                  >
+                    Read More
+                    <ArrowRightIcon className="w-4 h-4 ml-1" />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ===== MEDIA KIT ===== */}
+        <div id="media-kit" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 sm:pb-28">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-medium mb-4">
+              <ArrowDownTrayIcon className="w-4 h-4" />
+              Downloads
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Media{" "}
+              <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                Kit
+              </span>
+            </h2>
+            <p className="text-white/60 max-w-2xl mx-auto">
+              Download official branding assets for editorial use.
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {mediaAssets.map((asset, index) => (
-              <div key={index} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-                <div className="flex items-start">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                    <asset.icon className="h-6 w-6 text-blue-600" />
+              <div
+                key={index}
+                className="backdrop-blur-xl bg-white/5 rounded-xl border border-white/10 p-6 hover:border-emerald-500/40 transition-all duration-300 group"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-emerald-500/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <asset.icon className="w-6 h-6 text-emerald-400" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900 mb-2">{asset.title}</h3>
-                    <p className="text-gray-600 text-sm mb-4">{asset.description}</p>
-                    <Button asChild variant="outline" size="sm">
-                      <Link href={asset.download}>
-                        Download
-                        <ArrowRightIcon className="ml-2 h-4 w-4" />
-                      </Link>
-                    </Button>
+                    <h3 className="font-semibold text-white mb-1">{asset.title}</h3>
+                    <p className="text-sm text-white/60 mb-4">{asset.description}</p>
+                    <Link
+                      href="#"
+                      className="inline-flex items-center text-sm text-emerald-400 hover:text-emerald-300 transition-colors"
+                    >
+                      <ArrowDownTrayIcon className="w-4 h-4 mr-1" />
+                      Download
+                    </Link>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-        </Container>
-      </Section>
+        </div>
 
-      {/* Milestones & Recognition */}
-      <Section className="py-16 bg-white">
-        <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Our Milestones & Recognition
+        {/* ===== MILESTONES ===== */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 sm:pb-28">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Company{" "}
+              <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                Milestones
+              </span>
             </h2>
           </div>
-          
-          <div className="max-w-4xl mx-auto">
-            <div className="space-y-8">
+
+          <div className="max-w-3xl mx-auto relative">
+            {/* Timeline Line */}
+            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-emerald-500/50 via-teal-500/50 to-emerald-500/50 hidden md:block" />
+
+            <div className="space-y-6">
               {milestones.map((milestone, index) => (
-                <div key={index} className="flex items-center">
-                  <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-6 flex-shrink-0">
+                <div key={index} className="flex items-start gap-6">
+                  <div className="relative z-10 w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-[0_0_20px_rgba(16,185,129,0.4)] flex-shrink-0">
                     {milestone.year}
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900 mb-1">{milestone.title}</h3>
-                    <p className="text-gray-600">{milestone.description}</p>
+                  <div className="backdrop-blur-xl bg-white/5 rounded-xl border border-white/10 p-5 flex-1 hover:border-emerald-500/40 transition-all duration-300">
+                    <h3 className="font-semibold text-white mb-1">{milestone.title}</h3>
+                    <p className="text-sm text-white/60">{milestone.description}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        </Container>
-      </Section>
+        </div>
 
-      {/* Press Contact */}
-      <Section id="press-contact" className="py-16 bg-white">
-        <Container>
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Press Contact
-            </h2>
-            <p className="text-lg text-gray-600 mb-8">
-              For media inquiries, please email press@omgsystems.com or call +1-[phone placeholder].
-            </p>
-            
-            <div className="bg-gray-50 rounded-2xl p-8 shadow-sm border border-gray-200 mb-8">
-              <div className="flex items-center justify-center mb-6">
-                <EnvelopeIcon className="h-8 w-8 text-blue-600 mr-3" />
-                <div className="text-left">
-                  <div className="font-semibold text-gray-900">Media Relations Team</div>
-                  <div className="text-gray-600">press@omgsystems.com</div>
-                  <div className="text-gray-600">+1 (905) 555-0123</div>
+        {/* ===== PRESS CONTACT ===== */}
+        <div id="press-contact" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 sm:pb-28">
+          <div className="max-w-2xl mx-auto">
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-medium mb-4">
+                <EnvelopeIcon className="w-4 h-4" />
+                Get in Touch
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                Press{" "}
+                <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                  Contact
+                </span>
+              </h2>
+              <p className="text-white/60">
+                For media inquiries, interviews, or press information.
+              </p>
+            </div>
+
+            {/* Contact Info */}
+            <div className="backdrop-blur-xl bg-white/5 rounded-2xl border border-white/10 p-6 mb-8">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <BuildingOfficeIcon className="w-7 h-7 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white">Media Relations Team</h3>
+                  <p className="text-emerald-400">press@omgsystems.ca</p>
+                  <p className="text-white/60 text-sm">+1 (905) 555-0123</p>
                 </div>
               </div>
-              
-              <form className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <input 
-                    type="text" 
-                    placeholder="Your Name"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                  <input 
-                    type="text" 
-                    placeholder="Outlet"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            </div>
+
+            {/* Contact Form */}
+            <form className="backdrop-blur-xl bg-white/5 rounded-2xl border border-white/10 p-8">
+              <div className="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label className="block text-sm font-medium text-white/80 mb-2">Your Name</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                    placeholder="Full name"
                   />
                 </div>
-                <input 
-                  type="email" 
-                  placeholder="Email Address"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                <div>
+                  <label className="block text-sm font-medium text-white/80 mb-2">Publication/Outlet</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                    placeholder="Your outlet"
+                  />
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-white/80 mb-2">Email</label>
+                <input
+                  type="email"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                  placeholder="your.email@publication.com"
                 />
-                <textarea 
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-white/80 mb-2">Inquiry</label>
+                <textarea
                   rows={4}
-                  placeholder="Your inquiry or request..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all resize-none"
+                  placeholder="Tell us about your inquiry or interview request..."
                 ></textarea>
-                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                  Send Inquiry
-                </Button>
-              </form>
-            </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50">
-                <Link href="/">
-                  Back to Home
-                </Link>
-              </Button>
-              <Button asChild variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50">
-                <Link href="#media-kit">
-                  Download Media Kit
-                </Link>
-              </Button>
-            </div>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-lg hover:from-emerald-400 hover:to-teal-400 transition-all duration-300 shadow-[0_0_30px_rgba(16,185,129,0.4)] flex items-center justify-center gap-2"
+              >
+                <EnvelopeIcon className="w-5 h-5" />
+                Send Inquiry
+              </button>
+            </form>
           </div>
-        </Container>
-      </Section>
-    </main>
+        </div>
+      </div>
+
+      {/* ===== FINAL CTA ===== */}
+      <section className="relative py-20 sm:py-28 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 via-teal-500 to-emerald-600" />
+        <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-white/10 rounded-full blur-[100px] animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-white/10 rounded-full blur-[80px] animate-pulse" />
+
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
+            Want to Learn More About OMGsystems?
+          </h2>
+          <p className="text-xl text-white/90 mb-10 max-w-2xl mx-auto">
+            Discover how we're transforming business automation across Canada.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/about"
+              className="inline-flex items-center justify-center px-8 py-4 bg-white text-emerald-600 font-bold rounded-lg hover:bg-white/90 transition-all duration-300 transform hover:scale-105 shadow-xl"
+            >
+              About Us
+              <ArrowRightIcon className="w-5 h-5 ml-2" />
+            </Link>
+            <Link
+              href="/contact"
+              className="inline-flex items-center justify-center px-8 py-4 border-2 border-white/40 text-white font-semibold rounded-lg hover:bg-white/10 hover:border-white/60 transition-all duration-300"
+            >
+              Contact Us
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

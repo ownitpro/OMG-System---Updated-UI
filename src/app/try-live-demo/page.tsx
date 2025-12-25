@@ -3,9 +3,9 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { liveDemos } from "@/config/try_live_demo_config";
-import { 
-  PlayIcon, 
-  ClockIcon, 
+import {
+  PlayIcon,
+  ClockIcon,
   CheckCircleIcon,
   SparklesIcon,
   ArrowRightIcon
@@ -30,131 +30,227 @@ export const metadata: Metadata = {
 
 export default function TryLiveDemoPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-50 rounded-full blur-3xl opacity-50"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-50 rounded-full blur-3xl opacity-50"></div>
-      </div>
+    <main className="min-h-screen bg-slate-950 text-white">
+      {/* ============================================
+          1. HERO SECTION - Interactive Demo Theme
+          ============================================ */}
+      <section className="relative overflow-hidden pt-40 sm:pt-52 pb-20 sm:pb-28">
+        {/* Animated Glow Orbs */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-[120px] cyan-glow-float" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-teal-500/15 rounded-full blur-[100px] cyan-glow-float-delayed" />
+        <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-cyan-400/10 rounded-full blur-[80px] cyan-glow-float" style={{ animationDelay: '1s' }} />
 
-      <section className="relative mx-auto flex max-w-6xl flex-col gap-10 px-4 py-16 sm:px-6 lg:px-8">
-        {/* Hero */}
-        <div className="text-center max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 border border-emerald-200 px-4 py-1.5 mb-6">
-            <SparklesIcon className="w-4 h-4 text-emerald-600" />
-            <span className="text-xs font-semibold text-emerald-700 uppercase tracking-wide">
+        {/* Floating Play Button Icons */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {/* Play icon 1 - Large */}
+          <div className="absolute top-[15%] left-[10%] float-play" style={{ animationDelay: '0s' }}>
+            <div className="w-14 h-14 rounded-full bg-cyan-500/25 border border-cyan-500/40 flex items-center justify-center play-pulse">
+              <PlayIcon className="w-6 h-6 text-cyan-400/80" />
+            </div>
+          </div>
+          {/* Play icon 2 */}
+          <div className="absolute top-[20%] right-[12%] float-play" style={{ animationDelay: '1.5s' }}>
+            <div className="w-12 h-12 rounded-full bg-teal-500/20 border border-teal-500/35 flex items-center justify-center play-pulse" style={{ animationDelay: '0.5s' }}>
+              <PlayIcon className="w-5 h-5 text-teal-400/70" />
+            </div>
+          </div>
+          {/* Play icon 3 */}
+          <div className="absolute top-[45%] left-[5%] float-play" style={{ animationDelay: '3s' }}>
+            <div className="w-10 h-10 rounded-full bg-cyan-400/15 border border-cyan-400/30 flex items-center justify-center">
+              <PlayIcon className="w-4 h-4 text-cyan-300/60" />
+            </div>
+          </div>
+          {/* Play icon 4 - Large */}
+          <div className="absolute top-[35%] right-[8%] float-play" style={{ animationDelay: '0.8s' }}>
+            <div className="w-16 h-16 rounded-full bg-teal-500/15 border border-teal-500/30 flex items-center justify-center play-pulse" style={{ animationDelay: '1s' }}>
+              <PlayIcon className="w-7 h-7 text-teal-400/60" />
+            </div>
+          </div>
+          {/* Play icon 5 */}
+          <div className="absolute top-[55%] left-[15%] float-play" style={{ animationDelay: '2.2s' }}>
+            <div className="w-11 h-11 rounded-full bg-cyan-500/18 border border-cyan-500/28 flex items-center justify-center">
+              <PlayIcon className="w-5 h-5 text-cyan-400/55" />
+            </div>
+          </div>
+          {/* Play icon 6 */}
+          <div className="absolute top-[60%] right-[18%] float-play" style={{ animationDelay: '4s' }}>
+            <div className="w-9 h-9 rounded-full bg-teal-400/12 border border-teal-400/22 flex items-center justify-center">
+              <PlayIcon className="w-4 h-4 text-teal-300/50" />
+            </div>
+          </div>
+          {/* Ripple effects */}
+          <div className="absolute top-[25%] left-[45%] w-24 h-24 rounded-full border border-cyan-500/25 ripple-animation" />
+          <div className="absolute top-[50%] right-[35%] w-20 h-20 rounded-full border border-teal-500/20 ripple-animation" style={{ animationDelay: '1.5s' }} />
+          <div className="absolute top-[70%] left-[30%] w-16 h-16 rounded-full border border-cyan-400/15 ripple-animation" style={{ animationDelay: '3s' }} />
+        </div>
+
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Badge */}
+          <div className="text-center mb-6">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-cyan-500/30 text-cyan-400 text-sm font-medium">
+              <SparklesIcon className="w-4 h-4" />
               Interactive Demos
             </span>
           </div>
-          <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl text-gray-900 mb-6">
-            Try a Live Demo
-          </h1>
-          <p className="mt-4 text-balance text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Choose a live sandbox and see how OMGsystems works in your world.
-            No registration required. Just launch, click around, and imagine
-            your team using this every day.
-          </p>
-        </div>
 
-        {/* Trust / short strip */}
-        <div className="flex flex-wrap gap-4 justify-center text-sm">
-          <div className="flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 shadow-sm">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="font-medium text-emerald-700">Instant access · No setup</span>
+          {/* Main Headline */}
+          <div className="text-center mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight max-w-4xl mx-auto leading-tight">
+              Try a{" "}
+              <span className="bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
+                Live Demo
+              </span>
+            </h1>
           </div>
-          <div className="flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 shadow-sm">
-            <ClockIcon className="w-4 h-4 text-blue-600" />
-            <span className="font-medium text-blue-700">5–10 minute guided experience</span>
+
+          {/* Description */}
+          <div className="text-center mb-10">
+            <p className="text-lg md:text-xl text-white/60 max-w-3xl mx-auto leading-relaxed">
+              Choose a live sandbox and see how OMGsystems works in your world.
+              No registration required. Just launch, click around, and imagine
+              your team using this every day.
+            </p>
+          </div>
+
+          {/* Trust Badges */}
+          <div className="flex flex-wrap gap-4 justify-center mb-16 sm:mb-20">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-cyan-500/20 text-white/80 text-sm">
+              <span className="w-2 h-2 bg-cyan-500 rounded-full animate-pulse" />
+              <span className="font-medium">Instant access · No setup</span>
+            </div>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-teal-500/20 text-white/80 text-sm">
+              <ClockIcon className="w-4 h-4 text-teal-400" />
+              <span className="font-medium">5-10 minute guided experience</span>
+            </div>
+          </div>
+
+          {/* Demo Cards Grid - Integrated into Hero */}
+          <div className="grid gap-8 md:grid-cols-2">
+            {liveDemos.map((demo) => (
+              <div
+                key={demo.id}
+                className="group relative backdrop-blur-xl bg-white/5 rounded-2xl border border-white/10 p-8 hover:border-cyan-500/50 hover:shadow-[0_0_40px_rgba(6,182,212,0.15)] transition-all duration-500 hover:-translate-y-1"
+              >
+                {/* Top Accent Line */}
+                <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+
+                {/* Badge Row */}
+                <div className="mb-6 flex items-center justify-between gap-2">
+                  {demo.badge && (
+                    <span className="inline-flex items-center rounded-full bg-cyan-500/10 border border-cyan-500/30 px-4 py-1.5 text-xs font-semibold text-cyan-400">
+                      {demo.badge}
+                    </span>
+                  )}
+                  <div className="flex items-center gap-1.5 text-xs text-white/50">
+                    <ClockIcon className="w-4 h-4 text-teal-400" />
+                    <span className="font-medium">~{demo.estTimeMinutes} min</span>
+                  </div>
+                </div>
+
+                {/* Title + Summary */}
+                <div className="mb-6">
+                  <h2 className="text-2xl font-bold tracking-tight text-white mb-3 group-hover:text-cyan-400 transition-colors">
+                    {demo.label}
+                  </h2>
+                  <p className="text-base text-white/60 leading-relaxed">{demo.summary}</p>
+                </div>
+
+                {/* Highlights */}
+                <ul className="space-y-3 mb-6">
+                  {demo.highlights.map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <CheckCircleIcon className="w-5 h-5 text-cyan-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-white/70 leading-relaxed">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Ideal For */}
+                <div className="mt-auto pt-6 border-t border-white/10">
+                  <p className="text-sm text-white/60 mb-5">
+                    <span className="font-semibold text-white">Ideal for:</span>{" "}
+                    {demo.idealFor}
+                  </p>
+
+                  {/* CTA with Coming Soon */}
+                  <div className="flex items-center gap-3">
+                    <button
+                      disabled
+                      className="inline-flex items-center gap-2 rounded-full bg-white/10 text-white/40 px-5 py-2.5 text-sm font-semibold cursor-not-allowed border border-white/10"
+                    >
+                      <PlayIcon className="w-4 h-4" />
+                      Launch demo
+                    </button>
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 px-4 py-2 text-xs font-semibold text-amber-400">
+                      <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+                      Coming Soon
+                    </span>
+                  </div>
+                </div>
+
+                {/* Hover Glow Effect */}
+                <div className="pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-gradient-to-br from-cyan-500/0 via-cyan-500/5 to-teal-500/0 opacity-0 blur-xl transition-opacity group-hover:opacity-100" />
+              </div>
+            ))}
           </div>
         </div>
+      </section>
 
-        {/* Demo tiles */}
-        <div className="grid gap-8 md:grid-cols-2 mt-4">
-          {liveDemos.map((demo) => (
-            <div
-              key={demo.id}
-              className="group relative flex flex-col rounded-2xl border-2 border-gray-200 bg-white p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:border-emerald-300"
-            >
-              {/* Badge */}
-              <div className="mb-4 flex items-center justify-between gap-2">
-                {demo.badge && (
-                  <span className="inline-flex items-center rounded-full bg-emerald-100 px-4 py-1.5 text-xs font-semibold text-emerald-700">
-                    {demo.badge}
-                  </span>
-                )}
-                <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                  <ClockIcon className="w-4 h-4" />
-                  <span className="font-medium">~{demo.estTimeMinutes} min</span>
-                </div>
-              </div>
+      {/* ============================================
+          3. FOOTER CTA SECTION - Gradient Banner
+          ============================================ */}
+      <section className="relative py-16 sm:py-20 overflow-hidden">
+        {/* Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 via-cyan-500 to-teal-500" />
 
-              {/* Title + summary */}
-              <div className="mb-6">
-                <h2 className="text-2xl font-bold tracking-tight text-gray-900 mb-3">
-                  {demo.label}
-                </h2>
-                <p className="text-base text-gray-600 leading-relaxed">{demo.summary}</p>
-              </div>
-
-              {/* Highlights */}
-              <ul className="mt-4 space-y-3 mb-6">
-                {demo.highlights.map((item) => (
-                  <li key={item} className="flex items-start gap-3">
-                    <CheckCircleIcon className="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700 leading-relaxed">{item}</span>
-                  </li>
-                ))}
-              </ul>
-
-              {/* Ideal for */}
-              <div className="mt-auto pt-6 border-t border-gray-100">
-                <p className="text-sm text-gray-600 mb-4">
-                  <span className="font-semibold text-gray-900">
-                    Ideal for:
-                  </span>{" "}
-                  {demo.idealFor}
-                </p>
-                
-                {/* CTA with Coming Soon */}
-                <div className="flex items-center gap-3">
-                  <button
-                    disabled
-                    className="inline-flex items-center gap-2 rounded-lg bg-gray-100 text-gray-400 px-5 py-2.5 text-sm font-semibold cursor-not-allowed"
-                  >
-                    <PlayIcon className="w-4 h-4" />
-                    Launch demo
-                  </button>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 border border-amber-200 px-4 py-2 text-xs font-semibold text-amber-700">
-                    <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse"></span>
-                    Coming Soon
-                  </span>
-                </div>
-              </div>
-
-              {/* Subtle hover glow */}
-              <div className="pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-gradient-to-br from-emerald-50/0 via-emerald-50/50 to-blue-50/0 opacity-0 blur-2xl transition-opacity group-hover:opacity-100" />
-            </div>
-          ))}
+        {/* Subtle pattern overlay */}
+        <div className="absolute inset-0 opacity-10">
+          <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <defs>
+              <pattern id="demo-grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                <circle cx="1" cy="1" r="1" fill="white" />
+              </pattern>
+            </defs>
+            <rect width="100" height="100" fill="url(#demo-grid)" />
+          </svg>
         </div>
 
-        {/* Footer CTA */}
-        <div className="mt-8 rounded-2xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-6 py-6 shadow-sm">
-          <div className="flex items-start gap-4">
-            <div className="flex-shrink-0 w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-              <ArrowRightIcon className="w-5 h-5 text-emerald-600" />
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
+            {/* Icon */}
+            <div className="flex-shrink-0 w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+              <ArrowRightIcon className="w-8 h-8 text-white" />
             </div>
-            <div>
-              <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
-                After you explore the demos, you can{" "}
-                <Link href="/contact" className="font-semibold text-emerald-600 hover:text-emerald-700 underline">
-                  connect with us through Contact Us
+
+            {/* Content */}
+            <div className="flex-1 text-center md:text-left">
+              <p className="text-lg md:text-xl text-white leading-relaxed">
+                After you explore the demos, connect with us through{" "}
+                <Link href="/contact" className="font-bold underline underline-offset-2 hover:text-white/80 transition-colors">
+                  Contact Us
                 </Link>{" "}
                 or{" "}
-                <Link href="/solutions/custom-solutions" className="font-semibold text-emerald-600 hover:text-emerald-700 underline">
+                <Link href="/solutions/custom-solutions" className="font-bold underline underline-offset-2 hover:text-white/80 transition-colors">
                   Custom Solutions
                 </Link>{" "}
                 to map out how OMGsystems can plug into your actual workflows.
               </p>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-wrap gap-3 justify-center">
+              <Link
+                href="/contact"
+                className="inline-flex items-center rounded-full bg-white px-6 py-3 font-semibold text-cyan-600 shadow-lg hover:bg-white/90 transition-all duration-300 hover:scale-105"
+              >
+                Contact Us
+              </Link>
+              <Link
+                href="/solutions/custom-solutions"
+                className="inline-flex items-center rounded-full border-2 border-white/50 px-6 py-3 font-medium text-white hover:bg-white/10 hover:border-white transition-all duration-300"
+              >
+                Custom Solutions
+              </Link>
             </div>
           </div>
         </div>

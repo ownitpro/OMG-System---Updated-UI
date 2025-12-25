@@ -1,36 +1,50 @@
 :root {
-  /* Color tokens (RGB) */
-  --color-primary: 42, 127, 98;
-  --color-primary-light: 74, 174, 138;
-  --color-primary-dark: 25, 91, 70;
+  /* Brand Colors (RGB values) */
+  /* Primary: #47BD79 → rgb(71, 189, 121) */
+  --color-primary: 71, 189, 121;
+  --color-primary-light: 95, 205, 143;
+  --color-primary-dark: 50, 150, 90;
 
-  --color-secondary: 255, 183, 70;
-  --color-secondary-dark: 230, 162, 60;
+  /* Secondary accent */
+  --color-secondary: 122, 122, 115;
+  --color-secondary-dark: 90, 90, 85;
 
-  --color-neutral-100: 249, 249, 249;
-  --color-neutral-200: 239, 239, 239;
-  --color-neutral-300: 217, 217, 217;
-  --color-neutral-400: 190, 190, 190;
-  --color-neutral-500: 144, 144, 144;
+  /* Dark theme base: #2B2A2A → rgb(43, 42, 42) */
+  --color-background: 43, 42, 42;
+  --color-surface: 55, 54, 54;
+  --color-surface-elevated: 65, 64, 64;
+
+  /* Neutral scale (dark theme) */
+  --color-neutral-100: 245, 245, 245;
+  --color-neutral-200: 229, 229, 229;
+  --color-neutral-300: 180, 180, 180;
+  --color-neutral-400: 140, 140, 140;
+  --color-neutral-500: 122, 122, 115;  /* #7A7A73 */
   --color-neutral-600: 95, 95, 95;
-  --color-neutral-700: 60, 60, 60;
-  --color-neutral-800: 35, 35, 35;
-  --color-neutral-900: 15, 15, 15;
+  --color-neutral-700: 70, 70, 70;
+  --color-neutral-800: 55, 54, 54;
+  --color-neutral-900: 43, 42, 42;  /* #2B2A2A */
 
-  --color-background: var(--color-neutral-100);
-  --color-surface: 255, 255, 255;
-  --color-on-surface: var(--color-neutral-800);
-  --color-text-primary: var(--color-neutral-800);
-  --color-text-secondary: var(--color-neutral-600);
-  --color-border: var(--color-neutral-300);
+  /* Text colors */
+  --color-text-primary: 255, 255, 255;
+  --color-text-secondary: 180, 180, 180;
+  --color-text-muted: 122, 122, 115;  /* #7A7A73 */
+  --color-on-surface: 255, 255, 255;
 
-  --color-success: 76, 175, 80;
-  --color-error: 229, 57, 53;
-  --color-warning: 255, 179, 0;
+  /* Border */
+  --color-border: 70, 70, 70;
+  --color-border-light: 90, 90, 90;
+
+  /* Status colors */
+  --color-success: 71, 189, 121;  /* Same as primary */
+  --color-error: 239, 68, 68;
+  --color-warning: 245, 158, 11;
+  --color-info: 59, 130, 246;
 
   /* Typography */
-  --font-family-base: "Inter", sans-serif;
-  --font-family-heading: "Poppins", sans-serif;
+  --font-family-base: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-family-heading: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-family-display: "Space Grotesk", "Inter", sans-serif;
 
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
@@ -39,6 +53,9 @@
   --font-size-xl: 1.25rem;
   --font-size-2xl: 1.5rem;
   --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
 
   --font-weight-normal: 400;
   --font-weight-medium: 500;
@@ -57,45 +74,586 @@
   --spacing-5: 1.25rem;   /* 20px */
   --spacing-6: 1.5rem;    /* 24px */
   --spacing-8: 2rem;      /* 32px */
+  --spacing-10: 2.5rem;   /* 40px */
   --spacing-12: 3rem;     /* 48px */
   --spacing-16: 4rem;     /* 64px */
+  --spacing-20: 5rem;     /* 80px */
 
-  /* Radii */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
+  /* Radii - More rounded for modern look */
+  --radius-sm: 0.375rem;  /* 6px */
+  --radius-md: 0.5rem;    /* 8px */
+  --radius-lg: 0.75rem;   /* 12px */
+  --radius-xl: 1rem;      /* 16px */
+  --radius-2xl: 1.5rem;   /* 24px */
+  --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-  --shadow-lg: 0 10px 15px rgba(0,0,0,0.15);
+  /* Enhanced Shadows - Dark theme optimized */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+
+  /* Green glow shadows for CTAs */
+  --shadow-glow-sm: 0 0 10px rgba(71, 189, 121, 0.3);
+  --shadow-glow-md: 0 0 20px rgba(71, 189, 121, 0.4);
+  --shadow-glow-lg: 0 4px 30px rgba(71, 189, 121, 0.5);
+
+  /* Accent Colors - Purple */
+  --color-accent-purple: 168, 85, 247;        /* #A855F7 */
+  --color-accent-purple-light: 192, 132, 252; /* #C084FC */
+  --color-accent-purple-dark: 126, 34, 206;   /* #7E22CE */
+
+  /* Accent Colors - Blue */
+  --color-accent-blue: 59, 130, 246;          /* #3B82F6 */
+  --color-accent-blue-light: 96, 165, 250;    /* #60A5FA */
+  --color-accent-blue-dark: 37, 99, 235;      /* #2563EB */
+
+  /* Purple glow shadows */
+  --shadow-glow-purple-sm: 0 0 10px rgba(168, 85, 247, 0.3);
+  --shadow-glow-purple-md: 0 0 20px rgba(168, 85, 247, 0.4);
+  --shadow-glow-purple-lg: 0 4px 30px rgba(168, 85, 247, 0.5);
+
+  /* Blue glow shadows */
+  --shadow-glow-blue-sm: 0 0 10px rgba(59, 130, 246, 0.3);
+  --shadow-glow-blue-md: 0 0 20px rgba(59, 130, 246, 0.4);
+  --shadow-glow-blue-lg: 0 4px 30px rgba(59, 130, 246, 0.5);
+
+  /* Multi-color glow for premium effects */
+  --shadow-glow-multi:
+    0 0 20px rgba(71, 189, 121, 0.3),
+    0 0 40px rgba(168, 85, 247, 0.2),
+    0 0 60px rgba(59, 130, 246, 0.1);
+
+  /* Glass Effect Levels */
+  --glass-blur-subtle: 8px;
+  --glass-blur-light: 12px;
+  --glass-blur-medium: 16px;
+  --glass-blur-heavy: 24px;
+  --glass-blur-intense: 32px;
+
+  --glass-opacity-subtle: 0.05;
+  --glass-opacity-light: 0.08;
+  --glass-opacity-medium: 0.12;
+  --glass-opacity-heavy: 0.18;
+  --glass-opacity-intense: 0.25;
+
+  /* Glass Border Colors */
+  --border-glass-subtle: rgba(255, 255, 255, 0.08);
+  --border-glass-light: rgba(255, 255, 255, 0.12);
+  --border-glass-medium: rgba(255, 255, 255, 0.18);
+  --border-glass-accent-green: rgba(71, 189, 121, 0.3);
+  --border-glass-accent-purple: rgba(168, 85, 247, 0.3);
+  --border-glass-accent-blue: rgba(59, 130, 246, 0.3);
+
+  /* Gradient Definitions */
+  --gradient-emerald-purple: linear-gradient(135deg, rgb(var(--color-primary)) 0%, rgb(var(--color-accent-purple)) 100%);
+  --gradient-emerald-blue: linear-gradient(135deg, rgb(var(--color-primary)) 0%, rgb(var(--color-accent-blue)) 100%);
+  --gradient-purple-blue: linear-gradient(135deg, rgb(var(--color-accent-purple)) 0%, rgb(var(--color-accent-blue)) 100%);
+  --gradient-dark-glass: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+
+  /* Inner shadows for inset effects */
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --shadow-glass-hover: 0 12px 40px rgba(0, 0, 0, 0.25);
 
   /* Transitions */
   --duration-fast: 150ms;
-  --duration-medium: 300ms;
-  --duration-slow: 500ms;
+  --duration-medium: 250ms;
+  --duration-slow: 400ms;
+  --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Premium Animation Timing */
+  --duration-premium-fast: 400ms;
+  --duration-premium-medium: 600ms;
+  --duration-premium-slow: 800ms;
+  --duration-premium-extra-slow: 1200ms;
+
+  /* Premium Easing Functions */
+  --ease-premium-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-premium-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-premium-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-premium-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-premium-smooth: cubic-bezier(0.4, 0, 0, 1);
 
   /* Z-index / layers */
   --z-base: 0;
   --z-dropdown: 1000;
+  --z-sticky: 1100;
   --z-modal: 2000;
   --z-toast: 3000;
+  --z-tooltip: 4000;
 }
 
-/* Dark mode override */
-.dark {
-  --color-background: 18, 18, 18;
-  --color-surface: 30, 30, 30;
-  --color-text-primary: 224, 224, 224;
-  --color-text-secondary: 160, 160, 160;
-  --color-border: 60, 60, 60;
-  --color-neutral-300: 50, 50, 50;
+/* Light mode override (optional - for pages that need light theme) */
+.light {
+  --color-background: 255, 255, 255;
+  --color-surface: 249, 250, 251;
+  --color-surface-elevated: 255, 255, 255;
+  --color-text-primary: 17, 24, 39;
+  --color-text-secondary: 75, 85, 99;
+  --color-text-muted: 156, 163, 175;
+  --color-on-surface: 17, 24, 39;
+  --color-border: 229, 231, 235;
+  --color-border-light: 243, 244, 246;
 }
 
-/* Utility wrapper classes (optional) */
+/* Utility classes */
 .bg-primary {
   background-color: rgb(var(--color-primary));
 }
+
+.bg-primary-hover:hover {
+  background-color: rgb(var(--color-primary-light));
+}
+
 .text-primary {
   color: rgb(var(--color-primary));
+}
+
+.bg-surface {
+  background-color: rgb(var(--color-surface));
+}
+
+.bg-surface-elevated {
+  background-color: rgb(var(--color-surface-elevated));
+}
+
+.text-muted {
+  color: rgb(var(--color-text-muted));
+}
+
+.border-subtle {
+  border-color: rgb(var(--color-border));
+}
+
+/* Glass/frosted effect utilities */
+.glass {
+  background: rgba(var(--color-surface), 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-heavy {
+  background: rgba(var(--color-surface), 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Gradient text utility */
+.text-gradient {
+  background: linear-gradient(135deg, rgb(var(--color-primary)) 0%, rgb(var(--color-primary-light)) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow effect utility */
+.glow-primary {
+  box-shadow: var(--shadow-glow-md);
+}
+
+.glow-primary-hover:hover {
+  box-shadow: var(--shadow-glow-lg);
+}
+
+.glow-purple {
+  box-shadow: var(--shadow-glow-purple-md);
+}
+
+.glow-blue {
+  box-shadow: var(--shadow-glow-blue-md);
+}
+
+.glow-multi {
+  box-shadow: var(--shadow-glow-multi);
+}
+
+/* ============================================
+   ENHANCED GLASS EFFECT UTILITIES
+   ============================================ */
+
+/* Tiered Glass Effects */
+.glass-subtle {
+  background: rgba(255, 255, 255, var(--glass-opacity-subtle));
+  backdrop-filter: blur(var(--glass-blur-subtle));
+  -webkit-backdrop-filter: blur(var(--glass-blur-subtle));
+  border: 1px solid var(--border-glass-subtle);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, var(--glass-opacity-light));
+  backdrop-filter: blur(var(--glass-blur-light));
+  -webkit-backdrop-filter: blur(var(--glass-blur-light));
+  border: 1px solid var(--border-glass-light);
+}
+
+.glass-medium {
+  background: rgba(255, 255, 255, var(--glass-opacity-medium));
+  backdrop-filter: blur(var(--glass-blur-medium));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  border: 1px solid var(--border-glass-medium);
+}
+
+.glass-heavy {
+  background: rgba(255, 255, 255, var(--glass-opacity-heavy));
+  backdrop-filter: blur(var(--glass-blur-heavy));
+  -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+  border: 1px solid var(--border-glass-medium);
+}
+
+.glass-intense {
+  background: rgba(255, 255, 255, var(--glass-opacity-intense));
+  backdrop-filter: blur(var(--glass-blur-intense));
+  -webkit-backdrop-filter: blur(var(--glass-blur-intense));
+  border: 1px solid var(--border-glass-medium);
+}
+
+/* Accent-Bordered Glass */
+.glass-accent-green {
+  background: rgba(255, 255, 255, var(--glass-opacity-light));
+  backdrop-filter: blur(var(--glass-blur-medium));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  border: 1px solid var(--border-glass-accent-green);
+  box-shadow: 0 0 15px rgba(71, 189, 121, 0.15);
+}
+
+.glass-accent-green:hover {
+  border-color: rgba(71, 189, 121, 0.5);
+  box-shadow: 0 0 25px rgba(71, 189, 121, 0.25);
+}
+
+.glass-accent-purple {
+  background: rgba(255, 255, 255, var(--glass-opacity-light));
+  backdrop-filter: blur(var(--glass-blur-medium));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  border: 1px solid var(--border-glass-accent-purple);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.15);
+}
+
+.glass-accent-purple:hover {
+  border-color: rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.25);
+}
+
+.glass-accent-blue {
+  background: rgba(255, 255, 255, var(--glass-opacity-light));
+  backdrop-filter: blur(var(--glass-blur-medium));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  border: 1px solid var(--border-glass-accent-blue);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
+}
+
+.glass-accent-blue:hover {
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.25);
+}
+
+/* Gradient Border Glass */
+.glass-gradient-border {
+  position: relative;
+  background: rgba(255, 255, 255, var(--glass-opacity-light));
+  backdrop-filter: blur(var(--glass-blur-medium));
+  -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+}
+
+.glass-gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(71, 189, 121, 0.5) 0%, rgba(168, 85, 247, 0.5) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ============================================
+   PREMIUM ANIMATIONS
+   ============================================ */
+
+/* Keyframes */
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes revealScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(71, 189, 121, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(71, 189, 121, 0.5), 0 0 60px rgba(168, 85, 247, 0.2);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    border-color: rgba(71, 189, 121, 0.3);
+  }
+  50% {
+    border-color: rgba(71, 189, 121, 0.6);
+  }
+}
+
+/* Marquee Animations */
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation Utility Classes */
+.animate-reveal-up {
+  animation: revealUp 0.8s var(--ease-premium-out) forwards;
+}
+
+.animate-reveal-scale {
+  animation: revealScale 0.6s var(--ease-premium-out) forwards;
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s linear infinite;
+}
+
+.animate-border-glow {
+  animation: borderGlow 2s ease-in-out infinite;
+}
+
+/* Stagger Delays */
+.stagger-delay-1 { animation-delay: 100ms; }
+.stagger-delay-2 { animation-delay: 200ms; }
+.stagger-delay-3 { animation-delay: 300ms; }
+.stagger-delay-4 { animation-delay: 400ms; }
+.stagger-delay-5 { animation-delay: 500ms; }
+.stagger-delay-6 { animation-delay: 600ms; }
+.stagger-delay-7 { animation-delay: 700ms; }
+.stagger-delay-8 { animation-delay: 800ms; }
+
+/* Micro-interactions */
+.micro-interaction {
+  transition: all var(--duration-premium-fast) var(--ease-premium-out);
+}
+
+.micro-interaction:hover {
+  transform: translateY(-2px);
+}
+
+.micro-interaction:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Card Lift Effect */
+.card-lift {
+  transition: all var(--duration-premium-medium) var(--ease-premium-out);
+}
+
+.card-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(71, 189, 121, 0.2);
+}
+
+/* Premium Transition Utilities */
+.transition-premium {
+  transition: all var(--duration-premium-medium) var(--ease-premium-out);
+}
+
+.transition-premium-slow {
+  transition: all var(--duration-premium-slow) var(--ease-premium-out);
+}
+
+.transition-premium-fast {
+  transition: all var(--duration-premium-fast) var(--ease-premium-out);
+}
+
+/* ============================================
+   BROWSER FALLBACKS
+   ============================================ */
+
+@supports not (backdrop-filter: blur(12px)) {
+  .glass-subtle,
+  .glass-light,
+  .glass-medium,
+  .glass-heavy,
+  .glass-intense,
+  .glass-accent-green,
+  .glass-accent-purple,
+  .glass-accent-blue {
+    background: rgba(43, 42, 42, 0.95);
+  }
+}
+
+/* ============================================
+   STRATEGY SESSION PAGE ANIMATIONS
+   ============================================ */
+
+/* Chess Board Grid Pattern */
+.chess-grid {
+  background-image:
+    linear-gradient(rgba(168, 85, 247, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168, 85, 247, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Diagonal Movement Animations (Chess Piece Movements) */
+@keyframes diagonalMove {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.6; }
+  100% {
+    transform: translate(180px, 180px);
+    opacity: 0;
+  }
+}
+
+@keyframes diagonalMove2 {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  10% { opacity: 0.4; }
+  90% { opacity: 0.4; }
+  100% {
+    transform: translate(240px, 240px);
+    opacity: 0;
+  }
+}
+
+/* Strategic Pulse Animation */
+@keyframes strategicPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px 8px rgba(168, 85, 247, 0.15);
+  }
+}
+
+/* Glow Float Animation */
+@keyframes glowFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.1); }
+}
+
+/* Timeline Flow Animation */
+@keyframes timelineFlow {
+  0% { top: 0; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* Strategy Session Animation Classes */
+.diagonal-dot {
+  animation: diagonalMove 8s infinite linear;
+}
+
+.diagonal-dot-2 {
+  animation: diagonalMove2 12s infinite linear;
+  animation-delay: 2s;
+}
+
+.diagonal-dot-3 {
+  animation: diagonalMove 10s infinite linear;
+  animation-delay: 4s;
+}
+
+.strategic-pulse {
+  animation: strategicPulse 3s infinite ease-in-out;
+}
+
+.glow-float {
+  animation: glowFloat 6s infinite ease-in-out;
+}
+
+.glow-float-delayed {
+  animation: glowFloat 6s infinite ease-in-out;
+  animation-delay: 2s;
+}
+
+.timeline-particle {
+  animation: timelineFlow 4s infinite linear;
+}
+
+/* Hide Scrollbar Utility */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

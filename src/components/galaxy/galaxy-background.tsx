@@ -11,11 +11,11 @@ interface GalaxyBackgroundProps {
 
 export function GalaxyBackground({ className = "" }: GalaxyBackgroundProps) {
   return (
-    <div className={`absolute inset-0 w-full h-full ${className}`} style={{ transform: 'translateY(-10%)' }}>
+    <div className={`absolute w-full h-full ${className}`} style={{ top: 0, left: 0, right: 0, bottom: 0 }}>
       <Canvas
         camera={{
-          position: [3, 1.8, 3],
-          fov: 50,
+          position: [3, 1.5, 3],
+          fov: 55,
           near: 0.1,
           far: 1000,
         }}
@@ -33,15 +33,15 @@ export function GalaxyBackground({ className = "" }: GalaxyBackgroundProps) {
 
           {/* Galaxy */}
           <Galaxy
-            count={100000}
-            size={0.01}
-            radius={5}
+            count={70000}
+            size={0.008}
+            radius={5.5}
             branches={4}
             spin={1}
             randomness={0.2}
             randomnessPower={3}
-            insideColor="#ff6030"
-            outsideColor="#1b3984"
+            insideColor="#47BD79"
+            outsideColor="#1a3d2a"
           />
         </Suspense>
       </Canvas>

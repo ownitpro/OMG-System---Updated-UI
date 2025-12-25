@@ -3,19 +3,40 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-all duration-400 ease-premium-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#2B2A2A]",
   {
     variants: {
       variant: {
+        // Default emerald badge
         default:
-          "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
+          "border-transparent bg-[#47BD79] text-white hover:bg-[#3da86a]",
+        // Secondary subtle badge
         secondary:
-          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "border-white/20 bg-white/10 text-white hover:bg-white/15",
+        // Destructive red badge
         destructive:
-          "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        outline: "text-foreground",
+          "border-transparent bg-red-600 text-white hover:bg-red-700",
+        // Outline badge
+        outline:
+          "border-white/20 text-white bg-transparent hover:bg-white/5",
+        // Success green badge
         success:
-          "border-transparent bg-green-100 text-green-800 hover:bg-green-200",
+          "border-[#47BD79]/30 bg-[#47BD79]/20 text-[#47BD79] hover:bg-[#47BD79]/30",
+        // Glass base badge
+        glass:
+          "border-white/20 bg-white/10 backdrop-blur-sm text-white hover:bg-white/15",
+        // Glass with green accent
+        "glass-green":
+          "border-[#47BD79]/30 bg-[#47BD79]/15 backdrop-blur-sm text-[#47BD79] hover:bg-[#47BD79]/25 hover:border-[#47BD79]/50",
+        // Glass with purple accent
+        "glass-purple":
+          "border-[#A855F7]/30 bg-[#A855F7]/15 backdrop-blur-sm text-[#A855F7] hover:bg-[#A855F7]/25 hover:border-[#A855F7]/50",
+        // Glass with blue accent
+        "glass-blue":
+          "border-[#3B82F6]/30 bg-[#3B82F6]/15 backdrop-blur-sm text-[#3B82F6] hover:bg-[#3B82F6]/25 hover:border-[#3B82F6]/50",
+        // Premium glow badge
+        "glow":
+          "border-[#47BD79]/30 bg-[#47BD79]/20 text-[#47BD79] shadow-[0_0_10px_rgba(71,189,121,0.3)] hover:shadow-[0_0_15px_rgba(71,189,121,0.5)]",
       },
     },
     defaultVariants: {

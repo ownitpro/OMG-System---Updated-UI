@@ -435,3 +435,614 @@ html {
   padding-top: 8px !important;
   padding-bottom: 8px !important;
 }
+
+/* ============================================
+   Strategy Session - Chess Board Background
+   ============================================ */
+
+/* Chess Board Grid Pattern */
+.chess-grid {
+  background-image:
+    linear-gradient(rgba(168, 85, 247, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168, 85, 247, 0.15) 1px, transparent 1px);
+  background-size: 60px 60px;
+  background-position: center center;
+}
+
+/* Diagonal Movement Animations - Chess Piece Movement */
+@keyframes diagonalMove {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(300px, 300px);
+    opacity: 0;
+  }
+}
+
+@keyframes diagonalMove2 {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-240px, 240px);
+    opacity: 0;
+  }
+}
+
+/* Strategic Pulse Animation */
+@keyframes strategicPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 25px 12px rgba(168, 85, 247, 0.15);
+  }
+}
+
+/* Glow Float Animation */
+@keyframes glowFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-25px) scale(1.15);
+    opacity: 0.8;
+  }
+}
+
+/* Timeline Flow Animation - flows through entire timeline */
+@keyframes timelineFlow {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+/* Strategy Session Animation Classes */
+.diagonal-dot {
+  animation: diagonalMove 8s infinite linear;
+}
+
+.diagonal-dot-2 {
+  animation: diagonalMove2 12s infinite linear;
+  animation-delay: 2s;
+}
+
+.diagonal-dot-3 {
+  animation: diagonalMove 10s infinite linear;
+  animation-delay: 4s;
+}
+
+.strategic-pulse {
+  animation: strategicPulse 3s infinite ease-in-out;
+}
+
+.glow-float {
+  animation: glowFloat 6s infinite ease-in-out;
+}
+
+.glow-float-delayed {
+  animation: glowFloat 6s infinite ease-in-out;
+  animation-delay: 2s;
+}
+
+.timeline-particle {
+  position: absolute;
+  animation: timelineFlow 10s infinite linear;
+}
+
+/* Hide scrollbar utility */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ============================================
+   Custom Solutions - Blueprint Grid Background
+   ============================================ */
+
+/* Blueprint grid pattern */
+.blueprint-grid {
+  background-image:
+    linear-gradient(rgba(249, 115, 22, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(249, 115, 22, 0.12) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: center center;
+}
+
+/* Node connection animation */
+@keyframes nodeConnect {
+  0% { transform: scale(0.8); opacity: 0.3; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(0.8); opacity: 0.3; }
+}
+
+/* Data flow animation */
+@keyframes dataFlow {
+  0% { transform: translateX(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateX(100px); opacity: 0; }
+}
+
+/* Blueprint pulse effect */
+@keyframes blueprintPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4); }
+  50% { box-shadow: 0 0 25px 12px rgba(249, 115, 22, 0.15); }
+}
+
+/* Orange glow float animation */
+@keyframes orangeGlowFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+  50% { transform: translateY(-25px) scale(1.15); opacity: 0.8; }
+}
+
+/* Custom Solutions Animation Classes */
+.node-connect {
+  animation: nodeConnect 3s infinite ease-in-out;
+}
+
+.data-flow {
+  animation: dataFlow 4s infinite linear;
+}
+
+.blueprint-pulse {
+  animation: blueprintPulse 3s infinite ease-in-out;
+}
+
+.orange-glow-float {
+  animation: orangeGlowFloat 6s infinite ease-in-out;
+}
+
+.orange-glow-float-delayed {
+  animation: orangeGlowFloat 6s infinite ease-in-out;
+  animation-delay: 2s;
+}
+
+/* ============================================
+   Try Live Demo - Cyan/Teal Theme Animations
+   ============================================ */
+
+/* Cyan glow float animation */
+@keyframes cyanGlowFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
+  50% { transform: translateY(-20px) scale(1.1); opacity: 0.7; }
+}
+
+.cyan-glow-float {
+  animation: cyanGlowFloat 6s infinite ease-in-out;
+}
+
+.cyan-glow-float-delayed {
+  animation: cyanGlowFloat 6s infinite ease-in-out;
+  animation-delay: 2s;
+}
+
+/* Floating play button animation - enhanced movement */
+@keyframes floatPlay {
+  0% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+  20% { transform: translateY(-15px) translateX(8px) rotate(5deg) scale(1.05); }
+  40% { transform: translateY(-25px) translateX(-5px) rotate(-3deg) scale(1.1); }
+  60% { transform: translateY(-18px) translateX(10px) rotate(4deg) scale(1.05); }
+  80% { transform: translateY(-8px) translateX(-8px) rotate(-2deg) scale(1.02); }
+  100% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+}
+
+.float-play {
+  animation: floatPlay 6s infinite ease-in-out;
+}
+
+/* Pulse glow effect for play icons */
+@keyframes playPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.4); }
+  50% { box-shadow: 0 0 20px 10px rgba(6, 182, 212, 0.2); }
+}
+
+.play-pulse {
+  animation: playPulse 2s infinite ease-in-out;
+}
+
+/* Ripple animation for interactive feel */
+@keyframes rippleExpand {
+  0% { transform: scale(1); opacity: 0.4; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.ripple-animation {
+  animation: rippleExpand 3s infinite ease-out;
+}
+
+/* ============================================
+   Real Estate Industry - Emerald/Green Theme Animations
+   ============================================ */
+
+/* Emerald glow float animation */
+@keyframes emeraldGlowFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
+  50% { transform: translateY(-20px) scale(1.1); opacity: 0.7; }
+}
+
+.emerald-glow-float {
+  animation: emeraldGlowFloat 6s infinite ease-in-out;
+}
+
+.emerald-glow-float-delayed {
+  animation: emeraldGlowFloat 6s infinite ease-in-out;
+  animation-delay: 2s;
+}
+
+/* Floating home icon animation */
+@keyframes floatHome {
+  0% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+  20% { transform: translateY(-12px) translateX(6px) rotate(3deg) scale(1.03); }
+  40% { transform: translateY(-20px) translateX(-4px) rotate(-2deg) scale(1.06); }
+  60% { transform: translateY(-15px) translateX(8px) rotate(2deg) scale(1.03); }
+  80% { transform: translateY(-6px) translateX(-6px) rotate(-1deg) scale(1.01); }
+  100% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+}
+
+.float-home {
+  animation: floatHome 7s infinite ease-in-out;
+}
+
+/* Home pulse glow effect */
+@keyframes homePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  50% { box-shadow: 0 0 20px 10px rgba(16, 185, 129, 0.2); }
+}
+
+.home-pulse {
+  animation: homePulse 2.5s infinite ease-in-out;
+}
+
+/* Timeline particle animation for emerald theme */
+@keyframes timelineFlowEmerald {
+  0% { top: 0%; opacity: 0; }
+  5% { opacity: 1; }
+  95% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.timeline-particle-emerald {
+  position: absolute;
+  animation: timelineFlowEmerald 8s infinite linear;
+}
+
+/* ============================================
+   Property Management Industry - Sky/Blue Theme Animations
+   ============================================ */
+
+/* Sky glow float animation */
+@keyframes skyGlowFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
+  50% { transform: translateY(-20px) scale(1.1); opacity: 0.7; }
+}
+
+.sky-glow-float {
+  animation: skyGlowFloat 6s infinite ease-in-out;
+}
+
+.sky-glow-float-delayed {
+  animation: skyGlowFloat 6s infinite ease-in-out;
+  animation-delay: 2s;
+}
+
+/* Floating building icon animation */
+@keyframes floatBuilding {
+  0% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+  20% { transform: translateY(-10px) translateX(5px) rotate(2deg) scale(1.02); }
+  40% { transform: translateY(-18px) translateX(-3px) rotate(-1.5deg) scale(1.05); }
+  60% { transform: translateY(-12px) translateX(6px) rotate(1.5deg) scale(1.03); }
+  80% { transform: translateY(-5px) translateX(-4px) rotate(-1deg) scale(1.01); }
+  100% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+}
+
+.float-building {
+  animation: floatBuilding 7s infinite ease-in-out;
+}
+
+/* Building pulse glow effect */
+@keyframes buildingPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.4); }
+  50% { box-shadow: 0 0 20px 10px rgba(14, 165, 233, 0.2); }
+}
+
+.building-pulse {
+  animation: buildingPulse 2.5s infinite ease-in-out;
+}
+
+/* Timeline particle animation for sky theme */
+@keyframes timelineFlowSky {
+  0% { top: 0%; opacity: 0; }
+  5% { opacity: 1; }
+  95% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.timeline-particle-sky {
+  position: absolute;
+  animation: timelineFlowSky 8s infinite linear;
+}
+
+/* ============================================
+   Contractors Industry - Yellow/Amber Theme Animations
+   ============================================ */
+
+/* Yellow glow float animation */
+@keyframes yellowGlowFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
+  50% { transform: translateY(-20px) scale(1.1); opacity: 0.7; }
+}
+
+.yellow-glow-float {
+  animation: yellowGlowFloat 6s infinite ease-in-out;
+}
+
+.yellow-glow-float-delayed {
+  animation: yellowGlowFloat 6s infinite ease-in-out;
+  animation-delay: 2s;
+}
+
+/* Floating tool icon animation */
+@keyframes floatTool {
+  0% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+  20% { transform: translateY(-12px) translateX(4px) rotate(3deg) scale(1.02); }
+  40% { transform: translateY(-20px) translateX(-3px) rotate(-2deg) scale(1.05); }
+  60% { transform: translateY(-14px) translateX(5px) rotate(2deg) scale(1.03); }
+  80% { transform: translateY(-6px) translateX(-4px) rotate(-1deg) scale(1.01); }
+  100% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+}
+
+.float-tool {
+  animation: floatTool 7s infinite ease-in-out;
+}
+
+/* Tool pulse glow effect */
+@keyframes toolPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+  50% { box-shadow: 0 0 20px 10px rgba(245, 158, 11, 0.2); }
+}
+
+.tool-pulse {
+  animation: toolPulse 2.5s infinite ease-in-out;
+}
+
+/* Timeline particle animation for yellow theme */
+@keyframes timelineFlowYellow {
+  0% { top: 0%; opacity: 0; }
+  5% { opacity: 1; }
+  95% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.timeline-particle-yellow {
+  position: absolute;
+  animation: timelineFlowYellow 8s infinite linear;
+}
+
+/* ============================================
+   Accounting Industry - Indigo/Violet Theme Animations
+   ============================================ */
+
+/* Indigo glow float animation */
+@keyframes indigoGlowFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
+  50% { transform: translateY(-20px) scale(1.1); opacity: 0.7; }
+}
+
+.indigo-glow-float {
+  animation: indigoGlowFloat 6s infinite ease-in-out;
+}
+
+.indigo-glow-float-delayed {
+  animation: indigoGlowFloat 6s infinite ease-in-out;
+  animation-delay: 2s;
+}
+
+/* Floating number/math symbol animation */
+@keyframes floatNumber {
+  0% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+  20% { transform: translateY(-14px) translateX(6px) rotate(4deg) scale(1.03); }
+  40% { transform: translateY(-22px) translateX(-4px) rotate(-2deg) scale(1.06); }
+  60% { transform: translateY(-16px) translateX(7px) rotate(3deg) scale(1.04); }
+  80% { transform: translateY(-7px) translateX(-5px) rotate(-1deg) scale(1.02); }
+  100% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+}
+
+.float-number {
+  animation: floatNumber 7s infinite ease-in-out;
+}
+
+.float-number-delayed {
+  animation: floatNumber 7s infinite ease-in-out;
+  animation-delay: 3s;
+}
+
+/* Calculator/number pulse glow effect */
+@keyframes numberPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+  50% { box-shadow: 0 0 20px 10px rgba(99, 102, 241, 0.2); }
+}
+
+.number-pulse {
+  animation: numberPulse 2.5s infinite ease-in-out;
+}
+
+/* Timeline particle animation for indigo theme */
+@keyframes timelineFlowIndigo {
+  0% { top: 0%; opacity: 0; }
+  5% { opacity: 1; }
+  95% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.timeline-particle-indigo {
+  position: absolute;
+  animation: timelineFlowIndigo 8s infinite linear;
+}
+
+/* Ledger line shimmer animation */
+@keyframes ledgerShimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.ledger-shimmer {
+  background: linear-gradient(90deg,
+    rgba(99, 102, 241, 0) 0%,
+    rgba(99, 102, 241, 0.3) 50%,
+    rgba(99, 102, 241, 0) 100%);
+  background-size: 200% 100%;
+  animation: ledgerShimmer 3s infinite linear;
+}
+
+/* ============================================
+   Contact Page - Cyan/Teal Theme Animations
+   ============================================ */
+
+/* Cyan glow float animation */
+@keyframes cyanGlowFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
+  50% { transform: translateY(-20px) scale(1.1); opacity: 0.7; }
+}
+
+.cyan-glow-float {
+  animation: cyanGlowFloat 6s infinite ease-in-out;
+}
+
+.cyan-glow-float-delayed {
+  animation: cyanGlowFloat 6s infinite ease-in-out;
+  animation-delay: 2s;
+}
+
+/* Floating contact icon animation */
+@keyframes floatContact {
+  0% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+  20% { transform: translateY(-14px) translateX(7px) rotate(4deg) scale(1.04); }
+  40% { transform: translateY(-22px) translateX(-5px) rotate(-3deg) scale(1.07); }
+  60% { transform: translateY(-16px) translateX(9px) rotate(3deg) scale(1.04); }
+  80% { transform: translateY(-7px) translateX(-7px) rotate(-2deg) scale(1.02); }
+  100% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+}
+
+.float-contact {
+  animation: floatContact 7s infinite ease-in-out;
+}
+
+.float-contact-delayed {
+  animation: floatContact 7s infinite ease-in-out;
+  animation-delay: 3.5s;
+}
+
+/* Contact icon pulse glow effect */
+@keyframes contactPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.4); }
+  50% { box-shadow: 0 0 20px 10px rgba(6, 182, 212, 0.2); }
+}
+
+.contact-pulse {
+  animation: contactPulse 2.5s infinite ease-in-out;
+}
+
+/* Grid dot moving animation */
+@keyframes gridDotMove {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.5); }
+}
+
+.grid-dot-animate {
+  animation: gridDotMove 4s infinite ease-in-out;
+}
+
+/* ============================================
+   ABOUT PAGE - EMERALD/GREEN THEME ANIMATIONS
+   ============================================ */
+
+/* Emerald glow orb floating animation */
+@keyframes emeraldGlowFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
+  50% { transform: translateY(-25px) scale(1.1); opacity: 0.7; }
+}
+
+.emerald-glow-float {
+  animation: emeraldGlowFloat 6s infinite ease-in-out;
+}
+
+.emerald-glow-float-delayed {
+  animation: emeraldGlowFloat 6s infinite ease-in-out;
+  animation-delay: 3s;
+}
+
+/* About page floating abstract icons */
+@keyframes floatAbout {
+  0% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+  25% { transform: translateY(-18px) translateX(10px) rotate(8deg) scale(1.05); }
+  50% { transform: translateY(-25px) translateX(-8px) rotate(-5deg) scale(1.08); }
+  75% { transform: translateY(-12px) translateX(12px) rotate(6deg) scale(1.03); }
+  100% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+}
+
+.float-about {
+  animation: floatAbout 8s infinite ease-in-out;
+}
+
+.float-about-delayed {
+  animation: floatAbout 8s infinite ease-in-out;
+  animation-delay: 4s;
+}
+
+/* Timeline particle animation - Emerald */
+@keyframes timelineParticleEmerald {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.3);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.9);
+  }
+}
+
+.timeline-particle-emerald {
+  animation: timelineParticleEmerald 2s infinite ease-in-out;
+}
+
+/* Emerald gradient pulse for icons */
+@keyframes emeraldPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  50% { box-shadow: 0 0 25px 12px rgba(16, 185, 129, 0.2); }
+}
+
+.emerald-pulse {
+  animation: emeraldPulse 3s infinite ease-in-out;
+}

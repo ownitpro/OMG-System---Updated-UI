@@ -51,7 +51,7 @@ export const metadata: Metadata = {
 
 export default function LeadFlowEnginePage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-[#2B2A2A] via-[#1f1e1e] to-[#2B2A2A]">
       <LeadFlowPageTracker />
       <HeroSection />
       <WhyLeadFlowMatters />
