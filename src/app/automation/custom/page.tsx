@@ -91,10 +91,12 @@ const customAutomations = [
 const complexityLevels = ['All', 'Low', 'Medium', 'High'];
 const statusFilters = ['All', 'Planning', 'In Development', 'Testing', 'Completed'];
 
+type Automation = typeof customAutomations[number];
+
 export default function CustomAutomationPage() {
   const [selectedComplexity, setSelectedComplexity] = useState('All');
   const [selectedStatus, setSelectedStatus] = useState('All');
-  const [selectedAutomation, setSelectedAutomation] = useState(null);
+  const [selectedAutomation, setSelectedAutomation] = useState<Automation | null>(null);
 
   const filteredAutomations = customAutomations.filter(automation => {
     const complexityMatch = selectedComplexity === 'All' || automation.complexity === selectedComplexity;

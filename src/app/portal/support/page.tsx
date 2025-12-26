@@ -30,11 +30,6 @@ export default async function PortalSupportPage() {
           name: true,
           email: true
         }
-      },
-      _count: {
-        select: {
-          comments: true
-        }
       }
     },
     orderBy: {

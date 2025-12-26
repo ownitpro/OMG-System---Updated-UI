@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     // Additional security logging
     logSecurityEvent('CSP_VIOLATION_RECEIVED', {
       userAgent: request.headers.get('user-agent'),
-      ip: request.ip || request.headers.get('x-forwarded-for') || 'unknown',
+      ip: request.headers.get('x-forwarded-for')?.split(',')[0] || request.headers.get('x-real-ip') || 'unknown',
       violation: body
     }, request);
     

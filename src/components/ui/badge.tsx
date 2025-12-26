@@ -22,6 +22,9 @@ const badgeVariants = cva(
         // Success green badge
         success:
           "border-[#47BD79]/30 bg-[#47BD79]/20 text-[#47BD79] hover:bg-[#47BD79]/30",
+        // Warning yellow/amber badge
+        warning:
+          "border-amber-500/30 bg-amber-500/20 text-amber-500 hover:bg-amber-500/30",
         // Glass base badge
         glass:
           "border-white/20 bg-white/10 backdrop-blur-sm text-white hover:bg-white/15",

@@ -4,7 +4,7 @@ import { prisma } from '@/lib/db';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    
+
     const {
       fullName,
       email,
@@ -12,7 +12,8 @@ export async function POST(request: NextRequest) {
       phone,
       industry,
       challenge,
-      newsletter
+      newsletter,
+      appSlug = 'crm' // Default app slug
     } = body;
 
     // Basic validation
@@ -23,18 +24,37 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Save to database
+    // First, create or find a lead for this demo request
+    let lead = await prisma.lead.findFirst({
+      where: { email }
+    });
+
+    if (!lead) {
+      lead = await prisma.lead.create({
+        data: {
+          email,
+          name: fullName,
+          contact: phone || null,
+          orgName: company,
+          source: 'DEMO_PAGE'
+        }
+      });
+    }
+
+    // Save to database - matching the DemoRequest schema
     const demoRequest = await prisma.demoRequest.create({
       data: {
-        fullName,
-        email,
-        company,
-        phone: phone || null,
+        appSlug,
         industry,
-        challenge: challenge || null,
-        newsletter: newsletter || false,
-        status: 'NEW',
-        source: 'DEMO_PAGE'
+        answers: {
+          fullName,
+          email,
+          company,
+          phone: phone || null,
+          challenge: challenge || null,
+          newsletter: newsletter || false
+        },
+        leadId: lead.id
       },
     });
 
@@ -44,8 +64,8 @@ export async function POST(request: NextRequest) {
     // 3. Trigger the demo generation process
     // 4. Add to CRM/marketing automation
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       message: 'Demo request submitted successfully',
       demoRequestId: demoRequest.id
     });

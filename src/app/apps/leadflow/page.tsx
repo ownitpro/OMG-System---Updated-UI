@@ -261,7 +261,7 @@ export default function LeadFlowPage() {
                   </div>
                   <h3 className="text-lg font-semibold text-white">{frustration.title}</h3>
                 </div>
-                <p className="text-white/70 leading-relaxed">{frustration.description}</p>
+                <p className="text-white/70 leading-relaxed">{frustration.body}</p>
               </div>
             ))}
           </div>
@@ -292,7 +292,7 @@ export default function LeadFlowPage() {
                   </div>
                   <div className="flex-1">
                     <h3 className="text-xl font-bold text-white mb-2">{step.title}</h3>
-                    <p className="text-white/70 leading-relaxed">{step.description}</p>
+                    <p className="text-white/70 leading-relaxed">{step.body}</p>
                   </div>
                 </div>
 
@@ -332,7 +332,14 @@ export default function LeadFlowPage() {
                   </div>
                   <h3 className="text-xl font-bold text-white">{deliverable.title}</h3>
                 </div>
-                <p className="text-white/70 leading-relaxed mb-4">{deliverable.description}</p>
+                <ul className="text-white/70 leading-relaxed mb-4 space-y-2">
+                  {deliverable.bullets.map((bullet, i) => (
+                    <li key={i} className="flex items-start">
+                      <span className="text-[#47BD79] mr-2">•</span>
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
                 <div className="flex items-center text-[#47BD79] font-semibold">
                   <span className="mr-2">✓</span>
                   <span>Included in your package</span>
@@ -361,18 +368,14 @@ export default function LeadFlowPage() {
           <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-12 border border-[#47BD79]/20 shadow-[0_0_30px_rgba(71,189,121,0.1)]">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h3 className="text-3xl font-bold text-white mb-6">{proof.title}</h3>
-                <p className="text-lg text-white/70 mb-8 leading-relaxed">{proof.description}</p>
-
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="text-center">
-                    <div className="text-4xl font-bold text-[#47BD79] mb-2">{proof.metric1}</div>
-                    <div className="text-white/60">{proof.label1}</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-4xl font-bold text-teal-400 mb-2">{proof.metric2}</div>
-                    <div className="text-white/60">{proof.label2}</div>
-                  </div>
+                <h3 className="text-3xl font-bold text-white mb-6">What Our Clients Say</h3>
+                <div className="space-y-6">
+                  {proof.quotes.map((item, index) => (
+                    <div key={index} className="bg-white/5 rounded-xl p-6 border border-white/10">
+                      <p className="text-lg text-white/80 italic mb-4">&quot;{item.quote}&quot;</p>
+                      <p className="text-[#47BD79] font-semibold">— {item.cite}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -386,11 +389,11 @@ export default function LeadFlowPage() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-white/70">Lead Conversion Rate</span>
-                    <span className="font-bold text-[#47BD79]">+{proof.metric1}</span>
+                    <span className="font-bold text-[#47BD79]">+45%</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-white/70">Response Time</span>
-                    <span className="font-bold text-teal-400">-{proof.metric2}</span>
+                    <span className="font-bold text-teal-400">-70%</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-white/70">Customer Satisfaction</span>

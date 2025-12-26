@@ -7,8 +7,8 @@ const nextConfig: NextConfig = {
   // Note: cacheComponents is incompatible with dynamic route segment config
   // If you need cacheComponents, remove all `export const dynamic` statements
   // cacheComponents: true,
-  // Turbopack disabled - using webpack instead (fixes Turbopack panic errors)
-  // turbopack: {},
+  // Empty turbopack config to silence Next.js 16 warning (allows fallback to webpack)
+  turbopack: {},
   serverExternalPackages: ['@swc/helpers'],
   // Suppress HMR module errors
   onDemandEntries: {

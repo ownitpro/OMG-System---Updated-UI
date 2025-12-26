@@ -38,31 +38,6 @@ export default async function PortalTicketDetailPage({ params }: PageProps) {
           name: true,
           email: true
         }
-      },
-      comments: {
-        include: {
-          user: {
-            select: {
-              name: true,
-              email: true
-            }
-          }
-        },
-        orderBy: {
-          createdAt: "asc"
-        }
-      },
-      attachments: {
-        include: {
-          user: {
-            select: {
-              name: true
-            }
-          }
-        },
-        orderBy: {
-          createdAt: "desc"
-        }
       }
     }
   });

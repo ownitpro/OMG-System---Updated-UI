@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { 
+import { useState } from "react";
+import {
   BuildingOfficeIcon,
   CreditCardIcon,
   WrenchScrewdriverIcon,
@@ -19,8 +19,30 @@ import {
   StarIcon,
   LightBulbIcon
 } from '@heroicons/react/24/outline';
+import type { ComponentType, SVGProps } from 'react';
 
-const customAppTemplates = [
+type AppTemplate = {
+  id: number;
+  name: string;
+  tagline: string;
+  description: string;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
+  color: string;
+  industry: string;
+  features: string[];
+  integrations: string[];
+};
+
+type CustomizationBuilderProps = {
+  template: AppTemplate | null;
+  onClose: () => void;
+};
+
+type FromScratchBuilderProps = {
+  onClose: () => void;
+};
+
+const customAppTemplates: AppTemplate[] = [
   {
     id: 1,
     name: 'Property Inventory Tracker',
@@ -123,11 +145,11 @@ const customAppTemplates = [
 ];
 
 export default function CustomAppsPage() {
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<AppTemplate | null>(null);
   const [showCustomizationBuilder, setShowCustomizationBuilder] = useState(false);
   const [showFromScratchBuilder, setShowFromScratchBuilder] = useState(false);
 
-  const handleViewDetails = (template) => {
+  const handleViewDetails = (template: AppTemplate) => {
     setSelectedTemplate(template);
   };
 
@@ -178,7 +200,7 @@ export default function CustomAppsPage() {
                   Build From Scratch
                 </button>
                 <button
-                  onClick={() => document.getElementById('templates').scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => document.getElementById('templates')?.scrollIntoView({ behavior: 'smooth' })}
                   className="inline-flex items-center justify-center px-8 py-4 border border-blue-400/30 text-lg font-medium rounded-lg text-blue-400 bg-blue-400/10 hover:bg-blue-400/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
                 >
                   <EyeIcon className="w-5 h-5 mr-2" />
@@ -361,8 +383,8 @@ export default function CustomAppsPage() {
 }
 
 // Customization Builder Component
-function CustomizationBuilder({ template, onClose }) {
-  const [selectedComponents, setSelectedComponents] = useState(new Set());
+function CustomizationBuilder({ template, onClose }: CustomizationBuilderProps) {
+  const [selectedComponents, setSelectedComponents] = useState<Set<string>>(new Set());
   
   const availableComponents = [
     { id: 'dashboard', name: 'Dashboard', description: 'Main control panel with key metrics and navigation' },
@@ -375,7 +397,7 @@ function CustomizationBuilder({ template, onClose }) {
     { id: 'mobile', name: 'Mobile Access', description: 'Mobile-responsive design and native app features' }
   ];
 
-  const toggleComponent = (componentId) => {
+  const toggleComponent = (componentId: string) => {
     const newSelected = new Set(selectedComponents);
     if (newSelected.has(componentId)) {
       newSelected.delete(componentId);
@@ -389,6 +411,9 @@ function CustomizationBuilder({ template, onClose }) {
     // Navigate to request form
     window.location.href = `/solutions/custom-apps/request?components=${Array.from(selectedComponents).join(',')}`;
   };
+
+  // Suppress unused variable warning - template is used for context
+  void template;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -461,10 +486,17 @@ function CustomizationBuilder({ template, onClose }) {
   );
 }
 
+type PhaseKey = 'phase1' | 'phase2' | 'phase3' | 'phase4';
+type SelectedComponentsState = Record<PhaseKey, Set<string>>;
+
+const getPhaseKey = (phaseId: number): PhaseKey => {
+  return `phase${phaseId}` as PhaseKey;
+};
+
 // From Scratch Builder Component
-function FromScratchBuilder({ onClose }) {
+function FromScratchBuilder({ onClose }: FromScratchBuilderProps) {
   const [currentPhase, setCurrentPhase] = useState(1);
-  const [selectedComponents, setSelectedComponents] = useState({
+  const [selectedComponents, setSelectedComponents] = useState<SelectedComponentsState>({
     phase1: new Set(),
     phase2: new Set(),
     phase3: new Set(),
@@ -522,8 +554,8 @@ function FromScratchBuilder({ onClose }) {
     }
   ];
 
-  const toggleComponent = (phaseId, componentId) => {
-    const phaseKey = `phase${phaseId}`;
+  const toggleComponent = (phaseId: number, componentId: string) => {
+    const phaseKey = getPhaseKey(phaseId);
     const newSelected = new Set(selectedComponents[phaseKey]);
     if (newSelected.has(componentId)) {
       newSelected.delete(componentId);
@@ -593,7 +625,7 @@ function FromScratchBuilder({ onClose }) {
               <div
                 key={component.id}
                 className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-300 ${
-                  selectedComponents[`phase${currentPhase}`].has(component.id)
+                  selectedComponents[getPhaseKey(currentPhase)].has(component.id)
                     ? 'border-blue-500 bg-blue-500/20'
                     : 'border-white/20 bg-white/5 hover:border-blue-400 hover:bg-white/10'
                 }`}
@@ -601,11 +633,11 @@ function FromScratchBuilder({ onClose }) {
               >
                 <div className="flex items-start space-x-3">
                   <div className={`w-6 h-6 rounded border-2 flex items-center justify-center ${
-                    selectedComponents[`phase${currentPhase}`].has(component.id)
+                    selectedComponents[getPhaseKey(currentPhase)].has(component.id)
                       ? 'border-blue-500 bg-blue-500'
                       : 'border-white/40'
                   }`}>
-                    {selectedComponents[`phase${currentPhase}`].has(component.id) && (
+                    {selectedComponents[getPhaseKey(currentPhase)].has(component.id) && (
                       <CheckCircleIcon className="w-4 h-4 text-white" />
                     )}
                   </div>

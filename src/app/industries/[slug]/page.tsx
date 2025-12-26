@@ -64,8 +64,12 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
     return notFound();
   }
 
-  const recommendedSolutions = getSolutionsByIds(industry.recommendedSolutionIds ?? []);
-  const recommendedApps = getAppsByIds(industry.recommendedAppIds ?? []);
+  // Extract IDs from the relation objects
+  const solutionIds = (industry.recommendedSolutions ?? industry.solutions ?? []).map(s => s.solutionId);
+  const appIds = (industry.recommendedApps ?? industry.apps ?? []).map(a => a.appId);
+
+  const recommendedSolutions = getSolutionsByIds(solutionIds);
+  const recommendedApps = getAppsByIds(appIds);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-50">

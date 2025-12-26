@@ -2,18 +2,29 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  PlayIcon, 
+import {
+  PlayIcon,
   ArrowRightIcon,
   ClockIcon,
   StarIcon,
   UserGroupIcon,
-  DocumentTextIcon,
   ShieldCheckIcon,
   ChartBarIcon
 } from '@heroicons/react/24/outline';
 
-const demoOptions = [
+type DemoOption = {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ForwardRefExoticComponent<React.SVGProps<SVGSVGElement>>;
+  color: string;
+  gradient: string;
+  features: string[];
+  duration: string;
+  href: string;
+};
+
+const demoOptions: DemoOption[] = [
   {
     id: 'crm',
     title: 'Try Live CRM Demo',
@@ -39,11 +50,11 @@ const demoOptions = [
 ];
 
 export default function LiveDemoPage() {
-  const [selectedDemo, setSelectedDemo] = useState(null);
-  const [isHovered, setIsHovered] = useState(null);
+  const [selectedDemo, setSelectedDemo] = useState<DemoOption | null>(null);
+  const [isHovered, setIsHovered] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleDemoSelect = (demo) => {
+  const handleDemoSelect = (demo: DemoOption) => {
     setSelectedDemo(demo);
     // Add a brief animation delay before navigation
     setTimeout(() => {

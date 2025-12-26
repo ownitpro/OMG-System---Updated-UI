@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
           role,
           betaTier
         },
-        ipAddress: request.ip || request.headers.get('x-forwarded-for'),
+        ipAddress: request.headers.get('x-forwarded-for')?.split(',')[0] || request.headers.get('x-real-ip') || 'unknown',
         userAgent: request.headers.get('user-agent'),
         createdAt: new Date()
       }

@@ -1,4 +1,5 @@
 import { ProductMarketingTemplate } from "@/components/ProductMarketingTemplate";
+import { CalendarIcon } from "@heroicons/react/24/outline";
 
 export default function StrategySessionPage() {
   return (
@@ -6,6 +7,8 @@ export default function StrategySessionPage() {
       brand="OMG Systems"
       productName="Strategy-Session"
       tagline="Book time with our team to map your next move."
+      color="#A855F7"
+      icon={CalendarIcon}
       heroBullets={[
         "Get clarity on your business goals",
         "Build a roadmap that actually works",

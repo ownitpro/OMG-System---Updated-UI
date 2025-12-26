@@ -7,12 +7,12 @@ export async function GET() {
     await prisma.$connect();
     
     // Simple query to test the connection
-    const result = await prisma.$queryRaw`SELECT 1 as test`;
-    
-    return NextResponse.json({ 
-      success: true, 
+    const result = await prisma.$queryRaw`SELECT 1 as test` as Array<{ test: number }>;
+
+    return NextResponse.json({
+      success: true,
       message: 'Database connection successful',
-      result: Number(result[0]?.test || 0)
+      result: Number(result[0]?.test ?? 0)
     });
   } catch (error) {
     console.error('Database connection error:', error);

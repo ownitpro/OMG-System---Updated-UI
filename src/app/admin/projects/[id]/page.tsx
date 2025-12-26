@@ -52,13 +52,6 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
         orderBy: { createdAt: "desc" },
       },
       attachments: {
-        include: {
-          user: {
-            select: {
-              name: true,
-            },
-          },
-        },
         orderBy: { createdAt: "desc" },
       },
     },

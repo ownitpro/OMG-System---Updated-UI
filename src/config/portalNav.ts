@@ -1,5 +1,33 @@
 import { APP_LINKS } from "@/config/appLinks";
 import type { NavGroup } from "@/components/PortalShell";
+import type { NavGroup as NavGroupV2 } from "@/components/portal/PortalShellV2";
+import {
+  HomeIcon,
+  CubeIcon,
+  ShieldCheckIcon,
+  UserGroupIcon,
+  ChartBarIcon,
+  ClockIcon,
+  CogIcon,
+  BoltIcon,
+  CalendarIcon,
+  PuzzlePieceIcon,
+  MegaphoneIcon,
+  PaintBrushIcon,
+  DocumentTextIcon,
+  BuildingOfficeIcon,
+  WrenchScrewdriverIcon,
+  CalculatorIcon,
+  ShoppingCartIcon,
+  TagIcon,
+  UsersIcon,
+  KeyIcon,
+  DocumentMagnifyingGlassIcon,
+  AcademicCapIcon,
+  SparklesIcon,
+  RocketLaunchIcon,
+  PresentationChartLineIcon,
+} from "@heroicons/react/24/outline";
 
 export function getClientNav(): NavGroup[] {
   return [
@@ -44,16 +72,71 @@ export function getClientNav(): NavGroup[] {
   ];
 }
 
+// V2 Navigation with Icons for new dark theme portal
+export function getClientNavV2(): NavGroupV2[] {
+  return [
+    {
+      title: "Home",
+      items: [
+        { label: "Dashboard", href: "/portal/client", icon: HomeIcon },
+      ],
+    },
+    {
+      title: "Apps",
+      items: [
+        { label: "OMG Build", href: "/portal/client", icon: CubeIcon, comingSoon: true },
+        { label: "OMG-CRM", kind: "external" as const, externalUrl: APP_LINKS.omgCrm, icon: UserGroupIcon },
+        { label: "SecureVault Docs", kind: "external" as const, externalUrl: APP_LINKS.securevaultDocs, icon: ShieldCheckIcon },
+        { label: "OMG-Leads", kind: "external" as const, externalUrl: APP_LINKS.omgLeads, icon: RocketLaunchIcon },
+        { label: "OMG-IQ", kind: "external" as const, externalUrl: APP_LINKS.omgIq, icon: ChartBarIcon },
+        { label: "OMG AI Mastery", kind: "external" as const, externalUrl: APP_LINKS.omgAiMastery, icon: AcademicCapIcon },
+        { label: "TimeGuard AI", href: "/portal/client/timeguard-ai", icon: ClockIcon, comingSoon: true },
+      ],
+    },
+    {
+      title: "Work",
+      items: [
+        { label: "Automations", href: "/portal/client/automations", icon: BoltIcon },
+        { label: "Strategy Session", href: "/portal/client/strategy-session", icon: CalendarIcon, comingSoon: true },
+        { label: "Custom Solutions", href: "/portal/client/custom-solutions", icon: PuzzlePieceIcon, comingSoon: true },
+      ],
+    },
+    {
+      title: "Growth",
+      items: [
+        { label: "Ads Management", href: "/portal/client/ads-management", icon: MegaphoneIcon },
+        { label: "Branding & Creative", href: "/portal/client/branding-creative", icon: PaintBrushIcon },
+        { label: "Content Development", href: "/portal/client/content-development", icon: DocumentTextIcon },
+      ],
+    },
+    {
+      title: "Industry Solutions",
+      items: [
+        { label: "Real Estate", href: "/portal/client/industry-focused/real-estate", icon: BuildingOfficeIcon, comingSoon: true },
+        { label: "Property Management", href: "/portal/client/industry-focused/property-management", icon: KeyIcon, comingSoon: true },
+        { label: "Contractors", href: "/portal/client/industry-focused/contractors", icon: WrenchScrewdriverIcon, comingSoon: true },
+        { label: "Accounting", href: "/portal/client/industry-focused/accounting", icon: CalculatorIcon, comingSoon: true },
+      ],
+    },
+  ];
+}
+
 export function getAdminNav(): NavGroup[] {
   return [
     { title: "Overview", items: [{ label: "Admin Home", href: "/portal/admin" }] },
+        {
+          title: "Analytics",
+          items: [
+            { label: "Client Analytics", href: "/portal/admin/analytics" },
+            { label: "Coupon Analytics", href: "/portal/admin/coupons/analytics" },
+          ],
+        },
         {
           title: "Commerce",
           items: [
             { label: "Orders", href: "/portal/admin/orders" },
             { label: "Products", href: "/portal/admin/products" },
             { label: "Coupons", href: "/portal/admin/coupons" },
-            { label: "Coupons Analytics", href: "/portal/admin/coupons/analytics" },
           ],
         },
         {
@@ -68,6 +151,47 @@ export function getAdminNav(): NavGroup[] {
       items: [
         { label: "Logs", href: "/portal/admin/logs" },
         { label: "Settings", href: "/portal/admin/settings" },
+      ],
+    },
+  ];
+}
+
+// V2 Navigation with Icons for new dark theme portal
+export function getAdminNavV2(): NavGroupV2[] {
+  return [
+    {
+      title: "Overview",
+      items: [
+        { label: "Dashboard", href: "/portal/admin", icon: HomeIcon },
+      ],
+    },
+    {
+      title: "Analytics",
+      items: [
+        { label: "Client Analytics", href: "/portal/admin/analytics", icon: PresentationChartLineIcon },
+        { label: "Coupon Analytics", href: "/portal/admin/coupons/analytics", icon: ChartBarIcon },
+      ],
+    },
+    {
+      title: "Commerce",
+      items: [
+        { label: "Orders", href: "/portal/admin/orders", icon: ShoppingCartIcon },
+        { label: "Products", href: "/portal/admin/products", icon: CubeIcon },
+        { label: "Coupons", href: "/portal/admin/coupons", icon: TagIcon },
+      ],
+    },
+    {
+      title: "Users",
+      items: [
+        { label: "Clients", href: "/portal/admin/users", icon: UsersIcon },
+        { label: "Access Control", href: "/portal/admin/access", icon: KeyIcon },
+      ],
+    },
+    {
+      title: "System",
+      items: [
+        { label: "Audit Logs", href: "/portal/admin/logs", icon: DocumentMagnifyingGlassIcon },
+        { label: "Settings", href: "/portal/admin/settings", icon: CogIcon },
       ],
     },
   ];

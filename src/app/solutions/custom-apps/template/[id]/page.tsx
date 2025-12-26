@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { 
+import {
   ArrowLeftIcon,
   ArrowRightIcon,
   CheckCircleIcon,
@@ -20,7 +20,24 @@ import {
   RocketLaunchIcon
 } from '@heroicons/react/24/outline';
 
-const appTemplates = {
+type AppTemplate = {
+  id: string;
+  name: string;
+  tagline: string;
+  description: string;
+  icon: string;
+  color: string;
+  whatItDoes: string;
+  whoItsFor: string;
+  howItHelps: string;
+  integrations: string[];
+  frontEnd: string[];
+  backEnd: string[];
+  features: string[];
+  benefits: string[];
+};
+
+const appTemplates: Record<string, AppTemplate> = {
   'property-inventory': {
     id: 'property-inventory',
     name: 'Property Inventory Tracker',
@@ -278,12 +295,13 @@ const appTemplates = {
 export default function TemplateDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [template, setTemplate] = useState(null);
+  const [template, setTemplate] = useState<AppTemplate | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
-    if (params.id && appTemplates[params.id]) {
-      setTemplate(appTemplates[params.id]);
+    const id = typeof params.id === 'string' ? params.id : undefined;
+    if (id && appTemplates[id]) {
+      setTemplate(appTemplates[id]);
     }
   }, [params.id]);
 

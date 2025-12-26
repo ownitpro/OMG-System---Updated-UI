@@ -19,12 +19,34 @@ import {
   EyeSlashIcon
 } from "@heroicons/react/24/outline";
 
+interface TicketMessage {
+  id: string;
+  content: string;
+  createdAt: Date;
+  user: {
+    name: string | null;
+    email: string;
+  };
+}
+
+interface TicketAttachment {
+  id: string;
+  name: string;
+  url: string | null;
+  size: number;
+  mimeType: string;
+  createdAt: Date;
+}
+
 interface Ticket {
   id: string;
   subject: string;
-  description: string | null;
+  description: string;
   status: string;
   priority: string;
+  category: string | null;
+  assignedTo: string | null;
+  resolvedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
   user: {
@@ -35,26 +57,8 @@ interface Ticket {
     name: string;
     slug: string;
   };
-  messages: Array<{
-    id: string;
-    content: string;
-    createdAt: Date;
-    user: {
-      name: string | null;
-      email: string;
-    };
-  }>;
-  attachments: Array<{
-    id: string;
-    name: string;
-    url: string;
-    size: number;
-    mimeType: string;
-    createdAt: Date;
-    user: {
-      name: string | null;
-    };
-  }>;
+  messages?: TicketMessage[];
+  attachments?: TicketAttachment[];
 }
 
 interface TicketDetailTabsProps {
@@ -68,6 +72,10 @@ export function TicketDetailTabs({ ticket }: TicketDetailTabsProps) {
   const [showInternalNotes, setShowInternalNotes] = useState(false);
   const [status, setStatus] = useState(ticket.status);
   const [priority, setPriority] = useState(ticket.priority);
+
+  // Default empty arrays for optional fields
+  const messages = ticket.messages ?? [];
+  const attachments = ticket.attachments ?? [];
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -285,14 +293,14 @@ export function TicketDetailTabs({ ticket }: TicketDetailTabsProps) {
                 >
                   <Icon className="h-5 w-5 mr-2" />
                   {tab.name}
-                  {tab.id === "conversation" && ticket.messages.length > 0 && (
+                  {tab.id === "conversation" && messages.length > 0 && (
                     <span className="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">
-                      {ticket.messages.length}
+                      {messages.length}
                     </span>
                   )}
-                  {tab.id === "attachments" && ticket.attachments.length > 0 && (
+                  {tab.id === "attachments" && attachments.length > 0 && (
                     <span className="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">
-                      {ticket.attachments.length}
+                      {attachments.length}
                     </span>
                   )}
                 </button>
@@ -309,7 +317,7 @@ export function TicketDetailTabs({ ticket }: TicketDetailTabsProps) {
                 <div>
                   <h3 className="text-lg font-medium text-gray-900 mb-4">Recent Messages</h3>
                   <div className="space-y-3">
-                    {ticket.messages.slice(0, 5).map((message) => (
+                    {messages.slice(0, 5).map((message) => (
                       <div key={message.id} className="p-3 bg-gray-50 rounded-lg">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-sm font-medium text-gray-900">
@@ -322,7 +330,7 @@ export function TicketDetailTabs({ ticket }: TicketDetailTabsProps) {
                         <p className="text-sm text-gray-700">{message.content}</p>
                       </div>
                     ))}
-                    {ticket.messages.length === 0 && (
+                    {messages.length === 0 && (
                       <p className="text-sm text-gray-500">No messages yet</p>
                     )}
                   </div>
@@ -331,7 +339,7 @@ export function TicketDetailTabs({ ticket }: TicketDetailTabsProps) {
                 <div>
                   <h3 className="text-lg font-medium text-gray-900 mb-4">Attachments</h3>
                   <div className="space-y-3">
-                    {ticket.attachments.slice(0, 5).map((attachment) => (
+                    {attachments.slice(0, 5).map((attachment) => (
                       <div key={attachment.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <div className="flex items-center">
                           <PaperClipIcon className="h-5 w-5 text-gray-400 mr-3" />
@@ -347,7 +355,7 @@ export function TicketDetailTabs({ ticket }: TicketDetailTabsProps) {
                         </button>
                       </div>
                     ))}
-                    {ticket.attachments.length === 0 && (
+                    {attachments.length === 0 && (
                       <p className="text-sm text-gray-500">No attachments yet</p>
                     )}
                   </div>
@@ -403,7 +411,7 @@ export function TicketDetailTabs({ ticket }: TicketDetailTabsProps) {
 
               {/* Messages List */}
               <div className="space-y-4">
-                {ticket.messages.map((message) => (
+                {messages.map((message) => (
                   <div key={message.id} className="bg-white border border-gray-200 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center">
@@ -422,7 +430,7 @@ export function TicketDetailTabs({ ticket }: TicketDetailTabsProps) {
                     <p className="text-sm text-gray-700">{message.content}</p>
                   </div>
                 ))}
-                {ticket.messages.length === 0 && (
+                {messages.length === 0 && (
                   <p className="text-sm text-gray-500 text-center py-8">No messages yet</p>
                 )}
               </div>
@@ -442,7 +450,7 @@ export function TicketDetailTabs({ ticket }: TicketDetailTabsProps) {
 
               {/* Attachments List */}
               <div className="space-y-3">
-                {ticket.attachments.map((attachment) => (
+                {attachments.map((attachment) => (
                   <div key={attachment.id} className="bg-gray-50 p-4 rounded-lg">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
@@ -471,7 +479,7 @@ export function TicketDetailTabs({ ticket }: TicketDetailTabsProps) {
                     </div>
                   </div>
                 ))}
-                {ticket.attachments.length === 0 && (
+                {attachments.length === 0 && (
                   <p className="text-sm text-gray-500 text-center py-8">No attachments yet</p>
                 )}
               </div>

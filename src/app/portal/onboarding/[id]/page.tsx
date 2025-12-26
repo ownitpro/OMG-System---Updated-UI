@@ -52,13 +52,6 @@ export default async function PortalProjectDetailPage({ params }: PortalProjectD
         orderBy: { createdAt: "desc" },
       },
       attachments: {
-        include: {
-          user: {
-            select: {
-              name: true,
-            },
-          },
-        },
         orderBy: { createdAt: "desc" },
       },
     },

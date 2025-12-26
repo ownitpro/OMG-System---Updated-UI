@@ -65,13 +65,10 @@ interface Project {
   attachments: Array<{
     id: string;
     name: string;
-    url: string;
+    url: string | null;
     size: number;
     mimeType: string;
     createdAt: Date;
-    user: {
-      name: string | null;
-    };
   }>;
 }
 
@@ -562,9 +559,6 @@ export function ProjectDetailTabs({ project, showClientView, onToggleClientView 
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <span className="text-sm text-gray-500">
-                          {attachment.user.name || "Unknown"}
-                        </span>
                         <span className="text-sm text-gray-500">
                           {new Date(attachment.createdAt).toLocaleDateString()}
                         </span>

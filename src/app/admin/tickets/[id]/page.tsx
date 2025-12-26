@@ -29,27 +29,6 @@ export default async function TicketDetailPage({ params }: TicketDetailPageProps
           slug: true,
         },
       },
-      messages: {
-        include: {
-          user: {
-            select: {
-              name: true,
-              email: true,
-            },
-          },
-        },
-        orderBy: { createdAt: "asc" },
-      },
-      attachments: {
-        include: {
-          user: {
-            select: {
-              name: true,
-            },
-          },
-        },
-        orderBy: { createdAt: "desc" },
-      },
     },
   });
 

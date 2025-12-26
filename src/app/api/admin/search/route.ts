@@ -12,7 +12,7 @@ import {
 export async function GET(request: NextRequest) {
   try {
     const session = await auth();
-    
+
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -37,16 +37,14 @@ export async function GET(request: NextRequest) {
       return NextResponse.json([]);
     }
 
-    const searchTerm = `%${query}%`;
-
-    // Search across different resources
+    // Search across different resources (SQLite doesn't support mode: 'insensitive')
     const [organizations, invoices, tickets, leads, projects] = await Promise.all([
       // Organizations
       prisma.organization.findMany({
         where: {
           OR: [
-            { name: { contains: query, mode: 'insensitive' } },
-            { slug: { contains: query, mode: 'insensitive' } }
+            { name: { contains: query } },
+            { slug: { contains: query } }
           ],
           ...(orgId ? { id: orgId } : {})
         },
@@ -61,7 +59,7 @@ export async function GET(request: NextRequest) {
       // Invoices
       prisma.invoice.findMany({
         where: {
-          number: { contains: query, mode: 'insensitive' },
+          number: { contains: query },
           ...(orgId ? { organizationId: orgId } : {})
         },
         take: 5,
@@ -70,9 +68,7 @@ export async function GET(request: NextRequest) {
           number: true,
           amount: true,
           status: true,
-          organization: {
-            select: { name: true }
-          }
+          organizationId: true
         }
       }),
 
@@ -80,8 +76,8 @@ export async function GET(request: NextRequest) {
       prisma.ticket.findMany({
         where: {
           OR: [
-            { subject: { contains: query, mode: 'insensitive' } },
-            { description: { contains: query, mode: 'insensitive' } }
+            { subject: { contains: query } },
+            { description: { contains: query } }
           ],
           ...(orgId ? { organizationId: orgId } : {})
         },
@@ -91,9 +87,7 @@ export async function GET(request: NextRequest) {
           subject: true,
           status: true,
           priority: true,
-          organization: {
-            select: { name: true }
-          }
+          organizationId: true
         }
       }),
 
@@ -101,9 +95,9 @@ export async function GET(request: NextRequest) {
       prisma.lead.findMany({
         where: {
           OR: [
-            { email: { contains: query, mode: 'insensitive' } },
-            { contact: { contains: query, mode: 'insensitive' } },
-            { orgName: { contains: query, mode: 'insensitive' } }
+            { email: { contains: query } },
+            { contact: { contains: query } },
+            { orgName: { contains: query } }
           ]
         },
         take: 5,
@@ -120,8 +114,8 @@ export async function GET(request: NextRequest) {
       prisma.project.findMany({
         where: {
           OR: [
-            { name: { contains: query, mode: 'insensitive' } },
-            { description: { contains: query, mode: 'insensitive' } }
+            { name: { contains: query } },
+            { description: { contains: query } }
           ],
           ...(orgId ? { organizationId: orgId } : {})
         },
@@ -130,12 +124,26 @@ export async function GET(request: NextRequest) {
           id: true,
           name: true,
           status: true,
-          organization: {
-            select: { name: true }
-          }
+          organizationId: true
         }
       })
     ]);
+
+    // Get organization names for items that have organizationId
+    const orgIds = [
+      ...invoices.map(i => i.organizationId),
+      ...tickets.map(t => t.organizationId),
+      ...projects.map(p => p.organizationId)
+    ].filter(Boolean);
+
+    const orgsMap = new Map<string, string>();
+    if (orgIds.length > 0) {
+      const orgs = await prisma.organization.findMany({
+        where: { id: { in: orgIds } },
+        select: { id: true, name: true }
+      });
+      orgs.forEach(org => orgsMap.set(org.id, org.name));
+    }
 
     // Format results
     const results = [
@@ -147,38 +155,38 @@ export async function GET(request: NextRequest) {
         icon: BuildingOfficeIcon,
         type: 'organization'
       })),
-      
+
       ...invoices.map(invoice => ({
         id: invoice.id,
         title: `Invoice ${invoice.number}`,
-        subtitle: `${invoice.organization.name} • $${invoice.amount} • ${invoice.status}`,
+        subtitle: `${orgsMap.get(invoice.organizationId) || 'Unknown'} • $${invoice.amount} • ${invoice.status}`,
         href: `/admin/invoices/${invoice.id}`,
         icon: DocumentTextIcon,
         type: 'invoice'
       })),
-      
+
       ...tickets.map(ticket => ({
         id: ticket.id,
         title: ticket.subject,
-        subtitle: `${ticket.organization.name} • ${ticket.status} • ${ticket.priority}`,
+        subtitle: `${orgsMap.get(ticket.organizationId) || 'Unknown'} • ${ticket.status} • ${ticket.priority}`,
         href: `/admin/tickets/${ticket.id}`,
         icon: TicketIcon,
         type: 'ticket'
       })),
-      
+
       ...leads.map(lead => ({
         id: lead.id,
-        title: lead.contact || lead.email,
-        subtitle: `${lead.orgName || 'No company'} • ${lead.source}`,
+        title: lead.contact || lead.email || 'Unknown',
+        subtitle: `${lead.orgName || 'No company'} • ${lead.source || 'Unknown source'}`,
         href: `/admin/leads/${lead.id}`,
         icon: UserGroupIcon,
         type: 'lead'
       })),
-      
+
       ...projects.map(project => ({
         id: project.id,
         title: project.name,
-        subtitle: `${project.organization.name} • ${project.status}`,
+        subtitle: `${orgsMap.get(project.organizationId) || 'Unknown'} • ${project.status}`,
         href: `/admin/projects/${project.id}`,
         icon: CogIcon,
         type: 'project'
@@ -186,10 +194,13 @@ export async function GET(request: NextRequest) {
     ];
 
     // Sort by relevance (exact matches first, then partial matches)
+    const lowerQuery = query.toLowerCase();
     results.sort((a, b) => {
-      const aExact = a.title.toLowerCase().includes(query.toLowerCase());
-      const bExact = b.title.toLowerCase().includes(query.toLowerCase());
-      
+      const aTitle = a.title?.toLowerCase() || '';
+      const bTitle = b.title?.toLowerCase() || '';
+      const aExact = aTitle.includes(lowerQuery);
+      const bExact = bTitle.includes(lowerQuery);
+
       if (aExact && !bExact) return -1;
       if (!aExact && bExact) return 1;
       return 0;

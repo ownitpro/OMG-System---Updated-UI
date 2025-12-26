@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 const AnalyticsEventSchema = z.object({
   event: z.string(),
-  properties: z.record(z.any()),
+  properties: z.record(z.string(), z.any()),
   userId: z.string().optional(),
   organizationId: z.string().optional(),
   role: z.enum(['ADMIN', 'STAFF', 'CLIENT']).optional(),
@@ -16,10 +16,15 @@ const AnalyticsEventSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     const session = await auth();
-    
+
     // Parse the analytics event
     const body = await request.json();
     const event = AnalyticsEventSchema.parse(body);
+
+    // Get client IP from headers (Next.js doesn't have request.ip)
+    const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0] ||
+                     request.headers.get('x-real-ip') ||
+                     'unknown';
 
     // Log the event (in a real app, you might store this in a database)
     console.log('Analytics Event:', {
@@ -29,7 +34,7 @@ export async function POST(request: NextRequest) {
       organizationId: event.organizationId,
       role: event.role,
       timestamp: event.timestamp || new Date().toISOString(),
-      ip: request.ip || 'unknown',
+      ip: clientIp,
       userAgent: request.headers.get('user-agent') || 'unknown',
     });
 
@@ -58,7 +63,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Only admins can view analytics data
-    if (session.user.role !== 'ADMIN') {
+    const userRole = (session.user as { role?: string })?.role;
+    if (userRole !== 'ADMIN') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 

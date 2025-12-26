@@ -96,7 +96,9 @@ const outcomes = [
 ];
 
 export default function RealEstateIndustryPage() {
-  const featuredApps = getAppsByIds(industry.recommendedAppIds ?? []);
+  // Extract app IDs from the relation objects
+  const appIds = (industry.recommendedApps ?? industry.apps ?? []).map(a => a.appId);
+  const featuredApps = getAppsByIds(appIds);
 
   return (
     <main className="min-h-screen bg-slate-950 text-white">

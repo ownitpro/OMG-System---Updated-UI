@@ -32,8 +32,7 @@ export async function POST(request: NextRequest) {
         email: validatedData.email,
         name: validatedData.name,
         company: validatedData.company || validatedData.industry,
-        source: validatedData.source,
-        status: 'NEW'
+        source: validatedData.source
       }
     });
 
@@ -51,7 +50,7 @@ export async function POST(request: NextRequest) {
           budgetBand: validatedData.budgetBand,
           context: validatedData.context
         },
-        ipAddress: request.ip || 'unknown',
+        ipAddress: request.headers.get('x-forwarded-for')?.split(',')[0] || request.headers.get('x-real-ip') || 'unknown',
         userAgent: request.headers.get('user-agent') || 'unknown'
       }
     });
@@ -96,7 +95,7 @@ export async function POST(request: NextRequest) {
     
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid data provided', details: error.errors },
+        { error: 'Invalid data provided', details: error.issues },
         { status: 400 }
       );
     }

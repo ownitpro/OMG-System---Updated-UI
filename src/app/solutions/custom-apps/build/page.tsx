@@ -2,9 +2,8 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { 
+import {
   ArrowLeftIcon,
-  ArrowRightIcon,
   CheckCircleIcon,
   CogIcon,
   BoltIcon,
@@ -17,13 +16,21 @@ import {
   SparklesIcon,
   StarIcon,
   RocketLaunchIcon,
-  PlayIcon,
   EyeIcon,
-  TrashIcon,
   PlusIcon
 } from '@heroicons/react/24/outline';
 
-const allComponents = {
+type ComponentItem = {
+  id: string;
+  name: string;
+  description: string;
+  icon: React.ForwardRefExoticComponent<React.SVGProps<SVGSVGElement>>;
+  required: boolean;
+};
+
+type ComponentCategory = 'frontend' | 'integrations' | 'automation' | 'advanced';
+
+const allComponents: Record<ComponentCategory, ComponentItem[]> = {
   'frontend': [
     { id: 'dashboard', name: 'Dashboard', description: 'Main control panel with key metrics', icon: ComputerDesktopIcon, required: true },
     { id: 'forms', name: 'Data Entry Forms', description: 'User-friendly forms for data input', icon: WrenchScrewdriverIcon, required: false },
@@ -58,7 +65,9 @@ const allComponents = {
   ]
 };
 
-const templateComponents = {
+type TemplateId = 'property-inventory' | 'tenant-payment' | 'contractor-workorder' | 'client-onboarding' | 'client-intake' | 'cleaning-route' | 'real-estate-lead' | 'custom-dashboard' | 'workflow-automation';
+
+const templateComponents: Record<TemplateId, string[]> = {
   'property-inventory': ['dashboard', 'forms', 'reports', 'user-management', 'integrations', 'automation', 'database', 'mobile'],
   'tenant-payment': ['dashboard', 'forms', 'user-management', 'integrations', 'automation', 'database', 'mobile', 'notifications'],
   'contractor-workorder': ['dashboard', 'forms', 'reports', 'user-management', 'integrations', 'automation', 'database', 'mobile', 'scheduling'],
@@ -73,19 +82,19 @@ const templateComponents = {
 function CustomAppBuildPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [selectedComponents, setSelectedComponents] = useState([]);
-  const [template, setTemplate] = useState(null);
-  const [buildPhase, setBuildPhase] = useState('selection'); // 'selection', 'preview', 'request'
+  const [selectedComponents, setSelectedComponents] = useState<string[]>([]);
+  const [template, setTemplate] = useState<TemplateId | null>(null);
+  const [buildPhase, setBuildPhase] = useState<'selection' | 'preview' | 'request'>('selection');
 
   useEffect(() => {
-    const templateId = searchParams.get('template');
-    if (templateId && templateComponents[templateId]) {
+    const templateId = searchParams.get('template') as TemplateId | null;
+    if (templateId && templateId in templateComponents) {
       setTemplate(templateId);
       setSelectedComponents(templateComponents[templateId]);
     }
   }, [searchParams]);
 
-  const toggleComponent = (componentId) => {
+  const toggleComponent = (componentId: string) => {
     setSelectedComponents(prev => {
       if (prev.includes(componentId)) {
         return prev.filter(id => id !== componentId);
@@ -95,7 +104,7 @@ function CustomAppBuildPageContent() {
     });
   };
 
-  const getComponentById = (id) => {
+  const getComponentById = (id: string): ComponentItem | null => {
     for (const category of Object.values(allComponents)) {
       const component = category.find(comp => comp.id === id);
       if (component) return component;
@@ -104,12 +113,12 @@ function CustomAppBuildPageContent() {
   };
 
   const handleBuildRequest = () => {
-    const components = selectedComponents.map(id => getComponentById(id)).filter(Boolean);
+    const components = selectedComponents.map(id => getComponentById(id)).filter((comp): comp is ComponentItem => comp !== null);
     const componentIds = components.map(comp => comp.id).join(',');
     router.push(`/solutions/custom-apps/request?components=${componentIds}&fromScratch=${!template}`);
   };
 
-  const renderComponentCard = (component, category) => {
+  const renderComponentCard = (component: ComponentItem, category: string) => {
     const isSelected = selectedComponents.includes(component.id);
     const isRequired = component.required;
     

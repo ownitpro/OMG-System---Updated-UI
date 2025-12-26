@@ -12,6 +12,15 @@ import {
   setLocalEntitlement,
   type AccessGrant,
 } from "@/lib/admin/accessStore";
+import {
+  MagnifyingGlassIcon,
+  PlusIcon,
+  ArrowPathIcon,
+  ChevronUpIcon,
+  XMarkIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/outline";
 
 type SortKey = "createdAt" | "clientEmail" | "productId" | "status";
 type SortDir = "desc" | "asc";
@@ -32,10 +41,10 @@ function Pill({ tone, children }: { tone: "good" | "muted" | "warn"; children: R
   const base = "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium";
   const cls =
     tone === "good"
-      ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+      ? "bg-[#47BD79]/20 text-[#47BD79] border-[#47BD79]/30"
       : tone === "warn"
-      ? "bg-amber-50 text-amber-700 border-amber-200"
-      : "bg-slate-50 text-slate-700 border-slate-200";
+      ? "bg-amber-500/20 text-amber-400 border-amber-500/30"
+      : "bg-white/10 text-white/60 border-white/20";
   return <span className={`${base} ${cls}`}>{children}</span>;
 }
 
@@ -53,15 +62,22 @@ function Modal({
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/30" onClick={onClose} />
-      <div className="relative w-full max-w-xl rounded-2xl border bg-white p-4 shadow-lg">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      <div
+        className="relative w-full max-w-xl rounded-2xl border border-white/10 bg-zinc-900 p-6 shadow-2xl"
+        style={{ boxShadow: "0 0 40px rgba(71, 189, 121, 0.15)" }}
+      >
         <div className="flex items-start justify-between gap-3">
           <div>
-            <div className="text-lg font-semibold">{title}</div>
-            <div className="text-xs text-muted-foreground">Week 1 local-only</div>
+            <div className="text-lg font-semibold text-white">{title}</div>
+            <div className="text-xs text-white/50">Week 1 local-only</div>
           </div>
-          <button onClick={onClose} className="rounded-lg border px-3 py-2 text-sm hover:bg-white" type="button">
-            Close
+          <button
+            onClick={onClose}
+            className="rounded-xl border border-white/20 bg-white/5 p-2 text-white/70 hover:bg-white/10 hover:text-white transition-all"
+            type="button"
+          >
+            <XMarkIcon className="w-5 h-5" />
           </button>
         </div>
         <div className="mt-4">{children}</div>
@@ -164,60 +180,66 @@ export default function AccessTable() {
   if (!ready) return null;
 
   return (
-    <div className="rounded-xl border bg-white">
+    <div
+      className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl"
+      style={{ boxShadow: "0 0 20px rgba(59, 130, 246, 0.1)" }}
+    >
       {/* Controls */}
       <div className="flex flex-col gap-3 p-4 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-1 gap-2">
-          <input
-            value={ui.query}
-            onChange={(e) => patch({ query: e.target.value })}
-            placeholder="Search email, client id, product, grant id…"
-            className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
-          />
+          <div className="relative flex-1">
+            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+            <input
+              value={ui.query}
+              onChange={(e) => patch({ query: e.target.value })}
+              placeholder="Search email, client id, product, grant id…"
+              className="w-full rounded-xl border border-white/20 bg-white/5 pl-10 pr-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#3B82F6]/50 focus:ring-2 focus:ring-[#3B82F6]/20 transition-all"
+            />
+          </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          {msg ? <span className="text-xs text-muted-foreground">{msg}</span> : null}
+          {msg ? <span className="text-xs text-[#47BD79]">{msg}</span> : null}
 
           <select
             value={ui.status}
             onChange={(e) => patch({ status: e.target.value as StatusFilter })}
-            className="rounded-lg border px-3 py-2 text-sm"
+            className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[#3B82F6]/50"
             title="Status"
           >
-            <option value="all">All statuses</option>
-            <option value="active">Active</option>
-            <option value="revoked">Revoked</option>
+            <option value="all" className="bg-zinc-900">All statuses</option>
+            <option value="active" className="bg-zinc-900">Active</option>
+            <option value="revoked" className="bg-zinc-900">Revoked</option>
           </select>
 
           <select
             value={ui.source}
             onChange={(e) => patch({ source: e.target.value as SourceFilter })}
-            className="rounded-lg border px-3 py-2 text-sm"
+            className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[#3B82F6]/50"
             title="Source"
           >
-            <option value="all">All sources</option>
-            <option value="purchase">Purchase</option>
-            <option value="admin">Admin</option>
-            <option value="promo">Promo</option>
+            <option value="all" className="bg-zinc-900">All sources</option>
+            <option value="purchase" className="bg-zinc-900">Purchase</option>
+            <option value="admin" className="bg-zinc-900">Admin</option>
+            <option value="promo" className="bg-zinc-900">Promo</option>
           </select>
 
           <select
             value={ui.sortKey}
             onChange={(e) => patch({ sortKey: e.target.value as SortKey })}
-            className="rounded-lg border px-3 py-2 text-sm"
+            className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[#3B82F6]/50"
             title="Sort"
           >
-            <option value="createdAt">Date</option>
-            <option value="clientEmail">Email</option>
-            <option value="productId">Product</option>
-            <option value="status">Status</option>
+            <option value="createdAt" className="bg-zinc-900">Date</option>
+            <option value="clientEmail" className="bg-zinc-900">Email</option>
+            <option value="productId" className="bg-zinc-900">Product</option>
+            <option value="status" className="bg-zinc-900">Status</option>
           </select>
 
           <button
             type="button"
             onClick={() => patch({ sortDir: ui.sortDir === "desc" ? "asc" : "desc" })}
-            className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
+            className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all"
             title="Toggle direction"
           >
             {ui.sortDir === "desc" ? "Desc" : "Asc"}
@@ -226,9 +248,10 @@ export default function AccessTable() {
           <button
             type="button"
             onClick={() => setOpenGrant(true)}
-            className="rounded-lg bg-black px-3 py-2 text-sm text-white"
+            className="flex items-center gap-1.5 rounded-xl bg-[#47BD79] px-4 py-2 text-sm font-semibold text-white hover:bg-[#3da86a] transition-all shadow-lg shadow-[#47BD79]/30"
           >
-            + Grant access
+            <PlusIcon className="w-4 h-4" />
+            Grant access
           </button>
 
           <button
@@ -238,25 +261,26 @@ export default function AccessTable() {
               resetScroll();
               flash("View reset");
             }}
-            className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
+            className="flex items-center gap-1 rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all"
           >
-            Reset view
+            <ArrowPathIcon className="w-4 h-4" />
+            Reset
           </button>
 
           <button
             type="button"
             onClick={toggle}
-            className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
+            className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all"
             title="Toggle density"
           >
-            Density: {compact ? "Compact" : "Comfortable"}
+            {compact ? "Compact" : "Comfortable"}
           </button>
 
           {isOverride ? (
             <button
               type="button"
               onClick={clearOverride}
-              className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
+              className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all"
               title="Use global density"
             >
               Use global
@@ -266,35 +290,37 @@ export default function AccessTable() {
       </div>
 
       {/* Mini stats */}
-      <div className="flex flex-wrap items-center gap-3 px-4 pb-3 text-sm text-muted-foreground">
-        <span className="rounded-lg border bg-white px-3 py-1.5">
-          Grants: <span className="font-medium text-black">{filtered.length}</span>
-        </span>
-        <span className="rounded-lg border bg-white px-3 py-1.5">
-          Active: <span className="font-medium text-black">{activeCount}</span>
-        </span>
+      <div className="flex flex-wrap items-center gap-3 px-4 pb-3">
+        <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-2">
+          <span className="text-sm text-white/50">Grants: </span>
+          <span className="text-sm font-semibold text-white">{filtered.length}</span>
+        </div>
+        <div className="rounded-xl border border-[#47BD79]/30 bg-[#47BD79]/10 px-4 py-2">
+          <span className="text-sm text-[#47BD79]/70">Active: </span>
+          <span className="text-sm font-semibold text-[#47BD79]">{activeCount}</span>
+        </div>
       </div>
 
       {/* Table */}
-      <div className={compact ? "table-compact" : ""}>
+      <div className={`rounded-xl border border-white/10 mx-4 mb-4 overflow-hidden ${compact ? "table-compact" : ""}`}>
         <div className="overflow-x-auto">
           <div ref={scrollRef} className="max-h-[520px] overflow-auto">
             <table className="w-full text-sm">
-              <thead className="sticky top-0 z-10 border-t bg-slate-50 text-left">
-                <tr className="text-xs uppercase tracking-wide text-slate-500">
-                  <th className="px-4 py-3">Client</th>
-                  <th className="px-4 py-3">Product</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Source</th>
-                  <th className="px-4 py-3">Created</th>
+              <thead className="sticky top-0 z-10 bg-white/5 backdrop-blur-sm">
+                <tr className="text-xs uppercase tracking-wide text-white/50 border-b border-white/10">
+                  <th className="px-4 py-3 text-left">Client</th>
+                  <th className="px-4 py-3 text-left">Product</th>
+                  <th className="px-4 py-3 text-left">Status</th>
+                  <th className="px-4 py-3 text-left">Source</th>
+                  <th className="px-4 py-3 text-left">Created</th>
                   <th className="px-4 py-3 text-right">Action</th>
                 </tr>
               </thead>
 
-              <tbody>
+              <tbody className="divide-y divide-white/5">
                 {filtered.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="px-4 py-12 text-center text-muted-foreground">
+                    <td colSpan={6} className="px-4 py-12 text-center text-white/50">
                       No access grants yet. Click "Grant access" to create one.
                     </td>
                   </tr>
@@ -302,28 +328,38 @@ export default function AccessTable() {
                   filtered.map((r) => (
                     <tr
                       key={r.id}
-                      className="group border-t transition-colors hover:bg-slate-50/80"
+                      className="group transition-colors hover:bg-white/5"
                     >
                       <td className="px-4 py-3">
-                        <div className="font-medium">{r.clientEmail}</div>
-                        <div className="text-xs text-muted-foreground">{r.clientId}</div>
+                        <div className="font-medium text-white">{r.clientEmail}</div>
+                        <div className="text-xs text-white/50">{r.clientId}</div>
                       </td>
                       <td className="px-4 py-3">
-                        <div className="font-medium">{r.productId}</div>
-                        <div className="text-xs text-muted-foreground">{r.entitlementKey}</div>
+                        <div className="font-medium text-white">{r.productId}</div>
+                        <div className="text-xs text-white/50 font-mono">{r.entitlementKey}</div>
                       </td>
                       <td className="px-4 py-3">
-                        {r.status === "active" ? <Pill tone="good">Active</Pill> : <Pill tone="muted">Revoked</Pill>}
+                        {r.status === "active" ? (
+                          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#47BD79]/30 bg-[#47BD79]/20 px-2.5 py-1 text-xs font-medium text-[#47BD79]">
+                            <CheckCircleIcon className="w-3 h-3" />
+                            Active
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-xs font-medium text-white/60">
+                            <XCircleIcon className="w-3 h-3" />
+                            Revoked
+                          </span>
+                        )}
                       </td>
                       <td className="px-4 py-3">
                         <Pill tone="muted">{r.source}</Pill>
                       </td>
-                      <td className="px-4 py-3 text-muted-foreground">
+                      <td className="px-4 py-3 text-white/60">
                         {new Date(r.createdAt).toLocaleString()}
                       </td>
                       <td className="px-4 py-3 text-right" onClick={stopRowClick}>
                         <div className="flex items-center justify-end gap-2">
-                          <span className="w-[92px] text-right text-xs text-slate-400">
+                          <span className="w-[92px] text-right text-xs text-white/30">
                             <span className="opacity-0 transition-opacity group-hover:opacity-100">›</span>
                           </span>
 
@@ -335,7 +371,7 @@ export default function AccessTable() {
                                 setLocalEntitlement(r.entitlementKey, false);
                                 flash("Access revoked");
                               }}
-                              className="rounded-lg border px-3 py-1.5 text-xs font-medium hover:bg-white"
+                              className="rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 hover:bg-red-500/20 transition-all"
                             >
                               Revoke
                             </button>
@@ -343,7 +379,6 @@ export default function AccessTable() {
                             <button
                               type="button"
                               onClick={() => {
-                                // re-grant by creating new grant entry (audit-friendly)
                                 grantAccess({
                                   clientEmail: r.clientEmail,
                                   clientId: r.clientId,
@@ -355,7 +390,7 @@ export default function AccessTable() {
                                 setLocalEntitlement(r.entitlementKey, true);
                                 flash("Access re-granted");
                               }}
-                              className="rounded-lg border px-3 py-1.5 text-xs font-medium hover:bg-white"
+                              className="rounded-xl border border-[#47BD79]/30 bg-[#47BD79]/10 px-3 py-1.5 text-xs font-medium text-[#47BD79] hover:bg-[#47BD79]/20 transition-all"
                             >
                               Re-grant
                             </button>
@@ -371,88 +406,87 @@ export default function AccessTable() {
         </div>
       </div>
 
-      <div className="flex items-center justify-between border-t p-4 text-xs text-muted-foreground">
-        <span>Stored in localStorage: <span className="font-mono">omg_access_grants</span></span>
+      <div className="flex items-center justify-between border-t border-white/10 p-4 text-xs text-white/40">
+        <span>Stored in localStorage: <span className="font-mono text-white/60">omg_access_grants</span></span>
         <span>Mocked (Week 1)</span>
       </div>
 
       <Modal open={openGrant} title="Grant access" onClose={() => setOpenGrant(false)}>
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-2">
           <div className="md:col-span-2">
-            <label className="text-xs text-muted-foreground">Client email</label>
+            <label className="text-xs text-white/50">Client email</label>
             <input
               value={gEmail}
               onChange={(e) => setGEmail(e.target.value)}
-              className="mt-1 w-full rounded-lg border px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#47BD79]/50 focus:ring-2 focus:ring-[#47BD79]/20"
               placeholder="client@email.com"
             />
           </div>
 
           <div>
-            <label className="text-xs text-muted-foreground">Client ID</label>
+            <label className="text-xs text-white/50">Client ID</label>
             <input
               value={gClientId}
               onChange={(e) => setGClientId(e.target.value)}
-              className="mt-1 w-full rounded-lg border px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#47BD79]/50 focus:ring-2 focus:ring-[#47BD79]/20"
               placeholder="cli_123"
             />
           </div>
 
           <div>
-            <label className="text-xs text-muted-foreground">Source</label>
+            <label className="text-xs text-white/50">Source</label>
             <select
               value={gSource}
               onChange={(e) => setGSource(e.target.value as any)}
-              className="mt-1 w-full rounded-lg border px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-[#47BD79]/50"
             >
-              <option value="admin">Admin</option>
-              <option value="promo">Promo</option>
-              <option value="purchase">Purchase</option>
+              <option value="admin" className="bg-zinc-900">Admin</option>
+              <option value="promo" className="bg-zinc-900">Promo</option>
+              <option value="purchase" className="bg-zinc-900">Purchase</option>
             </select>
           </div>
 
           <div className="md:col-span-2">
-            <label className="text-xs text-muted-foreground">Product ID</label>
+            <label className="text-xs text-white/50">Product ID</label>
             <input
               value={gProductId}
               onChange={(e) => setGProductId(e.target.value)}
-              className="mt-1 w-full rounded-lg border px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#47BD79]/50 focus:ring-2 focus:ring-[#47BD79]/20"
               placeholder="securevault-docs"
             />
-            <div className="mt-1 text-xs text-muted-foreground">
-              Entitlement key will be: <span className="font-mono">{entitlementKeyFromProductId(gProductId)}</span>
+            <div className="mt-2 text-xs text-white/50">
+              Entitlement key will be: <span className="font-mono text-[#47BD79]">{entitlementKeyFromProductId(gProductId)}</span>
             </div>
           </div>
 
           <div className="md:col-span-2">
-            <label className="text-xs text-muted-foreground">Note (optional)</label>
+            <label className="text-xs text-white/50">Note (optional)</label>
             <input
               value={gNote}
               onChange={(e) => setGNote(e.target.value)}
-              className="mt-1 w-full rounded-lg border px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#47BD79]/50 focus:ring-2 focus:ring-[#47BD79]/20"
               placeholder="Why was access granted?"
             />
           </div>
         </div>
 
-        <div className="mt-4 flex items-center justify-end gap-2">
+        <div className="mt-6 flex items-center justify-end gap-3">
           <button
             type="button"
             onClick={() => setOpenGrant(false)}
-            className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
+            className="rounded-xl border border-white/20 bg-white/5 px-4 py-2.5 text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={createGrant}
-            className="rounded-lg bg-black px-3 py-2 text-sm text-white"
+            className="rounded-xl bg-[#47BD79] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#3da86a] transition-all shadow-lg shadow-[#47BD79]/30"
           >
-            Grant
+            Grant Access
           </button>
         </div>
       </Modal>
     </div>
   );
 }
-

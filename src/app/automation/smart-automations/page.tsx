@@ -115,10 +115,12 @@ const automationTemplates = [
 
 const categories = ['All', 'Marketing', 'Finance', 'Sales', 'Analytics', 'Operations', 'Communication'];
 
+type AutomationTemplate = typeof automationTemplates[number];
+
 export default function SmartAutomationsPage() {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<AutomationTemplate | null>(null);
 
   const handleDeploy = (templateId: number) => {
     router.push(`/automation/smart-automations/${templateId}`);

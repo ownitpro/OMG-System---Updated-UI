@@ -7,7 +7,7 @@ export type MockOrder = {
     name: string;
     email: string;
   };
-  status: "completed" | "pending" | "cancelled" | "refunded";
+  status: "completed" | "pending" | "cancelled" | "refunded" | "paid";
   amountCents: number;
   currency: string;
   createdAt: string;

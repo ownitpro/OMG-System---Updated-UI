@@ -30,7 +30,7 @@ interface Ticket {
     name: string | null;
     email: string;
   };
-  _count: {
+  _count?: {
     comments: number;
   };
 }
@@ -285,7 +285,7 @@ export function PortalSupportIndex({ tickets }: PortalSupportIndexProps) {
                           <div>{getTimeAgo(ticket.createdAt)}</div>
                           <div className="flex items-center">
                             <ChatBubbleLeftIcon className="h-4 w-4 mr-1" />
-                            {ticket._count.comments}
+                            {ticket._count?.comments ?? 0}
                           </div>
                         </div>
                       </div>

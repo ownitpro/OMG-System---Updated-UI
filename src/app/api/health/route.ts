@@ -178,9 +178,9 @@ async function checkExternalServices(): Promise<HealthCheck> {
       await dns.resolve('google.com');
       checks.push({ service: 'dns', status: 'ok' });
     } catch (error) {
-      checks.push({ service: 'dns', status: 'error', error: error.message });
+      checks.push({ service: 'dns', status: 'error', error: error instanceof Error ? error.message : 'Unknown error' });
     }
-    
+
     // Check Stripe connectivity (if configured)
     if (process.env.STRIPE_SECRET_KEY) {
       try {
@@ -188,7 +188,7 @@ async function checkExternalServices(): Promise<HealthCheck> {
         await stripe.balance.retrieve();
         checks.push({ service: 'stripe', status: 'ok' });
       } catch (error) {
-        checks.push({ service: 'stripe', status: 'error', error: error.message });
+        checks.push({ service: 'stripe', status: 'error', error: error instanceof Error ? error.message : 'Unknown error' });
       }
     }
     
@@ -216,7 +216,7 @@ async function checkExternalServices(): Promise<HealthCheck> {
 export async function GET(request: NextRequest) {
   try {
     // Log health check access with redacted IP
-    const clientIP = redactIP(request.ip || request.headers.get('x-forwarded-for') || 'unknown');
+    const clientIP = redactIP(request.headers.get('x-forwarded-for')?.split(',')[0] || request.headers.get('x-real-ip') || 'unknown');
     console.log(`[HEALTH_CHECK] Access from IP: ${clientIP}`);
     
     const checks = await Promise.all([

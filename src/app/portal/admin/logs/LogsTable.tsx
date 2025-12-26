@@ -6,6 +6,14 @@ import { useTableDensity } from "@/lib/admin/useTableDensity";
 import { useTableState } from "@/lib/admin/useTableState";
 import { useTableScrollRestore } from "@/lib/admin/useTableScrollRestore";
 import { useLastOpened } from "@/lib/admin/useLastOpened";
+import {
+  MagnifyingGlassIcon,
+  ArrowPathIcon,
+  ChevronUpIcon,
+  ClipboardDocumentIcon,
+  CheckIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 
 const levelOptions = ["all", "info", "warn", "error", "audit"] as const;
 type LevelFilter = (typeof levelOptions)[number];
@@ -14,12 +22,12 @@ function levelPill(level: LogLevel) {
   const base = "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium";
   const styles =
     level === "error"
-      ? "bg-red-50 text-red-700 border-red-200"
+      ? "bg-red-500/20 text-red-400 border-red-500/30"
       : level === "warn"
-      ? "bg-amber-50 text-amber-700 border-amber-200"
+      ? "bg-amber-500/20 text-amber-400 border-amber-500/30"
       : level === "audit"
-      ? "bg-slate-50 text-slate-800 border-slate-200"
-      : "bg-emerald-50 text-emerald-700 border-emerald-200";
+      ? "bg-white/10 text-white/70 border-white/20"
+      : "bg-[#47BD79]/20 text-[#47BD79] border-[#47BD79]/30";
   return `${base} ${styles}`;
 }
 
@@ -28,8 +36,6 @@ function stopRowClick(e: React.MouseEvent) {
 }
 
 function formatDate(ts: string): string {
-  // Format date consistently to avoid hydration mismatches
-  // Format: "MM/DD/YYYY, HH:MM:SS AM/PM"
   const d = new Date(ts);
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
@@ -57,10 +63,20 @@ function CopyButton({ value, label }: { value: string; label: string }) {
     <button
       type="button"
       onClick={copy}
-      className="rounded-lg border px-2.5 py-1.5 text-xs font-medium hover:bg-white"
+      className="flex items-center gap-1 rounded-xl border border-white/20 bg-white/5 px-2.5 py-1.5 text-xs font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all"
       title={`Copy ${label}`}
     >
-      {copied ? "Copied" : `Copy ${label}`}
+      {copied ? (
+        <>
+          <CheckIcon className="w-3 h-3 text-[#47BD79]" />
+          Copied
+        </>
+      ) : (
+        <>
+          <ClipboardDocumentIcon className="w-3 h-3" />
+          Copy {label}
+        </>
+      )}
     </button>
   );
 }
@@ -97,7 +113,6 @@ export default function LogsTable({ initialLogs }: { initialLogs: AdminLog[] }) 
       });
   }, [logs, ui.query, ui.level]);
 
-  // Auto-reopen last opened item on mount
   React.useEffect(() => {
     if (!lastId) return;
 
@@ -109,66 +124,67 @@ export default function LogsTable({ initialLogs }: { initialLogs: AdminLog[] }) 
   }, [lastId, logs]);
 
   return (
-    <div className="rounded-xl border bg-white">
+    <div
+      className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl"
+      style={{ boxShadow: "0 0 20px rgba(59, 130, 246, 0.1)" }}
+    >
       {/* Controls */}
       <div className="flex flex-col gap-3 p-4 md:flex-row md:items-center md:justify-between">
-        <input
-          value={ui.query}
-          onChange={(e) => patch({ query: e.target.value })}
-          placeholder="Search logs (id, action, actor, email)…"
-          className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
-        />
+        <div className="relative flex-1">
+          <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+          <input
+            value={ui.query}
+            onChange={(e) => patch({ query: e.target.value })}
+            placeholder="Search logs (id, action, actor, email)…"
+            className="w-full rounded-xl border border-white/20 bg-white/5 pl-10 pr-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#3B82F6]/50 focus:ring-2 focus:ring-[#3B82F6]/20 transition-all"
+          />
+        </div>
 
-        <div className="flex items-center gap-2">
-          <label className="text-sm text-zinc-600">Level</label>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm text-white/50">Level</span>
           <select
             value={ui.level}
             onChange={(e) => patch({ level: e.target.value as LevelFilter })}
-            className="rounded-lg border px-3 py-2 text-sm"
+            className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[#3B82F6]/50"
           >
-            <option value="all">All</option>
-            <option value="info">Info</option>
-            <option value="warn">Warn</option>
-            <option value="error">Error</option>
-            <option value="audit">Audit</option>
+            <option value="all" className="bg-zinc-900">All</option>
+            <option value="info" className="bg-zinc-900">Info</option>
+            <option value="warn" className="bg-zinc-900">Warn</option>
+            <option value="error" className="bg-zinc-900">Error</option>
+            <option value="audit" className="bg-zinc-900">Audit</option>
           </select>
 
-          {/* Reset View */}
           <button
             type="button"
             onClick={reset}
-            className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
-            title="Reset filters and sorting"
+            className="flex items-center gap-1 rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all"
           >
-            Reset view
+            <ArrowPathIcon className="w-4 h-4" />
+            Reset
           </button>
 
-          {/* Back to Top */}
           <button
             type="button"
             onClick={resetScroll}
-            className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
-            title="Back to top"
+            className="flex items-center gap-1 rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all"
           >
-            Back to top
+            <ChevronUpIcon className="w-4 h-4" />
+            Top
           </button>
 
-          {/* Density Controls */}
           <button
             type="button"
             onClick={toggle}
-            className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
-            title="Toggle table density"
+            className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all"
           >
-            Density: {compact ? "Compact" : "Comfortable"}
+            {compact ? "Compact" : "Comfortable"}
           </button>
 
           {isOverride ? (
             <button
               type="button"
               onClick={clearOverride}
-              className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
-              title="Use global setting"
+              className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all"
             >
               Use global
             </button>
@@ -177,24 +193,24 @@ export default function LogsTable({ initialLogs }: { initialLogs: AdminLog[] }) 
       </div>
 
       {/* Table */}
-      <div className={`overflow-x-auto ${compact ? "table-compact" : ""}`}>
+      <div className={`rounded-xl border border-white/10 mx-4 mb-4 overflow-hidden ${compact ? "table-compact" : ""}`}>
         <div ref={scrollRef} className="max-h-[520px] overflow-auto">
           <table className="w-full text-sm">
-            <thead className="sticky top-0 z-10 border-t bg-slate-50 text-left">
-              <tr className="text-xs uppercase tracking-wide text-slate-500">
-                <th className="px-4 py-3">Time</th>
-                <th className="px-4 py-3">Level</th>
-                <th className="px-4 py-3">Actor</th>
-                <th className="px-4 py-3">Action</th>
-                <th className="px-4 py-3">Detail</th>
+            <thead className="sticky top-0 z-10 bg-white/5 backdrop-blur-sm">
+              <tr className="text-xs uppercase tracking-wide text-white/50 border-b border-white/10">
+                <th className="px-4 py-3 text-left">Time</th>
+                <th className="px-4 py-3 text-left">Level</th>
+                <th className="px-4 py-3 text-left">Actor</th>
+                <th className="px-4 py-3 text-left">Action</th>
+                <th className="px-4 py-3 text-left">Detail</th>
                 <th className="px-4 py-3 text-right">Action</th>
               </tr>
             </thead>
 
-            <tbody>
+            <tbody className="divide-y divide-white/5">
               {filtered.length === 0 ? (
                 <tr>
-                  <td className="px-4 py-12 text-center text-zinc-600" colSpan={6}>
+                  <td className="px-4 py-12 text-center text-white/50" colSpan={6}>
                     No logs found. Try a different search.
                   </td>
                 </tr>
@@ -216,22 +232,21 @@ export default function LogsTable({ initialLogs }: { initialLogs: AdminLog[] }) 
                         setReopened(false);
                       }
                     }}
-                    className="group cursor-pointer border-t transition-colors hover:bg-slate-50/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
+                    className="group cursor-pointer transition-colors hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3B82F6]/30"
                   >
-                    <td className="px-4 py-3 text-zinc-600">{formatDate(l.ts)}</td>
+                    <td className="px-4 py-3 text-white/60">{formatDate(l.ts)}</td>
                     <td className="px-4 py-3">
                       <span className={levelPill(l.level)}>{l.level.toUpperCase()}</span>
                     </td>
                     <td className="px-4 py-3">
-                      <div className="font-medium">{l.actor.name}</div>
-                      <div className="text-xs text-zinc-500">{l.actor.email ?? l.actor.type}</div>
+                      <div className="font-medium text-white">{l.actor.name}</div>
+                      <div className="text-xs text-white/50">{l.actor.email ?? l.actor.type}</div>
                     </td>
-                    <td className="px-4 py-3 font-medium">{l.action}</td>
-                    <td className="px-4 py-3 text-zinc-600">{l.detail}</td>
+                    <td className="px-4 py-3 font-medium text-white">{l.action}</td>
+                    <td className="px-4 py-3 text-white/60">{l.detail}</td>
                     <td className="px-4 py-3 text-right" onClick={stopRowClick}>
                       <div className="flex items-center justify-end gap-2">
-                        {/* fixed hint slot (no layout shift) */}
-                        <span className="w-[92px] text-right text-xs text-slate-400">
+                        <span className="w-[92px] text-right text-xs text-white/30">
                           <span className="opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-0">
                             ›
                           </span>
@@ -252,12 +267,12 @@ export default function LogsTable({ initialLogs }: { initialLogs: AdminLog[] }) 
 
       {/* Drawer */}
       {selected ? (
-        <div className="border-t bg-white p-4">
+        <div className="border-t border-white/10 bg-white/5 p-4 mx-4 mb-4 rounded-xl">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <div className="text-sm text-muted-foreground">Log details</div>
-              <div className="mt-1 text-lg font-semibold">{selected.action}</div>
-              <div className="mt-1 text-sm text-muted-foreground">
+              <div className="text-sm text-white/50">Log details</div>
+              <div className="mt-1 text-lg font-semibold text-white">{selected.action}</div>
+              <div className="mt-1 text-sm text-white/60">
                 {formatDate(selected.ts)} • {selected.actor.name}
               </div>
 
@@ -267,7 +282,7 @@ export default function LogsTable({ initialLogs }: { initialLogs: AdminLog[] }) 
                     "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium",
                     "transition-opacity",
                     reopened
-                      ? "opacity-100 bg-slate-50 text-slate-700 border-slate-200"
+                      ? "opacity-100 bg-white/10 text-white/70 border-white/20"
                       : "opacity-0 pointer-events-none",
                   ].join(" ")}
                 >
@@ -283,34 +298,34 @@ export default function LogsTable({ initialLogs }: { initialLogs: AdminLog[] }) 
                 clear();
                 setReopened(false);
               }}
-              className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
+              className="rounded-xl border border-white/20 bg-white/5 p-2 text-white/70 hover:bg-white/10 hover:text-white transition-all"
             >
-              Close
+              <XMarkIcon className="w-5 h-5" />
             </button>
           </div>
 
           <div className="mt-4 grid gap-3 md:grid-cols-2">
-            <div className="rounded-xl border bg-slate-50 p-3">
-              <div className="text-xs text-zinc-600">Level</div>
+            <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+              <div className="text-xs text-white/50">Level</div>
               <div className="mt-1">
                 <span className={levelPill(selected.level)}>{selected.level.toUpperCase()}</span>
               </div>
             </div>
 
-            <div className="rounded-xl border bg-slate-50 p-3">
-              <div className="text-xs text-zinc-600">Log ID</div>
-              <div className="mt-1 font-mono text-sm">{selected.id}</div>
+            <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+              <div className="text-xs text-white/50">Log ID</div>
+              <div className="mt-1 font-mono text-sm text-white">{selected.id}</div>
             </div>
 
-            <div className="rounded-xl border bg-slate-50 p-3 md:col-span-2">
-              <div className="text-xs text-zinc-600">Detail</div>
-              <div className="mt-1 text-sm">{selected.detail}</div>
+            <div className="rounded-xl border border-white/10 bg-white/5 p-3 md:col-span-2">
+              <div className="text-xs text-white/50">Detail</div>
+              <div className="mt-1 text-sm text-white">{selected.detail}</div>
             </div>
 
             {selected.meta ? (
-              <div className="rounded-xl border bg-slate-50 p-3 md:col-span-2">
-                <div className="text-xs text-zinc-600">Meta</div>
-                <pre className="mt-2 overflow-auto rounded-lg border bg-white p-3 text-xs">
+              <div className="rounded-xl border border-white/10 bg-white/5 p-3 md:col-span-2">
+                <div className="text-xs text-white/50">Meta</div>
+                <pre className="mt-2 overflow-auto rounded-xl border border-white/10 bg-black/30 p-3 text-xs text-white/80">
                   {JSON.stringify(selected.meta, null, 2)}
                 </pre>
               </div>
@@ -319,11 +334,10 @@ export default function LogsTable({ initialLogs }: { initialLogs: AdminLog[] }) 
         </div>
       ) : null}
 
-      <div className="flex items-center justify-between border-t p-4 text-xs text-zinc-600">
+      <div className="flex items-center justify-between border-t border-white/10 p-4 text-xs text-white/40">
         <span>{filtered.length} result(s)</span>
         <span>Mocked (Week 1)</span>
       </div>
     </div>
   );
 }
-

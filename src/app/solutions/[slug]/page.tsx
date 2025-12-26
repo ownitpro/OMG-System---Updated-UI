@@ -66,8 +66,8 @@ export default async function SolutionPage({ params }: SolutionsPageProps) {
     return notFound();
   }
 
-  const featuredApps = solution.featuredApps
-    ? appsConfig.filter((app) => solution.featuredApps!.includes(app.id))
+  const featuredApps = solution.apps
+    ? appsConfig.filter((app) => solution.apps!.some(rel => rel.appId === app.id))
     : [];
 
   return (

@@ -15,6 +15,28 @@ import {
   ArrowDownTrayIcon
 } from "@heroicons/react/24/outline";
 
+interface TicketComment {
+  id: string;
+  content: string;
+  createdAt: Date;
+  user: {
+    name: string | null;
+    email: string;
+  };
+}
+
+interface TicketAttachment {
+  id: string;
+  name: string;
+  url: string | null;
+  size: number;
+  mimeType: string;
+  createdAt: Date;
+  user?: {
+    name: string | null;
+  };
+}
+
 interface Ticket {
   id: string;
   subject: string;
@@ -31,26 +53,8 @@ interface Ticket {
     name: string | null;
     email: string;
   };
-  comments: Array<{
-    id: string;
-    content: string;
-    createdAt: Date;
-    user: {
-      name: string | null;
-      email: string;
-    };
-  }>;
-  attachments: Array<{
-    id: string;
-    name: string;
-    url: string;
-    size: number;
-    mimeType: string;
-    createdAt: Date;
-    user: {
-      name: string | null;
-    };
-  }>;
+  comments?: TicketComment[];
+  attachments?: TicketAttachment[];
 }
 
 interface PortalTicketDetailTabsProps {
@@ -60,6 +64,10 @@ interface PortalTicketDetailTabsProps {
 export function PortalTicketDetailTabs({ ticket }: PortalTicketDetailTabsProps) {
   const [activeTab, setActiveTab] = useState("conversation");
   const [newComment, setNewComment] = useState("");
+
+  // Default empty arrays for optional fields
+  const comments = ticket.comments ?? [];
+  const attachments = ticket.attachments ?? [];
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -218,14 +226,14 @@ export function PortalTicketDetailTabs({ ticket }: PortalTicketDetailTabsProps) 
                 >
                   <Icon className="h-5 w-5 mr-2" />
                   {tab.name}
-                  {tab.id === "conversation" && ticket.comments.length > 0 && (
+                  {tab.id === "conversation" && comments.length > 0 && (
                     <span className="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">
-                      {ticket.comments.length}
+                      {comments.length}
                     </span>
                   )}
-                  {tab.id === "attachments" && ticket.attachments.length > 0 && (
+                  {tab.id === "attachments" && attachments.length > 0 && (
                     <span className="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">
-                      {ticket.attachments.length}
+                      {attachments.length}
                     </span>
                   )}
                 </button>
@@ -244,7 +252,7 @@ export function PortalTicketDetailTabs({ ticket }: PortalTicketDetailTabsProps) 
 
               {/* Comments List */}
               <div className="space-y-4">
-                {ticket.comments.map((comment) => (
+                {comments.map((comment) => (
                   <div key={comment.id} className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center">
@@ -260,7 +268,7 @@ export function PortalTicketDetailTabs({ ticket }: PortalTicketDetailTabsProps) 
                     <p className="text-sm text-gray-700 whitespace-pre-wrap">{comment.content}</p>
                   </div>
                 ))}
-                {ticket.comments.length === 0 && (
+                {comments.length === 0 && (
                   <p className="text-sm text-gray-500 text-center py-8">No comments yet</p>
                 )}
               </div>
@@ -300,7 +308,7 @@ export function PortalTicketDetailTabs({ ticket }: PortalTicketDetailTabsProps) 
 
               {/* Attachments List */}
               <div className="space-y-3">
-                {ticket.attachments.map((attachment) => (
+                {attachments.map((attachment) => (
                   <div key={attachment.id} className="bg-gray-50 p-4 rounded-lg">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
@@ -314,23 +322,25 @@ export function PortalTicketDetailTabs({ ticket }: PortalTicketDetailTabsProps) 
                       </div>
                       <div className="flex items-center space-x-2">
                         <span className="text-sm text-gray-500">
-                          {attachment.user.name || "Unknown"}
+                          {attachment.user?.name || "Unknown"}
                         </span>
                         <span className="text-sm text-gray-500">
                           {new Date(attachment.createdAt).toLocaleDateString()}
                         </span>
-                        <a
-                          href={attachment.url}
-                          download
-                          className="text-blue-600 hover:text-blue-900 text-sm font-medium"
-                        >
-                          <ArrowDownTrayIcon className="h-4 w-4" />
-                        </a>
+                        {attachment.url && (
+                          <a
+                            href={attachment.url}
+                            download
+                            className="text-blue-600 hover:text-blue-900 text-sm font-medium"
+                          >
+                            <ArrowDownTrayIcon className="h-4 w-4" />
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>
                 ))}
-                {ticket.attachments.length === 0 && (
+                {attachments.length === 0 && (
                   <p className="text-sm text-gray-500 text-center py-8">No attachments yet</p>
                 )}
               </div>

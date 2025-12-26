@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { readAdminSettings, adminDefaults, type AdminSettings } from "@/lib/admin/adminSettings";
+import { ArrowPathIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 const KEY = "omg_admin_settings";
 
@@ -26,71 +27,81 @@ export default function SettingsPanel() {
   }
 
   return (
-    <div className="rounded-xl border bg-white p-4">
-      <div className="flex items-center justify-between gap-3">
-        <h2 className="text-sm font-semibold">Admin preferences</h2>
-        {msg ? <span className="text-xs text-zinc-600">{msg}</span> : null}
+    <div
+      className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6"
+      style={{ boxShadow: "0 0 20px rgba(245, 158, 11, 0.1)" }}
+    >
+      <div className="flex items-center justify-between gap-3 mb-6">
+        <h2 className="text-lg font-semibold text-white">Admin Preferences</h2>
+        {msg ? <span className="text-xs text-[#47BD79]">{msg}</span> : null}
       </div>
 
-      <div className="mt-4 space-y-4">
-        <div className="flex items-center justify-between gap-4 rounded-lg border p-3">
+      <div className="space-y-4">
+        <div className="flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
           <div>
-            <div className="text-sm font-medium">Show Dev Tools pill</div>
-            <div className="text-xs text-zinc-600">
-              Toggles the ⚙ Dev Tools shortcut in the portal top bar (dev only).
+            <div className="text-sm font-medium text-white">Show Dev Tools pill</div>
+            <div className="text-xs text-white/50">
+              Toggles the Dev Tools shortcut in the portal top bar (dev only).
             </div>
           </div>
-          <input
-            type="checkbox"
-            checked={settings.showDevToolsPill}
-            onChange={(e) => save({ ...settings, showDevToolsPill: e.target.checked })}
-            className="h-5 w-5"
-          />
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={settings.showDevToolsPill}
+              onChange={(e) => save({ ...settings, showDevToolsPill: e.target.checked })}
+              className="sr-only peer"
+            />
+            <div className="w-11 h-6 bg-white/10 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#47BD79]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#47BD79]"></div>
+          </label>
         </div>
 
-        <div className="flex items-center justify-between gap-4 rounded-lg border p-3">
+        <div className="flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
           <div>
-            <div className="text-sm font-medium">Compact tables</div>
-            <div className="text-xs text-zinc-600">
+            <div className="text-sm font-medium text-white">Compact tables</div>
+            <div className="text-xs text-white/50">
               Makes tables tighter for power users.
             </div>
           </div>
-          <input
-            type="checkbox"
-            checked={settings.compactTables}
-            onChange={(e) => save({ ...settings, compactTables: e.target.checked })}
-            className="h-5 w-5"
-          />
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={settings.compactTables}
+              onChange={(e) => save({ ...settings, compactTables: e.target.checked })}
+              className="sr-only peer"
+            />
+            <div className="w-11 h-6 bg-white/10 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#47BD79]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#47BD79]"></div>
+          </label>
         </div>
 
-        <div className="flex items-center justify-between gap-4 rounded-lg border p-3">
+        <div className="flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
           <div>
-            <div className="text-sm font-medium">Default currency</div>
-            <div className="text-xs text-zinc-600">
+            <div className="text-sm font-medium text-white">Default currency</div>
+            <div className="text-xs text-white/50">
               Used for Week 1 mock displays.
             </div>
           </div>
           <select
             value={settings.defaultCurrency}
             onChange={(e) => save({ ...settings, defaultCurrency: e.target.value as any })}
-            className="rounded-lg border px-3 py-2 text-sm"
+            className="rounded-xl border border-white/20 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-amber-500/50"
           >
-            <option value="USD">USD</option>
-            <option value="CAD">CAD</option>
+            <option value="USD" className="bg-zinc-900">USD</option>
+            <option value="CAD" className="bg-zinc-900">CAD</option>
           </select>
         </div>
 
-        <div className="rounded-lg border bg-slate-50 p-3">
-          <div className="text-xs text-zinc-600">Storage key</div>
-          <div className="mt-1 font-mono text-sm">{KEY}</div>
+        <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+          <div className="text-xs text-white/50">Storage key</div>
+          <div className="mt-1 font-mono text-sm text-white">{KEY}</div>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-3 pt-2">
           <button
             type="button"
             onClick={() => save(adminDefaults)}
-            className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
+            className="flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-4 py-2.5 text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all"
           >
+            <ArrowPathIcon className="w-4 h-4" />
             Reset to defaults
           </button>
           <button
@@ -102,8 +113,9 @@ export default function SettingsPanel() {
               setMsg("Reset");
               window.setTimeout(() => setMsg(""), 900);
             }}
-            className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
+            className="flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm font-medium text-red-400 hover:bg-red-500/20 transition-all"
           >
+            <TrashIcon className="w-4 h-4" />
             Clear saved settings
           </button>
         </div>
@@ -111,4 +123,3 @@ export default function SettingsPanel() {
     </div>
   );
 }
-

@@ -6,6 +6,7 @@ import { useTableDensity } from "@/lib/admin/useTableDensity";
 import { useTableScrollRestore } from "@/lib/admin/useTableScrollRestore";
 import { useTableState } from "@/lib/admin/useTableState";
 import MiniLineChart from "./MiniLineChart";
+import { MagnifyingGlassIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 
 type Row = {
   code: string;
@@ -112,10 +113,13 @@ function buildDailySeries(events: CouponEvent[], days = 14) {
 
 function StatCard({ title, value, sub }: { title: string; value: string; sub?: string }) {
   return (
-    <div className="rounded-2xl border bg-white p-4 shadow-sm">
-      <div className="text-xs uppercase tracking-wide text-slate-500">{title}</div>
-      <div className="mt-2 text-2xl font-semibold">{value}</div>
-      {sub ? <div className="mt-1 text-xs text-muted-foreground">{sub}</div> : null}
+    <div
+      className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-4"
+      style={{ boxShadow: "0 0 20px rgba(71, 189, 121, 0.05)" }}
+    >
+      <div className="text-xs uppercase tracking-wide text-white/50">{title}</div>
+      <div className="mt-2 text-2xl font-semibold text-white">{value}</div>
+      {sub ? <div className="mt-1 text-xs text-white/60">{sub}</div> : null}
     </div>
   );
 }
@@ -222,24 +226,30 @@ export default function CouponsAnalyticsPanel() {
       />
 
       {/* Controls */}
-      <div className="rounded-xl border bg-white p-4">
+      <div
+        className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-4"
+        style={{ boxShadow: "0 0 20px rgba(71, 189, 121, 0.1)" }}
+      >
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <input
-            value={ui.query}
-            onChange={(e) => patch({ query: e.target.value })}
-            placeholder="Search coupon code…"
-            className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
-          />
+          <div className="relative flex-1">
+            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+            <input
+              value={ui.query}
+              onChange={(e) => patch({ query: e.target.value })}
+              placeholder="Search coupon code…"
+              className="w-full rounded-xl border border-white/20 bg-white/5 pl-10 pr-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#47BD79]/50 focus:ring-2 focus:ring-[#47BD79]/20 transition-all"
+            />
+          </div>
 
           <div className="flex flex-wrap items-center gap-2">
             <select
               value={ui.product}
               onChange={(e) => patch({ product: e.target.value })}
-              className="rounded-lg border px-3 py-2 text-sm"
+              className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[#47BD79]/50"
               title="Filter by product"
             >
               {productOptions.map((p) => (
-                <option key={p} value={p}>
+                <option key={p} value={p} className="bg-zinc-900">
                   {p === "all" ? "All products" : p}
                 </option>
               ))}
@@ -248,16 +258,16 @@ export default function CouponsAnalyticsPanel() {
             <select
               value={ui.sort}
               onChange={(e) => patch({ sort: e.target.value as any })}
-              className="rounded-lg border px-3 py-2 text-sm"
+              className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[#47BD79]/50"
               title="Sort"
             >
-              <option value="successes">Top by successes</option>
-              <option value="applies">Top by applies</option>
-              <option value="savings">Top by savings</option>
+              <option value="successes" className="bg-zinc-900">Top by successes</option>
+              <option value="applies" className="bg-zinc-900">Top by applies</option>
+              <option value="savings" className="bg-zinc-900">Top by savings</option>
             </select>
 
             <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">Range</span>
+              <span className="text-sm text-white/50">Range</span>
               {[7, 14, 30].map((d) => {
                 const active = ui.rangeDays === d;
                 return (
@@ -266,8 +276,10 @@ export default function CouponsAnalyticsPanel() {
                     type="button"
                     onClick={() => patch({ rangeDays: d as 7 | 14 | 30 })}
                     className={[
-                      "rounded-lg border px-3 py-2 text-sm",
-                      active ? "bg-black text-white border-black" : "hover:bg-white",
+                      "rounded-xl border px-3 py-2 text-sm font-medium transition-all",
+                      active
+                        ? "bg-[#47BD79] text-white border-[#47BD79]"
+                        : "border-white/20 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white",
                     ].join(" ")}
                   >
                     {d}d
@@ -282,25 +294,26 @@ export default function CouponsAnalyticsPanel() {
                 reset();
                 resetScroll();
               }}
-              className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
+              className="flex items-center gap-1 rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all"
             >
-              Reset view
+              <ArrowPathIcon className="w-4 h-4" />
+              Reset
             </button>
 
             <button
               type="button"
               onClick={toggle}
-              className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
+              className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all"
               title="Toggle density"
             >
-              Density: {compact ? "Compact" : "Comfortable"}
+              {compact ? "Compact" : "Comfortable"}
             </button>
 
             {isOverride ? (
               <button
                 type="button"
                 onClick={clearOverride}
-                className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
+                className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all"
                 title="Use global density"
               >
                 Use global
@@ -311,47 +324,48 @@ export default function CouponsAnalyticsPanel() {
       </div>
 
       {/* Table */}
-      <div className={`rounded-xl border bg-white ${compact ? "table-compact" : ""}`}>
-        <div className="overflow-x-auto">
-          <div ref={scrollRef} className="max-h-[520px] overflow-auto">
-            <table className="w-full text-sm">
-              <thead className="sticky top-0 z-10 border-t bg-slate-50 text-left">
-                <tr className="text-xs uppercase tracking-wide text-slate-500">
-                  <th className="px-4 py-3">Code</th>
-                  <th className="px-4 py-3">Applies</th>
-                  <th className="px-4 py-3">Successes</th>
-                  <th className="px-4 py-3">Savings</th>
-                  <th className="px-4 py-3">Top product</th>
-                </tr>
-              </thead>
+      <div
+        className={`rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl overflow-hidden ${compact ? "table-compact" : ""}`}
+        style={{ boxShadow: "0 0 20px rgba(71, 189, 121, 0.1)" }}
+      >
+        <div ref={scrollRef} className="max-h-[520px] overflow-auto">
+          <table className="w-full text-sm">
+            <thead className="sticky top-0 z-10 bg-white/5 backdrop-blur-sm">
+              <tr className="text-xs uppercase tracking-wide text-white/50 border-b border-white/10">
+                <th className="px-4 py-3 text-left">Code</th>
+                <th className="px-4 py-3 text-left">Applies</th>
+                <th className="px-4 py-3 text-left">Successes</th>
+                <th className="px-4 py-3 text-left">Savings</th>
+                <th className="px-4 py-3 text-left">Top product</th>
+              </tr>
+            </thead>
 
-              <tbody>
-                {filtered.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="px-4 py-12 text-center text-muted-foreground">
-                      No coupon analytics yet. Try running a checkout flow with a coupon.
-                    </td>
-                  </tr>
-                ) : (
-                  filtered.map((r) => {
-                    const topProduct = Object.entries(r.products).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "—";
-                    return (
-                      <tr key={r.code} className="border-t transition-colors hover:bg-slate-50/80">
-                        <td className="px-4 py-3 font-medium">{r.code}</td>
-                        <td className="px-4 py-3">{r.applies}</td>
-                        <td className="px-4 py-3">{r.successes}</td>
-                        <td className="px-4 py-3 text-muted-foreground">{money(r.estimatedSavingsCents, currency)}</td>
-                        <td className="px-4 py-3 text-muted-foreground">{topProduct}</td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
+            <tbody className="divide-y divide-white/5">
+              {filtered.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="px-4 py-12 text-center text-white/50">
+                    No coupon analytics yet. Try running a checkout flow with a coupon.
+                  </td>
+                </tr>
+              ) : (
+                filtered.map((r) => {
+                  const topProduct = Object.entries(r.products).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "—";
+                  return (
+                    <tr key={r.code} className="transition-colors hover:bg-white/5">
+                      <td className="px-4 py-3 font-medium text-white">{r.code}</td>
+                      <td className="px-4 py-3 text-white">{r.applies}</td>
+                      <td className="px-4 py-3 text-white">{r.successes}</td>
+                      <td className="px-4 py-3 text-white/60">{money(r.estimatedSavingsCents, currency)}</td>
+                      <td className="px-4 py-3 text-white/60">{topProduct}</td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
         </div>
 
-        <div className="flex items-center justify-between border-t p-4 text-xs text-muted-foreground">
+        <div className="flex items-center justify-between border-t border-white/10 p-4 text-xs text-white/40">
           <span>Stored in localStorage: <span className="font-mono">omg_coupon_analytics</span></span>
           <span>{filtered.length} row(s)</span>
         </div>

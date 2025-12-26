@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, ChangeEvent, FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
 import { 
   CheckCircleIcon,
@@ -30,18 +30,19 @@ function CustomAppRequestPageContent() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [selectedComponents, setSelectedComponents] = useState([]);
+  const [selectedComponents, setSelectedComponents] = useState<string[]>([]);
 
   useEffect(() => {
     const components = searchParams.get('components');
-    const fromScratch = searchParams.get('fromScratch');
-    
+    // fromScratch param is available if needed for future use
+    // const fromScratch = searchParams.get('fromScratch');
+
     if (components) {
       setSelectedComponents(components.split(','));
     }
   }, [searchParams]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -49,7 +50,7 @@ function CustomAppRequestPageContent() {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -63,7 +64,7 @@ function CustomAppRequestPageContent() {
     setIsSubmitted(true);
   };
 
-  const componentDescriptions = {
+  const componentDescriptions: Record<string, string> = {
     'dashboard': 'Dashboard',
     'forms': 'Data Entry Forms',
     'reports': 'Reporting System',
