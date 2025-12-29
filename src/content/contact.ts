@@ -84,11 +84,9 @@ export const contact: ContactContent = {
         "Real Estate",
         "Contractors",
         "Accounting",
-        "Cleaning",
-        "Healthcare",
         "Other",
       ],
-      budgets: ["<$1,000/mo", "$1,000–$2,500/mo", "$2,500–$5,000/mo", "$5,000+/mo", "Not sure"],
+      budgets: ["<$1,000/mo", "$1,000–$2,500/mo", "$2,500–$5,000/mo", "$5,000+/mo", "Flexible"],
       timelines: ["ASAP (this month)", "Next 1–3 months", "This quarter", "Exploring"],
     },
     caslNote:

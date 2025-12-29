@@ -3,11 +3,18 @@
 import Link from "next/link";
 import * as React from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { Suspense } from "react";
 import { applyCouponStack, type AppliedCoupon } from "@/lib/checkout/rulesEngine";
 import { trackCouponEvent } from "@/lib/analytics/couponAnalytics";
 import { readCoupons } from "@/lib/admin/couponStore";
 import { PRODUCT_PRICING } from "@/config/pricing";
+import {
+  SparklesIcon,
+  ShieldCheckIcon,
+  CheckCircleIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/solid";
 
 // Map product IDs to product names for pricing lookup
 const PRODUCT_NAME_MAP: Record<string, keyof typeof PRODUCT_PRICING> = {
@@ -18,10 +25,19 @@ const PRODUCT_NAME_MAP: Record<string, keyof typeof PRODUCT_PRICING> = {
   "omg-ai-mastery": "OMG-AI-Mastery",
 };
 
+// Product accent colors
+const PRODUCT_COLORS: Record<string, string> = {
+  "securevault-docs": "#A855F7",
+  "omg-crm": "#47BD79",
+  "omg-leads": "#47BD79",
+  "omg-iq": "#F59E0B",
+  "omg-ai-mastery": "#EC4899",
+};
+
 function parsePrice(priceStr: string): number {
-  // Extract number from "$29/month" format
-  const match = priceStr.match(/\$(\d+)/);
-  return match ? parseInt(match[1], 10) * 100 : 0; // Convert to cents
+  // Extract number from "$29.97/month" format
+  const match = priceStr.match(/\$([\d.]+)/);
+  return match ? Math.round(parseFloat(match[1]) * 100) : 0; // Convert to cents
 }
 
 function CheckoutStartContent() {
@@ -29,10 +45,12 @@ function CheckoutStartContent() {
   const searchParams = useSearchParams();
 
   const productId = searchParams.get("product") || "unknown";
+  const hasTrial = searchParams.get("trial") === "true";
   const productName = PRODUCT_NAME_MAP[productId] || productId;
   const priceStr = PRODUCT_PRICING[productName as keyof typeof PRODUCT_PRICING]?.price || "$0/month";
   const priceCents = parsePrice(priceStr);
   const currency = "USD";
+  const accentColor = PRODUCT_COLORS[productId] || "#47BD79";
 
   const urlCoupon = searchParams.get("coupon");
   const [couponInput, setCouponInput] = React.useState("");
@@ -151,143 +169,204 @@ function CheckoutStartContent() {
   }
 
   return (
-    <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-      <div className="text-xl font-semibold">{productName}</div>
-      <div className="mt-2 text-sm text-zinc-600">
-        Product: <span className="font-semibold">{productId}</span>
+    <div className="rounded-2xl border border-white/10 bg-[#1e293b] p-6 md:p-8">
+      {/* Product Header */}
+      <div className="flex items-start gap-4 mb-6">
+        <div
+          className="w-12 h-12 rounded-xl flex items-center justify-center"
+          style={{ backgroundColor: `${accentColor}20` }}
+        >
+          <SparklesIcon className="w-6 h-6" style={{ color: accentColor }} />
+        </div>
+        <div>
+          <h2 className="text-xl font-semibold text-white">{productName}</h2>
+          <p className="text-sm text-white/60">Product: {productId}</p>
+        </div>
       </div>
 
-      {/* Price Display + "saved $X" pill */}
-      <div className="mt-4 space-y-1">
+      {/* Price Display */}
+      <div className="mb-6 p-4 rounded-xl bg-white/5 border border-white/10">
+        <div className="text-sm text-white/60 mb-1">
+          {hasTrial ? "After 6-day free trial" : "Monthly subscription"}
+        </div>
         {savedCents > 0 ? (
-          <>
-            <div className="text-sm text-muted-foreground line-through">
-              {(priceCents / 100).toFixed(2)}
-            </div>
-            <div className="text-2xl font-semibold">
-              {(finalCents / 100).toFixed(2)}
-            </div>
-
-            <div className="mt-2 inline-flex items-center rounded-full border bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
-              This coupon saved you{" "}
-              {new Intl.NumberFormat(undefined, { style: "currency", currency }).format(savedCents / 100)}
-            </div>
-          </>
+          <div className="flex items-baseline gap-3">
+            <span className="text-3xl font-bold text-white">
+              ${(finalCents / 100).toFixed(0)}
+            </span>
+            <span className="text-lg text-white/40 line-through">
+              ${(priceCents / 100).toFixed(0)}
+            </span>
+            <span
+              className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium"
+              style={{ backgroundColor: `${accentColor}20`, color: accentColor }}
+            >
+              Save ${(savedCents / 100).toFixed(0)}
+            </span>
+          </div>
         ) : (
-          <div className="text-2xl font-semibold">
-            {(priceCents / 100).toFixed(2)}
+          <div className="text-3xl font-bold text-white">
+            ${(priceCents / 100).toFixed(0)}<span className="text-lg font-normal text-white/60">/month</span>
           </div>
         )}
       </div>
 
-      {/* Coupon UI (input + apply + stack chips) */}
-      <div className="mt-4 rounded-xl border bg-slate-50 p-3">
+      {/* Coupon UI */}
+      <div className="mb-6 p-4 rounded-xl bg-white/5 border border-white/10">
+        <div className="text-sm font-medium text-white mb-3">Have a coupon?</div>
         <div className="flex gap-2">
           <input
             value={couponInput}
             onChange={(e) => setCouponInput(e.target.value)}
-            placeholder="Coupons (comma separated) e.g. OMG10,VIP5"
-            className="flex-1 rounded-lg border px-3 py-2 text-sm"
+            placeholder="Enter coupon code"
+            className="flex-1 rounded-xl border border-white/20 bg-[#0f172a] px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-white/40 transition-all"
           />
           <button
             type="button"
             onClick={() => applyStack(couponInput.split(","), "manual")}
-            className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
+            className="rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm font-medium text-white hover:bg-white/10 transition-all"
           >
             Apply
           </button>
-
-          {stack.length ? (
+          {stack.length > 0 && (
             <button
               type="button"
               onClick={() => {
                 setCouponInput("");
                 applyStack([], "manual");
               }}
-              className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
+              className="rounded-xl border border-white/20 bg-white/5 p-3 text-white/60 hover:bg-white/10 hover:text-white transition-all"
               title="Remove coupons"
             >
-              Clear
+              <XMarkIcon className="w-5 h-5" />
             </button>
-          ) : null}
+          )}
         </div>
 
-        {couponMsg ? <div className="mt-2 text-xs text-muted-foreground">{couponMsg}</div> : null}
+        {couponMsg && (
+          <div className="mt-2 text-xs text-white/60">{couponMsg}</div>
+        )}
 
-        {applied.length ? (
+        {applied.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">
             {applied.map((a) => (
               <span
                 key={a.code}
-                className="inline-flex items-center rounded-full border bg-white px-2.5 py-1 text-xs font-medium"
-                title={`-${a.discountCents}¢`}
+                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium"
+                style={{ backgroundColor: `${accentColor}20`, color: accentColor }}
               >
+                <CheckCircleIcon className="w-3.5 h-3.5" />
                 {a.code} • {a.percentOff}% off
               </span>
             ))}
           </div>
-        ) : null}
+        )}
 
-        {rejected.length ? (
+        {rejected.length > 0 && (
           <div className="mt-3 space-y-1">
             {rejected.slice(0, 3).map((r) => (
-              <div key={r.code} className="text-xs text-amber-700">
+              <div key={r.code} className="text-xs text-amber-400">
                 {r.code}: {r.reason}
               </div>
             ))}
           </div>
-        ) : null}
+        )}
       </div>
 
-      <div className="mt-6 flex flex-wrap gap-2">
+      {/* Trial Info */}
+      {hasTrial && (
+        <div className="mb-6 p-4 rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
+          <div className="flex items-center gap-3 text-white">
+            <ShieldCheckIcon className="w-5 h-5" style={{ color: accentColor }} />
+            <div>
+              <div className="font-medium">6-day free trial included</div>
+              <div className="text-sm text-white/60">Cancel anytime during trial. No charges until trial ends.</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Action Buttons */}
+      <div className="flex flex-col sm:flex-row gap-3">
         <button
           onClick={proceedToCheckout}
-          className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-semibold text-white hover:bg-zinc-800"
+          className="flex-1 rounded-xl px-6 py-4 text-base font-semibold text-white transition-all shadow-lg hover:shadow-xl"
+          style={{
+            backgroundColor: accentColor,
+            boxShadow: `0 10px 25px -5px ${accentColor}40`
+          }}
         >
-          Complete Purchase
+          {hasTrial ? "Start Free Trial" : "Complete Purchase"}
         </button>
 
-        <button
-          onClick={() => router.push(`/checkout/cancel?product=${encodeURIComponent(productId)}`)}
-          className="rounded-xl border border-zinc-200 bg-white px-4 py-2 text-sm font-semibold hover:bg-zinc-50"
+        <Link
+          href={`/products/${productId}`}
+          className="rounded-xl border border-white/20 bg-white/5 px-6 py-4 text-base font-medium text-white/80 hover:bg-white/10 hover:text-white transition-all text-center"
         >
-          Cancel
-        </button>
+          Back to Product
+        </Link>
       </div>
 
-      <div className="mt-4 text-xs text-zinc-500">
-        Week 1 testing: mock checkout flow. Later: real Stripe Checkout + webhook unlock.
+      {/* Security Badge */}
+      <div className="mt-6 flex items-center justify-center gap-2 text-xs text-white/40">
+        <ShieldCheckIcon className="w-4 h-4" />
+        Secure checkout powered by Stripe
       </div>
     </div>
   );
 }
 
 export default function CheckoutStartPage() {
+  const { data: session } = useSession();
+  const userRole = (session?.user as any)?.role;
+  const isAdmin = userRole === "ADMIN" || userRole === "STAFF";
+  const backToPortalHref = isAdmin ? "/portal/admin/products" : "/portal/client";
+
   return (
-    <div className="min-h-screen bg-zinc-50 text-zinc-900">
-      <header className="border-b border-zinc-200 bg-white">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-5">
-          <div>
-            <div className="text-sm text-zinc-500">Checkout</div>
-            <div className="text-2xl font-semibold">Complete Purchase</div>
+    <div className="min-h-screen bg-[#0f172a]">
+      {/* Minimal Header */}
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0f172a]/80 backdrop-blur-xl">
+        <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#47BD79] to-[#3da86a] flex items-center justify-center">
+                <SparklesIcon className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-lg font-semibold text-white">OMG Systems</span>
+            </Link>
+
+            {/* Back Link */}
+            <Link
+              href={backToPortalHref}
+              className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white transition-all"
+            >
+              Back to Portal
+            </Link>
           </div>
-          <Link
-            href="/products"
-            className="rounded-xl border border-zinc-200 bg-white px-4 py-2 text-sm font-semibold hover:bg-zinc-50"
-          >
-            Back to Products
-          </Link>
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl px-4 py-10">
+      <main className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-12">
+        {/* Page Title */}
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-bold text-white mb-2">Complete Your Purchase</h1>
+          <p className="text-white/60">Review your order and start your subscription</p>
+        </div>
+
         <Suspense fallback={
-          <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+          <div className="rounded-2xl border border-white/10 bg-[#1e293b] p-6 md:p-8">
             <div className="animate-pulse space-y-4">
-              <div className="h-6 w-48 bg-zinc-200 rounded"></div>
-              <div className="h-4 w-32 bg-zinc-200 rounded"></div>
-              <div className="h-8 w-24 bg-zinc-200 rounded"></div>
-              <div className="h-20 w-full bg-zinc-100 rounded-xl"></div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-white/10 rounded-xl"></div>
+                <div className="space-y-2">
+                  <div className="h-5 w-32 bg-white/10 rounded"></div>
+                  <div className="h-4 w-24 bg-white/10 rounded"></div>
+                </div>
+              </div>
+              <div className="h-20 w-full bg-white/5 rounded-xl"></div>
+              <div className="h-16 w-full bg-white/5 rounded-xl"></div>
+              <div className="h-12 w-full bg-white/10 rounded-xl"></div>
             </div>
           </div>
         }>

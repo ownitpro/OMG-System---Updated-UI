@@ -47,7 +47,7 @@ export default async function PortalTicketDetailPage({ params }: PageProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-[#0f172a] p-6 space-y-6">
       <PortalTicketDetailTabs ticket={ticket} />
     </div>
   );

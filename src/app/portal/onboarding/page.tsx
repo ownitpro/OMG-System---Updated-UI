@@ -52,10 +52,10 @@ export default async function PortalOnboardingPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-[#0f172a] p-6 space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Onboarding</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-white">Onboarding</h1>
+        <p className="mt-1 text-sm text-white/60">
           Track your onboarding progress and complete required tasks
         </p>
       </div>

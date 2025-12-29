@@ -97,14 +97,14 @@ export function CommandSearch({ items }: { items: CommandItem[] }) {
     <div className="fixed inset-0 z-50 md:items-start md:pt-24">
       {/* overlay */}
       <button
-        className="absolute inset-0 bg-black/30"
+        className="absolute inset-0 bg-[#0f172a]/80 backdrop-blur-sm"
         onClick={() => setOpen(false)}
         aria-label="Close command search"
       />
 
       {/* modal */}
-      <div className="relative mx-auto mt-20 w-[92%] max-w-xl rounded-2xl border border-zinc-200 bg-white shadow-xl">
-        <div className="border-b border-zinc-200 p-3">
+      <div className="relative mx-auto mt-20 w-[92%] max-w-xl rounded-2xl border border-white/10 bg-[#1e293b] shadow-2xl">
+        <div className="border-b border-white/10 p-3">
           <input
             autoFocus
             value={q}
@@ -113,16 +113,16 @@ export function CommandSearch({ items }: { items: CommandItem[] }) {
               setActiveIndex(0);
             }}
             placeholder="Type to search… (CRM, Docs, Leads, Billing)"
-            className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-zinc-200"
+            className="w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#47BD79]/50 focus:ring-2 focus:ring-[#47BD79]/20"
           />
-          <div className="mt-2 text-xs text-zinc-500">
+          <div className="mt-2 text-xs text-white/50">
             Use ↑ ↓ to move • Enter to open • Esc to close
           </div>
         </div>
 
         <div className="max-h-[420px] overflow-auto p-2">
           {filtered.length === 0 ? (
-            <div className="rounded-xl px-3 py-10 text-center text-sm text-zinc-600">
+            <div className="rounded-xl px-3 py-10 text-center text-sm text-white/50">
               No matches. Try a different word.
             </div>
           ) : (
@@ -131,18 +131,22 @@ export function CommandSearch({ items }: { items: CommandItem[] }) {
                 key={item.label + item.href}
                 onMouseEnter={() => setActiveIndex(idx)}
                 onClick={() => go(item)}
-                className={`w-full rounded-xl px-3 py-3 text-left ${
-                  idx === activeIndex ? "bg-zinc-100" : "hover:bg-zinc-50"
+                className={`w-full rounded-xl px-3 py-3 text-left transition-colors ${
+                  idx === activeIndex
+                    ? "bg-[#47BD79]/20 border border-[#47BD79]/30"
+                    : "hover:bg-white/5"
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <div className="font-semibold">{item.label}</div>
-                  <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600">
+                  <div className={`font-semibold ${idx === activeIndex ? "text-[#47BD79]" : "text-white"}`}>
+                    {item.label}
+                  </div>
+                  <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs text-white/60">
                     {item.kind === "internal" ? "Portal" : "App"}
                   </span>
                 </div>
                 {item.description ? (
-                  <div className="mt-1 text-sm text-zinc-600">{item.description}</div>
+                  <div className="mt-1 text-sm text-white/60">{item.description}</div>
                 ) : null}
               </button>
             ))

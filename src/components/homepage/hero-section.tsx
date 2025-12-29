@@ -117,7 +117,7 @@ export function HeroSection({
             {secondaryCTA && (
               <Link
                 href={secondaryCTA.href}
-                className="inline-flex items-center justify-center px-8 py-3.5 bg-white/10 backdrop-blur-glass-medium text-white font-semibold rounded-xl hover:bg-white/20 transition-all duration-600 ease-premium-out border-2 border-white/30 hover:border-[#47BD79]/50 shadow-lg hover:shadow-[0_0_25px_rgba(71,189,121,0.3)] hover:scale-105 active:scale-[0.98] text-base"
+                className="inline-flex items-center justify-center px-8 py-3.5 bg-black/80 backdrop-blur-glass-medium text-white font-semibold rounded-xl hover:bg-black/90 transition-all duration-600 ease-premium-out border-2 border-white/40 hover:border-[#47BD79]/50 shadow-lg hover:shadow-[0_0_25px_rgba(71,189,121,0.3)] hover:scale-105 active:scale-[0.98] text-base"
               >
                 {showVideo && videoUrl ? (
                   <>
@@ -140,11 +140,11 @@ export function HeroSection({
             }`}
             style={{ transitionDelay: '500ms' }}
           >
-            <div className="flex items-center bg-black/60 backdrop-blur-glass-medium px-5 py-3 rounded-full border border-[#47BD79]/40 shadow-[0_0_15px_rgba(71,189,121,0.2)] hover:bg-black/70 hover:shadow-[0_0_25px_rgba(71,189,121,0.4)] hover:border-[#47BD79]/60 transition-all duration-600 ease-premium-out">
+            <div className="flex items-center bg-black/90 backdrop-blur-glass-medium px-5 py-3 rounded-full border border-[#47BD79]/50 shadow-[0_0_15px_rgba(71,189,121,0.2)] hover:bg-black hover:shadow-[0_0_25px_rgba(71,189,121,0.4)] hover:border-[#47BD79]/70 transition-all duration-600 ease-premium-out">
               <div className="w-2.5 h-2.5 bg-[#47BD79] rounded-full mr-2.5 animate-glow-pulse shadow-[0_0_10px_rgba(71,189,121,0.6)]"></div>
               <span className="font-semibold text-white">Trusted by 10,000+ businesses</span>
             </div>
-            <div className="flex items-center bg-black/60 backdrop-blur-glass-medium px-5 py-3 rounded-full border border-[#A855F7]/40 shadow-[0_0_15px_rgba(168,85,247,0.2)] hover:bg-black/70 hover:shadow-[0_0_25px_rgba(168,85,247,0.4)] hover:border-[#A855F7]/60 transition-all duration-600 ease-premium-out">
+            <div className="flex items-center bg-black/90 backdrop-blur-glass-medium px-5 py-3 rounded-full border border-[#A855F7]/50 shadow-[0_0_15px_rgba(168,85,247,0.2)] hover:bg-black hover:shadow-[0_0_25px_rgba(168,85,247,0.4)] hover:border-[#A855F7]/70 transition-all duration-600 ease-premium-out">
               <div className="w-2.5 h-2.5 bg-[#A855F7] rounded-full mr-2.5 animate-glow-pulse shadow-[0_0_10px_rgba(168,85,247,0.6)]" style={{ animationDelay: '0.5s' }}></div>
               <span className="font-semibold text-white">Canadian data residency</span>
             </div>

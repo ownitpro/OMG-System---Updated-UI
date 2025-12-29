@@ -228,7 +228,7 @@ export default function CouponsAnalyticsPanel() {
       {/* Controls */}
       <div
         className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-4"
-        style={{ boxShadow: "0 0 20px rgba(71, 189, 121, 0.1)" }}
+        style={{ boxShadow: "0 0 20px rgba(71, 189, 121, 0.03)" }}
       >
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div className="relative flex-1">
@@ -326,7 +326,7 @@ export default function CouponsAnalyticsPanel() {
       {/* Table */}
       <div
         className={`rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl overflow-hidden ${compact ? "table-compact" : ""}`}
-        style={{ boxShadow: "0 0 20px rgba(71, 189, 121, 0.1)" }}
+        style={{ boxShadow: "0 0 20px rgba(71, 189, 121, 0.03)" }}
       >
         <div ref={scrollRef} className="max-h-[520px] overflow-auto">
           <table className="w-full text-sm">

@@ -144,8 +144,11 @@ export const authConfig: NextAuthConfig = {
       return session;
     },
   },
-  pages: { signIn: "/login" },
-  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/login",
+    error: "/login"  // Redirect auth errors to login page
+  },
+  secret: process.env.AUTH_SECRET,
 };
 
 // Export authOptions as alias for getServerSession compatibility

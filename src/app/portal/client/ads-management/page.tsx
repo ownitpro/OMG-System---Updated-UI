@@ -2,6 +2,7 @@
 
 import { PortalShellV2 } from "@/components/portal/PortalShellV2";
 import { getClientNavV2 } from "@/config/portalNav";
+import { useEntitlements } from "@/hooks/useEntitlements";
 import Link from "next/link";
 import {
   MegaphoneIcon,
@@ -50,12 +51,14 @@ const SAMPLE_CAMPAIGNS = [
 
 export default function AdsManagementPage() {
   const nav = getClientNavV2();
+  const entitlements = useEntitlements();
 
   const totalSpend = SAMPLE_CAMPAIGNS.reduce((sum, c) => sum + parseFloat(c.spend.replace("$", "")), 0);
   const totalClicks = SAMPLE_CAMPAIGNS.reduce((sum, c) => sum + c.clicks, 0);
+  const lockedCount = Object.values(entitlements).filter((s) => s === "locked").length;
 
   return (
-    <PortalShellV2 role="client" title="Ads Management" nav={nav} upgradeHref="/products/plans" lockedCount={0}>
+    <PortalShellV2 role="client" title="Ads Management" nav={nav} upgradeHref="/products/plans" lockedCount={lockedCount} entitlements={entitlements}>
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">

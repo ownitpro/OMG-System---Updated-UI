@@ -27,6 +27,10 @@ import {
   SparklesIcon,
   RocketLaunchIcon,
   PresentationChartLineIcon,
+  UserCircleIcon,
+  QuestionMarkCircleIcon,
+  LockClosedIcon,
+  CreditCardIcon,
 } from "@heroicons/react/24/outline";
 
 export function getClientNav(): NavGroup[] {
@@ -84,20 +88,26 @@ export function getClientNavV2(): NavGroupV2[] {
     {
       title: "Apps",
       items: [
-        { label: "OMG Build", href: "/portal/client", icon: CubeIcon, comingSoon: true },
-        { label: "OMG-CRM", kind: "external" as const, externalUrl: APP_LINKS.omgCrm, icon: UserGroupIcon },
-        { label: "SecureVault Docs", kind: "external" as const, externalUrl: APP_LINKS.securevaultDocs, icon: ShieldCheckIcon },
-        { label: "OMG-Leads", kind: "external" as const, externalUrl: APP_LINKS.omgLeads, icon: RocketLaunchIcon },
-        { label: "OMG-IQ", kind: "external" as const, externalUrl: APP_LINKS.omgIq, icon: ChartBarIcon },
-        { label: "OMG AI Mastery", kind: "external" as const, externalUrl: APP_LINKS.omgAiMastery, icon: AcademicCapIcon },
-        { label: "TimeGuard AI", href: "/portal/client/timeguard-ai", icon: ClockIcon, comingSoon: true },
+        { label: "OMG Build", href: "/portal/client", icon: CubeIcon, comingSoon: true, productKey: "omg_build" },
+        { label: "OMG-CRM", href: "/products/omg-crm", icon: UserGroupIcon, productKey: "omg_crm", launchUrl: APP_LINKS.omgCrm },
+        { label: "SecureVault Docs", href: "/products/securevault-docs", icon: ShieldCheckIcon, productKey: "securevault_docs", launchUrl: APP_LINKS.securevaultDocs },
+        { label: "OMG-Leads", href: "/products/omg-leads", icon: RocketLaunchIcon, productKey: "omg_leads", launchUrl: APP_LINKS.omgLeads },
+        { label: "OMG-IQ", href: "/products/omg-iq", icon: ChartBarIcon, productKey: "omg_iq", launchUrl: APP_LINKS.omgIq },
+        { label: "OMG AI Mastery", href: "/products/omg-ai-mastery", icon: AcademicCapIcon, productKey: "omg_ai_mastery", launchUrl: APP_LINKS.omgAiMastery },
+        { label: "TimeGuard AI", href: "/portal/client/timeguard-ai", icon: ClockIcon, comingSoon: true, productKey: "timeguard_ai" },
       ],
     },
     {
-      title: "Work",
+      title: "Strategy Session",
+      items: [
+        { label: "Strategy Session", href: "/portal/client/strategy-session", icon: CalendarIcon, comingSoon: true },
+      ],
+    },
+    {
+      title: "Services",
       items: [
         { label: "Automations", href: "/portal/client/automations", icon: BoltIcon },
-        { label: "Strategy Session", href: "/portal/client/strategy-session", icon: CalendarIcon, comingSoon: true },
+        { label: "AI Solutions", href: "/portal/client/ai-solutions", icon: SparklesIcon },
         { label: "Custom Solutions", href: "/portal/client/custom-solutions", icon: PuzzlePieceIcon, comingSoon: true },
       ],
     },
@@ -116,6 +126,16 @@ export function getClientNavV2(): NavGroupV2[] {
         { label: "Property Management", href: "/portal/client/industry-focused/property-management", icon: KeyIcon, comingSoon: true },
         { label: "Contractors", href: "/portal/client/industry-focused/contractors", icon: WrenchScrewdriverIcon, comingSoon: true },
         { label: "Accounting", href: "/portal/client/industry-focused/accounting", icon: CalculatorIcon, comingSoon: true },
+      ],
+    },
+    {
+      title: "Account",
+      items: [
+        { label: "Profile", href: "/portal/client/profile", icon: UserCircleIcon },
+        { label: "Billing", href: "/portal/client/billing", icon: CreditCardIcon },
+        { label: "Settings", href: "/portal/client/settings", icon: CogIcon },
+        { label: "Security", href: "/portal/client/security", icon: LockClosedIcon },
+        { label: "Help & Support", href: "/portal/client/support", icon: QuestionMarkCircleIcon },
       ],
     },
   ];
@@ -183,7 +203,7 @@ export function getAdminNavV2(): NavGroupV2[] {
     {
       title: "Users",
       items: [
-        { label: "Clients", href: "/portal/admin/users", icon: UsersIcon },
+        { label: "Clients", href: "/portal/clients", icon: UsersIcon },
         { label: "Access Control", href: "/portal/admin/access", icon: KeyIcon },
       ],
     },

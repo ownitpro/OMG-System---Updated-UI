@@ -71,16 +71,16 @@ export default function MiniLineChart({
   const isCold = totalA > 0 && conversion < coldThreshold && !!focusCode;
 
   return (
-    <div className="rounded-2xl border bg-white p-4 shadow-sm">
+    <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-4">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <div className="text-sm font-semibold">{title}</div>
-          <div className="mt-1 text-xs text-muted-foreground">
+          <div className="text-sm font-semibold text-white">{title}</div>
+          <div className="mt-1 text-xs text-white/60">
             Total: Applies {totalA} • Successes {totalB}
             <span className="mx-2">•</span>
 
             <span className="inline-flex items-center">
-              <span className="text-muted-foreground">Conv {conversion}%</span>
+              <span className="text-white/60">Conv {conversion}%</span>
 
               <span className="ml-2 h-5">
                 {/* Hot pill */}
@@ -88,7 +88,7 @@ export default function MiniLineChart({
                   className={[
                     "inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-medium transition-opacity",
                     isHot
-                      ? "opacity-100 bg-emerald-50 text-emerald-700 border-emerald-200"
+                      ? "opacity-100 bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
                       : "opacity-0 pointer-events-none",
                   ].join(" ")}
                   title={`Hot when ≥ ${hotThreshold}%`}
@@ -102,7 +102,7 @@ export default function MiniLineChart({
                   className={[
                     "ml-2 inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-medium transition-opacity",
                     isCold
-                      ? "opacity-100 bg-slate-50 text-slate-600 border-slate-200 hover:bg-white"
+                      ? "opacity-100 bg-white/10 text-white/60 border-white/20 hover:bg-white/20"
                       : "opacity-0 pointer-events-none",
                   ].join(" ")}
                   title="Opportunity: tweak offer or placement"
@@ -117,61 +117,61 @@ export default function MiniLineChart({
           </div>
         </div>
 
-        <div className="text-xs text-muted-foreground">
-          Max: <span className="font-medium text-black">{maxVal}</span>
+        <div className="text-xs text-white/60">
+          Max: <span className="font-medium text-white">{maxVal}</span>
         </div>
       </div>
 
-      <div className="mt-3 overflow-x-auto">
+      <div className="mt-3 w-full">
         <svg
-          viewBox={`0 0 ${width} ${height}`}
-          className="h-[80px] w-full min-w-[520px]"
+          viewBox={`0 0 ${width} ${height - 15}`}
+          className="h-[100px] w-full text-white"
+          preserveAspectRatio="none"
           role="img"
           aria-label="Coupon activity chart"
         >
           {/* grid lines */}
           {[0.25, 0.5, 0.75].map((t) => {
-            const y = pad + t * (height - pad * 2);
-            return <line key={t} x1={pad} x2={width - pad} y1={y} y2={y} stroke="currentColor" opacity="0.08" />;
+            const y = pad + t * (height - 15 - pad * 2);
+            return <line key={t} x1={0} x2={width} y1={y} y2={y} stroke="currentColor" opacity="0.1" />;
           })}
 
           {/* series B (success) */}
-          <path d={pathB} fill="none" stroke="currentColor" opacity="0.55" strokeWidth="2" />
+          <path d={pathB} fill="none" stroke="#47BD79" opacity="0.6" strokeWidth="2" vectorEffect="non-scaling-stroke" />
 
           {/* series A (apply) */}
-          <path d={pathA} fill="none" stroke="currentColor" opacity="0.95" strokeWidth="2" />
+          <path d={pathA} fill="none" stroke="#47BD79" opacity="1" strokeWidth="2" vectorEffect="non-scaling-stroke" />
 
           {/* last dots */}
           {ptsA.length ? (
-            <circle cx={ptsA[ptsA.length - 1].x} cy={ptsA[ptsA.length - 1].y} r="3" fill="currentColor" />
+            <circle cx={ptsA[ptsA.length - 1].x} cy={ptsA[ptsA.length - 1].y} r="4" fill="#47BD79" />
           ) : null}
           {ptsB.length ? (
-            <circle cx={ptsB[ptsB.length - 1].x} cy={ptsB[ptsB.length - 1].y} r="3" fill="currentColor" opacity="0.6" />
+            <circle cx={ptsB[ptsB.length - 1].x} cy={ptsB[ptsB.length - 1].y} r="4" fill="#47BD79" opacity="0.6" />
           ) : null}
+        </svg>
 
-          {/* x-axis labels (first, mid, last) */}
+        {/* x-axis labels outside SVG to prevent stretching */}
+        <div className="flex justify-between px-1 mt-1">
           {(() => {
             const idxs = [0, Math.floor((n - 1) / 2), n - 1].map((i) => clamp(i, 0, n - 1));
             const unique = Array.from(new Set(idxs));
-            return unique.map((i) => {
-              const x = pad + (i * (width - pad * 2)) / (n - 1);
-              return (
-                <text key={i} x={x} y={height - 2} fontSize="9" textAnchor="middle" fill="currentColor" opacity="0.45">
-                  {labels[i]}
-                </text>
-              );
-            });
+            return unique.map((i) => (
+              <span key={i} className="text-[10px] text-white/50">
+                {labels[i]}
+              </span>
+            ));
           })()}
-        </svg>
+        </div>
       </div>
 
-      <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
+      <div className="mt-2 flex items-center gap-3 text-xs text-white/60">
         <span className="inline-flex items-center gap-2">
-          <span className="inline-block h-2 w-2 rounded-full bg-black" />
+          <span className="inline-block h-2 w-2 rounded-full bg-[#47BD79]" />
           Applies
         </span>
         <span className="inline-flex items-center gap-2">
-          <span className="inline-block h-2 w-2 rounded-full bg-black opacity-50" />
+          <span className="inline-block h-2 w-2 rounded-full bg-[#47BD79] opacity-60" />
           Successes
         </span>
       </div>

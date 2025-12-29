@@ -67,7 +67,7 @@ export default function AdminHealthCardV2() {
   return (
     <div
       className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6"
-      style={{ boxShadow: "0 0 20px rgba(71, 189, 121, 0.1)" }}
+      style={{ boxShadow: "0 0 20px rgba(71, 189, 121, 0.03)" }}
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-4 mb-6">

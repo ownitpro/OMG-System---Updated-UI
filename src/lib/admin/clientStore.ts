@@ -1,5 +1,26 @@
 // Client store for admin coupon targeting and analytics
 
+export type ClientNote = {
+  id: string;
+  content: string;
+  createdAt: string;
+  createdBy: string;
+};
+
+export type ClientTag = {
+  id: string;
+  name: string;
+  color: string;
+};
+
+export type ClientActivity = {
+  id: string;
+  type: "note_added" | "status_changed" | "email_sent" | "order_placed" | "tag_added" | "tag_removed" | "plan_changed";
+  description: string;
+  timestamp: string;
+  metadata?: Record<string, any>;
+};
+
 export type Client = {
   id: string;
   name: string;
@@ -11,6 +32,9 @@ export type Client = {
   lastActiveAt: string;
   totalSpent: number; // in cents
   ordersCount: number;
+  notes?: ClientNote[];
+  tags?: string[]; // tag IDs
+  activity?: ClientActivity[];
 };
 
 export type Product = {
@@ -250,4 +274,425 @@ export function getProductById(id: string): Product | undefined {
 
 export function getProductsByIds(ids: string[]): Product[] {
   return ids.map((id) => PRODUCTS.find((p) => p.id === id)).filter(Boolean) as Product[];
+}
+
+// ============================================
+// Client Statistics and Analytics
+// ============================================
+
+export type ClientStats = {
+  total: number;
+  active: number;
+  inactive: number;
+  churned: number;
+  newThisMonth: number;
+  totalRevenueCents: number;
+  avgOrderValueCents: number;
+  churnRate: number;
+};
+
+export function getClientStats(): ClientStats {
+  const clients = readClients();
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  const total = clients.length;
+  const active = clients.filter((c) => c.status === "active").length;
+  const inactive = clients.filter((c) => c.status === "inactive").length;
+  const churned = clients.filter((c) => c.status === "churned").length;
+  const newThisMonth = clients.filter((c) => new Date(c.createdAt) >= startOfMonth).length;
+
+  const totalRevenueCents = clients.reduce((sum, c) => sum + c.totalSpent, 0);
+  const totalOrders = clients.reduce((sum, c) => sum + c.ordersCount, 0);
+  const avgOrderValueCents = totalOrders > 0 ? Math.round(totalRevenueCents / totalOrders) : 0;
+  const churnRate = total > 0 ? Math.round((churned / total) * 100) : 0;
+
+  return {
+    total,
+    active,
+    inactive,
+    churned,
+    newThisMonth,
+    totalRevenueCents,
+    avgOrderValueCents,
+    churnRate,
+  };
+}
+
+// ============================================
+// Bulk Operations
+// ============================================
+
+export function bulkUpdateClientStatus(ids: string[], status: Client["status"]) {
+  const clients = readClients();
+  const updated = clients.map((c) =>
+    ids.includes(c.id) ? { ...c, status, lastActiveAt: new Date().toISOString() } : c
+  );
+  writeClients(updated);
+}
+
+export function updateClientStatus(id: string, status: Client["status"]) {
+  bulkUpdateClientStatus([id], status);
+}
+
+// ============================================
+// Export Functionality
+// ============================================
+
+export function exportClientsToCSV(clients: Client[]): string {
+  const headers = [
+    "Name",
+    "Email",
+    "Company",
+    "ID",
+    "Plan",
+    "Status",
+    "Orders",
+    "Total Spent",
+    "Joined",
+    "Last Active",
+  ];
+
+  const rows = clients.map((c) => [
+    c.name,
+    c.email,
+    c.company || "",
+    c.id,
+    c.plan,
+    c.status,
+    c.ordersCount,
+    `$${(c.totalSpent / 100).toFixed(2)}`,
+    new Date(c.createdAt).toLocaleDateString(),
+    new Date(c.lastActiveAt).toLocaleDateString(),
+  ]);
+
+  const csvContent = [
+    headers.join(","),
+    ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
+  ].join("\n");
+
+  return csvContent;
+}
+
+export function downloadCSV(content: string, filename: string) {
+  const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+// ============================================
+// Filter and Sort Helpers
+// ============================================
+
+export type ClientSortKey = "name" | "createdAt" | "totalSpent" | "ordersCount" | "lastActiveAt";
+export type SortDirection = "asc" | "desc";
+
+export function sortClients(
+  clients: Client[],
+  sortKey: ClientSortKey,
+  direction: SortDirection
+): Client[] {
+  return [...clients].sort((a, b) => {
+    let comparison = 0;
+
+    switch (sortKey) {
+      case "name":
+        comparison = a.name.localeCompare(b.name);
+        break;
+      case "createdAt":
+        comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        break;
+      case "totalSpent":
+        comparison = a.totalSpent - b.totalSpent;
+        break;
+      case "ordersCount":
+        comparison = a.ordersCount - b.ordersCount;
+        break;
+      case "lastActiveAt":
+        comparison = new Date(a.lastActiveAt).getTime() - new Date(b.lastActiveAt).getTime();
+        break;
+    }
+
+    return direction === "asc" ? comparison : -comparison;
+  });
+}
+
+export function filterClients(
+  clients: Client[],
+  filters: {
+    search?: string;
+    status?: Client["status"] | "all";
+    plan?: Client["plan"] | "all";
+  }
+): Client[] {
+  return clients.filter((c) => {
+    // Search filter
+    if (filters.search) {
+      const q = filters.search.toLowerCase();
+      const matchesSearch =
+        c.name.toLowerCase().includes(q) ||
+        c.email.toLowerCase().includes(q) ||
+        c.id.toLowerCase().includes(q) ||
+        (c.company?.toLowerCase().includes(q) ?? false);
+      if (!matchesSearch) return false;
+    }
+
+    // Status filter
+    if (filters.status && filters.status !== "all" && c.status !== filters.status) {
+      return false;
+    }
+
+    // Plan filter
+    if (filters.plan && filters.plan !== "all" && c.plan !== filters.plan) {
+      return false;
+    }
+
+    return true;
+  });
+}
+
+// ============================================
+// Relative Time Helper
+// ============================================
+
+export function getRelativeTime(dateString: string): string {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffSecs = Math.floor(diffMs / 1000);
+  const diffMins = Math.floor(diffSecs / 60);
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+  const diffWeeks = Math.floor(diffDays / 7);
+  const diffMonths = Math.floor(diffDays / 30);
+
+  if (diffSecs < 60) return "just now";
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays < 7) return `${diffDays}d ago`;
+  if (diffWeeks < 4) return `${diffWeeks}w ago`;
+  if (diffMonths < 12) return `${diffMonths}mo ago`;
+  return date.toLocaleDateString();
+}
+
+// ============================================
+// Tags System
+// ============================================
+
+const TAGS_KEY = "omg_client_tags";
+
+export const DEFAULT_TAGS: ClientTag[] = [
+  { id: "tag_vip", name: "VIP", color: "#F59E0B" },
+  { id: "tag_priority", name: "Priority", color: "#EF4444" },
+  { id: "tag_new", name: "New", color: "#47BD79" },
+  { id: "tag_enterprise", name: "Enterprise", color: "#A855F7" },
+  { id: "tag_at_risk", name: "At Risk", color: "#F97316" },
+  { id: "tag_upsell", name: "Upsell Opportunity", color: "#3B82F6" },
+  { id: "tag_referral", name: "Referral", color: "#EC4899" },
+  { id: "tag_demo", name: "Demo Account", color: "#6B7280" },
+];
+
+export function readTags(): ClientTag[] {
+  try {
+    const raw = localStorage.getItem(TAGS_KEY);
+    if (raw) {
+      return JSON.parse(raw);
+    }
+    localStorage.setItem(TAGS_KEY, JSON.stringify(DEFAULT_TAGS));
+    return DEFAULT_TAGS;
+  } catch {
+    return DEFAULT_TAGS;
+  }
+}
+
+export function writeTags(tags: ClientTag[]) {
+  localStorage.setItem(TAGS_KEY, JSON.stringify(tags));
+  window.dispatchEvent(new Event("omg-tags-updated"));
+}
+
+export function getTagById(id: string): ClientTag | undefined {
+  return readTags().find((t) => t.id === id);
+}
+
+export function getTagsByIds(ids: string[]): ClientTag[] {
+  const tags = readTags();
+  return ids.map((id) => tags.find((t) => t.id === id)).filter(Boolean) as ClientTag[];
+}
+
+export function createTag(name: string, color: string): ClientTag {
+  const tags = readTags();
+  const newTag: ClientTag = {
+    id: `tag_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    name,
+    color,
+  };
+  tags.push(newTag);
+  writeTags(tags);
+  return newTag;
+}
+
+// ============================================
+// Notes System
+// ============================================
+
+export function addClientNote(clientId: string, content: string, createdBy: string = "Admin"): ClientNote {
+  const clients = readClients();
+  const newNote: ClientNote = {
+    id: `note_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    content,
+    createdAt: new Date().toISOString(),
+    createdBy,
+  };
+
+  const updated = clients.map((c) => {
+    if (c.id === clientId) {
+      const notes = c.notes || [];
+      const activity = c.activity || [];
+      return {
+        ...c,
+        notes: [newNote, ...notes],
+        activity: [
+          {
+            id: `act_${Date.now()}`,
+            type: "note_added" as const,
+            description: `Note added by ${createdBy}`,
+            timestamp: new Date().toISOString(),
+            metadata: { noteId: newNote.id },
+          },
+          ...activity,
+        ],
+        lastActiveAt: new Date().toISOString(),
+      };
+    }
+    return c;
+  });
+
+  writeClients(updated);
+  return newNote;
+}
+
+export function deleteClientNote(clientId: string, noteId: string) {
+  const clients = readClients();
+  const updated = clients.map((c) => {
+    if (c.id === clientId) {
+      return {
+        ...c,
+        notes: (c.notes || []).filter((n) => n.id !== noteId),
+      };
+    }
+    return c;
+  });
+  writeClients(updated);
+}
+
+// ============================================
+// Client Tags Management
+// ============================================
+
+export function addTagToClient(clientId: string, tagId: string) {
+  const clients = readClients();
+  const tag = getTagById(tagId);
+  const updated = clients.map((c) => {
+    if (c.id === clientId) {
+      const tags = c.tags || [];
+      if (tags.includes(tagId)) return c;
+      const activity = c.activity || [];
+      return {
+        ...c,
+        tags: [...tags, tagId],
+        activity: [
+          {
+            id: `act_${Date.now()}`,
+            type: "tag_added" as const,
+            description: `Tag "${tag?.name || tagId}" added`,
+            timestamp: new Date().toISOString(),
+            metadata: { tagId },
+          },
+          ...activity,
+        ],
+        lastActiveAt: new Date().toISOString(),
+      };
+    }
+    return c;
+  });
+  writeClients(updated);
+}
+
+export function removeTagFromClient(clientId: string, tagId: string) {
+  const clients = readClients();
+  const tag = getTagById(tagId);
+  const updated = clients.map((c) => {
+    if (c.id === clientId) {
+      const activity = c.activity || [];
+      return {
+        ...c,
+        tags: (c.tags || []).filter((t) => t !== tagId),
+        activity: [
+          {
+            id: `act_${Date.now()}`,
+            type: "tag_removed" as const,
+            description: `Tag "${tag?.name || tagId}" removed`,
+            timestamp: new Date().toISOString(),
+            metadata: { tagId },
+          },
+          ...activity,
+        ],
+      };
+    }
+    return c;
+  });
+  writeClients(updated);
+}
+
+// ============================================
+// Activity Tracking
+// ============================================
+
+export function addClientActivity(
+  clientId: string,
+  type: ClientActivity["type"],
+  description: string,
+  metadata?: Record<string, any>
+) {
+  const clients = readClients();
+  const updated = clients.map((c) => {
+    if (c.id === clientId) {
+      const activity = c.activity || [];
+      return {
+        ...c,
+        activity: [
+          {
+            id: `act_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            type,
+            description,
+            timestamp: new Date().toISOString(),
+            metadata,
+          },
+          ...activity,
+        ],
+        lastActiveAt: new Date().toISOString(),
+      };
+    }
+    return c;
+  });
+  writeClients(updated);
+}
+
+export function getClientActivity(clientId: string, limit: number = 20): ClientActivity[] {
+  const client = getClientById(clientId);
+  return (client?.activity || []).slice(0, limit);
+}
+
+// ============================================
+// Email Tracking
+// ============================================
+
+export function recordEmailSent(clientId: string, subject: string, emailType: string = "manual") {
+  addClientActivity(clientId, "email_sent", `Email sent: "${subject}"`, {
+    subject,
+    emailType,
+  });
 }

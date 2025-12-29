@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { usePathname } from "next/navigation";
 
 // Import Header and Footer components directly from their files
@@ -8,22 +8,23 @@ import { usePathname } from "next/navigation";
 import { Header } from "@/components/navigation/header";
 import { Footer } from "@/components/navigation/footer";
 
+// Helper to check if nav should be hidden for a given path
+function shouldHideNavForPath(path: string | null): boolean {
+  if (!path) return false;
+  return (
+    path.startsWith("/dashboard/admin") ||
+    path.startsWith("/admin") ||
+    path.startsWith("/portal") ||
+    path.startsWith("/products") ||
+    path.startsWith("/checkout")
+  );
+}
+
 export function ConditionalLayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [shouldHideNav, setShouldHideNav] = useState(false);
-  
-  // Check pathname after mount to avoid hydration mismatches
-  useEffect(() => {
-    // Hide Header/Footer for admin routes, portal routes, and product pages
-    // Product pages have their own custom headers
-    setShouldHideNav(
-      pathname?.startsWith("/dashboard/admin") || 
-      pathname?.startsWith("/admin") || 
-      pathname?.startsWith("/portal") || 
-      pathname?.startsWith("/products") || 
-      false
-    );
-  }, [pathname]);
+
+  // Compute hide state directly from pathname (no useEffect delay)
+  const shouldHideNav = shouldHideNavForPath(pathname);
   
   // Always render Header/Footer but hide them for admin/portal routes using CSS class
   // This ensures webpack always loads the modules at build time, avoiding runtime errors

@@ -56,9 +56,9 @@ export function ProductMarketingTemplate(p: ProductMarketingProps) {
   const IconComponent = p.icon || SparklesIcon;
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#0f172a] text-white">
       {/* Top bar */}
-      <header className="sticky top-0 z-30 border-b border-white/10 bg-black/80 backdrop-blur-xl">
+      <header className="sticky top-0 z-30 border-b border-white/10 bg-[#0f172a]/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
             <div

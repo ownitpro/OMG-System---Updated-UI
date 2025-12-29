@@ -2,12 +2,12 @@ import type { OrderStatus } from "@/lib/admin/types";
 
 function dotClass(active: boolean) {
   return active
-    ? "h-2.5 w-2.5 rounded-full bg-black"
-    : "h-2.5 w-2.5 rounded-full bg-slate-300";
+    ? "h-2.5 w-2.5 rounded-full bg-[#47BD79]"
+    : "h-2.5 w-2.5 rounded-full bg-white/20";
 }
 
 function itemClass(active: boolean) {
-  return active ? "text-black" : "text-slate-500";
+  return active ? "text-white" : "text-white/50";
 }
 
 export default function OrderTimeline({
@@ -24,8 +24,8 @@ export default function OrderTimeline({
   const accessGranted = status === "paid" || status === "completed"; // Week 1 rule
 
   return (
-    <div className="rounded-xl border bg-white p-4">
-      <h2 className="text-sm font-semibold">Timeline</h2>
+    <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-4">
+      <h2 className="text-sm font-semibold text-white">Timeline</h2>
 
       <div className="mt-4 space-y-4">
         {/* Created */}
@@ -35,7 +35,7 @@ export default function OrderTimeline({
           </div>
           <div className={itemClass(created)}>
             <div className="text-sm font-medium">Order created</div>
-            <div className="text-xs text-zinc-600">
+            <div className="text-xs text-white/50">
               {new Date(createdAt).toLocaleString()}
             </div>
           </div>
@@ -50,7 +50,7 @@ export default function OrderTimeline({
             <div className="text-sm font-medium">
               {paid ? "Payment received" : pending ? "Payment pending" : "Payment failed"}
             </div>
-            <div className="text-xs text-zinc-600">
+            <div className="text-xs text-white/50">
               {paid
                 ? "Funds confirmed."
                 : pending
@@ -69,7 +69,7 @@ export default function OrderTimeline({
             <div className="text-sm font-medium">
               {accessGranted ? "Access granted" : "Access not granted"}
             </div>
-            <div className="text-xs text-zinc-600">
+            <div className="text-xs text-white/50">
               {accessGranted
                 ? "Instant access after purchase (Week 1 behavior)."
                 : "Access unlocks once payment is marked paid."}
@@ -85,7 +85,7 @@ export default function OrderTimeline({
             </div>
             <div className={itemClass(true)}>
               <div className="text-sm font-medium">Refunded</div>
-              <div className="text-xs text-zinc-600">
+              <div className="text-xs text-white/50">
                 Payment was reversed. Access should be removed in the real system.
               </div>
             </div>

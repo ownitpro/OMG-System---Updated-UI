@@ -86,7 +86,7 @@ export default function AdminPortalHome() {
             <Link
               href="/portal/admin/orders"
               className="group rounded-2xl border border-[#47BD79]/30 bg-white/5 backdrop-blur-xl p-5 hover:bg-white/10 hover:scale-[1.01] transition-all duration-300"
-              style={{ boxShadow: "0 0 20px rgba(71, 189, 121, 0.15)" }}
+              style={{ boxShadow: "0 0 20px rgba(71, 189, 121, 0.05)" }}
             >
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-xl bg-[#47BD79]/20 flex items-center justify-center">
@@ -109,7 +109,7 @@ export default function AdminPortalHome() {
             <Link
               href="/portal/admin/users"
               className="group rounded-2xl border border-[#A855F7]/30 bg-white/5 backdrop-blur-xl p-5 hover:bg-white/10 hover:scale-[1.01] transition-all duration-300"
-              style={{ boxShadow: "0 0 20px rgba(168, 85, 247, 0.15)" }}
+              style={{ boxShadow: "0 0 20px rgba(168, 85, 247, 0.05)" }}
             >
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-xl bg-[#A855F7]/20 flex items-center justify-center">
@@ -132,7 +132,7 @@ export default function AdminPortalHome() {
             <Link
               href="/portal/admin/products"
               className="group rounded-2xl border border-[#3B82F6]/30 bg-white/5 backdrop-blur-xl p-5 hover:bg-white/10 hover:scale-[1.01] transition-all duration-300"
-              style={{ boxShadow: "0 0 20px rgba(59, 130, 246, 0.15)" }}
+              style={{ boxShadow: "0 0 20px rgba(59, 130, 246, 0.05)" }}
             >
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-xl bg-[#3B82F6]/20 flex items-center justify-center">

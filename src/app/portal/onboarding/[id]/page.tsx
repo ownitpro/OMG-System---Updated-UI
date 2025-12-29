@@ -59,15 +59,15 @@ export default async function PortalProjectDetailPage({ params }: PortalProjectD
 
   if (!project) {
     return (
-      <div className="text-center py-12">
-        <h1 className="text-2xl font-bold text-gray-900">Project not found</h1>
-        <p className="mt-2 text-gray-600">The project you're looking for doesn't exist.</p>
+      <div className="min-h-screen bg-[#0f172a] text-center py-12">
+        <h1 className="text-2xl font-bold text-white">Project not found</h1>
+        <p className="mt-2 text-white/60">The project you're looking for doesn't exist.</p>
       </div>
     );
   }
 
   return (
-    <div>
+    <div className="min-h-screen bg-[#0f172a] p-6">
       <PortalProjectDetailTabs project={project} />
     </div>
   );

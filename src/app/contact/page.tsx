@@ -449,6 +449,222 @@ function ContactForm() {
   const [status, setStatus] = React.useState<
     "idle" | "submitting" | "success" | "error"
   >("idle");
+  const [selectedIndustry, setSelectedIndustry] = React.useState("");
+  const [showOtherModal, setShowOtherModal] = React.useState(false);
+  const [otherIndustry, setOtherIndustry] = React.useState("");
+  const [tempOtherIndustry, setTempOtherIndustry] = React.useState("");
+
+  const [selectedBudget, setSelectedBudget] = React.useState("");
+  const [showBudgetModal, setShowBudgetModal] = React.useState(false);
+  const [otherBudget, setOtherBudget] = React.useState("");
+  const [tempOtherBudget, setTempOtherBudget] = React.useState("");
+
+  // Date range picker state
+  const [startDate, setStartDate] = React.useState<Date | null>(null);
+  const [endDate, setEndDate] = React.useState<Date | null>(null);
+  const [selectingEndDate, setSelectingEndDate] = React.useState(false);
+  const [showCalendar, setShowCalendar] = React.useState(false);
+  const [calendarMonth, setCalendarMonth] = React.useState(new Date().getMonth());
+  const [calendarYear, setCalendarYear] = React.useState(new Date().getFullYear());
+  const calendarRef = React.useRef<HTMLDivElement>(null);
+
+  const handleIndustryChange = (value: string) => {
+    if (value === "Other") {
+      setTempOtherIndustry(otherIndustry);
+      setShowOtherModal(true);
+    } else {
+      setSelectedIndustry(value);
+      setOtherIndustry("");
+    }
+  };
+
+  const handleOtherConfirm = () => {
+    if (tempOtherIndustry.trim()) {
+      setOtherIndustry(tempOtherIndustry.trim());
+      setSelectedIndustry("Other");
+      setShowOtherModal(false);
+    }
+  };
+
+  const handleOtherCancel = () => {
+    setTempOtherIndustry("");
+    setShowOtherModal(false);
+    if (!otherIndustry) {
+      setSelectedIndustry("");
+    }
+  };
+
+  const handleBudgetChange = (value: string) => {
+    if (value === "Flexible") {
+      setTempOtherBudget(otherBudget);
+      setShowBudgetModal(true);
+    } else {
+      setSelectedBudget(value);
+      setOtherBudget("");
+    }
+  };
+
+  const handleBudgetInputChange = (value: string) => {
+    // Only allow numbers and commas
+    const numericValue = value.replace(/[^0-9,]/g, "");
+    setTempOtherBudget(numericValue);
+  };
+
+  const formatBudgetDisplay = (value: string) => {
+    if (!value) return "";
+    // Add commas for thousands
+    const num = value.replace(/,/g, "");
+    return `$${Number(num).toLocaleString()}/mo`;
+  };
+
+  const handleBudgetConfirm = () => {
+    if (tempOtherBudget.trim()) {
+      const formattedBudget = formatBudgetDisplay(tempOtherBudget);
+      setOtherBudget(formattedBudget);
+      setSelectedBudget("Flexible");
+      setShowBudgetModal(false);
+    }
+  };
+
+  const handleBudgetCancel = () => {
+    setTempOtherBudget("");
+    setShowBudgetModal(false);
+    if (!otherBudget) {
+      setSelectedBudget("");
+    }
+  };
+
+  // Date picker helpers
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  const formatDateDisplay = (date: Date) => {
+    return `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+  };
+
+  const getDaysInMonth = (year: number, month: number) => {
+    return new Date(year, month + 1, 0).getDate();
+  };
+
+  const getFirstDayOfMonth = (year: number, month: number) => {
+    return new Date(year, month, 1).getDay();
+  };
+
+  const isDateDisabled = (year: number, month: number, day: number) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const checkDate = new Date(year, month, day);
+    return checkDate < today;
+  };
+
+  const isToday = (year: number, month: number, day: number) => {
+    const today = new Date();
+    return (
+      today.getFullYear() === year &&
+      today.getMonth() === month &&
+      today.getDate() === day
+    );
+  };
+
+  const isStartDate = (year: number, month: number, day: number) => {
+    if (!startDate) return false;
+    return (
+      startDate.getFullYear() === year &&
+      startDate.getMonth() === month &&
+      startDate.getDate() === day
+    );
+  };
+
+  const isEndDate = (year: number, month: number, day: number) => {
+    if (!endDate) return false;
+    return (
+      endDate.getFullYear() === year &&
+      endDate.getMonth() === month &&
+      endDate.getDate() === day
+    );
+  };
+
+  const isInRange = (year: number, month: number, day: number) => {
+    if (!startDate || !endDate) return false;
+    const checkDate = new Date(year, month, day);
+    return checkDate > startDate && checkDate < endDate;
+  };
+
+  const handleDateSelect = (day: number) => {
+    if (isDateDisabled(calendarYear, calendarMonth, day)) return;
+
+    const selectedDate = new Date(calendarYear, calendarMonth, day);
+
+    if (!selectingEndDate) {
+      // Selecting start date
+      setStartDate(selectedDate);
+      setEndDate(null);
+      setSelectingEndDate(true);
+    } else {
+      // Selecting end date
+      if (selectedDate < startDate!) {
+        // If selected date is before start date, swap them
+        setEndDate(startDate);
+        setStartDate(selectedDate);
+      } else {
+        setEndDate(selectedDate);
+      }
+      setSelectingEndDate(false);
+      setShowCalendar(false);
+    }
+  };
+
+  const formatDateRangeDisplay = () => {
+    if (!startDate && !endDate) return "";
+    if (startDate && !endDate) return `${formatDateDisplay(startDate)} - Select end date`;
+    if (startDate && endDate) return `${formatDateDisplay(startDate)} - ${formatDateDisplay(endDate)}`;
+    return "";
+  };
+
+  const clearDateRange = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setSelectingEndDate(false);
+  };
+
+  const handlePrevMonth = () => {
+    if (calendarMonth === 0) {
+      setCalendarMonth(11);
+      setCalendarYear(calendarYear - 1);
+    } else {
+      setCalendarMonth(calendarMonth - 1);
+    }
+  };
+
+  const handleNextMonth = () => {
+    if (calendarMonth === 11) {
+      setCalendarMonth(0);
+      setCalendarYear(calendarYear + 1);
+    } else {
+      setCalendarMonth(calendarMonth + 1);
+    }
+  };
+
+  // Close calendar when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
+        setShowCalendar(false);
+      }
+    };
+
+    if (showCalendar) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showCalendar]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -582,8 +798,8 @@ function ContactForm() {
           </div>
         </div>
 
-        {/* Industry, Budget, Timeline Row */}
-        <div className="grid md:grid-cols-3 gap-4">
+        {/* Industry & Budget Row */}
+        <div className="grid md:grid-cols-2 gap-4">
           <div>
             <label
               htmlFor="contact-industry"
@@ -595,6 +811,8 @@ function ContactForm() {
               id="contact-industry"
               name="industry"
               required
+              value={selectedIndustry}
+              onChange={(e) => handleIndustryChange(e.target.value)}
               className="w-full rounded-xl border border-white/10 bg-slate-900 px-4 py-3 text-white focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all outline-none appearance-none cursor-pointer"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2306B6D4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
@@ -606,10 +824,14 @@ function ContactForm() {
               <option value="">Select industry</option>
               {contact.form.fields.industries.map((i) => (
                 <option key={i} value={i}>
-                  {i}
+                  {i === "Other" && otherIndustry ? `Other: ${otherIndustry}` : i}
                 </option>
               ))}
             </select>
+            {/* Hidden input for form submission */}
+            {selectedIndustry === "Other" && otherIndustry && (
+              <input type="hidden" name="otherIndustry" value={otherIndustry} />
+            )}
           </div>
           <div>
             <label
@@ -622,6 +844,8 @@ function ContactForm() {
               id="contact-budget"
               name="budget"
               required
+              value={selectedBudget}
+              onChange={(e) => handleBudgetChange(e.target.value)}
               className="w-full rounded-xl border border-white/10 bg-slate-900 px-4 py-3 text-white focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all outline-none appearance-none cursor-pointer"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2306B6D4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
@@ -633,37 +857,215 @@ function ContactForm() {
               <option value="">Select budget</option>
               {contact.form.fields.budgets.map((b) => (
                 <option key={b} value={b}>
-                  {b}
+                  {b === "Flexible" && otherBudget ? `Flexible: ${otherBudget}` : b}
                 </option>
               ))}
             </select>
+            {/* Hidden input for form submission */}
+            {selectedBudget === "Flexible" && otherBudget && (
+              <input type="hidden" name="otherBudget" value={otherBudget} />
+            )}
           </div>
-          <div>
-            <label
-              htmlFor="contact-timeline"
-              className="block text-sm font-medium text-white/80 mb-2"
-            >
-              Timeline <span className="text-cyan-400">*</span>
-            </label>
-            <select
-              id="contact-timeline"
-              name="timeline"
-              required
-              className="w-full rounded-xl border border-white/10 bg-slate-900 px-4 py-3 text-white focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all outline-none appearance-none cursor-pointer"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2306B6D4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "right 12px center",
-                backgroundSize: "20px",
+        </div>
+
+        {/* Timeline Row - Date Range Picker */}
+        <div ref={calendarRef}>
+          <label
+            htmlFor="contact-timeline"
+            className="block text-sm font-medium text-white/80 mb-2"
+          >
+            Project Timeline <span className="text-cyan-400">*</span>
+            <span className="text-white/40 font-normal ml-2">(Start - End)</span>
+          </label>
+          <div className="relative">
+            {/* Date Range Input - Using div to avoid nested button issue */}
+            <div
+              onClick={() => setShowCalendar(!showCalendar)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setShowCalendar(!showCalendar);
+                }
               }}
+              className={`w-full rounded-xl border bg-slate-900 px-4 py-3 text-left text-white focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all outline-none cursor-pointer flex items-center justify-between hover:border-cyan-500/30 ${
+                selectingEndDate ? "border-cyan-500/50 ring-2 ring-cyan-500/30" : "border-white/10"
+              }`}
             >
-              <option value="">Select timeline</option>
-              {contact.form.fields.timelines.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
+              <span className={startDate ? "text-white" : "text-white/30"}>
+                {formatDateRangeDisplay() || "Select start and end dates"}
+              </span>
+              <div className="flex items-center gap-2">
+                {(startDate || endDate) && (
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      clearDateRange();
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        clearDateRange();
+                      }
+                    }}
+                    className="p-1 hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
+                  >
+                    <svg className="w-4 h-4 text-white/50 hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </span>
+                )}
+                <svg
+                  className="w-5 h-5 text-cyan-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            {/* Hidden inputs for form submission */}
+            <input
+              type="hidden"
+              name="timeline_start"
+              value={startDate ? formatDateDisplay(startDate) : ""}
+            />
+            <input
+              type="hidden"
+              name="timeline_end"
+              value={endDate ? formatDateDisplay(endDate) : ""}
+            />
+            <input
+              type="hidden"
+              name="timeline"
+              value={startDate && endDate ? `${formatDateDisplay(startDate)} - ${formatDateDisplay(endDate)}` : ""}
+              required
+            />
+
+            {/* Calendar Dropdown */}
+            {showCalendar && (
+              <div className="absolute top-full left-0 mt-2 z-50 w-full sm:w-80 bg-slate-900 border border-cyan-500/30 rounded-2xl shadow-2xl shadow-cyan-500/20 p-4 animate-in fade-in zoom-in-95 duration-200">
+                {/* Selection Indicator */}
+                <div className="mb-4 p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/20">
+                  <p className="text-sm text-cyan-400 font-medium">
+                    {!startDate && "Select start date"}
+                    {startDate && !endDate && "Now select end date"}
+                    {startDate && endDate && "Date range selected"}
+                  </p>
+                </div>
+
+                {/* Month/Year Navigation */}
+                <div className="flex items-center justify-between mb-4">
+                  <button
+                    type="button"
+                    onClick={handlePrevMonth}
+                    className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  >
+                    <svg className="w-5 h-5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <span className="text-white font-semibold">
+                    {monthNames[calendarMonth]} {calendarYear}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleNextMonth}
+                    className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  >
+                    <svg className="w-5 h-5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Days of Week Header */}
+                <div className="grid grid-cols-7 gap-1 mb-2">
+                  {dayNames.map((day) => (
+                    <div key={day} className="text-center text-xs text-white/50 font-medium py-1">
+                      {day}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Calendar Grid */}
+                <div className="grid grid-cols-7 gap-1">
+                  {/* Empty cells for days before the first of the month */}
+                  {Array.from({ length: getFirstDayOfMonth(calendarYear, calendarMonth) }).map((_, i) => (
+                    <div key={`empty-${i}`} className="w-full aspect-square" />
+                  ))}
+
+                  {/* Days of the month */}
+                  {Array.from({ length: getDaysInMonth(calendarYear, calendarMonth) }).map((_, i) => {
+                    const day = i + 1;
+                    const disabled = isDateDisabled(calendarYear, calendarMonth, day);
+                    const today = isToday(calendarYear, calendarMonth, day);
+                    const isStart = isStartDate(calendarYear, calendarMonth, day);
+                    const isEnd = isEndDate(calendarYear, calendarMonth, day);
+                    const inRange = isInRange(calendarYear, calendarMonth, day);
+
+                    return (
+                      <button
+                        key={day}
+                        type="button"
+                        onClick={() => handleDateSelect(day)}
+                        disabled={disabled}
+                        className={`w-full aspect-square rounded-lg text-sm font-medium transition-all
+                          ${disabled
+                            ? "text-white/20 cursor-not-allowed"
+                            : isStart
+                            ? "bg-gradient-to-r from-cyan-500 to-cyan-600 text-white shadow-lg shadow-cyan-500/30 rounded-r-none"
+                            : isEnd
+                            ? "bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/30 rounded-l-none"
+                            : inRange
+                            ? "bg-cyan-500/20 text-cyan-300 rounded-none"
+                            : today
+                            ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/50 hover:bg-cyan-500/30"
+                            : "text-white hover:bg-white/10"
+                          }`}
+                      >
+                        {day}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Footer Actions */}
+                <div className="mt-4 pt-3 border-t border-white/10 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const today = new Date();
+                      setCalendarMonth(today.getMonth());
+                      setCalendarYear(today.getFullYear());
+                    }}
+                    className="flex-1 py-2 text-sm text-cyan-400 hover:text-cyan-300 hover:bg-white/5 rounded-lg transition-colors"
+                  >
+                    Go to Today
+                  </button>
+                  {(startDate || endDate) && (
+                    <button
+                      type="button"
+                      onClick={clearDateRange}
+                      className="flex-1 py-2 text-sm text-white/50 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -810,6 +1212,155 @@ function ContactForm() {
           </div>
         )}
       </form>
+
+      {/* Other Industry Modal */}
+      {showOtherModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={handleOtherCancel}
+          />
+
+          {/* Modal */}
+          <div className="relative bg-slate-900 border border-cyan-500/30 rounded-2xl p-6 w-full max-w-md shadow-2xl shadow-cyan-500/20 animate-in fade-in zoom-in duration-200">
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-teal-500 rounded-xl flex items-center justify-center">
+                <svg
+                  className="w-5 h-5 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-white">Specify Your Industry</h3>
+                <p className="text-sm text-white/50">Tell us what industry you're in</p>
+              </div>
+            </div>
+
+            {/* Input */}
+            <input
+              type="text"
+              value={tempOtherIndustry}
+              onChange={(e) => setTempOtherIndustry(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleOtherConfirm();
+                }
+              }}
+              placeholder="e.g., Manufacturing, Education, Retail..."
+              className="w-full rounded-xl border border-cyan-500/30 bg-white/5 px-4 py-3 text-white placeholder-white/30 focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all outline-none mb-6"
+              autoFocus
+            />
+
+            {/* Buttons */}
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={handleOtherCancel}
+                className="flex-1 px-4 py-3 rounded-xl border border-white/20 text-white/70 hover:bg-white/5 hover:text-white transition-all font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleOtherConfirm}
+                disabled={!tempOtherIndustry.trim()}
+                className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 text-white font-semibold hover:from-cyan-600 hover:to-teal-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Budget Modal */}
+      {showBudgetModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={handleBudgetCancel}
+          />
+
+          {/* Modal */}
+          <div className="relative bg-slate-900 border border-cyan-500/30 rounded-2xl p-6 w-full max-w-md shadow-2xl shadow-cyan-500/20 animate-in fade-in zoom-in duration-200">
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-teal-500 rounded-xl flex items-center justify-center">
+                <svg
+                  className="w-5 h-5 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-white">Specify Your Budget</h3>
+                <p className="text-sm text-white/50">Tell us your estimated monthly budget</p>
+              </div>
+            </div>
+
+            {/* Input with $ prefix */}
+            <div className="relative mb-6">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-cyan-400 font-semibold text-lg">$</span>
+              <input
+                type="text"
+                inputMode="numeric"
+                value={tempOtherBudget}
+                onChange={(e) => handleBudgetInputChange(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleBudgetConfirm();
+                  }
+                }}
+                placeholder="Enter amount (e.g., 1500)"
+                className="w-full rounded-xl border border-cyan-500/30 bg-white/5 pl-8 pr-16 py-3 text-white placeholder-white/30 focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all outline-none"
+                autoFocus
+              />
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 text-sm">/mo</span>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={handleBudgetCancel}
+                className="flex-1 px-4 py-3 rounded-xl border border-white/20 text-white/70 hover:bg-white/5 hover:text-white transition-all font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleBudgetConfirm}
+                disabled={!tempOtherBudget.trim()}
+                className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 text-white font-semibold hover:from-cyan-600 hover:to-teal-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

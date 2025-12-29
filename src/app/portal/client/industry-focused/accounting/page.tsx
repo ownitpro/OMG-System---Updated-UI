@@ -2,6 +2,7 @@
 
 import { PortalShellV2 } from "@/components/portal/PortalShellV2";
 import { getClientNavV2 } from "@/config/portalNav";
+import { useEntitlements } from "@/hooks/useEntitlements";
 import Link from "next/link";
 import {
   CalculatorIcon,
@@ -63,9 +64,11 @@ const UPCOMING_DEADLINES = [
 
 export default function AccountingPage() {
   const nav = getClientNavV2();
+  const entitlements = useEntitlements();
+  const lockedCount = Object.values(entitlements).filter((s) => s === "locked").length;
 
   return (
-    <PortalShellV2 role="client" title="Accounting" nav={nav} upgradeHref="/products/plans" lockedCount={0}>
+    <PortalShellV2 role="client" title="Accounting" nav={nav} upgradeHref="/products/plans" lockedCount={lockedCount} entitlements={entitlements}>
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">

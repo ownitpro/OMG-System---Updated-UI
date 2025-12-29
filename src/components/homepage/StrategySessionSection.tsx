@@ -49,9 +49,9 @@ export default function StrategySessionSection() {
   const tilt = useTilt();
 
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} className="relative py-24 bg-black text-white overflow-hidden">
-      {/* Smooth gradient transition from black to emerald-tinted background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-[#051008] via-30% to-[#071510]" />
+    <section ref={ref as React.RefObject<HTMLElement>} className="relative pt-12 pb-24 bg-[#0f172a] text-white overflow-hidden">
+      {/* Smooth gradient transition to emerald-tinted background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-[#051008] via-30% to-[#071510]" />
 
       {/* Modern Background Elements - Emerald theme */}
       <div className="absolute inset-0">

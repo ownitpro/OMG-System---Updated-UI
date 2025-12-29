@@ -118,8 +118,6 @@ const nextConfig: NextConfig = {
       // Portal redirects
       { source: '/dashboard/client', destination: '/portal/client', permanent: true },
       { source: '/dashboard/admin', destination: '/portal/admin', permanent: true },
-      // Fix incorrect product route casing
-      { source: '/products/Omg-iq', destination: '/products/omg-iq', permanent: true },
       // Fix singular "product" routes (should be "products")
       { source: '/product/omg-iq', destination: '/products/omg-iq', permanent: true },
       { source: '/product/strategy-session', destination: '/products/strategy-session', permanent: true },

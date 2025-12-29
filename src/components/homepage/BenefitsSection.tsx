@@ -119,9 +119,9 @@ export default function HomepageBenefitsSection() {
   }, [isInView]);
 
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} id="benefits" className="py-20 bg-black relative overflow-hidden">
-      {/* Pure black background */}
-      <div className="absolute inset-0 bg-black" />
+    <section ref={ref as React.RefObject<HTMLElement>} id="benefits" className="pt-8 pb-20 bg-black relative overflow-hidden">
+      {/* Black background with gradient fade to dark blue at bottom */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-black via-80% to-[#0f172a]" />
 
       {/* Background glow orbs - positioned away from edges */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#47BD79]/5 rounded-full blur-3xl pointer-events-none" />

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { PRODUCT_PRICING } from "@/config/pricing";
 import {
   DocumentTextIcon,
@@ -132,10 +133,15 @@ function getBuyNowLink(key: ProductCard["key"]) {
 }
 
 export default function ProductsHubPage() {
+  const { data: session, status } = useSession();
+  const userRole = (session?.user as any)?.role;
+  const isAdmin = userRole === "ADMIN" || userRole === "STAFF";
+  const backToPortalHref = status === "loading" ? "/portal/client" : (isAdmin ? "/portal/admin" : "/portal/client");
+
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#0f172a] text-white">
       {/* Top bar */}
-      <header className="sticky top-0 z-30 border-b border-white/10 bg-black/80 backdrop-blur-xl">
+      <header className="sticky top-0 z-30 border-b border-white/10 bg-[#0f172a]/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div className="flex flex-col">
             <div className="text-sm text-white/50">OMG Systems</div>
@@ -150,7 +156,7 @@ export default function ProductsHubPage() {
               View Plans
             </Link>
             <Link
-              href="/portal/client"
+              href={backToPortalHref}
               className="rounded-xl border border-white/20 bg-white/5 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10 transition-colors"
             >
               Back to Portal
@@ -298,7 +304,7 @@ export default function ProductsHubPage() {
               View Plans
             </Link>
             <Link
-              href="/portal/client"
+              href={backToPortalHref}
               className="rounded-xl border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/10 transition-colors"
             >
               Back to Portal

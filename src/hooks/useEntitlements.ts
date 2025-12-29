@@ -2,16 +2,19 @@
 
 import { useEffect, useState } from "react";
 import type { Entitlements } from "@/mock/entitlements";
+import { MOCK_ENTITLEMENTS } from "@/mock/entitlements";
 import { getEntitlements } from "@/mock/entitlementStore";
 
 export function useEntitlements() {
-  const [entitlements, setEntitlements] = useState<Entitlements>(() => getEntitlements());
+  // Initialize with MOCK_ENTITLEMENTS to ensure SSR and initial client render match
+  // This prevents hydration mismatch since localStorage is only available on client
+  const [entitlements, setEntitlements] = useState<Entitlements>(MOCK_ENTITLEMENTS);
 
   useEffect(() => {
-    // refresh once on mount
+    // Read from localStorage only after hydration is complete
     setEntitlements(getEntitlements());
 
-    // refresh whenever user returns to tab
+    // Refresh whenever user returns to tab
     const onFocus = () => setEntitlements(getEntitlements());
     window.addEventListener("focus", onFocus);
     return () => window.removeEventListener("focus", onFocus);

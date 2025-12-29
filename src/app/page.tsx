@@ -73,7 +73,7 @@ export default function HomePage() {
         }}
       />
 
-      <div className="min-h-screen bg-black">
+      <div className="min-h-screen bg-[#0f172a]">
         {/* Hero with Galaxy - Client component that wraps hero and metrics with galaxy background */}
         <HeroWithGalaxy
           heroProps={{

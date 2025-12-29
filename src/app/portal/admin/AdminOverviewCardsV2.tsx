@@ -46,25 +46,25 @@ const accentColors = {
   emerald: {
     iconBg: "bg-[#47BD79]/20",
     iconColor: "text-[#47BD79]",
-    glowColor: "rgba(71, 189, 121, 0.15)",
+    glowColor: "rgba(71, 189, 121, 0.05)",
     border: "border-[#47BD79]/30",
   },
   purple: {
     iconBg: "bg-[#A855F7]/20",
     iconColor: "text-[#A855F7]",
-    glowColor: "rgba(168, 85, 247, 0.15)",
+    glowColor: "rgba(168, 85, 247, 0.05)",
     border: "border-[#A855F7]/30",
   },
   blue: {
     iconBg: "bg-[#3B82F6]/20",
     iconColor: "text-[#3B82F6]",
-    glowColor: "rgba(59, 130, 246, 0.15)",
+    glowColor: "rgba(59, 130, 246, 0.05)",
     border: "border-[#3B82F6]/30",
   },
   amber: {
     iconBg: "bg-amber-500/20",
     iconColor: "text-amber-400",
-    glowColor: "rgba(245, 158, 11, 0.15)",
+    glowColor: "rgba(245, 158, 11, 0.05)",
     border: "border-amber-500/30",
   },
 };

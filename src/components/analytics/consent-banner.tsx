@@ -61,15 +61,15 @@ export function ConsentBanner() {
   if (!showBanner) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-xl border-t border-white/10 shadow-2xl">
       <div className="max-w-7xl mx-auto px-4 py-4">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex-1">
-            <h3 className="text-sm font-semibold text-gray-900 mb-1">
+            <h3 className="text-sm font-semibold text-white mb-1">
               We value your privacy
             </h3>
-            <p className="text-sm text-gray-600">
-              We use cookies to improve your experience and analyze site usage. 
+            <p className="text-sm text-white/60">
+              We use cookies to improve your experience and analyze site usage.
               Functional cookies are always enabled. You can customize your preferences.
             </p>
           </div>
@@ -78,7 +78,7 @@ export function ConsentBanner() {
               variant="outline"
               size="sm"
               onClick={customizeConsent}
-              className="text-xs"
+              className="text-xs bg-white/5 border-white/20 text-white hover:bg-white/10 hover:border-white/30"
             >
               Customize
             </Button>
@@ -86,14 +86,14 @@ export function ConsentBanner() {
               variant="outline"
               size="sm"
               onClick={acceptNecessary}
-              className="text-xs"
+              className="text-xs bg-white/5 border-white/20 text-white hover:bg-white/10 hover:border-white/30"
             >
               Necessary Only
             </Button>
             <Button
               size="sm"
               onClick={acceptAll}
-              className="text-xs"
+              className="text-xs bg-emerald-500 hover:bg-emerald-600 text-white border-0"
             >
               Accept All
             </Button>

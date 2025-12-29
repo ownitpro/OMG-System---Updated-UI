@@ -2,6 +2,7 @@
 
 import { PortalShellV2 } from "@/components/portal/PortalShellV2";
 import { getClientNavV2 } from "@/config/portalNav";
+import { useEntitlements } from "@/hooks/useEntitlements";
 import Link from "next/link";
 import {
   BuildingOffice2Icon,
@@ -88,12 +89,14 @@ const MAINTENANCE_REQUESTS = [
 
 export default function PropertyManagementPage() {
   const nav = getClientNavV2();
+  const entitlements = useEntitlements();
 
   const totalUnits = PROPERTIES.reduce((sum, p) => sum + p.units, 0);
   const avgOccupancy = Math.round(PROPERTIES.reduce((sum, p) => sum + p.occupancy, 0) / PROPERTIES.length);
+  const lockedCount = Object.values(entitlements).filter((s) => s === "locked").length;
 
   return (
-    <PortalShellV2 role="client" title="Property Management" nav={nav} upgradeHref="/products/plans" lockedCount={0}>
+    <PortalShellV2 role="client" title="Property Management" nav={nav} upgradeHref="/products/plans" lockedCount={lockedCount} entitlements={entitlements}>
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">

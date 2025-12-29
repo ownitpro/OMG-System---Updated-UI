@@ -1,5 +1,7 @@
 "use client";
 
+import { Suspense, useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { PortalShellV2 } from "@/components/portal/PortalShellV2";
 import { ProductCardV2 } from "@/components/portal/PortalCard";
 import { PRODUCT_CATALOG } from "@/config/productCatalog";
@@ -25,7 +27,9 @@ import {
   UserGroupIcon,
   AcademicCapIcon,
   BoltIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { CheckCircleIcon as CheckCircleSolid } from "@heroicons/react/24/solid";
 
 // Map product keys to icons
 const productIcons: Record<string, React.ElementType> = {
@@ -49,9 +53,61 @@ const productAccents: Record<string, "emerald" | "purple" | "blue" | "amber"> = 
   omg_build: "emerald",
 };
 
+// Thank you banner component that uses useSearchParams
+function ThankYouBanner() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const purchasedProduct = searchParams.get("purchased");
+  const [showThankYou, setShowThankYou] = useState(false);
+
+  useEffect(() => {
+    if (purchasedProduct) {
+      const dismissedKey = `omg_thankyou_dismissed_${purchasedProduct}`;
+      const wasDismissed = localStorage.getItem(dismissedKey);
+      if (!wasDismissed) {
+        setShowThankYou(true);
+      }
+    }
+  }, [purchasedProduct]);
+
+  const dismissThankYou = () => {
+    if (purchasedProduct) {
+      localStorage.setItem(`omg_thankyou_dismissed_${purchasedProduct}`, "true");
+    }
+    setShowThankYou(false);
+    router.replace("/portal/client", { scroll: false });
+  };
+
+  if (!showThankYou || !purchasedProduct) return null;
+
+  return (
+    <div className="relative rounded-xl border border-[#47BD79]/30 bg-gradient-to-r from-[#47BD79]/20 to-[#47BD79]/10 p-4 backdrop-blur-xl">
+      <button
+        onClick={dismissThankYou}
+        className="absolute top-3 right-3 p-1 rounded-lg hover:bg-white/10 transition-colors"
+        aria-label="Dismiss"
+      >
+        <XMarkIcon className="w-5 h-5 text-white/60 hover:text-white" />
+      </button>
+      <div className="flex items-center gap-3 pr-8">
+        <div className="w-10 h-10 rounded-xl bg-[#47BD79]/20 flex items-center justify-center flex-shrink-0">
+          <CheckCircleSolid className="w-6 h-6 text-[#47BD79]" />
+        </div>
+        <div>
+          <p className="font-semibold text-white">
+            Thank you for purchasing {purchasedProduct}!
+          </p>
+          <p className="text-sm text-white/60">
+            Your product is now active and ready to use.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ClientPortalHome() {
   const nav = getClientNavV2();
-
   const entitlements = useEntitlements();
 
   const topProducts = PRODUCT_CATALOG.filter((p) => p.group === "top");
@@ -71,8 +127,14 @@ export default function ClientPortalHome() {
       commandItems={CLIENT_COMMAND_ITEMS}
       lockedCount={lockedCount}
       upgradeHref="/products/plans"
+      entitlements={entitlements}
     >
       <div className="space-y-8">
+        {/* Thank You Banner - wrapped in Suspense for useSearchParams */}
+        <Suspense fallback={null}>
+          <ThankYouBanner />
+        </Suspense>
+
         {/* Welcome Section */}
         <div className="relative overflow-hidden rounded-2xl border border-[#47BD79]/30 bg-gradient-to-br from-[#47BD79]/10 via-transparent to-[#3B82F6]/10 p-6 backdrop-blur-xl">
           <div className="absolute top-0 right-0 w-64 h-64 bg-[#47BD79]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />

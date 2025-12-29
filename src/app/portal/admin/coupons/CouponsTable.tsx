@@ -5,7 +5,19 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useTableState } from "@/lib/admin/useTableState";
 import { useTableDensity } from "@/lib/admin/useTableDensity";
 import { useTableScrollRestore } from "@/lib/admin/useTableScrollRestore";
-import { upsertCoupon, readCoupons, toggleCoupon, deleteCoupon, getCouponStats, type Coupon } from "@/lib/admin/couponStore";
+import {
+  upsertCoupon,
+  readCoupons,
+  toggleCoupon,
+  deleteCoupon,
+  getCouponStats,
+  duplicateCoupon,
+  bulkToggleCoupons,
+  bulkDeleteCoupons,
+  exportCouponsToCSV,
+  type Coupon,
+  type CouponCategory,
+} from "@/lib/admin/couponStore";
 import { readClients, PRODUCTS, type Client, type Product } from "@/lib/admin/clientStore";
 import {
   MagnifyingGlassIcon,
@@ -21,11 +33,30 @@ import {
   TrashIcon,
   ChartBarIcon,
   CalendarDaysIcon,
+  DocumentDuplicateIcon,
+  ArrowDownTrayIcon,
+  ExclamationTriangleIcon,
+  ClockIcon,
+  SparklesIcon,
+  CurrencyDollarIcon,
+  UserPlusIcon,
+  FolderIcon,
+  BanknotesIcon,
 } from "@heroicons/react/24/outline";
 
-type SortKey = "createdAt" | "code" | "percentOff" | "enabled";
+type SortKey = "createdAt" | "code" | "percentOff" | "enabled" | "category";
 type SortDir = "desc" | "asc";
-type EnabledFilter = "all" | "enabled" | "disabled";
+type EnabledFilter = "all" | "enabled" | "disabled" | "expired" | "scheduled";
+type CategoryFilter = "all" | CouponCategory;
+
+const CATEGORY_OPTIONS: { value: CouponCategory; label: string; color: string }[] = [
+  { value: "promo", label: "Promo", color: "#47BD79" },
+  { value: "partner", label: "Partner", color: "#3B82F6" },
+  { value: "loyalty", label: "Loyalty", color: "#A855F7" },
+  { value: "seasonal", label: "Seasonal", color: "#F59E0B" },
+  { value: "referral", label: "Referral", color: "#EC4899" },
+  { value: "other", label: "Other", color: "#6B7280" },
+];
 
 function stopRowClick(e: React.MouseEvent) {
   e.stopPropagation();
@@ -37,12 +68,110 @@ function compare(a: any, b: any) {
   return 0;
 }
 
-function Pill({ on, children }: { on: boolean; children: React.ReactNode }) {
-  const base = "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium";
-  const cls = on
-    ? "bg-[#47BD79]/20 text-[#47BD79] border-[#47BD79]/30"
-    : "bg-white/10 text-white/50 border-white/20";
-  return <span className={`${base} ${cls}`}>{children}</span>;
+// Status pill component
+function StatusPill({ coupon }: { coupon: Coupon }) {
+  const now = new Date();
+  const endsAt = coupon.endsAt ? new Date(coupon.endsAt) : null;
+  const startsAt = coupon.startsAt ? new Date(coupon.startsAt) : null;
+  const sevenDaysFromNow = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+  // Check if expired
+  if (endsAt && endsAt < now) {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium bg-red-500/20 text-red-400 border-red-500/30">
+        <XMarkIcon className="w-3 h-3" />
+        Expired
+      </span>
+    );
+  }
+
+  // Check if scheduled (not yet started)
+  if (startsAt && startsAt > now) {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium bg-blue-500/20 text-blue-400 border-blue-500/30">
+        <ClockIcon className="w-3 h-3" />
+        Scheduled
+      </span>
+    );
+  }
+
+  // Check if expiring soon (within 7 days)
+  if (endsAt && endsAt <= sevenDaysFromNow) {
+    const daysLeft = Math.ceil((endsAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium bg-amber-500/20 text-amber-400 border-amber-500/30">
+        <ExclamationTriangleIcon className="w-3 h-3" />
+        {daysLeft}d left
+      </span>
+    );
+  }
+
+  // Regular enabled/disabled status
+  if (coupon.enabled) {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium bg-[#47BD79]/20 text-[#47BD79] border-[#47BD79]/30">
+        <CheckIcon className="w-3 h-3" />
+        Active
+      </span>
+    );
+  }
+
+  return (
+    <span className="inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium bg-white/10 text-white/50 border-white/20">
+      Disabled
+    </span>
+  );
+}
+
+// Category badge component
+function CategoryBadge({ category }: { category?: CouponCategory }) {
+  const cat = CATEGORY_OPTIONS.find((c) => c.value === category) || CATEGORY_OPTIONS[5]; // default to "other"
+  return (
+    <span
+      className="inline-flex items-center gap-1 rounded-lg px-2 py-0.5 text-xs font-medium"
+      style={{ backgroundColor: `${cat.color}20`, color: cat.color }}
+    >
+      <FolderIcon className="w-3 h-3" />
+      {cat.label}
+    </span>
+  );
+}
+
+// Usage progress bar component
+function UsageBar({ used, max }: { used: number; max?: number }) {
+  if (!max) {
+    return (
+      <div className="flex items-center gap-2">
+        <span className="text-white/60 text-sm">{used}</span>
+        <span className="text-white/30 text-xs">/ ∞</span>
+      </div>
+    );
+  }
+
+  const percentage = Math.min(100, (used / max) * 100);
+  const isNearLimit = percentage >= 80;
+  const isAtLimit = used >= max;
+
+  return (
+    <div className="w-full max-w-[120px]">
+      <div className="flex items-center justify-between text-xs mb-1">
+        <span className={isAtLimit ? "text-red-400" : "text-white/60"}>
+          {used} / {max}
+        </span>
+        <span className={isAtLimit ? "text-red-400" : isNearLimit ? "text-amber-400" : "text-white/40"}>
+          {Math.round(percentage)}%
+        </span>
+      </div>
+      <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+        <div
+          className={`h-full rounded-full transition-all ${
+            isAtLimit ? "bg-red-500" : isNearLimit ? "bg-amber-500" : "bg-[#47BD79]"
+          }`}
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+    </div>
+  );
 }
 
 function CopyCode({ code }: { code: string }) {
@@ -101,10 +230,10 @@ function Modal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
       <div
-        className={`relative w-full ${sizeClass} rounded-2xl border border-white/10 bg-zinc-900 p-6 shadow-2xl max-h-[90vh] overflow-y-auto`}
+        className={`relative w-full ${sizeClass} rounded-2xl border border-white/10 bg-[#0f172a] p-6 shadow-2xl max-h-[90vh] overflow-y-auto`}
         style={{ boxShadow: "0 0 40px rgba(71, 189, 121, 0.15)" }}
       >
-        <div className="flex items-start justify-between gap-3 sticky top-0 bg-zinc-900 pb-4 -mt-2 pt-2 -mx-6 px-6 border-b border-white/10">
+        <div className="flex items-start justify-between gap-3 sticky top-0 bg-[#0f172a] pb-4 -mt-2 pt-2 -mx-6 px-6 border-b border-white/10">
           <div>
             <div className="text-lg font-semibold text-white">{title}</div>
           </div>
@@ -131,6 +260,7 @@ function MultiSelect({
   renderItem,
   idKey = "id",
   color,
+  compact = false,
 }: {
   label: string;
   icon: React.ElementType;
@@ -140,6 +270,7 @@ function MultiSelect({
   renderItem: (item: any) => { name: string; sub?: string };
   idKey?: string;
   color: string;
+  compact?: boolean;
 }) {
   const [search, setSearch] = React.useState("");
 
@@ -161,18 +292,20 @@ function MultiSelect({
   const clearAll = () => onChange([]);
 
   return (
-    <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-      <div className="flex items-center justify-between mb-3">
+    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+      <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <Icon className="w-4 h-4" style={{ color }} />
-          <span className="text-sm font-medium text-white">{label}</span>
-          <span className="text-xs text-white/40">({selected.length} selected)</span>
+          <span className="text-xs font-medium text-white">{label}</span>
+          <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[10px] font-medium" style={{ backgroundColor: `${color}30`, color }}>
+            {selected.length}
+          </span>
         </div>
         <div className="flex gap-2">
           <button
             type="button"
             onClick={selectAll}
-            className="text-xs text-white/50 hover:text-white transition-colors"
+            className="text-[10px] text-white/50 hover:text-white transition-colors"
           >
             All
           </button>
@@ -180,24 +313,24 @@ function MultiSelect({
           <button
             type="button"
             onClick={clearAll}
-            className="text-xs text-white/50 hover:text-white transition-colors"
+            className="text-[10px] text-white/50 hover:text-white transition-colors"
           >
-            None
+            Clear
           </button>
         </div>
       </div>
 
-      <div className="relative mb-3">
-        <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+      <div className="relative mb-2">
+        <MagnifyingGlassIcon className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/40" />
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search..."
-          className="w-full rounded-lg border border-white/10 bg-white/5 pl-9 pr-3 py-2 text-sm text-white placeholder:text-white/40 outline-none focus:border-white/20"
+          className="w-full rounded-lg border border-white/10 bg-white/5 pl-8 pr-3 py-1.5 text-xs text-white placeholder:text-white/40 outline-none focus:border-white/20"
         />
       </div>
 
-      <div className="max-h-40 overflow-y-auto space-y-1">
+      <div className={`${compact ? "max-h-32" : "max-h-48"} overflow-y-auto space-y-0.5 scrollbar-thin`}>
         {filtered.map((item) => {
           const { name, sub } = renderItem(item);
           const id = item[idKey];
@@ -208,37 +341,37 @@ function MultiSelect({
               key={id}
               type="button"
               onClick={() => toggle(id)}
-              className={`w-full flex items-center gap-3 rounded-lg px-3 py-2 text-left transition-all ${
+              className={`w-full flex items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-all ${
                 isSelected
-                  ? "bg-white/10 border border-white/20"
-                  : "hover:bg-white/5 border border-transparent"
+                  ? "bg-white/10"
+                  : "hover:bg-white/5"
               }`}
             >
               <div
-                className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
+                className={`w-4 h-4 rounded flex items-center justify-center transition-all flex-shrink-0 ${
                   isSelected
-                    ? "border-[#47BD79] bg-[#47BD79]"
-                    : "border-white/20 bg-white/5"
+                    ? "bg-gradient-to-br from-[#47BD79] to-[#3da968]"
+                    : "border border-white/20 bg-white/5"
                 }`}
               >
-                {isSelected && <CheckIcon className="w-3 h-3 text-white" />}
+                {isSelected && <CheckIcon className="w-2.5 h-2.5 text-white" />}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-sm text-white truncate">{name}</div>
-                {sub && <div className="text-xs text-white/40 truncate">{sub}</div>}
+                <div className="text-xs text-white truncate">{name}</div>
+                {sub && !compact && <div className="text-[10px] text-white/40 truncate">{sub}</div>}
               </div>
             </button>
           );
         })}
         {filtered.length === 0 && (
-          <div className="text-center text-sm text-white/40 py-4">No items found</div>
+          <div className="text-center text-xs text-white/40 py-3">No items found</div>
         )}
       </div>
     </div>
   );
 }
 
-function StatCard({ label, value, icon: Icon, color }: { label: string; value: string | number; icon: React.ElementType; color: string }) {
+function StatCard({ label, value, icon: Icon, color, sub }: { label: string; value: string | number; icon: React.ElementType; color: string; sub?: string }) {
   return (
     <div
       className="rounded-xl border border-white/10 bg-white/5 p-4"
@@ -250,6 +383,46 @@ function StatCard({ label, value, icon: Icon, color }: { label: string; value: s
       </div>
       <div className="mt-1 text-xl font-bold" style={{ color }}>
         {value}
+      </div>
+      {sub && <div className="text-xs text-white/40 mt-0.5">{sub}</div>}
+    </div>
+  );
+}
+
+// Empty state component
+function EmptyState({ onCreateNew }: { onCreateNew: () => void }) {
+  return (
+    <div className="px-4 py-16 text-center">
+      <div className="mx-auto w-20 h-20 rounded-2xl bg-gradient-to-br from-[#47BD79]/20 to-[#3B82F6]/20 flex items-center justify-center mb-6">
+        <TagIcon className="w-10 h-10 text-[#47BD79]" />
+      </div>
+      <h3 className="text-lg font-semibold text-white mb-2">No coupons yet</h3>
+      <p className="text-white/50 max-w-sm mx-auto mb-6">
+        Create your first coupon to offer discounts for promos, partnerships, loyalty rewards, and more.
+      </p>
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <button
+          type="button"
+          onClick={onCreateNew}
+          className="inline-flex items-center gap-2 rounded-xl bg-[#47BD79] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#3da968] transition-all"
+        >
+          <PlusIcon className="w-4 h-4" />
+          Create your first coupon
+        </button>
+      </div>
+      <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
+        {[
+          { icon: TagIcon, label: "Promo codes", desc: "Launch campaigns" },
+          { icon: UserGroupIcon, label: "Partner deals", desc: "Exclusive offers" },
+          { icon: SparklesIcon, label: "Loyalty rewards", desc: "Retain customers" },
+          { icon: CalendarDaysIcon, label: "Seasonal sales", desc: "Holiday specials" },
+        ].map((item) => (
+          <div key={item.label} className="rounded-xl border border-white/10 bg-white/5 p-3 text-left">
+            <item.icon className="w-5 h-5 text-[#47BD79] mb-2" />
+            <div className="text-sm font-medium text-white">{item.label}</div>
+            <div className="text-xs text-white/40">{item.desc}</div>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -269,6 +442,7 @@ export default function CouponsTable() {
   const { state: ui, patch, reset, ready } = useTableState("admin-coupons", {
     query: "",
     enabled: "all" as EnabledFilter,
+    category: "all" as CategoryFilter,
     sortKey: "createdAt" as SortKey,
     sortDir: "desc" as SortDir,
   });
@@ -278,8 +452,22 @@ export default function CouponsTable() {
   const [openNew, setOpenNew] = React.useState(false);
   const [editId, setEditId] = React.useState<string | null>(null);
   const [msg, setMsg] = React.useState("");
-  const [stats, setStats] = React.useState({ totalCoupons: 0, activeCoupons: 0, totalRedemptions: 0, avgDiscount: 0 });
+  const [stats, setStats] = React.useState({
+    totalCoupons: 0,
+    activeCoupons: 0,
+    totalRedemptions: 0,
+    avgDiscount: 0,
+    totalSavingsCents: 0,
+    expiredCoupons: 0,
+    expiringSoon: 0,
+    scheduledCoupons: 0,
+  });
   const [confirmDelete, setConfirmDelete] = React.useState<string | null>(null);
+  const [confirmBulkDelete, setConfirmBulkDelete] = React.useState(false);
+
+  // Bulk selection state
+  const [selectedIds, setSelectedIds] = React.useState<Set<string>>(new Set());
+  const [selectMode, setSelectMode] = React.useState(false);
 
   React.useEffect(() => {
     function load() {
@@ -307,14 +495,30 @@ export default function CouponsTable() {
 
   const filtered = React.useMemo(() => {
     const q = ui.query.trim().toLowerCase();
+    const now = new Date();
+
     const base = rows
-      .filter((c) => (ui.enabled === "all" ? true : ui.enabled === "enabled" ? c.enabled : !c.enabled))
+      .filter((c) => {
+        // Status filter
+        if (ui.enabled === "all") return true;
+        if (ui.enabled === "enabled") return c.enabled;
+        if (ui.enabled === "disabled") return !c.enabled;
+        if (ui.enabled === "expired") return c.endsAt && new Date(c.endsAt) < now;
+        if (ui.enabled === "scheduled") return c.startsAt && new Date(c.startsAt) > now;
+        return true;
+      })
+      .filter((c) => {
+        // Category filter
+        if (ui.category === "all") return true;
+        return (c.category || "other") === ui.category;
+      })
       .filter((c) => {
         if (!q) return true;
         return (
           c.code.toLowerCase().includes(q) ||
           c.id.toLowerCase().includes(q) ||
-          (c.note ?? "").toLowerCase().includes(q)
+          (c.note ?? "").toLowerCase().includes(q) ||
+          (c.category ?? "").toLowerCase().includes(q)
         );
       });
 
@@ -324,9 +528,10 @@ export default function CouponsTable() {
       if (ui.sortKey === "createdAt") return compare(a.createdAt, b.createdAt) * dir;
       if (ui.sortKey === "code") return compare(a.code, b.code) * dir;
       if (ui.sortKey === "percentOff") return compare(a.percentOff, b.percentOff) * dir;
+      if (ui.sortKey === "category") return compare(a.category || "other", b.category || "other") * dir;
       return compare(Number(a.enabled), Number(b.enabled)) * dir;
     });
-  }, [rows, ui.query, ui.enabled, ui.sortKey, ui.sortDir]);
+  }, [rows, ui.query, ui.enabled, ui.category, ui.sortKey, ui.sortDir]);
 
   // Form state
   const [code, setCode] = React.useState("OMG10");
@@ -342,6 +547,9 @@ export default function CouponsTable() {
   const [startsAt, setStartsAt] = React.useState<string>("");
   const [endsAt, setEndsAt] = React.useState<string>("");
   const [note, setNote] = React.useState<string>("");
+  const [category, setCategory] = React.useState<CouponCategory>("promo");
+  const [minPurchaseCents, setMinPurchaseCents] = React.useState<string>("");
+  const [firstTimeOnly, setFirstTimeOnly] = React.useState(false);
 
   // Reset form
   function resetForm() {
@@ -358,6 +566,9 @@ export default function CouponsTable() {
     setStartsAt("");
     setEndsAt("");
     setNote("");
+    setCategory("promo");
+    setMinPurchaseCents("");
+    setFirstTimeOnly(false);
     setEditId(null);
   }
 
@@ -392,6 +603,9 @@ export default function CouponsTable() {
     setPercentOff(coupon.percentOff);
     setAmountOffCents(coupon.amountOffCents || 500);
     setEnabled(coupon.enabled);
+    setCategory(coupon.category || "promo");
+    setMinPurchaseCents(coupon.minPurchaseCents ? String(coupon.minPurchaseCents / 100) : "");
+    setFirstTimeOnly(coupon.firstTimeOnly || false);
 
     if (coupon.appliesTo === "all") {
       setAppliesTo("all");
@@ -416,10 +630,13 @@ export default function CouponsTable() {
   }
 
   function saveCoupon() {
+    const existingCoupon = editId ? readCoupons().find((c) => c.id === editId) : null;
+
     const payload: Coupon = {
       id: editId ?? `cpn_${Math.floor(100000 + Math.random() * 900000)}`,
-      createdAt: editId ? (readCoupons().find((c) => c.id === editId)?.createdAt ?? new Date().toISOString()) : new Date().toISOString(),
-      redeemedCount: editId ? (readCoupons().find((c) => c.id === editId)?.redeemedCount ?? 0) : 0,
+      createdAt: existingCoupon?.createdAt ?? new Date().toISOString(),
+      redeemedCount: existingCoupon?.redeemedCount ?? 0,
+      totalSavingsCents: existingCoupon?.totalSavingsCents ?? 0,
       code: code.trim().toUpperCase(),
       enabled,
       discountType,
@@ -431,6 +648,9 @@ export default function CouponsTable() {
       startsAt: startsAt ? new Date(startsAt).toISOString() : undefined,
       endsAt: endsAt ? new Date(endsAt).toISOString() : undefined,
       note: note.trim() || undefined,
+      category,
+      minPurchaseCents: minPurchaseCents.trim() ? Math.round(parseFloat(minPurchaseCents) * 100) : undefined,
+      firstTimeOnly,
     };
 
     upsertCoupon(payload);
@@ -446,7 +666,74 @@ export default function CouponsTable() {
   function handleDelete(id: string) {
     deleteCoupon(id);
     setConfirmDelete(null);
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
     flash("Coupon deleted");
+  }
+
+  function handleDuplicate(id: string) {
+    const newCoupon = duplicateCoupon(id);
+    if (newCoupon) {
+      flash(`Duplicated as ${newCoupon.code}`);
+    }
+  }
+
+  function handleExportCSV() {
+    const csv = exportCouponsToCSV();
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `coupons-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    flash("Exported to CSV");
+  }
+
+  // Bulk action handlers
+  function handleBulkEnable() {
+    bulkToggleCoupons(Array.from(selectedIds), true);
+    flash(`${selectedIds.size} coupons enabled`);
+    setSelectedIds(new Set());
+    setSelectMode(false);
+  }
+
+  function handleBulkDisable() {
+    bulkToggleCoupons(Array.from(selectedIds), false);
+    flash(`${selectedIds.size} coupons disabled`);
+    setSelectedIds(new Set());
+    setSelectMode(false);
+  }
+
+  function handleBulkDelete() {
+    bulkDeleteCoupons(Array.from(selectedIds));
+    flash(`${selectedIds.size} coupons deleted`);
+    setSelectedIds(new Set());
+    setSelectMode(false);
+    setConfirmBulkDelete(false);
+  }
+
+  function toggleSelectAll() {
+    if (selectedIds.size === filtered.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(filtered.map((c) => c.id)));
+    }
+  }
+
+  function toggleSelectOne(id: string) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
   }
 
   function getClientNames(ids: string[]): string {
@@ -467,12 +754,26 @@ export default function CouponsTable() {
 
   return (
     <div className="space-y-6">
-      {/* Stats */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+      {/* Stats - Enhanced with more metrics */}
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6">
         <StatCard label="Total Coupons" value={stats.totalCoupons} icon={TagIcon} color="#47BD79" />
         <StatCard label="Active" value={stats.activeCoupons} icon={CheckIcon} color="#3B82F6" />
-        <StatCard label="Total Redemptions" value={stats.totalRedemptions} icon={ChartBarIcon} color="#A855F7" />
+        <StatCard label="Redemptions" value={stats.totalRedemptions} icon={ChartBarIcon} color="#A855F7" />
         <StatCard label="Avg Discount" value={`${stats.avgDiscount}%`} icon={CubeIcon} color="#F59E0B" />
+        <StatCard
+          label="Total Savings"
+          value={`$${(stats.totalSavingsCents / 100).toFixed(0)}`}
+          icon={BanknotesIcon}
+          color="#EC4899"
+          sub="Given to customers"
+        />
+        <StatCard
+          label="Expiring Soon"
+          value={stats.expiringSoon}
+          icon={ExclamationTriangleIcon}
+          color={stats.expiringSoon > 0 ? "#EF4444" : "#6B7280"}
+          sub="Within 7 days"
+        />
       </div>
 
       <div
@@ -486,7 +787,7 @@ export default function CouponsTable() {
             <input
               value={ui.query}
               onChange={(e) => patch({ query: e.target.value })}
-              placeholder="Search coupon code or id..."
+              placeholder="Search coupon code, id, or note..."
               className="w-full rounded-xl border border-white/20 bg-white/5 pl-10 pr-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#47BD79]/50 focus:ring-2 focus:ring-[#47BD79]/20 transition-all"
             />
           </div>
@@ -498,11 +799,27 @@ export default function CouponsTable() {
               value={ui.enabled}
               onChange={(e) => patch({ enabled: e.target.value as EnabledFilter })}
               className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[#47BD79]/50"
-              title="Enabled"
+              title="Status filter"
             >
-              <option value="all" className="bg-zinc-900">All</option>
-              <option value="enabled" className="bg-zinc-900">Enabled</option>
+              <option value="all" className="bg-zinc-900">All Status</option>
+              <option value="enabled" className="bg-zinc-900">Active</option>
               <option value="disabled" className="bg-zinc-900">Disabled</option>
+              <option value="expired" className="bg-zinc-900">Expired</option>
+              <option value="scheduled" className="bg-zinc-900">Scheduled</option>
+            </select>
+
+            <select
+              value={ui.category}
+              onChange={(e) => patch({ category: e.target.value as CategoryFilter })}
+              className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[#47BD79]/50"
+              title="Category filter"
+            >
+              <option value="all" className="bg-zinc-900">All Categories</option>
+              {CATEGORY_OPTIONS.map((cat) => (
+                <option key={cat.value} value={cat.value} className="bg-zinc-900">
+                  {cat.label}
+                </option>
+              ))}
             </select>
 
             <select
@@ -514,7 +831,8 @@ export default function CouponsTable() {
               <option value="createdAt" className="bg-zinc-900">Date</option>
               <option value="code" className="bg-zinc-900">Code</option>
               <option value="percentOff" className="bg-zinc-900">% Off</option>
-              <option value="enabled" className="bg-zinc-900">Enabled</option>
+              <option value="category" className="bg-zinc-900">Category</option>
+              <option value="enabled" className="bg-zinc-900">Status</option>
             </select>
 
             <button
@@ -529,6 +847,16 @@ export default function CouponsTable() {
 
             <button
               type="button"
+              onClick={handleExportCSV}
+              className="flex items-center gap-1 rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all"
+              title="Export to CSV"
+            >
+              <ArrowDownTrayIcon className="w-4 h-4" />
+              Export
+            </button>
+
+            <button
+              type="button"
               onClick={() => {
                 resetForm();
                 setOpenNew(true);
@@ -538,6 +866,71 @@ export default function CouponsTable() {
               <PlusIcon className="w-4 h-4" />
               New coupon
             </button>
+          </div>
+        </div>
+
+        {/* Bulk Actions Bar */}
+        {rows.length > 0 && (
+          <div className="flex items-center gap-3 px-4 pb-3 border-b border-white/10">
+            <button
+              type="button"
+              onClick={() => {
+                setSelectMode(!selectMode);
+                if (selectMode) setSelectedIds(new Set());
+              }}
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
+                selectMode
+                  ? "bg-[#47BD79] text-white"
+                  : "border border-white/20 bg-white/5 text-white/60 hover:bg-white/10"
+              }`}
+            >
+              <CheckIcon className="w-3.5 h-3.5" />
+              {selectMode ? `${selectedIds.size} selected` : "Select"}
+            </button>
+
+            {selectMode && (
+              <>
+                <button
+                  type="button"
+                  onClick={toggleSelectAll}
+                  className="text-xs text-white/50 hover:text-white transition-colors"
+                >
+                  {selectedIds.size === filtered.length ? "Deselect all" : "Select all"}
+                </button>
+
+                {selectedIds.size > 0 && (
+                  <>
+                    <div className="h-4 w-px bg-white/20" />
+                    <button
+                      type="button"
+                      onClick={handleBulkEnable}
+                      className="flex items-center gap-1 rounded-lg border border-[#47BD79]/30 bg-[#47BD79]/10 px-2.5 py-1.5 text-xs font-medium text-[#47BD79] hover:bg-[#47BD79]/20 transition-all"
+                    >
+                      <CheckIcon className="w-3 h-3" />
+                      Enable
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleBulkDisable}
+                      className="flex items-center gap-1 rounded-lg border border-white/20 bg-white/5 px-2.5 py-1.5 text-xs font-medium text-white/60 hover:bg-white/10 transition-all"
+                    >
+                      <XMarkIcon className="w-3 h-3" />
+                      Disable
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setConfirmBulkDelete(true)}
+                      className="flex items-center gap-1 rounded-lg border border-red-500/30 bg-red-500/10 px-2.5 py-1.5 text-xs font-medium text-red-400 hover:bg-red-500/20 transition-all"
+                    >
+                      <TrashIcon className="w-3 h-3" />
+                      Delete
+                    </button>
+                  </>
+                )}
+              </>
+            )}
+
+            <div className="flex-1" />
 
             <button
               type="button"
@@ -546,63 +939,81 @@ export default function CouponsTable() {
                 resetScroll();
                 flash("View reset");
               }}
-              className="flex items-center gap-1 rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all"
+              className="flex items-center gap-1 rounded-lg border border-white/20 bg-white/5 px-2.5 py-1.5 text-xs text-white/50 hover:bg-white/10 hover:text-white transition-all"
             >
-              <ArrowPathIcon className="w-4 h-4" />
+              <ArrowPathIcon className="w-3.5 h-3.5" />
               Reset
             </button>
 
             <button
               type="button"
               onClick={toggle}
-              className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all"
+              className="rounded-lg border border-white/20 bg-white/5 px-2.5 py-1.5 text-xs text-white/50 hover:bg-white/10 hover:text-white transition-all"
               title="Toggle density"
             >
               {compact ? "Compact" : "Comfortable"}
             </button>
 
-            {isOverride ? (
+            {isOverride && (
               <button
                 type="button"
                 onClick={clearOverride}
-                className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all"
+                className="rounded-lg border border-white/20 bg-white/5 px-2.5 py-1.5 text-xs text-white/50 hover:bg-white/10 hover:text-white transition-all"
                 title="Use global density"
               >
                 Use global
               </button>
-            ) : null}
+            )}
           </div>
-        </div>
+        )}
 
         {/* Table */}
-        <div className={`rounded-xl border border-white/10 mx-4 mb-4 overflow-hidden ${compact ? "table-compact" : ""}`}>
+        <div className={`rounded-xl border border-white/10 m-4 overflow-hidden ${compact ? "table-compact" : ""}`}>
           <div ref={scrollRef} className="max-h-[520px] overflow-auto">
-            <table className="w-full text-sm">
-              <thead className="sticky top-0 z-10 bg-white/5 backdrop-blur-sm">
-                <tr className="text-xs uppercase tracking-wide text-white/50 border-b border-white/10">
-                  <th className="px-4 py-3 text-left">Code</th>
-                  <th className="px-4 py-3 text-left">Discount</th>
-                  <th className="px-4 py-3 text-left">Products</th>
-                  <th className="px-4 py-3 text-left">Clients</th>
-                  <th className="px-4 py-3 text-left">Redemptions</th>
-                  <th className="px-4 py-3 text-left">Status</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
-                </tr>
-              </thead>
-
-              <tbody className="divide-y divide-white/5">
-                {filtered.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="px-4 py-12 text-center text-white/50">
-                      No coupons yet. Click "New coupon" to create one.
-                    </td>
+            {rows.length === 0 ? (
+              <EmptyState onCreateNew={() => { resetForm(); setOpenNew(true); }} />
+            ) : filtered.length === 0 ? (
+              <div className="px-4 py-12 text-center text-white/50">
+                No coupons match your filters. Try adjusting your search or filters.
+              </div>
+            ) : (
+              <table className="w-full text-sm">
+                <thead className="sticky top-0 z-10 bg-[#0f172a]/95 backdrop-blur-sm">
+                  <tr className="text-xs uppercase tracking-wide text-white/50 border-b border-white/10">
+                    {selectMode && <th className="px-3 py-3.5 w-10"></th>}
+                    <th className="px-4 py-3.5 text-left">Code</th>
+                    <th className="px-4 py-3.5 text-left">Category</th>
+                    <th className="px-4 py-3.5 text-left">Discount</th>
+                    <th className="px-4 py-3.5 text-left">Targeting</th>
+                    <th className="px-4 py-3.5 text-left">Usage</th>
+                    <th className="px-4 py-3.5 text-left">Status</th>
+                    <th className="px-4 py-3.5 text-right">Actions</th>
                   </tr>
-                ) : (
-                  filtered.map((c) => (
+                </thead>
+
+                <tbody className="divide-y divide-white/5">
+                  {filtered.map((c) => (
                     <tr
                       key={c.id}
-                      className="group cursor-pointer transition-colors hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#47BD79]/30"
+                      className={`group transition-colors hover:bg-white/5 focus:outline-none ${
+                        selectedIds.has(c.id) ? "bg-[#47BD79]/10" : ""
+                      }`}
                     >
+                      {selectMode && (
+                        <td className="px-3 py-3" onClick={stopRowClick}>
+                          <button
+                            type="button"
+                            onClick={() => toggleSelectOne(c.id)}
+                            className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
+                              selectedIds.has(c.id)
+                                ? "border-[#47BD79] bg-[#47BD79]"
+                                : "border-white/20 bg-white/5 hover:border-white/40"
+                            }`}
+                          >
+                            {selectedIds.has(c.id) && <CheckIcon className="w-3 h-3 text-white" />}
+                          </button>
+                        </td>
+                      )}
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
                           <div className="w-8 h-8 rounded-lg bg-[#47BD79]/20 flex items-center justify-center">
@@ -615,42 +1026,65 @@ export default function CouponsTable() {
                         </div>
                       </td>
                       <td className="px-4 py-3">
+                        <CategoryBadge category={c.category} />
+                      </td>
+                      <td className="px-4 py-3">
                         <div className="font-semibold text-white">
                           {c.discountType === "fixed" && c.amountOffCents
                             ? `$${(c.amountOffCents / 100).toFixed(2)} off`
                             : `${c.percentOff}% off`}
                         </div>
+                        {c.minPurchaseCents && (
+                          <div className="text-xs text-white/40 flex items-center gap-1 mt-0.5">
+                            <CurrencyDollarIcon className="w-3 h-3" />
+                            Min ${(c.minPurchaseCents / 100).toFixed(0)}
+                          </div>
+                        )}
+                        {c.firstTimeOnly && (
+                          <div className="text-xs text-[#A855F7] flex items-center gap-1 mt-0.5">
+                            <UserPlusIcon className="w-3 h-3" />
+                            New customers
+                          </div>
+                        )}
                       </td>
                       <td className="px-4 py-3">
-                        <div className="flex items-center gap-1.5">
-                          <CubeIcon className="w-4 h-4 text-[#3B82F6]" />
-                          <span className="text-white/60 text-xs">
-                            {c.appliesTo === "all"
-                              ? "All products"
-                              : getProductNames(c.appliesTo as string[])}
-                          </span>
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-1.5">
+                            <CubeIcon className="w-3.5 h-3.5 text-[#3B82F6]" />
+                            <span className="text-white/60 text-xs">
+                              {c.appliesTo === "all"
+                                ? "All products"
+                                : `${(c.appliesTo as string[]).length} products`}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <UserGroupIcon className="w-3.5 h-3.5 text-[#A855F7]" />
+                            <span className="text-white/60 text-xs">
+                              {c.assignedTo === "all"
+                                ? "All clients"
+                                : `${(c.assignedTo as string[]).length} clients`}
+                            </span>
+                          </div>
                         </div>
                       </td>
                       <td className="px-4 py-3">
-                        <div className="flex items-center gap-1.5">
-                          <UserGroupIcon className="w-4 h-4 text-[#A855F7]" />
-                          <span className="text-white/60 text-xs">
-                            {c.assignedTo === "all"
-                              ? "All clients"
-                              : getClientNames(c.assignedTo as string[])}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 text-white/60">
-                        {c.redeemedCount}
-                        {c.maxRedemptions ? ` / ${c.maxRedemptions}` : ""}
+                        <UsageBar used={c.redeemedCount} max={c.maxRedemptions} />
                       </td>
                       <td className="px-4 py-3">
-                        <Pill on={c.enabled}>{c.enabled ? "Enabled" : "Disabled"}</Pill>
+                        <StatusPill coupon={c} />
                       </td>
                       <td className="px-4 py-3 text-right" onClick={stopRowClick}>
-                        <div className="flex items-center justify-end gap-2">
+                        <div className="flex items-center justify-end gap-1.5">
                           <CopyCode code={c.code} />
+
+                          <button
+                            type="button"
+                            onClick={() => handleDuplicate(c.id)}
+                            className="rounded-xl border border-white/20 bg-white/5 p-1.5 text-white/70 hover:bg-white/10 hover:text-white transition-all"
+                            title="Duplicate coupon"
+                          >
+                            <DocumentDuplicateIcon className="w-3.5 h-3.5" />
+                          </button>
 
                           <button
                             type="button"
@@ -659,7 +1093,7 @@ export default function CouponsTable() {
                               setEditId(c.id);
                               setOpenNew(true);
                             }}
-                            className="rounded-xl border border-white/20 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all"
+                            className="rounded-xl border border-white/20 bg-white/5 px-2.5 py-1.5 text-xs font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all"
                             title="Edit coupon"
                           >
                             Edit
@@ -671,7 +1105,7 @@ export default function CouponsTable() {
                               toggleCoupon(c.id, !c.enabled);
                               flash(c.enabled ? "Coupon disabled" : "Coupon enabled");
                             }}
-                            className="rounded-xl border border-white/20 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all"
+                            className="rounded-xl border border-white/20 bg-white/5 px-2.5 py-1.5 text-xs font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all"
                           >
                             {c.enabled ? "Disable" : "Enable"}
                           </button>
@@ -679,7 +1113,7 @@ export default function CouponsTable() {
                           <button
                             type="button"
                             onClick={() => setConfirmDelete(c.id)}
-                            className="rounded-xl border border-red-500/30 bg-red-500/10 px-2 py-1.5 text-xs font-medium text-red-400 hover:bg-red-500/20 transition-all"
+                            className="rounded-xl border border-red-500/30 bg-red-500/10 p-1.5 text-red-400 hover:bg-red-500/20 transition-all"
                             title="Delete coupon"
                           >
                             <TrashIcon className="w-3.5 h-3.5" />
@@ -687,16 +1121,16 @@ export default function CouponsTable() {
                         </div>
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
 
         <div className="flex items-center justify-between border-t border-white/10 p-4 text-xs text-white/40">
           <span>Stored in localStorage: <span className="font-mono">omg_coupons</span></span>
-          <span>{filtered.length} coupon{filtered.length !== 1 ? "s" : ""}</span>
+          <span>{filtered.length} coupon{filtered.length !== 1 ? "s" : ""}{rows.length !== filtered.length ? ` (${rows.length} total)` : ""}</span>
         </div>
 
         {/* Create/Edit Modal */}
@@ -708,66 +1142,94 @@ export default function CouponsTable() {
             resetForm();
             router.replace("/portal/admin/coupons");
           }}
-          size="3xl"
+          size="2xl"
         >
-          <div className="space-y-6">
-            {/* Basic Info */}
-            <div className="grid gap-4 md:grid-cols-3">
-              <div>
-                <label className="text-xs text-white/50 mb-1 block">Coupon Code</label>
-                <input
-                  value={code}
-                  onChange={(e) => setCode(e.target.value.toUpperCase())}
-                  className="w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#47BD79]/50"
-                  placeholder="OMG10"
-                />
-              </div>
-
-              <div>
-                <label className="text-xs text-white/50 mb-1 block">Discount Type</label>
-                <select
-                  value={discountType}
-                  onChange={(e) => setDiscountType(e.target.value as "percent" | "fixed")}
-                  className="w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2.5 text-sm text-white outline-none focus:border-[#47BD79]/50"
-                >
-                  <option value="percent" className="bg-zinc-900">Percentage Off</option>
-                  <option value="fixed" className="bg-zinc-900">Fixed Amount Off</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="text-xs text-white/50 mb-1 block">
-                  {discountType === "percent" ? "Percent Off" : "Amount Off ($)"}
-                </label>
-                {discountType === "percent" ? (
+          <div className="space-y-5">
+            {/* Section: Basic Info */}
+            <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
+              <h3 className="text-xs font-semibold text-white/70 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <TagIcon className="w-3.5 h-3.5 text-[#47BD79]" />
+                Basic Info
+              </h3>
+              <div className="grid gap-3 grid-cols-2 md:grid-cols-4">
+                <div className="col-span-2 md:col-span-1">
+                  <label className="text-[10px] uppercase tracking-wide text-white/40 mb-1 block">Code</label>
                   <input
-                    value={percentOff}
-                    onChange={(e) => setPercentOff(Number(e.target.value))}
-                    type="number"
-                    min={0}
-                    max={100}
-                    className="w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2.5 text-sm text-white outline-none focus:border-[#47BD79]/50"
+                    value={code}
+                    onChange={(e) => setCode(e.target.value.toUpperCase())}
+                    className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#47BD79]/50 focus:bg-white/[0.08]"
+                    placeholder="OMG10"
                   />
-                ) : (
-                  <input
-                    value={(amountOffCents / 100).toFixed(2)}
-                    onChange={(e) => setAmountOffCents(Math.round(parseFloat(e.target.value || "0") * 100))}
-                    type="number"
-                    min={0}
-                    step={0.01}
-                    className="w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2.5 text-sm text-white outline-none focus:border-[#47BD79]/50"
-                  />
-                )}
+                </div>
+
+                <div>
+                  <label className="text-[10px] uppercase tracking-wide text-white/40 mb-1 block">Category</label>
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value as CouponCategory)}
+                    className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[#47BD79]/50"
+                  >
+                    {CATEGORY_OPTIONS.map((cat) => (
+                      <option key={cat.value} value={cat.value} className="bg-zinc-900">
+                        {cat.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[10px] uppercase tracking-wide text-white/40 mb-1 block">Type</label>
+                  <select
+                    value={discountType}
+                    onChange={(e) => setDiscountType(e.target.value as "percent" | "fixed")}
+                    className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[#47BD79]/50"
+                  >
+                    <option value="percent" className="bg-zinc-900">% Off</option>
+                    <option value="fixed" className="bg-zinc-900">$ Off</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[10px] uppercase tracking-wide text-white/40 mb-1 block">
+                    {discountType === "percent" ? "Percent" : "Amount"}
+                  </label>
+                  {discountType === "percent" ? (
+                    <div className="relative">
+                      <input
+                        value={percentOff}
+                        onChange={(e) => setPercentOff(Number(e.target.value))}
+                        type="number"
+                        min={0}
+                        max={100}
+                        className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 pr-8 text-sm text-white outline-none focus:border-[#47BD79]/50"
+                      />
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">%</span>
+                    </div>
+                  ) : (
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">$</span>
+                      <input
+                        value={(amountOffCents / 100).toFixed(2)}
+                        onChange={(e) => setAmountOffCents(Math.round(parseFloat(e.target.value || "0") * 100))}
+                        type="number"
+                        min={0}
+                        step={0.01}
+                        className="w-full rounded-lg border border-white/15 bg-white/5 pl-7 pr-3 py-2 text-sm text-white outline-none focus:border-[#47BD79]/50"
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-3">
+            {/* Section: Settings Row */}
+            <div className="grid gap-3 grid-cols-2 md:grid-cols-4">
               <div>
-                <label className="text-xs text-white/50 mb-1 block">Status</label>
+                <label className="text-[10px] uppercase tracking-wide text-white/40 mb-1 block">Status</label>
                 <select
                   value={enabled ? "enabled" : "disabled"}
                   onChange={(e) => setEnabled(e.target.value === "enabled")}
-                  className="w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2.5 text-sm text-white outline-none focus:border-[#47BD79]/50"
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[#47BD79]/50"
                 >
                   <option value="enabled" className="bg-zinc-900">Enabled</option>
                   <option value="disabled" className="bg-zinc-900">Disabled</option>
@@ -775,165 +1237,212 @@ export default function CouponsTable() {
               </div>
 
               <div>
-                <label className="text-xs text-white/50 mb-1 block">Max Redemptions (optional)</label>
+                <label className="text-[10px] uppercase tracking-wide text-white/40 mb-1 block">Max Uses</label>
                 <input
                   value={maxRedemptions}
                   onChange={(e) => setMaxRedemptions(e.target.value)}
                   type="number"
                   min={1}
-                  className="w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#47BD79]/50"
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#47BD79]/50"
                   placeholder="Unlimited"
                 />
               </div>
 
               <div>
-                <label className="text-xs text-white/50 mb-1 block">Note (optional)</label>
+                <label className="text-[10px] uppercase tracking-wide text-white/40 mb-1 block">Min Purchase</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">$</span>
+                  <input
+                    value={minPurchaseCents}
+                    onChange={(e) => setMinPurchaseCents(e.target.value)}
+                    type="number"
+                    min={0}
+                    step={1}
+                    className="w-full rounded-lg border border-white/15 bg-white/5 pl-7 pr-3 py-2 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#47BD79]/50"
+                    placeholder="None"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[10px] uppercase tracking-wide text-white/40 mb-1 block">Note</label>
                 <input
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
-                  className="w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#47BD79]/50"
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#47BD79]/50"
                   placeholder="Internal note..."
                 />
               </div>
             </div>
 
-            {/* Date Range */}
-            <div className="grid gap-4 md:grid-cols-2">
+            {/* Section: Date Range & First-time Toggle */}
+            <div className="grid gap-3 grid-cols-1 md:grid-cols-3">
               <div>
-                <label className="flex items-center gap-2 text-xs text-white/50 mb-1">
-                  <CalendarDaysIcon className="w-4 h-4" />
-                  Start Date (optional)
+                <label className="text-[10px] uppercase tracking-wide text-white/40 mb-1 flex items-center gap-1">
+                  <CalendarDaysIcon className="w-3 h-3" />
+                  Start Date
                 </label>
                 <input
                   type="datetime-local"
                   value={startsAt}
                   onChange={(e) => setStartsAt(e.target.value)}
-                  className="w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2.5 text-sm text-white outline-none focus:border-[#47BD79]/50"
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[#47BD79]/50"
                 />
               </div>
 
               <div>
-                <label className="flex items-center gap-2 text-xs text-white/50 mb-1">
-                  <CalendarDaysIcon className="w-4 h-4" />
-                  End Date (optional)
+                <label className="text-[10px] uppercase tracking-wide text-white/40 mb-1 flex items-center gap-1">
+                  <CalendarDaysIcon className="w-3 h-3" />
+                  End Date
                 </label>
                 <input
                   type="datetime-local"
                   value={endsAt}
                   onChange={(e) => setEndsAt(e.target.value)}
-                  className="w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2.5 text-sm text-white outline-none focus:border-[#47BD79]/50"
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[#47BD79]/50"
                 />
+              </div>
+
+              <div className="flex items-end">
+                <button
+                  type="button"
+                  onClick={() => setFirstTimeOnly(!firstTimeOnly)}
+                  className={`w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all ${
+                    firstTimeOnly
+                      ? "bg-[#A855F7]/20 border border-[#A855F7]/40 text-[#A855F7]"
+                      : "border border-white/15 bg-white/5 text-white/60 hover:bg-white/10"
+                  }`}
+                >
+                  <UserPlusIcon className="w-4 h-4" />
+                  <span className="flex-1 text-left">New customers only</span>
+                  {firstTimeOnly && <CheckIcon className="w-4 h-4" />}
+                </button>
               </div>
             </div>
 
-            {/* Product Targeting */}
-            <div>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="flex items-center gap-2">
-                  <CubeIcon className="w-4 h-4 text-[#3B82F6]" />
-                  <span className="text-sm font-medium text-white">Product Targeting</span>
+            {/* Section: Targeting - Side by Side */}
+            <div className="grid gap-3 grid-cols-1 md:grid-cols-2">
+              {/* Product Targeting */}
+              <div className="rounded-xl border border-white/10 bg-white/[0.02] p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <CubeIcon className="w-4 h-4 text-[#3B82F6]" />
+                    <span className="text-xs font-medium text-white">Products</span>
+                  </div>
+                  <div className="flex gap-1">
+                    <button
+                      type="button"
+                      onClick={() => setAppliesTo("all")}
+                      className={`rounded px-2 py-1 text-[10px] font-medium transition-all ${
+                        appliesTo === "all"
+                          ? "bg-[#3B82F6] text-white"
+                          : "text-white/50 hover:text-white"
+                      }`}
+                    >
+                      All
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAppliesTo("list")}
+                      className={`rounded px-2 py-1 text-[10px] font-medium transition-all ${
+                        appliesTo === "list"
+                          ? "bg-[#3B82F6] text-white"
+                          : "text-white/50 hover:text-white"
+                      }`}
+                    >
+                      Select
+                    </button>
+                  </div>
                 </div>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setAppliesTo("all")}
-                    className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
-                      appliesTo === "all"
-                        ? "bg-[#3B82F6] text-white"
-                        : "border border-white/20 bg-white/5 text-white/60 hover:bg-white/10"
-                    }`}
-                  >
-                    All Products
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setAppliesTo("list")}
-                    className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
-                      appliesTo === "list"
-                        ? "bg-[#3B82F6] text-white"
-                        : "border border-white/20 bg-white/5 text-white/60 hover:bg-white/10"
-                    }`}
-                  >
-                    Specific Products
-                  </button>
-                </div>
+
+                {appliesTo === "list" ? (
+                  <MultiSelect
+                    label="Products"
+                    icon={CubeIcon}
+                    items={PRODUCTS}
+                    selected={selectedProducts}
+                    onChange={setSelectedProducts}
+                    renderItem={(p: Product) => ({ name: p.name, sub: `$${(p.priceCents / 100).toFixed(2)}` })}
+                    color="#3B82F6"
+                    compact
+                  />
+                ) : (
+                  <div className="flex items-center gap-2 py-3 px-3 rounded-lg bg-[#3B82F6]/10 border border-[#3B82F6]/20">
+                    <CheckIcon className="w-4 h-4 text-[#3B82F6]" />
+                    <span className="text-xs text-[#3B82F6]">Applies to all products</span>
+                  </div>
+                )}
               </div>
 
-              {appliesTo === "list" && (
-                <MultiSelect
-                  label="Select Products"
-                  icon={CubeIcon}
-                  items={PRODUCTS}
-                  selected={selectedProducts}
-                  onChange={setSelectedProducts}
-                  renderItem={(p: Product) => ({ name: p.name, sub: `$${(p.priceCents / 100).toFixed(2)}` })}
-                  color="#3B82F6"
-                />
-              )}
-            </div>
+              {/* Client Targeting */}
+              <div className="rounded-xl border border-white/10 bg-white/[0.02] p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <UserGroupIcon className="w-4 h-4 text-[#A855F7]" />
+                    <span className="text-xs font-medium text-white">Clients</span>
+                  </div>
+                  <div className="flex gap-1">
+                    <button
+                      type="button"
+                      onClick={() => setAssignedTo("all")}
+                      className={`rounded px-2 py-1 text-[10px] font-medium transition-all ${
+                        assignedTo === "all"
+                          ? "bg-[#A855F7] text-white"
+                          : "text-white/50 hover:text-white"
+                      }`}
+                    >
+                      All
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAssignedTo("list")}
+                      className={`rounded px-2 py-1 text-[10px] font-medium transition-all ${
+                        assignedTo === "list"
+                          ? "bg-[#A855F7] text-white"
+                          : "text-white/50 hover:text-white"
+                      }`}
+                    >
+                      Select
+                    </button>
+                  </div>
+                </div>
 
-            {/* Client Targeting */}
-            <div>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="flex items-center gap-2">
-                  <UserGroupIcon className="w-4 h-4 text-[#A855F7]" />
-                  <span className="text-sm font-medium text-white">Client Targeting</span>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setAssignedTo("all")}
-                    className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
-                      assignedTo === "all"
-                        ? "bg-[#A855F7] text-white"
-                        : "border border-white/20 bg-white/5 text-white/60 hover:bg-white/10"
-                    }`}
-                  >
-                    All Clients
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setAssignedTo("list")}
-                    className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
-                      assignedTo === "list"
-                        ? "bg-[#A855F7] text-white"
-                        : "border border-white/20 bg-white/5 text-white/60 hover:bg-white/10"
-                    }`}
-                  >
-                    Specific Clients
-                  </button>
-                </div>
+                {assignedTo === "list" ? (
+                  <MultiSelect
+                    label="Clients"
+                    icon={UserGroupIcon}
+                    items={clients}
+                    selected={selectedClients}
+                    onChange={setSelectedClients}
+                    renderItem={(c: Client) => ({ name: c.name, sub: c.email })}
+                    color="#A855F7"
+                    compact
+                  />
+                ) : (
+                  <div className="flex items-center gap-2 py-3 px-3 rounded-lg bg-[#A855F7]/10 border border-[#A855F7]/20">
+                    <CheckIcon className="w-4 h-4 text-[#A855F7]" />
+                    <span className="text-xs text-[#A855F7]">Available to all clients</span>
+                  </div>
+                )}
               </div>
-
-              {assignedTo === "list" && (
-                <MultiSelect
-                  label="Select Clients"
-                  icon={UserGroupIcon}
-                  items={clients}
-                  selected={selectedClients}
-                  onChange={setSelectedClients}
-                  renderItem={(c: Client) => ({ name: c.name, sub: c.email })}
-                  color="#A855F7"
-                />
-              )}
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/10">
+            <div className="flex items-center justify-end gap-2 pt-3 border-t border-white/10">
               <button
                 type="button"
                 onClick={() => {
                   setOpenNew(false);
                   resetForm();
                 }}
-                className="rounded-xl border border-white/20 bg-white/5 px-4 py-2.5 text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all"
+                className="rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={saveCoupon}
-                className="rounded-xl bg-[#47BD79] px-6 py-2.5 text-sm font-medium text-white hover:bg-[#3da968] transition-all"
+                className="rounded-lg bg-gradient-to-r from-[#47BD79] to-[#3da968] px-5 py-2 text-sm font-medium text-white hover:opacity-90 transition-all"
               >
                 {editId ? "Save Changes" : "Create Coupon"}
               </button>
@@ -966,6 +1475,36 @@ export default function CouponsTable() {
                 className="rounded-xl bg-red-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-red-600 transition-all"
               >
                 Delete
+              </button>
+            </div>
+          </div>
+        </Modal>
+
+        {/* Bulk Delete Confirmation Modal */}
+        <Modal
+          open={confirmBulkDelete}
+          title={`Delete ${selectedIds.size} Coupons?`}
+          onClose={() => setConfirmBulkDelete(false)}
+          size="md"
+        >
+          <div className="space-y-4">
+            <p className="text-white/60">
+              Are you sure you want to delete {selectedIds.size} coupon{selectedIds.size !== 1 ? "s" : ""}? This action cannot be undone.
+            </p>
+            <div className="flex items-center justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setConfirmBulkDelete(false)}
+                className="rounded-xl border border-white/20 bg-white/5 px-4 py-2.5 text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleBulkDelete}
+                className="rounded-xl bg-red-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-red-600 transition-all"
+              >
+                Delete {selectedIds.size} Coupon{selectedIds.size !== 1 ? "s" : ""}
               </button>
             </div>
           </div>

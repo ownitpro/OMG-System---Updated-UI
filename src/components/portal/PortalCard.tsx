@@ -309,10 +309,10 @@ export function ProductCardV2({
   const config = statusConfig[status];
 
   const colorMap = {
-    emerald: { iconBg: "bg-[#47BD79]/20", iconColor: "text-[#47BD79]" },
-    purple: { iconBg: "bg-[#A855F7]/20", iconColor: "text-[#A855F7]" },
-    blue: { iconBg: "bg-[#3B82F6]/20", iconColor: "text-[#3B82F6]" },
-    amber: { iconBg: "bg-amber-500/20", iconColor: "text-amber-400" },
+    emerald: { iconBg: "bg-[#47BD79]/20", iconColor: "text-[#47BD79]", buttonBg: "bg-[#47BD79]", buttonHover: "hover:bg-[#3da86a]" },
+    purple: { iconBg: "bg-[#A855F7]/20", iconColor: "text-[#A855F7]", buttonBg: "bg-[#A855F7]", buttonHover: "hover:bg-[#9333EA]" },
+    blue: { iconBg: "bg-[#3B82F6]/20", iconColor: "text-[#3B82F6]", buttonBg: "bg-[#3B82F6]", buttonHover: "hover:bg-[#2563EB]" },
+    amber: { iconBg: "bg-amber-500/20", iconColor: "text-amber-400", buttonBg: "bg-amber-500", buttonHover: "hover:bg-amber-600" },
   };
 
   const colors = colorMap[accent];
@@ -333,8 +333,28 @@ export function ProductCardV2({
       <h3 className="text-lg font-semibold text-white mb-2">{name}</h3>
       <p className="text-sm text-white/60 flex-1">{description}</p>
 
-      <div className="mt-4">
-        {config.href ? (
+      <div className="mt-4 flex gap-2">
+        {status === "active" ? (
+          <>
+            {launchUrl && (
+              <Link
+                href={launchUrl}
+                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white ${colors.buttonBg} ${colors.buttonHover} transition-all duration-300 group`}
+              >
+                Launch
+                <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            )}
+            {unlockUrl && (
+              <Link
+                href={unlockUrl}
+                className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all duration-300"
+              >
+                Details
+              </Link>
+            )}
+          </>
+        ) : config.href ? (
           <Link
             href={config.href}
             className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white ${config.buttonClass} transition-all duration-300 group`}

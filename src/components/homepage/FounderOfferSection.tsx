@@ -83,9 +83,9 @@ export default function HomepageFounderOfferSection() {
   }, []);
 
   return (
-    <section className="relative py-20 bg-black text-white overflow-hidden">
-      {/* Smooth gradient transition from black */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-black via-30% to-black" />
+    <section className="relative py-20 bg-[#0f172a] text-white overflow-hidden">
+      {/* Smooth gradient transition */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-[#0f172a] via-30% to-[#0f172a]" />
 
       {/* Background glow orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

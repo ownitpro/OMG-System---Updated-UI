@@ -37,9 +37,9 @@ export function FinalCTASection({
   };
 
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} className={`py-20 bg-black text-white relative overflow-hidden ${className}`}>
-      {/* Pure black background to blend seamlessly */}
-      <div className="absolute inset-0 bg-black" />
+    <section ref={ref as React.RefObject<HTMLElement>} className={`py-20 bg-[#0f172a] text-white relative overflow-hidden ${className}`}>
+      {/* Background to blend seamlessly */}
+      <div className="absolute inset-0 bg-[#0f172a]" />
 
       {/* Glow orbs - subtle background elements */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#47BD79]/8 rounded-full blur-3xl pointer-events-none" />

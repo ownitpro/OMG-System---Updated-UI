@@ -31,8 +31,8 @@ export function MetricsBar({ metrics, className = '' }: MetricsBarProps) {
       ref={ref as React.RefObject<HTMLElement>}
       className={`py-20 bg-transparent relative overflow-hidden ${className}`}
     >
-      {/* Transparent gradient that lets galaxy particles show through and blends into next section */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent from-0% via-black/30 via-30% to-black to-100%" />
+      {/* Smooth gradient that fades to solid black at the bottom */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black" />
 
       {/* Subtle background glow */}
       <div className="absolute inset-0 pointer-events-none">

@@ -18,11 +18,11 @@ export default function CopyActions({ orderId, email }: { orderId: string; email
 
   return (
     <div className="flex items-center gap-2">
-      {msg ? <span className="text-xs text-zinc-600">{msg}</span> : null}
+      {msg ? <span className="text-xs text-[#47BD79]">{msg}</span> : null}
 
       <button
         onClick={() => copy(orderId, "Order ID")}
-        className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
+        className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white hover:bg-white/10 transition-all"
         type="button"
       >
         Copy Order ID
@@ -30,7 +30,7 @@ export default function CopyActions({ orderId, email }: { orderId: string; email
 
       <button
         onClick={() => copy(email, "Email")}
-        className="rounded-lg border px-3 py-2 text-sm hover:bg-white"
+        className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm text-white hover:bg-white/10 transition-all"
         type="button"
       >
         Copy Email

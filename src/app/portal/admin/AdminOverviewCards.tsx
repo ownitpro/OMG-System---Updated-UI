@@ -95,7 +95,7 @@ export default function AdminOverviewCards() {
       </a>
 
       {/* Clients */}
-      <a href="/portal/admin/clients" className={cardClass()}>
+      <a href="/portal/admin/users" className={cardClass()}>
         <div className="flex items-center justify-between">
           <div className="text-sm font-semibold">Clients</div>
           <span className="text-slate-400">›</span>

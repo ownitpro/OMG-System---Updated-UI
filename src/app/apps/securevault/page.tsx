@@ -390,7 +390,7 @@ export default function SecureVaultPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 md:py-24 bg-black">
+      <section className="py-16 md:py-24 bg-[#0f172a]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div className="text-center mb-16">
@@ -527,7 +527,7 @@ export default function SecureVaultPage() {
       </section>
 
       {/* Use Cases Section - Dark Glass Theme */}
-      <section className="py-16 md:py-24 bg-black">
+      <section className="py-16 md:py-24 bg-[#0f172a]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
@@ -657,7 +657,7 @@ export default function SecureVaultPage() {
       </section>
 
       {/* Pricing Section - Dark Glass Theme */}
-      <section className="py-16 md:py-24 bg-black">
+      <section className="py-16 md:py-24 bg-[#0f172a]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">

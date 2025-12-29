@@ -21,9 +21,12 @@ interface HeroWithGalaxyProps {
 
 export function HeroWithGalaxy({ heroProps, metrics }: HeroWithGalaxyProps) {
   return (
-    <div className="relative overflow-visible">
-      {/* Galaxy Background rendered at wrapper level to span both sections */}
-      <div className="absolute inset-x-0 z-0 pointer-events-none" style={{ top: '-25vh', height: '200vh' }}>
+    <div className="relative overflow-hidden bg-black">
+      {/* Black background base */}
+      <div className="absolute inset-0 z-0 bg-black" />
+
+      {/* Galaxy Background - contained within hero and metrics only */}
+      <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
         <GalaxyBackground />
       </div>
 
