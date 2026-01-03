@@ -154,6 +154,11 @@ module.exports = {
         '5xl': ['3rem', { lineHeight: '1' }],
         '6xl': ['3.75rem', { lineHeight: '1' }],
       },
+      fontFamily: {
+        'outfit': ['var(--font-outfit)', 'system-ui', 'sans-serif'],
+        'helvetica': ["'Helvetica Now'", "'Helvetica Neue'", 'Helvetica', 'Arial', 'sans-serif'],
+        'serif': ['Georgia', "'Times New Roman'", 'serif'],
+      },
       fontWeight: {
         'medium': '500',
         'semibold': '600',

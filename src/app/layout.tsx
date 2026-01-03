@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Outfit } from "next/font/google";
 import { Providers } from "@/components/providers/session-provider";
 import { SEO_CONFIG, generateOrganizationSchema, generateWebsiteSchema, generateOGImage } from "@/lib/seo";
 import { ConsentManager } from "@/components/consent/consent-manager";
@@ -17,6 +17,13 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter",
+  preload: true,
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-outfit",
   preload: true,
 });
 
@@ -105,7 +112,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} font-sans antialiased`}
+        className={`${inter.variable} ${outfit.variable} font-sans antialiased`}
         style={{
           fontFamily: "var(--font-inter), system-ui, sans-serif",
         }}

@@ -1,3 +1,6 @@
+/* Open Sauce One Font from Fontshare - must be first */
+@import url('https://api.fontshare.com/v2/css?f[]=open-sauce-one@400,400i,500,500i,700,700i&display=swap');
+
 @import "tailwindcss";
 
 :root {
@@ -1045,4 +1048,15 @@ html {
 
 .emerald-pulse {
   animation: emeraldPulse 3s infinite ease-in-out;
+}
+
+/* Card lift hover effect for glassmorphism cards */
+.card-lift {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   HeartIcon,
   ShieldCheckIcon,
@@ -93,13 +94,36 @@ const trustBadges = [
   }
 ];
 
+// SecureVault Docs gradient background
+const SVD_GRADIENT = `
+  radial-gradient(ellipse 120% 80% at 80% 20%, #ebe8e4 0%, transparent 50%),
+  radial-gradient(ellipse 100% 100% at 20% 80%, #005468 0%, transparent 60%),
+  radial-gradient(ellipse 80% 60% at 60% 60%, #0c9092 0%, transparent 50%),
+  radial-gradient(ellipse 90% 70% at 40% 40%, #8db0b6 0%, transparent 55%),
+  linear-gradient(180deg, #005468 0%, #075f6e 10%, #0a6a7a 18%, #0a7d86 26%,
+    #0c9092 35%, #289294 42%, #3d9598 48%, #5aa5a8 55%, #6a9fa3 60%,
+    #79a8ac 65%, #8db0b6 70%, #9ebbb8 75%, #b8ccc8 80%, #c5d0cc 84%,
+    #d5ddd8 88%, #dcdad6 91%, #e2dfdb 94%, #e5e2de 97%, #ebe8e4 100%)
+`;
+
 export function Footer() {
   const { rgb: themeRgb, hex: themeHex } = usePageTheme();
+  const pathname = usePathname();
+
+  // Check if we're on SecureVault Docs pages
+  const isSecureVaultDocs = pathname?.startsWith('/apps/securevault-docs');
 
   return (
     <footer className="relative py-16 overflow-hidden">
-      {/* Background matching nav - dark slate */}
-      <div className="absolute inset-0 bg-slate-950" />
+      {/* Background - SVD gradient or dark slate */}
+      {isSecureVaultDocs ? (
+        <div
+          className="absolute inset-0"
+          style={{ background: SVD_GRADIENT }}
+        />
+      ) : (
+        <div className="absolute inset-0 bg-slate-950" />
+      )}
 
       {/* Subtle glow orbs - dynamic color */}
       <div
@@ -116,11 +140,15 @@ export function Footer() {
         <div
           className="rounded-3xl border p-8 md:p-10 transition-all duration-500"
           style={{
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            borderColor: `rgba(${themeRgb}, 0.25)`,
-            boxShadow: `0 0 30px rgba(${themeRgb}, 0.15), inset 0 1px 0 rgba(255,255,255,0.1)`,
+            background: isSecureVaultDocs
+              ? 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)'
+              : 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%)',
+            backdropFilter: isSecureVaultDocs ? 'none' : 'blur(16px)',
+            WebkitBackdropFilter: isSecureVaultDocs ? 'none' : 'blur(16px)',
+            borderColor: isSecureVaultDocs ? 'rgba(255, 255, 255, 0.2)' : `rgba(${themeRgb}, 0.25)`,
+            boxShadow: isSecureVaultDocs
+              ? '0 4px 20px rgba(13, 148, 136, 0.4)'
+              : `0 0 30px rgba(${themeRgb}, 0.15), inset 0 1px 0 rgba(255,255,255,0.1)`,
           }}
         >
           {/* Trust Badges */}
@@ -129,34 +157,38 @@ export function Footer() {
               {trustBadges.map((badge, index) => (
                 <div
                   key={index}
-                  className="flex items-center space-x-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/[0.08] transition-all duration-500 group"
+                  className={`flex items-center space-x-3 p-3 rounded-xl border transition-all duration-500 group ${
+                    isSecureVaultDocs
+                      ? 'bg-white/10 border-white/20 hover:bg-white/15'
+                      : 'bg-white/5 border-white/10 hover:bg-white/[0.08]'
+                  }`}
                   style={{
                     // @ts-expect-error CSS custom properties for hover state
                     '--hover-border-color': `rgba(${themeRgb}, 0.3)`,
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = `rgba(${themeRgb}, 0.3)`;
+                    e.currentTarget.style.borderColor = isSecureVaultDocs ? 'rgba(255, 255, 255, 0.4)' : `rgba(${themeRgb}, 0.3)`;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    e.currentTarget.style.borderColor = isSecureVaultDocs ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.1)';
                   }}
                 >
                   <div className="flex-shrink-0">
                     <div
                       className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-500"
                       style={{
-                        backgroundColor: `rgba(${themeRgb}, 0.2)`,
+                        backgroundColor: isSecureVaultDocs ? 'rgba(20, 184, 166, 0.3)' : `rgba(${themeRgb}, 0.2)`,
                       }}
                     >
                       <badge.icon
                         className="w-4 h-4 transition-all duration-500"
-                        style={{ color: themeHex }}
+                        style={{ color: isSecureVaultDocs ? '#5eead4' : themeHex }}
                       />
                     </div>
                   </div>
                   <div>
                     <p className="text-white font-medium text-xs">{badge.text}</p>
-                    <p className="text-white/50 text-[10px]">{badge.description}</p>
+                    <p className="text-white/60 text-[10px]">{badge.description}</p>
                   </div>
                 </div>
               ))}
@@ -164,21 +196,21 @@ export function Footer() {
           </div>
 
           {/* Divider */}
-          <div className="w-full h-px bg-white/10 mb-8" />
+          <div className={`w-full h-px mb-8 ${isSecureVaultDocs ? 'bg-white/20' : 'bg-white/10'}`} />
 
           {/* Main Footer Content */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
             {/* Company Links */}
             <div>
-              <h3 className="text-white/90 font-semibold mb-4 text-[13px] uppercase tracking-wider">Company</h3>
+              <h3 className="text-white font-semibold mb-4 text-[13px] uppercase tracking-wider">Company</h3>
               <ul className="space-y-2.5">
                 {footerLinks.company.map((link) => (
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-white/60 transition-all duration-500 text-[13px] inline-block"
+                      className="text-white/70 transition-all duration-500 text-[13px] inline-block hover:text-white"
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.color = themeHex;
+                        e.currentTarget.style.color = isSecureVaultDocs ? '#5eead4' : themeHex;
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.color = '';
@@ -193,15 +225,15 @@ export function Footer() {
 
             {/* Legal Links */}
             <div>
-              <h3 className="text-white/90 font-semibold mb-4 text-[13px] uppercase tracking-wider">Legal</h3>
+              <h3 className="text-white font-semibold mb-4 text-[13px] uppercase tracking-wider">Legal</h3>
               <ul className="space-y-2.5">
                 {footerLinks.legal.map((link) => (
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-white/60 transition-all duration-500 text-[13px] inline-block"
+                      className="text-white/70 transition-all duration-500 text-[13px] inline-block hover:text-white"
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.color = themeHex;
+                        e.currentTarget.style.color = isSecureVaultDocs ? '#5eead4' : themeHex;
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.color = '';
@@ -216,15 +248,15 @@ export function Footer() {
 
             {/* Resources Links */}
             <div>
-              <h3 className="text-white/90 font-semibold mb-4 text-[13px] uppercase tracking-wider">Resources</h3>
+              <h3 className="text-white font-semibold mb-4 text-[13px] uppercase tracking-wider">Resources</h3>
               <ul className="space-y-2.5">
                 {footerLinks.resources.map((link) => (
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-white/60 transition-all duration-500 text-[13px] inline-block"
+                      className="text-white/70 transition-all duration-500 text-[13px] inline-block hover:text-white"
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.color = themeHex;
+                        e.currentTarget.style.color = isSecureVaultDocs ? '#5eead4' : themeHex;
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.color = '';
@@ -239,7 +271,7 @@ export function Footer() {
 
             {/* Social Links */}
             <div>
-              <h3 className="text-white/90 font-semibold mb-4 text-[13px] uppercase tracking-wider">Connect with Us</h3>
+              <h3 className="text-white font-semibold mb-4 text-[13px] uppercase tracking-wider">Connect with Us</h3>
               <div className="flex space-x-2">
                 {footerLinks.social.map((social) => {
                   const IconComponent = social.Icon;
@@ -249,7 +281,11 @@ export function Footer() {
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-white/60 ${social.color} hover:scale-105 transition-all duration-300 border border-white/10 hover:border-white/20`}
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center hover:scale-105 transition-all duration-300 border ${
+                        isSecureVaultDocs
+                          ? 'bg-white/10 text-white/80 border-white/20 hover:border-white/40 hover:bg-white/20 hover:text-teal-300'
+                          : `bg-white/5 text-white/60 border-white/10 hover:border-white/20 ${social.color}`
+                      }`}
                       title={social.name}
                       aria-label={social.name}
                     >
@@ -262,29 +298,33 @@ export function Footer() {
           </div>
 
           {/* Divider */}
-          <div className="w-full h-px bg-white/10 mb-8" />
+          <div className={`w-full h-px mb-8 ${isSecureVaultDocs ? 'bg-white/20' : 'bg-white/10'}`} />
 
           {/* Newsletter Signup */}
           <div
-            className="relative p-5 bg-white/5 rounded-2xl border border-white/10 transition-all duration-500 overflow-hidden group mb-8"
+            className={`relative p-5 rounded-2xl border transition-all duration-500 overflow-hidden group mb-8 ${
+              isSecureVaultDocs ? 'bg-white/10 border-white/20' : 'bg-white/5 border-white/10'
+            }`}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = `rgba(${themeRgb}, 0.3)`;
+              e.currentTarget.style.borderColor = isSecureVaultDocs ? 'rgba(255, 255, 255, 0.4)' : `rgba(${themeRgb}, 0.3)`;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+              e.currentTarget.style.borderColor = isSecureVaultDocs ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.1)';
             }}
           >
             {/* Subtle glow on hover */}
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
               style={{
-                background: `linear-gradient(to right, rgba(${themeRgb}, 0), rgba(${themeRgb}, 0.05))`,
+                background: isSecureVaultDocs
+                  ? 'linear-gradient(to right, rgba(20, 184, 166, 0), rgba(20, 184, 166, 0.1))'
+                  : `linear-gradient(to right, rgba(${themeRgb}, 0), rgba(${themeRgb}, 0.05))`,
               }}
             />
             <div className="relative flex flex-col md:flex-row items-center justify-between gap-4">
               <div>
                 <h3 className="text-white font-semibold text-sm mb-0.5">Stay Updated</h3>
-                <p className="text-white/50 text-[13px]">Get the latest automation tips and industry insights</p>
+                <p className="text-white/60 text-[13px]">Get the latest automation tips and industry insights</p>
               </div>
               <div className="flex w-full md:w-auto">
                 <input
@@ -293,25 +333,27 @@ export function Footer() {
                   name="newsletter-email"
                   autoComplete="email"
                   placeholder="Enter your email"
-                  className="flex-1 md:w-64 px-4 py-2.5 bg-white/5 border border-white/10 rounded-l-xl text-white text-[13px] placeholder-white/40 focus:outline-none transition-all duration-500"
+                  className={`flex-1 md:w-64 px-4 py-2.5 border rounded-l-xl text-white text-[13px] placeholder-white/50 focus:outline-none transition-all duration-500 ${
+                    isSecureVaultDocs ? 'bg-white/10 border-white/20' : 'bg-white/5 border-white/10'
+                  }`}
                   onFocus={(e) => {
-                    e.currentTarget.style.borderColor = `rgba(${themeRgb}, 0.5)`;
+                    e.currentTarget.style.borderColor = isSecureVaultDocs ? 'rgba(94, 234, 212, 0.5)' : `rgba(${themeRgb}, 0.5)`;
                   }}
                   onBlur={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    e.currentTarget.style.borderColor = isSecureVaultDocs ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.1)';
                   }}
                 />
                 <button
                   className="px-5 py-2.5 text-white text-[13px] font-semibold rounded-r-xl transition-all duration-500 active:scale-[0.98]"
                   style={{
-                    backgroundColor: themeHex,
-                    boxShadow: `0 2px 12px rgba(${themeRgb}, 0.3)`,
+                    backgroundColor: isSecureVaultDocs ? '#14b8a6' : themeHex,
+                    boxShadow: isSecureVaultDocs ? '0 2px 12px rgba(20, 184, 166, 0.4)' : `0 2px 12px rgba(${themeRgb}, 0.3)`,
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow = `0 4px 20px rgba(${themeRgb}, 0.4)`;
+                    e.currentTarget.style.boxShadow = isSecureVaultDocs ? '0 4px 20px rgba(20, 184, 166, 0.5)' : `0 4px 20px rgba(${themeRgb}, 0.4)`;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.boxShadow = `0 2px 12px rgba(${themeRgb}, 0.3)`;
+                    e.currentTarget.style.boxShadow = isSecureVaultDocs ? '0 2px 12px rgba(20, 184, 166, 0.4)' : `0 2px 12px rgba(${themeRgb}, 0.3)`;
                   }}
                 >
                   Subscribe
@@ -326,14 +368,16 @@ export function Footer() {
               <div
                 className="transition-all duration-500"
                 style={{
-                  filter: `drop-shadow(0 0 8px rgba(${themeRgb}, 0.4))`,
+                  filter: isSecureVaultDocs
+                    ? 'drop-shadow(0 0 8px rgba(20, 184, 166, 0.5))'
+                    : `drop-shadow(0 0 8px rgba(${themeRgb}, 0.4))`,
                 }}
               >
                 <Logo width={100} variant="svg" letterColor="white" />
               </div>
             </div>
 
-            <div className="flex items-center text-[12px] text-white/40">
+            <div className="flex items-center text-[12px] text-white/60">
               <span>© 2025 OMGsystems. All rights reserved. Proudly developed in Canada.</span>
             </div>
           </div>
