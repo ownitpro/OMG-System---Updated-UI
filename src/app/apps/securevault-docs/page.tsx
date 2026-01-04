@@ -3,18 +3,10 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { VideoModal } from "@/components/ui/video-modal";
-
-const industryTabs = [
-  { name: "Overview", href: "/apps/securevault-docs" },
-  { name: "Real Estate", href: "/apps/securevault-docs/real-estate" },
-  { name: "Accounting", href: "/apps/securevault-docs/accounting" },
-  { name: "Contractors", href: "/apps/securevault-docs/contractors" },
-];
+import { IndustryTabs } from "@/components/securevault-docs/industry-tabs";
 
 export default function SecureVaultDocsPage() {
-  const pathname = usePathname();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
   return (
@@ -70,44 +62,10 @@ export default function SecureVaultDocsPage() {
           style={{ maxWidth: "1350px" }}
         >
           {/* Industry Tab Navigation - Fixed position from top */}
-          <nav className="mt-8 mb-auto">
-            <div className="inline-flex items-center px-2 py-1 rounded-full backdrop-blur-xl border border-white/20 shadow-glass"
-              style={{
-                background: "linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)",
-              }}
-            >
-              {industryTabs.map((tab, index) => {
-                const isActive = pathname === tab.href;
-                return (
-                  <div key={tab.href} className="flex items-center">
-                    <Link
-                      href={tab.href}
-                      className={`
-                        px-4 py-1.5 rounded-full text-xs font-outfit uppercase tracking-wide transition-all duration-200 text-center
-                        ${
-                          isActive
-                            ? "text-white font-semibold shadow-lg"
-                            : "text-white/80 font-semibold hover:bg-white/10 hover:text-white"
-                        }
-                      `}
-                      style={{
-                        minWidth: tab.name === "Overview" ? "85px" : tab.name === "Real Estate" ? "95px" : tab.name === "Accounting" ? "95px" : "105px",
-                        ...(isActive ? { background: "linear-gradient(to right, #14b8a6, #0d9488)" } : {})
-                      }}
-                    >
-                      {tab.name}
-                    </Link>
-                    {index < industryTabs.length - 1 && (
-                      <div className="w-px h-4 bg-white/30 mx-1"></div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </nav>
+          <IndustryTabs />
 
           {/* Main content - centered in remaining space */}
-          <div className="flex-1 flex flex-col items-center justify-center">
+          <div className="flex-1 flex flex-col items-center justify-center relative z-10">
           <div className="relative space-y-8">
             {/* Main Headline */}
             <h1
@@ -120,10 +78,9 @@ export default function SecureVaultDocsPage() {
               Stay ahead of every
               <br />
               <span
-                className="text-transparent bg-clip-text"
+                className="text-transparent bg-clip-text italic"
                 style={{
-                  backgroundImage:
-                    "linear-gradient(90deg, #272f40 0%, #4a5568 50%, #272f40 100%)",
+                  backgroundImage: "linear-gradient(90deg, #14b8a6 0%, #22d3ee 100%)",
                 }}
               >
                 deadline.

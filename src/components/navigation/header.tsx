@@ -11,6 +11,9 @@ import { MarketingAgencyDropdown } from './dropdowns/marketing-agency-dropdown';
 import { UserProfileDropdown } from './dropdowns/user-profile-dropdown';
 import { Logo } from '@/components/common/logo';
 import { usePageTheme } from '@/hooks/usePageTheme';
+import { appsConfig } from '@/config/apps_config';
+import { solutionsConfig } from '@/config/solutions_config';
+import { industriesConfig } from '@/config/industries_config';
 
 interface HeaderProps {
   user?: {
@@ -24,6 +27,7 @@ export function Header({ user }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [expandedMobileMenu, setExpandedMobileMenu] = useState<string | null>(null);
   const [showWelcomeTooltip, setShowWelcomeTooltip] = useState(false);
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
@@ -70,6 +74,7 @@ export function Header({ user }: HeaderProps) {
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setActiveDropdown(null);
+    setExpandedMobileMenu(null);
   }, [pathname]);
 
   // Listen for closeDropdown custom event
@@ -291,16 +296,101 @@ export function Header({ user }: HeaderProps) {
               }}
             >
               <div className="p-4 space-y-1">
-                {navigationItems.map((item, index) => (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    className="block px-4 py-3 text-white/80 hover:text-white hover:bg-white/[0.1] rounded-xl transition-all duration-400 ease-premium-out font-medium text-sm"
-                    style={{ animationDelay: `${index * 50}ms` }}
+                {/* Apps Accordion */}
+                <div>
+                  <button
+                    onClick={() => setExpandedMobileMenu(expandedMobileMenu === 'apps' ? null : 'apps')}
+                    className="w-full flex items-center justify-between px-4 py-3 text-white/80 hover:text-white hover:bg-white/[0.1] rounded-xl transition-all duration-400 ease-premium-out font-medium text-sm"
                   >
-                    {item.label}
-                  </Link>
-                ))}
+                    <span>Apps</span>
+                    <ChevronDownIcon className={`w-4 h-4 transition-transform duration-300 ${expandedMobileMenu === 'apps' ? 'rotate-180' : ''}`} />
+                  </button>
+                  {expandedMobileMenu === 'apps' && (
+                    <div className="pl-4 pb-2 space-y-1 animate-fade-in-slow">
+                      {appsConfig.filter(app => app.id !== 'timeguard').map(app => (
+                        <Link
+                          key={app.id}
+                          href={app.href}
+                          className="block px-4 py-2.5 text-white/60 hover:text-white hover:bg-white/[0.08] rounded-lg transition-all duration-300 text-sm"
+                        >
+                          {app.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Solutions Accordion */}
+                <div>
+                  <button
+                    onClick={() => setExpandedMobileMenu(expandedMobileMenu === 'solutions' ? null : 'solutions')}
+                    className="w-full flex items-center justify-between px-4 py-3 text-white/80 hover:text-white hover:bg-white/[0.1] rounded-xl transition-all duration-400 ease-premium-out font-medium text-sm"
+                  >
+                    <span>Solutions</span>
+                    <ChevronDownIcon className={`w-4 h-4 transition-transform duration-300 ${expandedMobileMenu === 'solutions' ? 'rotate-180' : ''}`} />
+                  </button>
+                  {expandedMobileMenu === 'solutions' && (
+                    <div className="pl-4 pb-2 space-y-1 animate-fade-in-slow">
+                      {solutionsConfig.filter(s => s.id !== 'ai_mastery_training' && s.id !== 'live_demo').map(solution => (
+                        <Link
+                          key={solution.id}
+                          href={solution.href}
+                          className="block px-4 py-2.5 text-white/60 hover:text-white hover:bg-white/[0.08] rounded-lg transition-all duration-300 text-sm"
+                        >
+                          {solution.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Marketing Accordion */}
+                <div>
+                  <button
+                    onClick={() => setExpandedMobileMenu(expandedMobileMenu === 'marketing' ? null : 'marketing')}
+                    className="w-full flex items-center justify-between px-4 py-3 text-white/80 hover:text-white hover:bg-white/[0.1] rounded-xl transition-all duration-400 ease-premium-out font-medium text-sm"
+                  >
+                    <span>Marketing</span>
+                    <ChevronDownIcon className={`w-4 h-4 transition-transform duration-300 ${expandedMobileMenu === 'marketing' ? 'rotate-180' : ''}`} />
+                  </button>
+                  {expandedMobileMenu === 'marketing' && (
+                    <div className="pl-4 pb-2 space-y-1 animate-fade-in-slow">
+                      <Link href="/marketing/how-it-works" className="block px-4 py-2.5 text-white/60 hover:text-white hover:bg-white/[0.08] rounded-lg transition-all duration-300 text-sm">
+                        How it Works
+                      </Link>
+                      <Link href="/marketing/services" className="block px-4 py-2.5 text-white/60 hover:text-white hover:bg-white/[0.08] rounded-lg transition-all duration-300 text-sm">
+                        Services
+                      </Link>
+                      <Link href="/marketing/tiers" className="block px-4 py-2.5 text-white/60 hover:text-white hover:bg-white/[0.08] rounded-lg transition-all duration-300 text-sm">
+                        Tiers
+                      </Link>
+                    </div>
+                  )}
+                </div>
+
+                {/* Industries Accordion */}
+                <div>
+                  <button
+                    onClick={() => setExpandedMobileMenu(expandedMobileMenu === 'industries' ? null : 'industries')}
+                    className="w-full flex items-center justify-between px-4 py-3 text-white/80 hover:text-white hover:bg-white/[0.1] rounded-xl transition-all duration-400 ease-premium-out font-medium text-sm"
+                  >
+                    <span>Industries</span>
+                    <ChevronDownIcon className={`w-4 h-4 transition-transform duration-300 ${expandedMobileMenu === 'industries' ? 'rotate-180' : ''}`} />
+                  </button>
+                  {expandedMobileMenu === 'industries' && (
+                    <div className="pl-4 pb-2 space-y-1 animate-fade-in-slow">
+                      {industriesConfig.map(industry => (
+                        <Link
+                          key={industry.id}
+                          href={industry.href}
+                          className="block px-4 py-2.5 text-white/60 hover:text-white hover:bg-white/[0.08] rounded-lg transition-all duration-300 text-sm"
+                        >
+                          {industry.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
 
                 <div className="my-3 border-t border-white/[0.1]" />
 
