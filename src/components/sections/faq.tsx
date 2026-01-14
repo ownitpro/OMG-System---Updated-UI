@@ -8,7 +8,7 @@ const faqs = [
   },
   {
     question: "Is my data secure with OMGsystems?",
-    answer: "Absolutely. We use bank-grade encryption, maintain SOC 2 compliance, and follow industry best practices for data security. Your data is encrypted both in transit and at rest, and we never share your information with third parties without explicit consent."
+    answer: "Absolutely. We use bank-grade encryption and follow industry best practices for data security. Your data is encrypted both in transit and at rest, and we never share your information with third parties without explicit consent."
   },
   {
     question: "Can OMGsystems integrate with my existing systems?",
@@ -16,7 +16,7 @@ const faqs = [
   },
   {
     question: "What industries does OMGsystems support?",
-    answer: "We provide specialized solutions for Property Management, Real Estate, Accounting, Contractors, Cleaning Services, Healthcare, and many more. Each industry solution includes tailored workflows, compliance features, and best practices specific to your sector."
+    answer: "While we can work with any industry, we dominate in four key sectors: Real Estate, Property Management, Contractors, and Accounting. These are our specialties where we've proven massive ROI and know every workflow inside-out."
   },
   {
     question: "How does the pricing work?",
@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     question: "What kind of support do you provide?",
-    answer: "We provide 24/7 expert support via chat, email, and phone. Our support team includes industry specialists who understand your unique challenges. We also offer comprehensive documentation, video tutorials, and regular training webinars."
+    answer: "We provide 24/7 expert support via email and SMS. Our support team includes industry specialists who understand your unique challenges. We also offer comprehensive documentation, video tutorials, and regular training webinars."
   },
   {
     question: "Can I customize OMGsystems for my specific needs?",
