@@ -10,6 +10,7 @@ import { getClientNavV2 } from "@/config/portalNav";
 import { useEntitlements } from "@/hooks/useEntitlements";
 import { getCardStatus } from "@/utils/productStatus";
 import { DevToolsResetEntitlements } from "@/components/DevToolsResetEntitlements";
+import AssignedCouponBanner from "@/components/client/AssignedCouponBanner";
 import Link from "next/link";
 import {
   SparklesIcon,
@@ -43,12 +44,12 @@ const productIcons: Record<string, React.ElementType> = {
 };
 
 // Map product keys to accents
-const productAccents: Record<string, "emerald" | "purple" | "blue" | "amber"> = {
-  omg_crm: "emerald",
-  securevault_docs: "purple",
-  omg_leads: "blue",
-  omg_iq: "amber",
-  omg_ai_mastery: "purple",
+const productAccents: Record<string, "emerald" | "purple" | "blue" | "amber" | "teal" | "sky"> = {
+  omg_crm: "sky",                 // Light blue for OMG-CRM
+  securevault_docs: "teal",       // Teal for SecureVault Docs
+  omg_leads: "blue",              // Dark blue for OMG-Leads
+  omg_iq: "purple",               // Purple for OMG-IQ
+  omg_ai_mastery: "amber",        // Yellow/Amber for OMG AI Mastery
   timeguard_ai: "blue",
   omg_build: "emerald",
 };
@@ -135,6 +136,9 @@ export default function ClientPortalHome() {
           <ThankYouBanner />
         </Suspense>
 
+        {/* Assigned Coupon Banner - shows coupons assigned to this user */}
+        <AssignedCouponBanner />
+
         {/* Welcome Section */}
         <div className="relative overflow-hidden rounded-2xl border border-[#47BD79]/30 bg-gradient-to-br from-[#47BD79]/10 via-transparent to-[#3B82F6]/10 p-6 backdrop-blur-xl">
           <div className="absolute top-0 right-0 w-64 h-64 bg-[#47BD79]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
@@ -199,6 +203,7 @@ export default function ClientPortalHome() {
                   accent={accent}
                   launchUrl={p.launchUrl}
                   unlockUrl={p.unlockUrl}
+                  productKey={p.key}
                 />
               );
             })}

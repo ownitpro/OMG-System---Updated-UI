@@ -1,15 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { useProductLaunch, PRODUCT_IDS, type ProductId } from "@/hooks/useProductLaunch";
 
 interface PortalCardProps {
   title: string;
   description?: string;
   children?: React.ReactNode;
   className?: string;
-  accent?: "emerald" | "purple" | "blue" | "amber" | "default";
+  accent?: "emerald" | "purple" | "blue" | "amber" | "teal" | "sky" | "default";
   glow?: boolean;
   hover?: boolean;
 }
@@ -38,6 +39,18 @@ const accentColors = {
     glow: "shadow-[0_0_20px_rgba(245,158,11,0.15)]",
     hoverGlow: "hover:shadow-[0_0_30px_rgba(245,158,11,0.25)]",
     bg: "bg-amber-500/5",
+  },
+  teal: {
+    border: "border-[#14B8A6]/30",
+    glow: "shadow-[0_0_20px_rgba(20,184,166,0.15)]",
+    hoverGlow: "hover:shadow-[0_0_30px_rgba(20,184,166,0.25)]",
+    bg: "bg-[#14B8A6]/5",
+  },
+  sky: {
+    border: "border-[#38BDF8]/30",
+    glow: "shadow-[0_0_20px_rgba(56,189,248,0.15)]",
+    hoverGlow: "hover:shadow-[0_0_30px_rgba(56,189,248,0.25)]",
+    bg: "bg-[#38BDF8]/5",
   },
   default: {
     border: "border-white/10",
@@ -86,7 +99,7 @@ interface StatCardProps {
   value: string | number;
   icon?: React.ElementType;
   trend?: { value: number; positive: boolean };
-  accent?: "emerald" | "purple" | "blue" | "amber";
+  accent?: "emerald" | "purple" | "blue" | "amber" | "teal" | "sky";
 }
 
 export function StatCard({ label, value, icon: Icon, trend, accent = "emerald" }: StatCardProps) {
@@ -114,6 +127,18 @@ export function StatCard({ label, value, icon: Icon, trend, accent = "emerald" }
       iconColor: "text-amber-400",
       valueColor: "text-amber-400",
       glowColor: "rgba(245, 158, 11, 0.2)",
+    },
+    teal: {
+      iconBg: "bg-[#14B8A6]/20",
+      iconColor: "text-[#14B8A6]",
+      valueColor: "text-[#14B8A6]",
+      glowColor: "rgba(20, 184, 166, 0.2)",
+    },
+    sky: {
+      iconBg: "bg-[#38BDF8]/20",
+      iconColor: "text-[#38BDF8]",
+      valueColor: "text-[#38BDF8]",
+      glowColor: "rgba(56, 189, 248, 0.2)",
     },
   };
 
@@ -153,7 +178,7 @@ interface ActionCardProps {
   href?: string;
   onClick?: () => void;
   icon?: React.ElementType;
-  accent?: "emerald" | "purple" | "blue" | "amber";
+  accent?: "emerald" | "purple" | "blue" | "amber" | "teal" | "sky";
   buttonLabel?: string;
   disabled?: boolean;
   comingSoon?: boolean;
@@ -202,6 +227,22 @@ export function ActionCard({
       buttonHover: "hover:bg-amber-600",
       borderColor: "border-amber-500/30",
       glowColor: "rgba(245, 158, 11, 0.15)",
+    },
+    teal: {
+      iconBg: "bg-[#14B8A6]/20",
+      iconColor: "text-[#14B8A6]",
+      buttonBg: "bg-[#14B8A6]",
+      buttonHover: "hover:bg-[#0d9488]",
+      borderColor: "border-[#14B8A6]/30",
+      glowColor: "rgba(20, 184, 166, 0.15)",
+    },
+    sky: {
+      iconBg: "bg-[#38BDF8]/20",
+      iconColor: "text-[#38BDF8]",
+      buttonBg: "bg-[#38BDF8]",
+      buttonHover: "hover:bg-[#0ea5e9]",
+      borderColor: "border-[#38BDF8]/30",
+      glowColor: "rgba(56, 189, 248, 0.15)",
     },
   };
 
@@ -262,6 +303,15 @@ export function ActionCard({
   return content;
 }
 
+// Map product keys to SSO product IDs
+const productKeyToSSOId: Record<string, ProductId> = {
+  securevault_docs: PRODUCT_IDS.SECUREVAULT_DOCS,
+  omg_crm: PRODUCT_IDS.OMG_CRM,
+  omg_leads: PRODUCT_IDS.OMG_LEADS,
+  omg_iq: PRODUCT_IDS.OMG_IQ,
+  omg_ai_mastery: PRODUCT_IDS.OMG_AI_MASTERY,
+};
+
 // Product Card Component
 interface ProductCardV2Props {
   name: string;
@@ -270,7 +320,11 @@ interface ProductCardV2Props {
   icon?: React.ElementType;
   launchUrl?: string;
   unlockUrl?: string;
-  accent?: "emerald" | "purple" | "blue" | "amber";
+  accent?: "emerald" | "purple" | "blue" | "amber" | "teal" | "sky";
+  /** Product key for SSO launch (e.g., 'securevault_docs') */
+  productKey?: string;
+  /** Enable SSO launch instead of direct URL navigation */
+  useSSO?: boolean;
 }
 
 export function ProductCardV2({
@@ -281,7 +335,22 @@ export function ProductCardV2({
   launchUrl,
   unlockUrl,
   accent = "emerald",
+  productKey,
+  useSSO = false, // SSO disabled for initial launch - will be enabled after SSO integration
 }: ProductCardV2Props) {
+  const { launchProduct, launching, error } = useProductLaunch();
+
+  // Get SSO product ID if available
+  const ssoProductId = productKey ? productKeyToSSOId[productKey] : undefined;
+  const canUseSSO = useSSO && ssoProductId && status === "active";
+  const isLaunching = launching === ssoProductId;
+
+  // Handle SSO launch
+  const handleSSOLaunch = async () => {
+    if (ssoProductId) {
+      await launchProduct(ssoProductId);
+    }
+  };
   const statusConfig = {
     active: {
       badge: "Active",
@@ -313,6 +382,8 @@ export function ProductCardV2({
     purple: { iconBg: "bg-[#A855F7]/20", iconColor: "text-[#A855F7]", buttonBg: "bg-[#A855F7]", buttonHover: "hover:bg-[#9333EA]" },
     blue: { iconBg: "bg-[#3B82F6]/20", iconColor: "text-[#3B82F6]", buttonBg: "bg-[#3B82F6]", buttonHover: "hover:bg-[#2563EB]" },
     amber: { iconBg: "bg-amber-500/20", iconColor: "text-amber-400", buttonBg: "bg-amber-500", buttonHover: "hover:bg-amber-600" },
+    teal: { iconBg: "bg-[#14B8A6]/20", iconColor: "text-[#14B8A6]", buttonBg: "bg-[#14B8A6]", buttonHover: "hover:bg-[#0d9488]" },
+    sky: { iconBg: "bg-[#38BDF8]/20", iconColor: "text-[#38BDF8]", buttonBg: "bg-[#38BDF8]", buttonHover: "hover:bg-[#0ea5e9]" },
   };
 
   const colors = colorMap[accent];
@@ -336,7 +407,30 @@ export function ProductCardV2({
       <div className="mt-4 flex gap-2">
         {status === "active" ? (
           <>
-            {launchUrl && (
+            {canUseSSO ? (
+              /* SSO Launch Button - Uses API to generate token and open product */
+              <button
+                onClick={handleSSOLaunch}
+                disabled={isLaunching}
+                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white ${colors.buttonBg} ${colors.buttonHover} transition-all duration-300 group disabled:opacity-70 disabled:cursor-wait`}
+              >
+                {isLaunching ? (
+                  <>
+                    <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Launching...
+                  </>
+                ) : (
+                  <>
+                    Launch
+                    <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
+              </button>
+            ) : launchUrl ? (
+              /* Fallback: Direct URL navigation (when SSO not configured) */
               <Link
                 href={launchUrl}
                 className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white ${colors.buttonBg} ${colors.buttonHover} transition-all duration-300 group`}
@@ -344,7 +438,7 @@ export function ProductCardV2({
                 Launch
                 <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
-            )}
+            ) : null}
             {unlockUrl && (
               <Link
                 href={unlockUrl}
