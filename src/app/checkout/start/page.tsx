@@ -5,9 +5,8 @@ import * as React from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Suspense } from "react";
-import { applyCouponStack, type AppliedCoupon } from "@/lib/checkout/rulesEngine";
+import { validateCouponStack, type AppliedCoupon } from "@/hooks/useCouponValidation";
 import { trackCouponEvent } from "@/lib/analytics/couponAnalytics";
-import { readCoupons } from "@/lib/admin/couponStore";
 import { PRODUCT_PRICING } from "@/config/pricing";
 import {
   SparklesIcon,
@@ -60,6 +59,7 @@ function CheckoutStartContent() {
   const [finalCents, setFinalCents] = React.useState(priceCents);
   const [savedCents, setSavedCents] = React.useState(0);
   const [couponMsg, setCouponMsg] = React.useState<string | null>(null);
+  const [isValidating, setIsValidating] = React.useState(false);
 
   // Track checkout view + picker view
   React.useEffect(() => {
@@ -67,57 +67,71 @@ function CheckoutStartContent() {
     trackCouponEvent({ event: "coupon_picker_view", productId });
   }, [productId, priceCents]);
 
-  // Helper to apply the current stack
-  function applyStack(nextCodes: string[], mode: "manual" | "auto" = "manual") {
+  // Helper to apply the current stack (async - uses API)
+  async function applyStack(nextCodes: string[], mode: "manual" | "auto" = "manual") {
     const clean = nextCodes
       .map((c) => c.trim().toUpperCase())
       .filter(Boolean);
 
     setStack(clean);
 
-    const res = applyCouponStack({
-      codes: clean,
-      productId,
-      subtotalCents: priceCents,
-    });
-
-    if (!res.ok) {
+    if (clean.length === 0) {
       setApplied([]);
       setRejected([]);
       setFinalCents(priceCents);
       setSavedCents(0);
-      setCouponMsg(res.reason);
+      setCouponMsg(null);
+      return;
+    }
+
+    setIsValidating(true);
+    setCouponMsg("Validating...");
+
+    try {
+      const res = await validateCouponStack(clean, productId, priceCents);
+
+      if (!res.ok) {
+        setApplied([]);
+        setRejected([]);
+        setFinalCents(priceCents);
+        setSavedCents(0);
+        setCouponMsg(res.reason || "Invalid coupon");
+
+        trackCouponEvent({
+          event: mode === "auto" ? "coupon_auto_apply" : "coupon_apply",
+          productId,
+          couponCodes: clean,
+          subtotalCents: priceCents,
+          reason: res.reason,
+        });
+
+        return;
+      }
+
+      setApplied(res.applied);
+      setRejected(res.rejected);
+      setFinalCents(res.finalCents);
+      setSavedCents(res.totalDiscountCents);
+
+      const msg =
+        mode === "auto"
+          ? `Best deal applied ($${(res.totalDiscountCents / 100).toFixed(2)} saved)`
+          : `Discount applied ($${(res.totalDiscountCents / 100).toFixed(2)} saved)`;
+      setCouponMsg(msg);
 
       trackCouponEvent({
         event: mode === "auto" ? "coupon_auto_apply" : "coupon_apply",
         productId,
-        couponCodes: clean,
+        couponCodes: res.applied.map((x) => x.code),
         subtotalCents: priceCents,
-        reason: res.reason,
+        finalCents: res.finalCents,
+        discountCents: res.totalDiscountCents,
       });
-
-      return;
+    } catch (error) {
+      setCouponMsg("Failed to validate coupon. Please try again.");
+    } finally {
+      setIsValidating(false);
     }
-
-    setApplied(res.applied);
-    setRejected(res.rejected);
-    setFinalCents(res.finalCents);
-    setSavedCents(res.totalDiscountCents);
-
-    const msg =
-      mode === "auto"
-        ? `Best deal applied (${res.totalDiscountCents}¢ saved)`
-        : `Discount applied (${res.totalDiscountCents}¢ saved)`;
-    setCouponMsg(msg);
-
-    trackCouponEvent({
-      event: mode === "auto" ? "coupon_auto_apply" : "coupon_apply",
-      productId,
-      couponCodes: res.applied.map((x) => x.code),
-      subtotalCents: priceCents,
-      finalCents: res.finalCents,
-      discountCents: res.totalDiscountCents,
-    });
   }
 
   // Auto-apply from URL coupon (supports stacks)
@@ -128,40 +142,9 @@ function CheckoutStartContent() {
     const codes = urlCoupon.split(",").map((s) => s.trim()).filter(Boolean);
 
     setCouponInput(codes.join(", "));
-    applyStack(codes, "manual");
+    applyStack(codes, "auto");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [urlCoupon, productId, priceCents]);
-
-  // "Best deal applied" logic (simple Week-1 version)
-  React.useEffect(() => {
-    if (urlCoupon) return; // don't override explicit URL coupon
-    if (stack.length > 0) return; // don't override user choice
-
-    const coupons = readCoupons().filter((c) => c.enabled);
-    if (coupons.length === 0) return;
-
-    // Try each coupon alone; pick the lowest final price.
-    let best: { code: string; final: number; saved: number } | null = null;
-
-    for (const c of coupons) {
-      const res = applyCouponStack({
-        codes: [c.code],
-        productId,
-        subtotalCents: priceCents,
-      });
-      if (!res.ok) continue;
-
-      if (!best || res.finalCents < best.final) {
-        best = { code: c.code, final: res.finalCents, saved: res.totalDiscountCents };
-      }
-    }
-
-    if (!best || best.saved <= 0) return;
-
-    setCouponInput(best.code);
-    applyStack([best.code], "auto");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productId, priceCents]);
 
   function proceedToCheckout() {
     const couponParam = applied.length ? `&coupon=${encodeURIComponent(applied.map((x) => x.code).join(","))}` : "";
@@ -219,16 +202,18 @@ function CheckoutStartContent() {
             value={couponInput}
             onChange={(e) => setCouponInput(e.target.value)}
             placeholder="Enter coupon code"
-            className="flex-1 rounded-xl border border-white/20 bg-[#0f172a] px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-white/40 transition-all"
+            disabled={isValidating}
+            className="flex-1 rounded-xl border border-white/20 bg-[#0f172a] px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-white/40 transition-all disabled:opacity-50"
           />
           <button
             type="button"
             onClick={() => applyStack(couponInput.split(","), "manual")}
-            className="rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm font-medium text-white hover:bg-white/10 transition-all"
+            disabled={isValidating || !couponInput.trim()}
+            className="rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm font-medium text-white hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Apply
+            {isValidating ? "..." : "Apply"}
           </button>
-          {stack.length > 0 && (
+          {stack.length > 0 && !isValidating && (
             <button
               type="button"
               onClick={() => {

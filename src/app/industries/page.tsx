@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { IndustryBreadcrumbs } from "@/components/ui/breadcrumbs";
+import { LeadFormWrapper } from "@/components/forms";
 
 const industries = [
   {
@@ -16,7 +17,7 @@ const industries = [
   },
   {
     name: "Real Estate",
-    href: "/industries/real-estate", 
+    href: "/industries/real-estate",
     description: "Agent Growth Engine - Automate the busywork, close more deals",
     icon: "/icons/realestate/house.svg",
     features: ["Lead capture & drips", "Automated showings", "Contract generation", "Client nurturing"],
@@ -25,7 +26,7 @@ const industries = [
   {
     name: "Accounting",
     href: "/industries/accounting",
-    description: "Financial Workflow Engine - Automate 80% of your firm's grind", 
+    description: "Financial Workflow Engine - Automate 80% of your firm's grind",
     icon: "/icons/accounting/calculator.svg",
     features: ["Document capture", "Client onboarding", "Billing automation", "Compliance tracking"],
     stats: "70% less manual work"
@@ -34,25 +35,9 @@ const industries = [
     name: "Contractors",
     href: "/industries/contractors",
     description: "Project Growth Engine - Let automation handle the admin",
-    icon: "/icons/contractors/helmet.svg", 
+    icon: "/icons/contractors/helmet.svg",
     features: ["Lead generation", "Quote automation", "Project tracking", "Payment collection"],
     stats: "Steady lead flow year-round"
-  },
-  {
-    name: "Cleaning Services",
-    href: "/industries/cleaning",
-    description: "CleanFlow Engine - Run your company without it running you",
-    icon: "/icons/cleaning/broom.svg",
-    features: ["Route optimization", "Staff scheduling", "Quality control", "Client communication"],
-    stats: "Cut admin time 50%"
-  },
-  {
-    name: "Healthcare",
-    href: "/industries/healthcare",
-    description: "CareFlow Automation - Improve patient care, strengthen efficiency",
-    icon: "/icons/calendar.svg",
-    features: ["Patient scheduling", "Document management", "Billing automation", "Compliance tracking"],
-    stats: "Reduce no-shows by 20-50%"
   }
 ];
 
@@ -72,134 +57,191 @@ export const metadata = {
 
 export default function IndustriesPage() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-slate-950">
+      {/* Background Effects */}
+      <div className="fixed inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-emerald-500/5 rounded-full blur-3xl" />
+      </div>
+
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-white">
-        <div 
-          className="absolute inset-0 bg-gradient-radial from-green-50/40 via-transparent to-transparent"
-          aria-hidden="true"
-        />
-        
-        <Container className="relative py-20 lg:py-24">
-          <div className="text-center max-w-4xl mx-auto">
-            <IndustryBreadcrumbs industry="All Industries" />
-            
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Industry-Specific Automation Solutions
-            </h1>
-            
-            <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Tailored workflow automation for every industry. From property management to healthcare, 
-              we help Canadian businesses automate their most time-consuming processes.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
-              <Button asChild size="lg" className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg rounded-2xl">
-                <Link href="/book-demo">
-                  Book a Demo
-                  <ArrowRightIcon className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-4 text-lg rounded-2xl">
-                <Link href="/contact">
-                  Contact Sales
-                </Link>
-              </Button>
+      <section className="relative min-h-screen flex items-center justify-center py-20">
+        <Container className="relative z-10">
+          <div className="text-center max-w-6xl mx-auto">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/20 mb-8 backdrop-blur-xl">
+              <svg className="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+              <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+                Industry Solutions
+              </span>
             </div>
-            
-            <div className="flex flex-wrap justify-center gap-3">
-              <span className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-full text-sm font-medium text-gray-700">
-                Canadian Data Residency
+
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight tracking-tight">
+              Built for
+              <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-blue-400 to-emerald-400 animate-gradient">
+                Your Industry
               </span>
-              <span className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-full text-sm font-medium text-gray-700">
-                Industry-Specific Workflows
+            </h1>
+
+            <p className="text-xl md:text-2xl text-white/70 mb-12 max-w-4xl mx-auto leading-relaxed font-medium">
+              Automation solutions designed specifically for your industry's unique challenges.
+              <span className="block mt-2 text-white/50">
+                From property management to contractors—we've got you covered.
               </span>
-              <span className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-full text-sm font-medium text-gray-700">
-                1-3 Week Implementation
-              </span>
+            </p>
+
+            {/* Stats Pills */}
+            <div className="flex flex-wrap justify-center gap-4 mb-12">
+              <div className="px-6 py-3 bg-gradient-to-r from-purple-500/20 to-purple-500/10 border border-purple-500/30 backdrop-blur-xl rounded-2xl">
+                <div className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-300">4</div>
+                <div className="text-xs text-white/60 font-medium">Industries</div>
+              </div>
+              <div className="px-6 py-3 bg-gradient-to-r from-blue-500/20 to-blue-500/10 border border-blue-500/30 backdrop-blur-xl rounded-2xl">
+                <div className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-300">10+</div>
+                <div className="text-xs text-white/60 font-medium">Hours Saved/Week</div>
+              </div>
+              <div className="px-6 py-3 bg-gradient-to-r from-emerald-500/20 to-emerald-500/10 border border-emerald-500/30 backdrop-blur-xl rounded-2xl">
+                <div className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-300">1-3</div>
+                <div className="text-xs text-white/60 font-medium">Week Setup</div>
+              </div>
             </div>
           </div>
         </Container>
       </section>
 
       {/* Industries Grid */}
-      <section className="py-16 bg-gray-50">
-        <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Choose Your Industry
+      <section className="relative py-24">
+        <Container className="relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-tight">
+              Choose Your
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+                Industry
+              </span>
             </h2>
-            <p className="text-lg text-gray-600">
-              Each solution is built specifically for your industry's unique challenges and workflows
+            <p className="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto font-medium">
+              Powerful automation tailored to your specific workflows
             </p>
           </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {industries.map((industry, index) => (
-              <div 
-                key={index}
-                className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow duration-300 group"
-              >
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mr-4">
-                    <img src={industry.icon} alt="" className="h-6 w-6" />
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-7xl mx-auto">
+            {industries.map((industry, index) => {
+              const gradients = [
+                'from-blue-500/20 to-cyan-500/10',
+                'from-emerald-500/20 to-teal-500/10',
+                'from-indigo-500/20 to-violet-500/10',
+                'from-yellow-500/20 to-amber-500/10',
+              ];
+              const borderColors = [
+                'border-blue-500/30',
+                'border-emerald-500/30',
+                'border-indigo-500/30',
+                'border-yellow-500/30',
+              ];
+              const statColors = [
+                'from-blue-400 to-cyan-400',
+                'from-emerald-400 to-teal-400',
+                'from-indigo-400 to-violet-400',
+                'from-yellow-400 to-amber-400',
+              ];
+
+              return (
+                <Link
+                  key={index}
+                  href={industry.href}
+                  className={`group relative bg-gradient-to-br ${gradients[index]} backdrop-blur-xl border ${borderColors[index]} rounded-3xl p-8 hover:scale-[1.02] transition-all duration-500 overflow-hidden`}
+                >
+                  {/* Animated Background Glow */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                  {/* Content */}
+                  <div className="relative z-10">
+                    {/* Header */}
+                    <div className="flex items-start justify-between mb-6">
+                      <div className="flex-1">
+                        <h3 className="text-3xl md:text-4xl font-black text-white mb-2 group-hover:scale-105 transition-transform">
+                          {industry.name}
+                        </h3>
+                        <p className={`text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r ${statColors[index]}`}>
+                          {industry.stats}
+                        </p>
+                      </div>
+                      <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                        <img src={industry.icon} alt="" className="h-8 w-8 brightness-150" />
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-white/80 mb-6 text-lg font-medium leading-relaxed">
+                      {industry.description}
+                    </p>
+
+                    {/* Features */}
+                    <div className="grid grid-cols-2 gap-3 mb-8">
+                      {industry.features.map((feature, featureIndex) => (
+                        <div key={featureIndex} className="flex items-center gap-2 text-sm text-white/70 font-medium">
+                          <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${statColors[index]}`} />
+                          {feature}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* CTA Button */}
+                    <div className={`flex items-center justify-between px-6 py-4 bg-gradient-to-r ${gradients[index]} border ${borderColors[index]} rounded-2xl group-hover:shadow-xl group-hover:shadow-${borderColors[index].split('-')[1]}-500/20 transition-all`}>
+                      <span className="font-bold text-white text-lg">Explore Solutions</span>
+                      <ArrowRightIcon className="w-6 h-6 text-white/80 group-hover:translate-x-2 transition-transform" />
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 text-lg">{industry.name}</h3>
-                    <p className="text-sm text-green-600 font-medium">{industry.stats}</p>
-                  </div>
-                </div>
-                
-                <p className="text-gray-600 mb-4 text-sm">{industry.description}</p>
-                
-                <ul className="space-y-2 mb-6">
-                  {industry.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-start text-sm text-gray-600">
-                      <span className="text-green-600 mr-2 mt-1">•</span>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                
-                <Button asChild className="w-full bg-green-600 hover:bg-green-700 text-white group-hover:bg-green-700 transition-colors">
-                  <Link href={industry.href}>
-                    Learn More
-                    <ArrowRightIcon className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
-            ))}
+
+                  {/* Decorative corner accent */}
+                  <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl ${gradients[index]} rounded-bl-full opacity-50`} />
+                </Link>
+              );
+            })}
           </div>
         </Container>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-green-50">
-        <Container>
-          <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Don't See Your Industry?
+      <section className="relative py-40 my-20 overflow-hidden">
+        {/* Full gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-blue-600 to-emerald-600" />
+
+        {/* Animated orbs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        </div>
+
+        <Container className="relative z-10">
+          <div className="text-center max-w-4xl mx-auto">
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-black text-white mb-8 leading-tight">
+              Don't See Your
+              <span className="block">Industry?</span>
             </h2>
-            <p className="text-lg text-gray-600 mb-8">
-              We work with businesses across all industries. Contact us to discuss how we can 
+            <p className="text-xl md:text-2xl text-white/90 mb-12 leading-relaxed font-medium">
+              We work with businesses across all industries. Contact us to discuss how we can
               customize our automation solutions for your specific needs.
             </p>
-            
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button asChild size="lg" className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg rounded-2xl">
-                <Link href="/contact">
-                  Contact Us
-                  <ArrowRightIcon className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="border-gray-300 text-gray-700 hover:bg-white px-8 py-4 text-lg rounded-2xl">
-                <Link href="/book-demo">
-                  Book a Demo
-                </Link>
-              </Button>
-            </div>
+
+            <Link
+              href="#lead-form"
+              className="inline-flex items-center gap-3 px-10 py-5 bg-white text-purple-600 rounded-2xl font-black text-lg hover:bg-white/90 transition-all duration-300 shadow-2xl hover:shadow-white/20 hover:scale-105"
+            >
+              Let's Talk
+              <ArrowRightIcon className="w-6 h-6" />
+            </Link>
           </div>
         </Container>
+      </section>
+
+      {/* Lead Form Section */}
+      <section id="lead-form">
+        <LeadFormWrapper variant="industries" />
       </section>
     </main>
   );

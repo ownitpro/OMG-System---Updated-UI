@@ -131,7 +131,7 @@ export const individualCourse = {
   footnote: "Most learners feel a clear difference in 3 days or less, and you can always go at your own pace.",
   cta: {
     label: "Start the 3-Day Personal Course",
-    href: "/app/signup?track=personal",
+    href: "/app/login",
   },
 } as const;
 
@@ -150,7 +150,7 @@ export const businessCourse = {
   footnote: "Teams can be fully up and running in about 2 weeks without overwhelming staff.",
   cta: {
     label: "Enroll Your Entire Team",
-    href: "/contact?topic=ai-mastery-teams",
+    href: "/app/login",
   },
 } as const;
 

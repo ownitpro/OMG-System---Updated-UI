@@ -19,6 +19,8 @@ import {
   CheckCircleIcon,
   ExclamationCircleIcon,
 } from "@heroicons/react/24/outline";
+import { formatTicketId, TICKET_STATUS } from "@/lib/client/formatters";
+import { useSupportTickets, useCreateTicket } from "@/hooks/useClientData";
 
 interface FAQItem {
   question: string;
@@ -86,40 +88,34 @@ export default function ClientSupportPage() {
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<"faq" | "contact" | "tickets">("faq");
 
+  // 🔌 CONNECTED TO API - Fetch real tickets from database
+  const { data: ticketsData, loading: ticketsLoading, error: ticketsError, refetch } = useSupportTickets();
+
+  // 🔌 CRUD Operation - Create ticket
+  const { mutate: createTicket, loading: creating } = useCreateTicket();
+
   // Contact form state
   const [contactSubject, setContactSubject] = useState("");
   const [contactCategory, setContactCategory] = useState("");
   const [contactMessage, setContactMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
 
-  // Mock tickets
-  const tickets = [
+  // Use real data from API or fallback to mock
+  const mockTickets = [
     {
-      id: "TKT-1234",
+      id: "cm4xabc1234def5678ghi",
       subject: "Unable to access CRM dashboard",
-      status: "open",
-      priority: "high",
-      created: "Dec 25, 2024",
-      lastUpdate: "Dec 26, 2024",
-    },
-    {
-      id: "TKT-1189",
-      subject: "Question about billing cycle",
-      status: "resolved",
-      priority: "low",
-      created: "Dec 20, 2024",
-      lastUpdate: "Dec 22, 2024",
-    },
-    {
-      id: "TKT-1102",
-      subject: "Feature request: Dark mode",
-      status: "in_progress",
-      priority: "medium",
-      created: "Dec 15, 2024",
-      lastUpdate: "Dec 24, 2024",
+      status: "OPEN",
+      priority: "HIGH",
+      createdAt: "2024-12-25T10:00:00Z",
+      updatedAt: "2024-12-26T14:00:00Z",
     },
   ];
+
+  const tickets = ticketsData?.tickets || mockTickets;
+  console.log('[SUPPORT DEBUG] Tickets to display:', tickets?.length, tickets);
 
   const filteredFAQs = faqs.filter(
     (faq) =>
@@ -137,29 +133,61 @@ export default function ClientSupportPage() {
   }, {} as Record<string, FAQItem[]>);
 
   const handleSendMessage = async () => {
-    if (!contactSubject || !contactCategory || !contactMessage) return;
+    if (!contactSubject || !contactCategory || !contactMessage) {
+      setError("All fields are required");
+      return;
+    }
 
     setSending(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setSending(false);
-    setSent(true);
-    setContactSubject("");
-    setContactCategory("");
-    setContactMessage("");
-    setTimeout(() => setSent(false), 5000);
+    setError("");
+
+    try {
+      // 🔌 ACTUAL API CALL - Create ticket in database
+      await createTicket({
+        subject: contactSubject,
+        description: contactMessage,
+        category: contactCategory,
+        priority: "MEDIUM"
+      });
+
+      // Success!
+      setSent(true);
+      setContactSubject("");
+      setContactCategory("");
+      setContactMessage("");
+
+      // Refresh tickets list to show the new ticket
+      refetch();
+
+      // Switch to tickets tab to see the new ticket
+      setTimeout(() => {
+        setActiveTab("tickets");
+        setSent(false);
+      }, 2000);
+
+    } catch (err) {
+      setError("Failed to create ticket. Please try again.");
+      console.error("Error creating ticket:", err);
+    } finally {
+      setSending(false);
+    }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "open":
-        return "bg-amber-500/20 border-amber-500/30 text-amber-400";
-      case "in_progress":
-        return "bg-[#3B82F6]/20 border-[#3B82F6]/30 text-[#3B82F6]";
-      case "resolved":
-        return "bg-[#47BD79]/20 border-[#47BD79]/30 text-[#47BD79]";
-      default:
-        return "bg-white/10 border-white/20 text-white/60";
-    }
+  const getStatusBadge = (status: string) => {
+    const statusKey = status as keyof typeof TICKET_STATUS;
+    const config = TICKET_STATUS[statusKey] || TICKET_STATUS.OPEN;
+
+    const Icon = status === "OPEN" ? ClockIcon :
+                 status === "IN_PROGRESS" ? ExclamationCircleIcon :
+                 status === "RESOLVED" ? CheckCircleIcon :
+                 TicketIcon;
+
+    return (
+      <span className={`inline-flex items-center gap-1 rounded-full ${config.bgColor} border ${config.borderColor} px-2.5 py-1 text-xs font-medium ${config.textColor}`}>
+        <Icon className="w-3 h-3" />
+        {config.label}
+      </span>
+    );
   };
 
   const getPriorityColor = (priority: string) => {
@@ -332,11 +360,17 @@ export default function ClientSupportPage() {
                   <div className="mb-6 rounded-xl bg-[#47BD79]/20 border border-[#47BD79]/30 p-4">
                     <div className="flex items-center gap-2 text-[#47BD79]">
                       <CheckCircleIcon className="w-5 h-5" />
-                      <span className="text-sm font-medium">Message sent successfully!</span>
+                      <span className="text-sm font-medium">Ticket created successfully!</span>
                     </div>
                     <p className="mt-2 text-sm text-white/60">
-                      We'll get back to you within 24 hours.
+                      Your ticket has been created. We'll get back to you within 24 hours.
                     </p>
+                  </div>
+                )}
+
+                {error && (
+                  <div className="mb-6 rounded-xl bg-red-500/20 border border-red-500/30 p-4">
+                    <p className="text-sm text-red-400">{error}</p>
                   </div>
                 )}
 
@@ -457,13 +491,8 @@ export default function ClientSupportPage() {
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xs font-mono text-white/50">{ticket.id}</span>
-                          <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs ${getStatusColor(ticket.status)}`}>
-                            {ticket.status === "open" && <ExclamationCircleIcon className="w-3 h-3 mr-1" />}
-                            {ticket.status === "in_progress" && <ClockIcon className="w-3 h-3 mr-1" />}
-                            {ticket.status === "resolved" && <CheckCircleIcon className="w-3 h-3 mr-1" />}
-                            {ticket.status.replace("_", " ")}
-                          </span>
+                          <span className="text-xs font-mono text-white/50">{formatTicketId(ticket.id)}</span>
+                          {getStatusBadge(ticket.status)}
                         </div>
                         <h4 className="text-sm font-medium text-white">{ticket.subject}</h4>
                       </div>

@@ -1,11 +1,11 @@
 "use client";
 
-import { 
-  DocumentTextIcon, 
-  ClockIcon, 
-  CogIcon, 
-  DevicePhoneMobileIcon, 
-  ChartBarIcon 
+import {
+  DocumentTextIcon,
+  ClockIcon,
+  CogIcon,
+  DevicePhoneMobileIcon,
+  ChartBarIcon
 } from "@heroicons/react/24/outline";
 
 const features = [
@@ -13,84 +13,88 @@ const features = [
     icon: DocumentTextIcon,
     title: "Single Source of Truth",
     description: "Unify leads, clients & documents in one place.",
-    color: "text-[#47BD79]",
-    bgColor: "bg-[#47BD79]/20",
+    color: "text-sky-400",
   },
   {
     icon: ClockIcon,
     title: "Automated Lead Follow-up",
     description: "Respond to leads up to 7× faster.",
     color: "text-blue-400",
-    bgColor: "bg-blue-500/20",
   },
   {
     icon: CogIcon,
     title: "Industry-Ready Workflows",
     description: "Pre-built flows for property management, real estate and more.",
-    color: "text-purple-400",
-    bgColor: "bg-purple-500/20",
+    color: "text-cyan-400",
   },
   {
     icon: DevicePhoneMobileIcon,
     title: "Mobile Access",
     description: "Access your CRM anywhere, anytime.",
-    color: "text-indigo-400",
-    bgColor: "bg-indigo-500/20",
+    color: "text-sky-300",
   },
   {
     icon: ChartBarIcon,
     title: "Reporting & Analytics",
     description: "Make data-driven decisions with real-time insights.",
-    color: "text-orange-400",
-    bgColor: "bg-orange-500/20",
+    color: "text-blue-300",
   },
 ];
 
 export default function WhyChooseSection() {
   return (
-    <section className="py-16 md:py-24 bg-black">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+    <section className="py-20 md:py-32 bg-black relative overflow-hidden">
+      {/* Subtle background accent */}
+      <div className="absolute inset-0 bg-gradient-to-b from-sky-500/5 via-transparent to-transparent"></div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="text-center mb-20">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
             Why Choose Our CRM?
           </h2>
-          <p className="text-xl text-white/70 max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto">
             Built specifically for real businesses that need more than just contact management
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Features - Clean List Layout */}
+        <div className="max-w-5xl mx-auto space-y-12">
           {features.map((feature, index) => {
             const IconComponent = feature.icon;
             return (
               <div
                 key={index}
-                className="group relative bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 hover:border-[#47BD79]/30 transition-all duration-600 ease-premium-out transform hover:-translate-y-2"
+                className="group flex items-start gap-6 md:gap-8 hover:translate-x-2 transition-transform duration-300"
               >
-                <div className="flex flex-col items-center text-center">
-                  <div className={`w-16 h-16 ${feature.bgColor} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                    <IconComponent className={`w-8 h-8 ${feature.color}`} />
+                {/* Icon */}
+                <div className="flex-shrink-0">
+                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <IconComponent className={`w-8 h-8 md:w-10 md:h-10 ${feature.color}`} />
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-3">
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 pt-2">
+                  <h3 className="text-xl md:text-2xl font-bold text-white mb-2 group-hover:text-sky-400 transition-colors">
                     {feature.title}
                   </h3>
-                  <p className="text-white/60 leading-relaxed">
+                  <p className="text-base md:text-lg text-white/60 leading-relaxed">
                     {feature.description}
                   </p>
                 </div>
 
-                {/* Hover glow effect */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#47BD79]/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                {/* Subtle divider line */}
+                <div className="hidden md:block flex-shrink-0 w-px h-16 bg-gradient-to-b from-transparent via-white/10 to-transparent"></div>
               </div>
             );
           })}
         </div>
 
-        {/* Additional Info */}
-        <div className="mt-16 text-center">
-          <div className="inline-flex items-center px-6 py-3 bg-[#47BD79]/10 border border-[#47BD79]/30 rounded-full">
-            <div className="w-2 h-2 bg-[#47BD79] rounded-full mr-3 animate-pulse"></div>
-            <span className="text-[#47BD79] font-medium">
+        {/* Bottom CTA */}
+        <div className="mt-20 text-center">
+          <div className="inline-flex items-center px-6 py-3 border-l-4 border-sky-400 bg-sky-500/10">
+            <div className="w-2 h-2 bg-sky-400 rounded-full mr-3 animate-pulse"></div>
+            <span className="text-sky-400 font-medium text-lg">
               All features included in your free trial
             </span>
           </div>

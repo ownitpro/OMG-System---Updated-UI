@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { 
+import {
   SparklesIcon,
   CogIcon,
   ChartBarIcon,
@@ -75,13 +75,13 @@ export default function AutomationPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/contact-sales"
+                href="/industries#lead-form"
                 className="inline-flex items-center justify-center px-8 py-3 bg-white text-purple-600 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
               >
                 Contact Sales
               </Link>
               <Link
-                href="/demos"
+                href="/try-live-demo"
                 className="inline-flex items-center justify-center px-8 py-3 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition-colors"
               >
                 Try Live Demos
@@ -97,7 +97,7 @@ export default function AutomationPage() {
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Why Automate?</h2>
               <p className="text-xl text-gray-600">The benefits of business automation are clear and measurable</p>
             </div>
-            
+
             <div className="grid md:grid-cols-3 gap-8">
               {benefits.map((benefit, index) => (
                 <div key={index} className="text-center">
@@ -119,7 +119,7 @@ export default function AutomationPage() {
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Automation Solutions</h2>
               <p className="text-xl text-gray-600">Choose the automation approach that fits your business needs</p>
             </div>
-            
+
             <div className="grid md:grid-cols-3 gap-8">
               {automations.map((automation, index) => (
                 <Link
@@ -157,13 +157,13 @@ export default function AutomationPage() {
             <p className="text-xl text-purple-100 mb-8">Let's discuss how automation can transform your operations</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/contact-sales"
+                href="/industries#lead-form"
                 className="inline-flex items-center justify-center px-8 py-3 bg-white text-purple-600 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
               >
                 Contact Sales
               </Link>
               <Link
-                href="/demos"
+                href="/try-live-demo"
                 className="inline-flex items-center justify-center px-8 py-3 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition-colors"
               >
                 Try Live Demos

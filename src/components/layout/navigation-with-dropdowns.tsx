@@ -206,7 +206,7 @@ export default function NavigationWithDropdowns() {
               <Link href="/apps" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-gray-900">
                 Apps
               </Link>
-              <Link href="/demos" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-gray-900">
+              <Link href="/try-live-demo" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-gray-900">
                 Demos
               </Link>
               <Link href="/solutions" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-gray-900">

@@ -21,6 +21,7 @@ import {
   SparklesIcon,
 } from "@heroicons/react/24/outline";
 import { SolutionRelationsStrip } from "@/components/solutions/SolutionRelationsStrip";
+import { SolutionsLeadForm, StickyGetStartedButton, MobileFormDrawer } from "@/components/forms";
 
 const painPoints = [
   {
@@ -368,11 +369,11 @@ export default function AutomationsPage() {
               </p>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
-                Automations that buy you time back every week
+                Reclaim <span className="text-emerald-400">10+ Hours</span> Every Week
               </h1>
-              
+
               <p className="text-xl text-slate-200 leading-relaxed">
-                We map your tools, remove repetitive work, and build automations that give you hours back every week—so you can focus on clients, family, and growth.
+                Eliminate manual busywork, automate workflows, and free your team to focus on revenue—not admin tasks.
               </p>
               
               <ul className="space-y-3 text-slate-200">
@@ -392,7 +393,7 @@ export default function AutomationsPage() {
               
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Link
-                  href="/contact?solution=automations"
+                  href="#lead-form"
                   className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-400 text-white font-bold rounded-lg hover:from-emerald-600 hover:to-teal-500 transition-all duration-300 transform hover:scale-105 shadow-[0_0_30px_rgba(16,185,129,0.4)]"
                 >
                   Book an Automation Mapping Call
@@ -635,7 +636,7 @@ export default function AutomationsPage() {
 
           <div className="text-center">
             <Link
-              href="/contact?solution=automations"
+              href="#lead-form"
               className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-400 text-white font-bold rounded-lg hover:from-emerald-600 hover:to-teal-500 transition-all duration-300 transform hover:scale-105 shadow-[0_0_30px_rgba(16,185,129,0.4)]"
             >
               Book my Automation Mapping Call
@@ -778,7 +779,7 @@ export default function AutomationsPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/contact?solution=automations"
+                  href="#lead-form"
                   className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-400 text-white font-bold rounded-lg hover:from-emerald-600 hover:to-teal-500 transition-all duration-300 transform hover:scale-105 shadow-[0_0_30px_rgba(16,185,129,0.4)]"
                 >
                   Talk about my systems
@@ -795,6 +796,15 @@ export default function AutomationsPage() {
           </div>
         </div>
       </section>
+
+      {/* Lead Form Section */}
+      <SolutionsLeadForm />
+
+      {/* Sticky Button (Desktop) */}
+      <StickyGetStartedButton variant="solutions" />
+
+      {/* Mobile Drawer */}
+      <MobileFormDrawer variant="solutions" />
     </main>
   );
 }

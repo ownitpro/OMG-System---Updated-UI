@@ -34,14 +34,7 @@ export async function GET(request: NextRequest) {
         skip,
         take: limit,
         orderBy: { createdAt: 'desc' },
-        include: {
-          user: {
-            select: { name: true, email: true }
-          },
-          organization: {
-            select: { name: true }
-          }
-        }
+        // Note: AuditLog model stores userEmail directly, no relations needed
       }),
       prisma.auditLog.count({ where })
     ]);

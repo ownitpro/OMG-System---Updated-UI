@@ -470,7 +470,10 @@ export default function RealEstatePage() {
 
           {/* Bottom CTA */}
           <div className="flex justify-center">
-            <button className="inline-flex items-center gap-2 px-8 py-3 rounded-full border-2 border-slate-700 text-slate-800 font-semibold uppercase tracking-widest text-sm hover:bg-slate-800/10 transition-all">
+            <Link
+              href="/apps/securevault-docs/team-workflow"
+              className="inline-flex items-center gap-2 px-8 py-3 rounded-full border-2 border-slate-700 text-slate-800 font-semibold uppercase tracking-widest text-sm hover:bg-slate-800/10 transition-all"
+            >
               See a team workflow
               <svg
                 className="w-4 h-4"
@@ -485,7 +488,7 @@ export default function RealEstatePage() {
                   d="M14 5l7 7m0 0l-7 7m7-7H3"
                 />
               </svg>
-            </button>
+            </Link>
           </div>
         </div>
       </section>

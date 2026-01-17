@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   getSolutionsForHomepageSection,
@@ -5,8 +7,38 @@ import {
 } from "@/config/solutions_config";
 
 function AutomationCard({ solution }: { solution: SolutionConfig }) {
+  // Use solution-specific accent color or default to green
+  const accentColor = solution.accentColor || "#47BD79";
+
+  // Convert hex to RGB for rgba usage
+  const hexToRgb = (hex: string) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : { r: 71, g: 189, b: 121 }; // Default green
+  };
+
+  const rgb = hexToRgb(accentColor);
+  const rgbaLight = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`;
+  const rgbaMedium = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3)`;
+  const rgbaHover = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.5)`;
+
   return (
-    <div className="bg-white/5 backdrop-blur-xl rounded-xl p-6 border border-[#47BD79]/20 hover:bg-white/10 hover:border-[#47BD79]/40 transition-all duration-600 ease-premium-out flex flex-col h-full" style={{ boxShadow: '0 0 30px rgba(71, 189, 121, 0.1)' }}>
+    <div
+      className="bg-white/5 backdrop-blur-xl rounded-xl p-6 border hover:bg-white/10 transition-all duration-600 ease-premium-out flex flex-col h-full"
+      style={{
+        borderColor: `${accentColor}33`, // 20% opacity
+        boxShadow: `0 0 30px ${rgbaLight}`
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = `${accentColor}66`; // 40% opacity
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = `${accentColor}33`;
+      }}
+    >
       <h3 className="text-xl font-semibold text-white mb-2">
         {solution.label}
       </h3>
@@ -16,7 +48,7 @@ function AutomationCard({ solution }: { solution: SolutionConfig }) {
         <ul className="space-y-1 text-sm text-white/60 mb-6">
           {solution.bullets.slice(0, 4).map((item, idx) => (
             <li key={idx} className="flex items-start gap-2">
-              <span className="mt-1 text-[#47BD79]">•</span>
+              <span className="mt-1" style={{ color: accentColor }}>•</span>
               <span>{item}</span>
             </li>
           ))}
@@ -27,7 +59,17 @@ function AutomationCard({ solution }: { solution: SolutionConfig }) {
         <div className="mt-auto">
           <Link
             href={solution.ctaHref}
-            className="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-[#47BD79] text-white text-sm font-semibold hover:bg-[#3da86a] transition-all duration-600 ease-premium-out shadow-lg shadow-[#47BD79]/30 hover:shadow-[0_0_30px_rgba(71,189,121,0.5)]"
+            className="inline-flex items-center justify-center px-5 py-3 rounded-xl text-white text-sm font-semibold transition-all duration-600 ease-premium-out"
+            style={{
+              backgroundColor: accentColor,
+              boxShadow: `0 10px 15px -3px ${rgbaMedium}, 0 4px 6px -4px ${rgbaMedium}`,
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = `0 0 30px ${rgbaHover}`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = `0 10px 15px -3px ${rgbaMedium}, 0 4px 6px -4px ${rgbaMedium}`;
+            }}
           >
             {solution.ctaLabel}
           </Link>

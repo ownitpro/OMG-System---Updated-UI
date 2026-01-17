@@ -2,37 +2,18 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { MOCK_ORDERS } from "@/lib/admin/mockOrders";
-import { MOCK_LOGS } from "@/lib/admin/mockLogs";
+import {
+  useAdminDashboard,
+  useAdminAuditLogs,
+  useAdminOrdersCount,
+} from "@/hooks/useAdminDashboard";
 import {
   ShoppingCartIcon,
   UsersIcon,
   DocumentMagnifyingGlassIcon,
   CogIcon,
-  ArrowTrendingUpIcon,
   ArrowRightIcon,
 } from "@heroicons/react/24/outline";
-
-type AdminOrder = (typeof MOCK_ORDERS)[number];
-
-function readMockOrders(): AdminOrder[] {
-  try {
-    const raw = localStorage.getItem("omg_mock_orders");
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
-}
-
-function readEntitlementsCount(): number {
-  try {
-    const raw = localStorage.getItem("omg_entitlements");
-    const obj = raw ? JSON.parse(raw) : {};
-    return Object.values(obj).filter(Boolean).length;
-  } catch {
-    return 0;
-  }
-}
 
 interface OverviewCardProps {
   title: string;
@@ -40,6 +21,7 @@ interface OverviewCardProps {
   icon: React.ElementType;
   stats: { label: string; value: string | number }[];
   accent: "emerald" | "purple" | "blue" | "amber";
+  isLoading?: boolean;
 }
 
 const accentColors = {
@@ -69,7 +51,7 @@ const accentColors = {
   },
 };
 
-function OverviewCard({ title, href, icon: Icon, stats, accent }: OverviewCardProps) {
+function OverviewCard({ title, href, icon: Icon, stats, accent, isLoading }: OverviewCardProps) {
   const colors = accentColors[accent];
 
   return (
@@ -92,7 +74,11 @@ function OverviewCard({ title, href, icon: Icon, stats, accent }: OverviewCardPr
         {stats.map((stat, idx) => (
           <div key={idx} className="flex items-center justify-between">
             <span className="text-sm text-white/60">{stat.label}</span>
-            <span className="text-sm font-semibold text-white">{stat.value}</span>
+            {isLoading ? (
+              <span className="h-4 w-12 bg-white/10 rounded animate-pulse" />
+            ) : (
+              <span className="text-sm font-semibold text-white">{stat.value}</span>
+            )}
           </div>
         ))}
       </div>
@@ -101,33 +87,28 @@ function OverviewCard({ title, href, icon: Icon, stats, accent }: OverviewCardPr
 }
 
 export default function AdminOverviewCardsV2() {
-  const [ordersCount, setOrdersCount] = React.useState(0);
-  const [paidTotal, setPaidTotal] = React.useState("$0.00");
-  const [clientsCount, setClientsCount] = React.useState(0);
-  const [logsCount, setLogsCount] = React.useState(0);
-  const [entitlementsCount, setEntitlementsCount] = React.useState(0);
+  // Fetch real data from APIs
+  const { data: dashboardData, isLoading: dashboardLoading } = useAdminDashboard();
+  const { pagination: auditPagination, isLoading: auditLoading } = useAdminAuditLogs(1, 1);
+  const { totalOrders, isLoading: ordersLoading } = useAdminOrdersCount();
 
-  React.useEffect(() => {
-    const stored = readMockOrders();
-    const orders = [...stored, ...MOCK_ORDERS];
+  // Calculate total paid from recent orders or use total revenue
+  const totalRevenue = dashboardData?.overview?.totalRevenue ?? 0;
+  const formattedRevenue = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(totalRevenue);
 
-    setOrdersCount(orders.length);
+  // Get unique clients count (users with CLIENT role)
+  const clientsCount = dashboardData?.users?.byRole?.CLIENT ?? 0;
 
-    const paidCents = orders
-      .filter((o) => o.status === "paid" || o.status === "completed")
-      .reduce((sum, o) => sum + o.amountCents, 0);
+  // Active entitlements (using active subscriptions as proxy)
+  const activeEntitlements = dashboardData?.overview?.activeSubscriptions ?? 0;
 
-    const currency = orders[0]?.currency ?? "USD";
-    setPaidTotal(
-      new Intl.NumberFormat(undefined, { style: "currency", currency }).format(paidCents / 100)
-    );
+  // Audit logs count
+  const logsCount = auditPagination.total;
 
-    const clientIds = new Set(orders.map((o) => o.client.id));
-    setClientsCount(clientIds.size);
-
-    setLogsCount(MOCK_LOGS.length);
-    setEntitlementsCount(readEntitlementsCount());
-  }, []);
+  const isLoading = dashboardLoading || auditLoading || ordersLoading;
 
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -136,9 +117,10 @@ export default function AdminOverviewCardsV2() {
         href="/portal/admin/orders"
         icon={ShoppingCartIcon}
         accent="emerald"
+        isLoading={isLoading}
         stats={[
-          { label: "Total orders", value: ordersCount },
-          { label: "Paid total", value: paidTotal },
+          { label: "Total orders", value: totalOrders },
+          { label: "Paid total", value: formattedRevenue },
         ]}
       />
 
@@ -147,9 +129,10 @@ export default function AdminOverviewCardsV2() {
         href="/portal/admin/users"
         icon={UsersIcon}
         accent="purple"
+        isLoading={isLoading}
         stats={[
           { label: "Unique clients", value: clientsCount },
-          { label: "Active entitlements", value: entitlementsCount },
+          { label: "Active entitlements", value: activeEntitlements },
         ]}
       />
 
@@ -158,6 +141,7 @@ export default function AdminOverviewCardsV2() {
         href="/portal/admin/logs"
         icon={DocumentMagnifyingGlassIcon}
         accent="blue"
+        isLoading={isLoading}
         stats={[
           { label: "Log entries", value: logsCount },
           { label: "Status", value: "Active" },

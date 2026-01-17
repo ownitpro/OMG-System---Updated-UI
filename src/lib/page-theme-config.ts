@@ -13,13 +13,13 @@ export const PAGE_THEMES: Record<string, ThemeColor> = {
   // ═══════════════════════════════════════════════════════════════
   "/apps/omg-ai-mastery": { name: "amber", rgb: "245, 158, 11", hex: "#F59E0B" },
   "/apps/omg-iq": { name: "purple", rgb: "168, 85, 247", hex: "#A855F7" },
-  "/apps/omg-leads": { name: "purple", rgb: "168, 85, 247", hex: "#A855F7" },
+  "/apps/omg-leads": { name: "blue", rgb: "37, 99, 235", hex: "#2563EB" },
   "/apps/securevault": { name: "emerald", rgb: "16, 185, 129", hex: "#10B981" },
   "/apps/securevault-docs": { name: "teal", rgb: "20, 184, 166", hex: "#14B8A6" },
-  "/apps/leadflow": { name: "teal", rgb: "20, 184, 166", hex: "#14B8A6" },
-  "/apps/leadflow-engine": { name: "teal", rgb: "20, 184, 166", hex: "#14B8A6" },
-  "/apps/crm": { name: "blue", rgb: "59, 130, 246", hex: "#3B82F6" },
-  "/apps/crm-demo": { name: "blue", rgb: "59, 130, 246", hex: "#3B82F6" },
+  "/apps/leadflow": { name: "blue", rgb: "37, 99, 235", hex: "#2563EB" },
+  "/apps/leadflow-engine": { name: "blue", rgb: "37, 99, 235", hex: "#2563EB" },
+  "/apps/crm": { name: "sky", rgb: "56, 189, 248", hex: "#38BDF8" },
+  "/apps/crm-demo": { name: "sky", rgb: "56, 189, 248", hex: "#38BDF8" },
   "/apps/demo": { name: "green", rgb: "71, 189, 121", hex: "#47BD79" },
   "/apps": { name: "green", rgb: "71, 189, 121", hex: "#47BD79" },
 
@@ -30,8 +30,8 @@ export const PAGE_THEMES: Record<string, ThemeColor> = {
   "/products/omg-ai-mastery": { name: "amber", rgb: "245, 158, 11", hex: "#F59E0B" },
   "/products/securevault": { name: "emerald", rgb: "16, 185, 129", hex: "#10B981" },
   "/products/securevault-docs": { name: "teal", rgb: "20, 184, 166", hex: "#14B8A6" },
-  "/products/leadflow": { name: "teal", rgb: "20, 184, 166", hex: "#14B8A6" },
-  "/products/crm": { name: "blue", rgb: "59, 130, 246", hex: "#3B82F6" },
+  "/products/leadflow": { name: "blue", rgb: "37, 99, 235", hex: "#2563EB" },
+  "/products/crm": { name: "sky", rgb: "56, 189, 248", hex: "#38BDF8" },
   "/products": { name: "green", rgb: "71, 189, 121", hex: "#47BD79" },
 
   // ═══════════════════════════════════════════════════════════════

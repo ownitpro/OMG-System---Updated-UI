@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getIndustryById } from "@/config/industries_config";
 import { getAppsByIds } from "@/config/apps_config";
 import { getSolutionsByIds } from "@/config/solutions_config";
+import { LeadFormWrapper } from "@/components/forms";
 
 export const metadata: Metadata = {
   title: "Financial Workflow Engine | Accounting Automation | OMGsystems",
@@ -341,7 +342,7 @@ export default function AccountingPage() {
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
-              href="/solutions/strategy-session"
+              href="#lead-form"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 text-white font-semibold hover:from-indigo-600 hover:to-violet-600 transition-all shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40"
             >
               Streamline My Firm
@@ -888,7 +889,7 @@ export default function AccountingPage() {
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
-              href="/solutions/strategy-session"
+              href="#lead-form"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-white text-indigo-600 font-semibold hover:bg-white/90 transition-all shadow-lg"
             >
               Book Strategy Session
@@ -915,6 +916,9 @@ export default function AccountingPage() {
           </div>
         </div>
       </section>
+
+      {/* Lead Form Section */}
+      <LeadFormWrapper variant="industries" />
     </div>
   );
 }

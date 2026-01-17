@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -89,6 +89,7 @@
     "reactflow": "^11.11.4",
     "recharts": "^3.2.1",
     "stripe": "^19.1.0",
+    "swr": "^2.3.8",
     "tailwind-merge": "^3.3.1",
     "three": "^0.181.2",
     "uuid": "^13.0.0",
@@ -98,15 +99,21 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^20.19.27",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
     "@types/three": "^0.181.0",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "puppeteer": "^24.24.1",
+    "tailwind-scrollbar": "^4.0.2",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "overrides": {
     "@types/react": "19.2.7",

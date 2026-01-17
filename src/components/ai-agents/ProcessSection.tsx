@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { 
-  MagnifyingGlassIcon, 
-  CogIcon, 
+import {
+  MagnifyingGlassIcon,
+  CogIcon,
   RocketLaunchIcon,
   CheckCircleIcon,
   ArrowRightIcon
@@ -70,7 +70,8 @@ export default function ProcessSection() {
   }, []);
 
   return (
-    <section className="py-16 md:py-24 bg-gray-900">
+    <section className="py-24 md:py-32 bg-slate-950 relative overflow-hidden">
+      <div className="absolute inset-0 chess-grid opacity-10" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -87,13 +88,12 @@ export default function ProcessSection() {
           {steps.map((step, index) => {
             const Icon = step.icon;
             const isActive = activeStep === step.id;
-            
+
             return (
               <div
                 key={step.id}
-                className={`relative group cursor-pointer transition-all duration-500 ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                }`}
+                className={`relative group cursor-pointer transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                  }`}
                 style={{ transitionDelay: `${index * 200}ms` }}
                 onMouseEnter={() => setActiveStep(step.id)}
               >
@@ -108,9 +108,8 @@ export default function ProcessSection() {
                 </div>
 
                 {/* Step Content */}
-                <div className={`relative bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-2 ${
-                  isActive ? 'ring-2 ring-emerald-500/50' : ''
-                }`}>
+                <div className={`relative bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-2 ${isActive ? 'ring-2 ring-emerald-500/50' : ''
+                  }`}>
                   {/* Visual Element */}
                   <div className="text-center mb-4">
                     <div className="text-4xl mb-2">{step.visual}</div>
@@ -153,11 +152,10 @@ export default function ProcessSection() {
             {steps.map((step) => (
               <div
                 key={step.id}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  activeStep >= step.id 
-                    ? 'bg-emerald-400 scale-125' 
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${activeStep >= step.id
+                    ? 'bg-emerald-400 scale-125'
                     : 'bg-gray-600'
-                }`}
+                  }`}
               ></div>
             ))}
           </div>

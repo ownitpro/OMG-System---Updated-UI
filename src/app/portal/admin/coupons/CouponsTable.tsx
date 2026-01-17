@@ -6,19 +6,46 @@ import { useTableState } from "@/lib/admin/useTableState";
 import { useTableDensity } from "@/lib/admin/useTableDensity";
 import { useTableScrollRestore } from "@/lib/admin/useTableScrollRestore";
 import {
-  upsertCoupon,
-  readCoupons,
-  toggleCoupon,
-  deleteCoupon,
-  getCouponStats,
-  duplicateCoupon,
-  bulkToggleCoupons,
-  bulkDeleteCoupons,
-  exportCouponsToCSV,
-  type Coupon,
-  type CouponCategory,
-} from "@/lib/admin/couponStore";
-import { readClients, PRODUCTS, type Client, type Product } from "@/lib/admin/clientStore";
+  useAdminCoupons,
+  useAdminCouponStats,
+  type Coupon as APICoupon,
+  type CouponCategory as APICouponCategory,
+  type CreateCouponInput,
+} from "@/hooks/useAdminCoupons";
+
+// Local coupon type matching the UI needs (transformed from API)
+type CouponCategory = "promo" | "partner" | "loyalty" | "seasonal" | "referral" | "other";
+
+type Coupon = {
+  id: string;
+  code: string;
+  enabled: boolean;
+  percentOff: number;
+  appliesTo: "all" | string[];
+  assignedTo: "all" | string[];
+  maxRedemptions?: number;
+  redeemedCount: number;
+  startsAt?: string;
+  endsAt?: string;
+  createdAt: string;
+  note?: string;
+  discountType: "percent" | "fixed";
+  category?: CouponCategory;
+  minPurchaseCents?: number;
+  firstTimeOnly?: boolean;
+  isPublic?: boolean;
+  totalSavingsCents?: number;
+  amountOffCents?: number;
+};
+import { PRODUCTS, type Product } from "@/lib/admin/clientStore";
+
+// Client type for user selection (fetched from API)
+type Client = {
+  id: string;
+  name: string | null;
+  email: string;
+  company?: string | null;
+};
 import {
   MagnifyingGlassIcon,
   ArrowPathIcon,
@@ -57,6 +84,93 @@ const CATEGORY_OPTIONS: { value: CouponCategory; label: string; color: string }[
   { value: "referral", label: "Referral", color: "#EC4899" },
   { value: "other", label: "Other", color: "#6B7280" },
 ];
+
+// Transform API coupon to UI coupon format
+function transformApiCoupon(apiCoupon: APICoupon): Coupon {
+  let appliesTo: "all" | string[] = "all";
+  if (apiCoupon.appliesTo) {
+    try {
+      const parsed = JSON.parse(apiCoupon.appliesTo);
+      appliesTo = parsed === "all" ? "all" : (Array.isArray(parsed) ? parsed : "all");
+    } catch {
+      appliesTo = "all";
+    }
+  }
+
+  let assignedTo: "all" | string[] = "all";
+  if (apiCoupon.assignedTo) {
+    try {
+      const parsed = JSON.parse(apiCoupon.assignedTo);
+      assignedTo = parsed === "all" ? "all" : (Array.isArray(parsed) ? parsed : "all");
+    } catch {
+      assignedTo = "all";
+    }
+  }
+
+  return {
+    id: apiCoupon.id,
+    code: apiCoupon.code,
+    enabled: apiCoupon.isActive,
+    percentOff: apiCoupon.type === "PERCENTAGE" ? apiCoupon.value : 0,
+    amountOffCents: apiCoupon.type === "FIXED_AMOUNT" ? apiCoupon.value : undefined,
+    discountType: apiCoupon.type === "PERCENTAGE" ? "percent" : "fixed",
+    appliesTo,
+    assignedTo,
+    maxRedemptions: apiCoupon.maxUses ?? undefined,
+    redeemedCount: apiCoupon.currentUses,
+    startsAt: apiCoupon.startsAt ?? undefined,
+    endsAt: apiCoupon.expiresAt ?? undefined,
+    createdAt: apiCoupon.createdAt,
+    note: apiCoupon.note ?? undefined,
+    category: (apiCoupon.category?.toLowerCase() ?? "other") as CouponCategory,
+    minPurchaseCents: apiCoupon.minPurchase ?? undefined,
+    firstTimeOnly: apiCoupon.firstTimeOnly,
+    isPublic: apiCoupon.isPublic ?? false,
+    totalSavingsCents: apiCoupon.totalSavings ?? 0,
+  };
+}
+
+// Export coupons to CSV (client-side from transformed data)
+function exportCouponsToCSV(coupons: Coupon[]): string {
+  const headers = [
+    "Code",
+    "Status",
+    "Discount Type",
+    "Discount Value",
+    "Category",
+    "Redemptions",
+    "Max Redemptions",
+    "Min Purchase",
+    "First Time Only",
+    "Starts At",
+    "Ends At",
+    "Created At",
+    "Note",
+  ];
+
+  const rows = coupons.map((c) => [
+    c.code,
+    c.enabled ? "Enabled" : "Disabled",
+    c.discountType,
+    c.discountType === "fixed" ? `$${((c.amountOffCents || 0) / 100).toFixed(2)}` : `${c.percentOff}%`,
+    c.category || "other",
+    c.redeemedCount,
+    c.maxRedemptions || "Unlimited",
+    c.minPurchaseCents ? `$${(c.minPurchaseCents / 100).toFixed(2)}` : "None",
+    c.firstTimeOnly ? "Yes" : "No",
+    c.startsAt ? new Date(c.startsAt).toLocaleDateString() : "N/A",
+    c.endsAt ? new Date(c.endsAt).toLocaleDateString() : "N/A",
+    new Date(c.createdAt).toLocaleDateString(),
+    c.note || "",
+  ]);
+
+  const csvContent = [
+    headers.join(","),
+    ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
+  ].join("\n");
+
+  return csvContent;
+}
 
 function stopRowClick(e: React.MouseEvent) {
   e.stopPropagation();
@@ -447,45 +561,72 @@ export default function CouponsTable() {
     sortDir: "desc" as SortDir,
   });
 
-  const [rows, setRows] = React.useState<Coupon[]>([]);
+  // Use API hooks for data
+  const {
+    coupons: apiCoupons,
+    isLoading: couponsLoading,
+    error: couponsError,
+    createCoupon,
+    updateCoupon,
+    deleteCoupon: apiDeleteCoupon,
+    toggleCoupon: apiToggleCoupon,
+    duplicateCoupon: apiDuplicateCoupon,
+    bulkToggle,
+    bulkDelete,
+    refetch: refetchCoupons,
+  } = useAdminCoupons();
+
+  const { stats: apiStats, isLoading: statsLoading, refetch: refetchStats } = useAdminCouponStats();
+
+  // Transform API coupons to UI format
+  const rows = React.useMemo(() => {
+    return apiCoupons.map(transformApiCoupon);
+  }, [apiCoupons]);
+
+  // Use API stats or fallback
+  const stats = React.useMemo(() => ({
+    totalCoupons: apiStats?.totalCoupons ?? 0,
+    activeCoupons: apiStats?.activeCoupons ?? 0,
+    totalRedemptions: apiStats?.totalRedemptions ?? 0,
+    avgDiscount: apiStats?.avgDiscount ?? 0,
+    totalSavingsCents: (apiStats?.totalSavings ?? 0) * 100, // Convert to cents for UI
+    expiredCoupons: apiStats?.expiredCoupons ?? 0,
+    expiringSoon: apiStats?.expiringSoon ?? 0,
+    scheduledCoupons: apiStats?.scheduledCoupons ?? 0,
+  }), [apiStats]);
+
   const [clients, setClients] = React.useState<Client[]>([]);
   const [openNew, setOpenNew] = React.useState(false);
   const [editId, setEditId] = React.useState<string | null>(null);
   const [msg, setMsg] = React.useState("");
-  const [stats, setStats] = React.useState({
-    totalCoupons: 0,
-    activeCoupons: 0,
-    totalRedemptions: 0,
-    avgDiscount: 0,
-    totalSavingsCents: 0,
-    expiredCoupons: 0,
-    expiringSoon: 0,
-    scheduledCoupons: 0,
-  });
   const [confirmDelete, setConfirmDelete] = React.useState<string | null>(null);
   const [confirmBulkDelete, setConfirmBulkDelete] = React.useState(false);
+  const [isSaving, setIsSaving] = React.useState(false);
 
   // Bulk selection state
   const [selectedIds, setSelectedIds] = React.useState<Set<string>>(new Set());
   const [selectMode, setSelectMode] = React.useState(false);
 
+  // Load clients from database API (real users, not mock data)
   React.useEffect(() => {
-    function load() {
-      setRows(readCoupons());
-      setClients(readClients());
-      setStats(getCouponStats());
+    async function fetchClients() {
+      try {
+        const res = await fetch("/api/admin/users?role=CLIENT");
+        if (res.ok) {
+          const data = await res.json();
+          const users = data.data?.users || [];
+          setClients(users.map((u: any) => ({
+            id: u.id,
+            name: u.name,
+            email: u.email,
+            company: u.company,
+          })));
+        }
+      } catch (error) {
+        console.error("Failed to fetch clients:", error);
+      }
     }
-    load();
-
-    const onUpdated = () => load();
-    window.addEventListener("omg-coupons-updated", onUpdated);
-    window.addEventListener("omg-clients-updated", onUpdated);
-    window.addEventListener("storage", onUpdated);
-    return () => {
-      window.removeEventListener("omg-coupons-updated", onUpdated);
-      window.removeEventListener("omg-clients-updated", onUpdated);
-      window.removeEventListener("storage", onUpdated);
-    };
+    fetchClients();
   }, []);
 
   function flash(text: string) {
@@ -550,6 +691,7 @@ export default function CouponsTable() {
   const [category, setCategory] = React.useState<CouponCategory>("promo");
   const [minPurchaseCents, setMinPurchaseCents] = React.useState<string>("");
   const [firstTimeOnly, setFirstTimeOnly] = React.useState(false);
+  const [isPublic, setIsPublic] = React.useState(false);
 
   // Reset form
   function resetForm() {
@@ -569,15 +711,16 @@ export default function CouponsTable() {
     setCategory("promo");
     setMinPurchaseCents("");
     setFirstTimeOnly(false);
+    setIsPublic(false);
     setEditId(null);
   }
 
   // Handle edit mode from URL
   React.useEffect(() => {
-    if (!editCode) return;
+    if (!editCode || couponsLoading) return;
 
     const codeUpper = editCode.toUpperCase();
-    const existing = readCoupons().find((c) => c.code.toUpperCase() === codeUpper);
+    const existing = rows.find((c) => c.code.toUpperCase() === codeUpper);
 
     if (!existing) {
       setMsg(`Coupon ${codeUpper} not found`);
@@ -595,7 +738,7 @@ export default function CouponsTable() {
       window.setTimeout(() => setMsg(""), 1200);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editCode]);
+  }, [editCode, rows, couponsLoading]);
 
   function loadCouponToForm(coupon: Coupon) {
     setCode(coupon.code);
@@ -606,6 +749,7 @@ export default function CouponsTable() {
     setCategory(coupon.category || "promo");
     setMinPurchaseCents(coupon.minPurchaseCents ? String(coupon.minPurchaseCents / 100) : "");
     setFirstTimeOnly(coupon.firstTimeOnly || false);
+    setIsPublic(coupon.isPublic || false);
 
     if (coupon.appliesTo === "all") {
       setAppliesTo("all");
@@ -629,60 +773,79 @@ export default function CouponsTable() {
     setNote(coupon.note || "");
   }
 
-  function saveCoupon() {
-    const existingCoupon = editId ? readCoupons().find((c) => c.id === editId) : null;
+  async function saveCoupon() {
+    setIsSaving(true);
+    try {
+      const apiPayload: CreateCouponInput = {
+        code: code.trim().toUpperCase(),
+        type: discountType === "percent" ? "PERCENTAGE" : "FIXED_AMOUNT",
+        value: discountType === "percent"
+          ? Math.max(0, Math.min(100, Number(percentOff) || 0))
+          : Math.max(0, Number(amountOffCents) || 0),
+        isActive: enabled,
+        category: category.toUpperCase() as APICouponCategory,
+        appliesTo: appliesTo === "all" ? '"all"' : JSON.stringify(selectedProducts),
+        assignedTo: assignedTo === "all" ? '"all"' : JSON.stringify(selectedClients),
+        maxUses: maxRedemptions.trim() ? Number(maxRedemptions) : null,
+        startsAt: startsAt ? new Date(startsAt).toISOString() : null,
+        expiresAt: endsAt ? new Date(endsAt).toISOString() : null,
+        note: note.trim() || null,
+        minPurchase: minPurchaseCents.trim() ? Math.round(parseFloat(minPurchaseCents) * 100) : null,
+        firstTimeOnly,
+        isPublic,
+      };
 
-    const payload: Coupon = {
-      id: editId ?? `cpn_${Math.floor(100000 + Math.random() * 900000)}`,
-      createdAt: existingCoupon?.createdAt ?? new Date().toISOString(),
-      redeemedCount: existingCoupon?.redeemedCount ?? 0,
-      totalSavingsCents: existingCoupon?.totalSavingsCents ?? 0,
-      code: code.trim().toUpperCase(),
-      enabled,
-      discountType,
-      percentOff: discountType === "percent" ? Math.max(0, Math.min(100, Number(percentOff) || 0)) : 0,
-      amountOffCents: discountType === "fixed" ? Math.max(0, Number(amountOffCents) || 0) : undefined,
-      appliesTo: appliesTo === "all" ? "all" : selectedProducts,
-      assignedTo: assignedTo === "all" ? "all" : selectedClients,
-      maxRedemptions: maxRedemptions.trim() ? Number(maxRedemptions) : undefined,
-      startsAt: startsAt ? new Date(startsAt).toISOString() : undefined,
-      endsAt: endsAt ? new Date(endsAt).toISOString() : undefined,
-      note: note.trim() || undefined,
-      category,
-      minPurchaseCents: minPurchaseCents.trim() ? Math.round(parseFloat(minPurchaseCents) * 100) : undefined,
-      firstTimeOnly,
-    };
+      if (editId) {
+        await updateCoupon(editId, apiPayload);
+        flash("Coupon updated");
+      } else {
+        await createCoupon(apiPayload);
+        flash("Coupon created");
+      }
 
-    upsertCoupon(payload);
+      // Refresh stats after save
+      refetchStats();
 
-    setOpenNew(false);
-    resetForm();
-    setMsg(editId ? "Coupon updated" : "Coupon created");
-    window.setTimeout(() => setMsg(""), 1100);
-
-    router.replace("/portal/admin/coupons");
+      setOpenNew(false);
+      resetForm();
+      router.replace("/portal/admin/coupons");
+    } catch (error: any) {
+      flash(error.message || "Failed to save coupon");
+    } finally {
+      setIsSaving(false);
+    }
   }
 
-  function handleDelete(id: string) {
-    deleteCoupon(id);
-    setConfirmDelete(null);
-    setSelectedIds((prev) => {
-      const next = new Set(prev);
-      next.delete(id);
-      return next;
-    });
-    flash("Coupon deleted");
+  async function handleDelete(id: string) {
+    try {
+      await apiDeleteCoupon(id);
+      setConfirmDelete(null);
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+      flash("Coupon deleted");
+      refetchStats();
+    } catch (error: any) {
+      flash(error.message || "Failed to delete coupon");
+    }
   }
 
-  function handleDuplicate(id: string) {
-    const newCoupon = duplicateCoupon(id);
-    if (newCoupon) {
-      flash(`Duplicated as ${newCoupon.code}`);
+  async function handleDuplicate(id: string) {
+    try {
+      const newCoupon = await apiDuplicateCoupon(id);
+      if (newCoupon) {
+        flash(`Duplicated as ${newCoupon.code}`);
+        refetchStats();
+      }
+    } catch (error: any) {
+      flash(error.message || "Failed to duplicate coupon");
     }
   }
 
   function handleExportCSV() {
-    const csv = exportCouponsToCSV();
+    const csv = exportCouponsToCSV(rows);
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -694,26 +857,41 @@ export default function CouponsTable() {
   }
 
   // Bulk action handlers
-  function handleBulkEnable() {
-    bulkToggleCoupons(Array.from(selectedIds), true);
-    flash(`${selectedIds.size} coupons enabled`);
-    setSelectedIds(new Set());
-    setSelectMode(false);
+  async function handleBulkEnable() {
+    try {
+      const count = await bulkToggle(Array.from(selectedIds), true);
+      flash(`${count} coupons enabled`);
+      setSelectedIds(new Set());
+      setSelectMode(false);
+      refetchStats();
+    } catch (error: any) {
+      flash(error.message || "Failed to enable coupons");
+    }
   }
 
-  function handleBulkDisable() {
-    bulkToggleCoupons(Array.from(selectedIds), false);
-    flash(`${selectedIds.size} coupons disabled`);
-    setSelectedIds(new Set());
-    setSelectMode(false);
+  async function handleBulkDisable() {
+    try {
+      const count = await bulkToggle(Array.from(selectedIds), false);
+      flash(`${count} coupons disabled`);
+      setSelectedIds(new Set());
+      setSelectMode(false);
+      refetchStats();
+    } catch (error: any) {
+      flash(error.message || "Failed to disable coupons");
+    }
   }
 
-  function handleBulkDelete() {
-    bulkDeleteCoupons(Array.from(selectedIds));
-    flash(`${selectedIds.size} coupons deleted`);
-    setSelectedIds(new Set());
-    setSelectMode(false);
-    setConfirmBulkDelete(false);
+  async function handleBulkDelete() {
+    try {
+      const count = await bulkDelete(Array.from(selectedIds));
+      flash(`${count} coupons deleted`);
+      setSelectedIds(new Set());
+      setSelectMode(false);
+      setConfirmBulkDelete(false);
+      refetchStats();
+    } catch (error: any) {
+      flash(error.message || "Failed to delete coupons");
+    }
   }
 
   function toggleSelectAll() {
@@ -739,7 +917,10 @@ export default function CouponsTable() {
   function getClientNames(ids: string[]): string {
     return ids
       .slice(0, 3)
-      .map((id) => clients.find((c) => c.id === id)?.name || id)
+      .map((id) => {
+        const client = clients.find((c) => c.id === id);
+        return client?.name || client?.email || id;
+      })
       .join(", ") + (ids.length > 3 ? ` +${ids.length - 3} more` : "");
   }
 
@@ -751,6 +932,46 @@ export default function CouponsTable() {
   }
 
   if (!ready) return null;
+
+  // Show loading state
+  if (couponsLoading && rows.length === 0) {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="rounded-xl border border-white/10 bg-white/5 p-4 animate-pulse">
+              <div className="h-4 w-20 bg-white/10 rounded mb-2" />
+              <div className="h-6 w-12 bg-white/20 rounded" />
+            </div>
+          ))}
+        </div>
+        <div className="rounded-xl border border-white/10 bg-white/5 p-8 text-center">
+          <div className="animate-pulse flex flex-col items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-white/10" />
+            <div className="h-4 w-48 bg-white/10 rounded" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (couponsError) {
+    return (
+      <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-8 text-center">
+        <ExclamationTriangleIcon className="w-10 h-10 text-red-400 mx-auto mb-4" />
+        <h3 className="text-lg font-medium text-red-400 mb-2">Failed to load coupons</h3>
+        <p className="text-sm text-red-300/60 mb-4">{couponsError.message || "Unknown error"}</p>
+        <button
+          onClick={() => refetchCoupons()}
+          className="inline-flex items-center gap-2 rounded-xl bg-red-500/20 px-4 py-2 text-sm font-medium text-red-400 hover:bg-red-500/30 transition-all"
+        >
+          <ArrowPathIcon className="w-4 h-4" />
+          Try again
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -1101,9 +1322,14 @@ export default function CouponsTable() {
 
                           <button
                             type="button"
-                            onClick={() => {
-                              toggleCoupon(c.id, !c.enabled);
-                              flash(c.enabled ? "Coupon disabled" : "Coupon enabled");
+                            onClick={async () => {
+                              try {
+                                await apiToggleCoupon(c.id, !c.enabled);
+                                flash(c.enabled ? "Coupon disabled" : "Coupon enabled");
+                                refetchStats();
+                              } catch (error: any) {
+                                flash(error.message || "Failed to toggle coupon");
+                              }
                             }}
                             className="rounded-xl border border-white/20 bg-white/5 px-2.5 py-1.5 text-xs font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all"
                           >
@@ -1129,7 +1355,7 @@ export default function CouponsTable() {
         </div>
 
         <div className="flex items-center justify-between border-t border-white/10 p-4 text-xs text-white/40">
-          <span>Stored in localStorage: <span className="font-mono">omg_coupons</span></span>
+          <span>Stored in database via API</span>
           <span>{filtered.length} coupon{filtered.length !== 1 ? "s" : ""}{rows.length !== filtered.length ? ` (${rows.length} total)` : ""}</span>
         </div>
 
@@ -1275,8 +1501,8 @@ export default function CouponsTable() {
               </div>
             </div>
 
-            {/* Section: Date Range & First-time Toggle */}
-            <div className="grid gap-3 grid-cols-1 md:grid-cols-3">
+            {/* Section: Date Range */}
+            <div className="grid gap-3 grid-cols-1 md:grid-cols-2">
               <div>
                 <label className="text-[10px] uppercase tracking-wide text-white/40 mb-1 flex items-center gap-1">
                   <CalendarDaysIcon className="w-3 h-3" />
@@ -1302,23 +1528,30 @@ export default function CouponsTable() {
                   className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[#47BD79]/50"
                 />
               </div>
-
-              <div className="flex items-end">
-                <button
-                  type="button"
-                  onClick={() => setFirstTimeOnly(!firstTimeOnly)}
-                  className={`w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all ${
-                    firstTimeOnly
-                      ? "bg-[#A855F7]/20 border border-[#A855F7]/40 text-[#A855F7]"
-                      : "border border-white/15 bg-white/5 text-white/60 hover:bg-white/10"
-                  }`}
-                >
-                  <UserPlusIcon className="w-4 h-4" />
-                  <span className="flex-1 text-left">New customers only</span>
-                  {firstTimeOnly && <CheckIcon className="w-4 h-4" />}
-                </button>
-              </div>
             </div>
+
+            {/* Section: New Customers Only */}
+            <button
+              type="button"
+              onClick={() => {
+                const newValue = !firstTimeOnly;
+                setFirstTimeOnly(newValue);
+                // If turning ON firstTimeOnly, auto-reset client selection to "all"
+                if (newValue) {
+                  setAssignedTo("all");
+                  setSelectedClients([]);
+                }
+              }}
+              className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
+                firstTimeOnly
+                  ? "bg-[#A855F7]/20 border border-[#A855F7]/40 text-[#A855F7]"
+                  : "border border-white/15 bg-white/5 text-white/60 hover:bg-white/10"
+              }`}
+            >
+              <UserPlusIcon className="w-4 h-4" />
+              <span className="flex-1 text-left">New customers only</span>
+              {firstTimeOnly && <CheckIcon className="w-4 h-4" />}
+            </button>
 
             {/* Section: Targeting - Side by Side */}
             <div className="grid gap-3 grid-cols-1 md:grid-cols-2">
@@ -1375,18 +1608,23 @@ export default function CouponsTable() {
               </div>
 
               {/* Client Targeting */}
-              <div className="rounded-xl border border-white/10 bg-white/[0.02] p-3">
+              <div className={`rounded-xl border border-white/10 bg-white/[0.02] p-3 ${firstTimeOnly ? "opacity-60" : ""}`}>
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <UserGroupIcon className="w-4 h-4 text-[#A855F7]" />
                     <span className="text-xs font-medium text-white">Clients</span>
+                    {firstTimeOnly && (
+                      <span className="text-[9px] text-amber-400/80 bg-amber-400/10 px-1.5 py-0.5 rounded">
+                        Auto: New users only
+                      </span>
+                    )}
                   </div>
                   <div className="flex gap-1">
                     <button
                       type="button"
                       onClick={() => setAssignedTo("all")}
                       className={`rounded px-2 py-1 text-[10px] font-medium transition-all ${
-                        assignedTo === "all"
+                        assignedTo === "all" || firstTimeOnly
                           ? "bg-[#A855F7] text-white"
                           : "text-white/50 hover:text-white"
                       }`}
@@ -1395,10 +1633,14 @@ export default function CouponsTable() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => setAssignedTo("list")}
+                      onClick={() => !firstTimeOnly && setAssignedTo("list")}
+                      disabled={firstTimeOnly}
+                      title={firstTimeOnly ? "Cannot select specific clients when 'New Customers Only' is enabled" : undefined}
                       className={`rounded px-2 py-1 text-[10px] font-medium transition-all ${
-                        assignedTo === "list"
+                        assignedTo === "list" && !firstTimeOnly
                           ? "bg-[#A855F7] text-white"
+                          : firstTimeOnly
+                          ? "text-white/20 cursor-not-allowed"
                           : "text-white/50 hover:text-white"
                       }`}
                     >
@@ -1407,17 +1649,22 @@ export default function CouponsTable() {
                   </div>
                 </div>
 
-                {assignedTo === "list" ? (
+                {assignedTo === "list" && !firstTimeOnly ? (
                   <MultiSelect
                     label="Clients"
                     icon={UserGroupIcon}
                     items={clients}
                     selected={selectedClients}
                     onChange={setSelectedClients}
-                    renderItem={(c: Client) => ({ name: c.name, sub: c.email })}
+                    renderItem={(c: Client) => ({ name: c.name || c.email, sub: c.company || c.email })}
                     color="#A855F7"
                     compact
                   />
+                ) : firstTimeOnly ? (
+                  <div className="flex items-center gap-2 py-3 px-3 rounded-lg bg-amber-400/10 border border-amber-400/20">
+                    <UserPlusIcon className="w-4 h-4 text-amber-400" />
+                    <span className="text-xs text-amber-400">Only users without orders can use this</span>
+                  </div>
                 ) : (
                   <div className="flex items-center gap-2 py-3 px-3 rounded-lg bg-[#A855F7]/10 border border-[#A855F7]/20">
                     <CheckIcon className="w-4 h-4 text-[#A855F7]" />
@@ -1442,9 +1689,10 @@ export default function CouponsTable() {
               <button
                 type="button"
                 onClick={saveCoupon}
-                className="rounded-lg bg-gradient-to-r from-[#47BD79] to-[#3da968] px-5 py-2 text-sm font-medium text-white hover:opacity-90 transition-all"
+                disabled={isSaving}
+                className="rounded-lg bg-gradient-to-r from-[#47BD79] to-[#3da968] px-5 py-2 text-sm font-medium text-white hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {editId ? "Save Changes" : "Create Coupon"}
+                {isSaving ? "Saving..." : editId ? "Save Changes" : "Create Coupon"}
               </button>
             </div>
           </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { 
+import {
   CheckCircleIcon,
   ChartBarIcon,
   UserGroupIcon,
@@ -60,7 +60,7 @@ export default function IntroSection() {
               What It Is
             </h3>
             <p className="text-lg text-gray-600 max-w-4xl mx-auto">
-              A complete lead generation and nurturing system that turns your digital campaigns into a predictable revenue stream. 
+              A complete lead generation and nurturing system that turns your digital campaigns into a predictable revenue stream.
               No more guessing, no more gaps, no more lost opportunities.
             </p>
           </div>
@@ -107,8 +107,8 @@ export default function IntroSection() {
               Stop struggling with inconsistent results. Get a system that delivers qualified leads consistently, every single day.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <a 
-                href="/contact-sales" 
+              <a
+                href="/industries#lead-form"
                 className="bg-white text-emerald-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-colors duration-200"
               >
                 Get Your LeadFlow Strategy Call

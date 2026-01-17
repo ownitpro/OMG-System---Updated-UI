@@ -1,6 +1,6 @@
 "use client";
 
-import { 
+import {
   DocumentTextIcon,
   VideoCameraIcon,
   ChartBarIcon,
@@ -131,10 +131,10 @@ export default function DeliverablesSection() {
               Complete System, Not Just Campaigns
             </h3>
             <p className="text-lg text-gray-700 mb-8 max-w-3xl mx-auto">
-              Unlike other agencies that just run ads, we build you a complete lead generation system. 
+              Unlike other agencies that just run ads, we build you a complete lead generation system.
               Everything works together to deliver consistent results, month after month.
             </p>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
               <div className="text-center">
                 <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -143,7 +143,7 @@ export default function DeliverablesSection() {
                 <h4 className="font-semibold text-gray-900 mb-2">Strategic Foundation</h4>
                 <p className="text-gray-600 text-sm">Research-driven targeting and messaging</p>
               </div>
-              
+
               <div className="text-center">
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <ArrowPathIcon className="w-8 h-8 text-blue-600" />
@@ -151,7 +151,7 @@ export default function DeliverablesSection() {
                 <h4 className="font-semibold text-gray-900 mb-2">Automated Execution</h4>
                 <p className="text-gray-600 text-sm">Hands-off lead generation and nurturing</p>
               </div>
-              
+
               <div className="text-center">
                 <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <ChartPieIcon className="w-8 h-8 text-purple-600" />
@@ -160,10 +160,10 @@ export default function DeliverablesSection() {
                 <p className="text-gray-600 text-sm">Data-driven improvements and scaling</p>
               </div>
             </div>
-            
+
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <a 
-                href="/contact-sales" 
+              <a
+                href="/industries#lead-form"
                 className="bg-emerald-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-emerald-700 transition-colors duration-200"
               >
                 Get Your Complete System

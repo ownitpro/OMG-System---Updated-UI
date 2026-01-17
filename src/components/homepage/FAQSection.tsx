@@ -22,7 +22,7 @@ const faqs = [
   {
     id: 4,
     question: "What industries does OMGsystems work with?",
-    answer: "We specialize in service-based industries including Property Management, Real Estate, Contractors, Accounting, Healthcare, and Cleaning services. Our solutions are tailored to each industry's specific needs and compliance requirements."
+    answer: "While we can work with any industry, we dominate in four key sectors: Real Estate, Property Management, Contractors, and Accounting. These are our specialties where we've proven massive ROI and know every workflow inside-out."
   },
   {
     id: 5,
@@ -32,12 +32,12 @@ const faqs = [
   {
     id: 6,
     question: "What kind of support do you provide?",
-    answer: "We provide 24/7 support via phone, email, and chat. You'll also get dedicated account management, regular check-ins, and ongoing optimization to ensure your automation continues to deliver maximum value."
+    answer: "We provide 24/7 support via email and SMS. You'll also get dedicated account management, regular check-ins, and ongoing optimization to ensure your automation continues to deliver maximum value."
   },
   {
     id: 7,
     question: "Is my data secure with OMGsystems?",
-    answer: "Absolutely. We use enterprise-grade security with end-to-end encryption, SOC 2 compliance, and Canadian data residency. Your data is never shared with third parties and is protected by the same security standards used by major banks."
+    answer: "Absolutely. We use enterprise-grade security with end-to-end encryption and Canadian data residency. Your data is never shared with third parties and is protected by bank-level security standards."
   },
   {
     id: 8,
@@ -143,7 +143,7 @@ export default function HomepageFAQSection() {
                 Book Free Consultation
               </a>
               <a
-                href="/demos/live"
+                href="/try-live-demo"
                 className="inline-flex items-center px-6 py-3 bg-white/10 text-white font-semibold rounded-lg border-2 border-[#47BD79]/50 hover:bg-white/20 hover:border-[#47BD79] transition-all duration-400 ease-premium-out"
               >
                 Try Live Demo

@@ -355,64 +355,79 @@ export default function ContactPage() {
                     </details>
                   ))}
                 </div>
+
               </div>
 
               {/* Quick Links */}
               <div className="backdrop-blur-xl bg-gradient-to-br from-cyan-500/10 to-teal-500/5 rounded-2xl border border-cyan-500/20 p-6">
                 <h3 className="text-sm font-semibold text-white mb-4">
-                  Quick Links
+                  Quick Access to Lead Forms
                 </h3>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {/* Apps Lead Form */}
                   <Link
-                    href="/try-live-demo"
+                    href="/apps#waiting-list-form"
                     className="group flex items-center gap-2 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-500/40 transition-all text-sm"
                   >
-                    <svg
-                      className="w-4 h-4 text-cyan-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
+                    <div className="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                      </svg>
+                    </div>
                     <span className="text-white/70 group-hover:text-white transition-colors">
-                      Try Demo
+                      Apps
                     </span>
                   </Link>
+
+                  {/* Solutions Lead Form */}
                   <Link
-                    href="/solutions/strategy-session"
-                    className="group flex items-center gap-2 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-500/40 transition-all text-sm"
+                    href="/solutions#lead-form"
+                    className="group flex items-center gap-2 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-teal-500/40 transition-all text-sm"
                   >
-                    <svg
-                      className="w-4 h-4 text-teal-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                      />
-                    </svg>
+                    <div className="w-8 h-8 rounded-lg bg-teal-500/20 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-4 h-4 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                      </svg>
+                    </div>
                     <span className="text-white/70 group-hover:text-white transition-colors">
-                      Strategy Call
+                      Solutions
+                    </span>
+                  </Link>
+
+                  {/* Marketing Lead Form */}
+                  <Link
+                    href="/marketing"
+                    className="group flex items-center gap-2 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-emerald-500/40 transition-all text-sm"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                      </svg>
+                    </div>
+                    <span className="text-white/70 group-hover:text-white transition-colors">
+                      Marketing
+                    </span>
+                  </Link>
+
+                  {/* Industries Lead Form */}
+                  <Link
+                    href="/industries#lead-form"
+                    className="group flex items-center gap-2 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-purple-500/40 transition-all text-sm"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                      </svg>
+                    </div>
+                    <span className="text-white/70 group-hover:text-white transition-colors">
+                      Industries
                     </span>
                   </Link>
                 </div>
               </div>
+
+
+
             </div>
 
             {/* Right Column - Contact Form */}
@@ -440,7 +455,7 @@ export default function ContactPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(contact.schema.faq) }}
       />
-    </main>
+    </main >
   );
 }
 
@@ -674,22 +689,50 @@ function ContactForm() {
       window.dispatchEvent(new CustomEvent(contact.analytics.submit));
       setStatus("submitting");
 
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      // Prepare submission data with metadata
+      const submissionData = {
+        ...data,
+        source: 'contact-page',
+        page: window.location.pathname,
+        timestamp: new Date().toISOString(),
+      };
 
-      if (res.ok) {
-        setStatus("success");
-        window.dispatchEvent(new CustomEvent(contact.analytics.success));
-        form.reset();
-        return;
+      // Send to n8n webhook (primary) and API (secondary) in parallel
+      const webhookUrl = process.env.NEXT_PUBLIC_WEBHOOK_CONTACT;
+
+      if (webhookUrl) {
+        // Send to webhook
+        await fetch(webhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(submissionData)
+          // Removed mode: 'no-cors' to allow proper JSON body transmission to n8n
+        });
+        console.log('Contact webhook sent to:', webhookUrl);
+        console.log('Submission data:', submissionData);
       }
-      throw new Error("Request failed");
+
+      // Try to send to API as well (non-blocking)
+      try {
+        await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        console.log('Contact API submission successful');
+      } catch (error) {
+        console.warn('Contact API failed (non-blocking):', error);
+        // Don't throw - webhook is the primary submission method
+      }
+
+      // Show success if webhook was sent - form stays locked
+      setStatus("success");
+      window.dispatchEvent(new CustomEvent(contact.analytics.success));
+      // Form stays in success state - no reset, one-time submission only
     } catch {
       setStatus("error");
       window.dispatchEvent(new CustomEvent(contact.analytics.error));
+      // Error state allows retry
     }
   };
 
@@ -889,9 +932,8 @@ function ContactForm() {
                   setShowCalendar(!showCalendar);
                 }
               }}
-              className={`w-full rounded-xl border bg-slate-900 px-4 py-3 text-left text-white focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all outline-none cursor-pointer flex items-center justify-between hover:border-cyan-500/30 ${
-                selectingEndDate ? "border-cyan-500/50 ring-2 ring-cyan-500/30" : "border-white/10"
-              }`}
+              className={`w-full rounded-xl border bg-slate-900 px-4 py-3 text-left text-white focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all outline-none cursor-pointer flex items-center justify-between hover:border-cyan-500/30 ${selectingEndDate ? "border-cyan-500/50 ring-2 ring-cyan-500/30" : "border-white/10"
+                }`}
             >
               <span className={startDate ? "text-white" : "text-white/30"}>
                 {formatDateRangeDisplay() || "Select start and end dates"}
@@ -1025,14 +1067,14 @@ function ContactForm() {
                           ${disabled
                             ? "text-white/20 cursor-not-allowed"
                             : isStart
-                            ? "bg-gradient-to-r from-cyan-500 to-cyan-600 text-white shadow-lg shadow-cyan-500/30 rounded-r-none"
-                            : isEnd
-                            ? "bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/30 rounded-l-none"
-                            : inRange
-                            ? "bg-cyan-500/20 text-cyan-300 rounded-none"
-                            : today
-                            ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/50 hover:bg-cyan-500/30"
-                            : "text-white hover:bg-white/10"
+                              ? "bg-gradient-to-r from-cyan-500 to-cyan-600 text-white shadow-lg shadow-cyan-500/30 rounded-r-none"
+                              : isEnd
+                                ? "bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg shadow-teal-500/30 rounded-l-none"
+                                : inRange
+                                  ? "bg-cyan-500/20 text-cyan-300 rounded-none"
+                                  : today
+                                    ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/50 hover:bg-cyan-500/30"
+                                    : "text-white hover:bg-white/10"
                           }`}
                       >
                         {day}
@@ -1108,7 +1150,7 @@ function ContactForm() {
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={status === "submitting"}
+          disabled={status === "submitting" || status === "success"}
           className="w-full bg-gradient-to-r from-cyan-500 to-teal-500 text-white px-6 py-4 rounded-xl font-semibold hover:from-cyan-600 hover:to-teal-600 focus:ring-2 focus:ring-cyan-500/50 focus:ring-offset-2 focus:ring-offset-slate-950 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40"
         >
           {status === "submitting" ? (
@@ -1134,6 +1176,13 @@ function ContactForm() {
                 ></path>
               </svg>
               Sending...
+            </span>
+          ) : status === "success" ? (
+            <span className="flex items-center justify-center gap-2">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              Submitted Successfully
             </span>
           ) : (
             <span className="flex items-center justify-center gap-2">

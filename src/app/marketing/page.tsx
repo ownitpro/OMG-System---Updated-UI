@@ -130,7 +130,7 @@ export default function MarketingPage() {
   return (
     <div className="min-h-screen bg-slate-950">
       {/* ===== SECTION 1: HERO ===== */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 sm:pt-40 pb-32 sm:pb-40">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 sm:pt-40 pb-12 sm:pb-16">
         {/* Animated Background */}
         <div className="absolute inset-0">
           <svg
@@ -289,6 +289,39 @@ export default function MarketingPage() {
               Measurable Results
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ===== SECTION 1.5: IMPACT STATEMENT ===== */}
+      <section className="relative pt-0 pb-12 sm:pb-20 overflow-hidden">
+        {/* Decorative Elements */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[120px] -z-10" />
+
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+          <h2 className="text-3xl md:text-5xl font-medium text-white leading-tight mb-8">
+            Order isn't just about feeling good. <br />
+            It's about <span className="text-white/60">reclaiming your time.</span>
+          </h2>
+
+          <div className="flex flex-col items-center justify-center py-8">
+            <div className="text-[120px] md:text-[180px] font-bold leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/10 select-none opacity-20 absolute scale-150 blur-sm pointer-events-none">
+              40+ HRS
+            </div>
+
+            <div className="relative">
+              <div className="text-6xl md:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-400 animate-gradient">
+                40+ Hours
+              </div>
+              <div className="text-xl md:text-2xl text-emerald-400/80 font-medium tracking-widest uppercase mt-4">
+                Reclaimed Per Month
+              </div>
+            </div>
+          </div>
+
+          <p className="mt-12 text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed">
+            Redirect that time into <span className="text-white font-semibold">sales, operations, and growth</span> — while your marketing runs on autopilot in the background.
+          </p>
         </div>
       </section>
 

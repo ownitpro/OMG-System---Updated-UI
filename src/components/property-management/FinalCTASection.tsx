@@ -29,7 +29,7 @@ export default function FinalCTASection() {
             <ArrowRightIcon className="ml-3 h-6 w-6 inline-block" />
           </Button>
           <Link
-            href="/contact-sales"
+            href="/industries#lead-form"
             className="inline-flex items-center justify-center px-8 py-3 text-lg font-medium text-white border border-white rounded-full hover:bg-white hover:text-emerald-700 transition-colors duration-300"
           >
             Contact Sales

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { SolutionRelationsStrip } from "@/components/solutions/SolutionRelationsStrip";
+import { ConfigurableLeadForm, COLOR_SCHEMES, StickyGetStartedButton, MobileFormDrawer } from "@/components/forms";
 import {
   ChatBubbleLeftRightIcon,
   CalendarIcon,
@@ -107,7 +108,7 @@ const useCases = [
 
 const benefits = [
   {
-    title: "Save 5–40 Hours Every Week",
+    title: "Save 10–42 Hours Every Week",
     description:
       "No more answering the same messages or coordinating schedules manually.",
     icon: ClockIcon,
@@ -229,7 +230,7 @@ export default function TimeGuardAIPage() {
           <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
-                <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(28, 110, 242, 0.3)" strokeWidth="1"/>
+                <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(28, 110, 242, 0.3)" strokeWidth="1" />
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#grid)" />
@@ -274,7 +275,7 @@ export default function TimeGuardAIPage() {
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
-                  href="/contact?solution=timeguard-ai"
+                  href="#lead-form"
                   className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold rounded-lg hover:from-blue-600 hover:to-cyan-500 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/25"
                 >
                   Book Your Time Assessment Call
@@ -327,6 +328,119 @@ export default function TimeGuardAIPage() {
               {/* Decorative accents */}
               <div className="absolute -top-4 -right-4 w-32 h-32 bg-cyan-400/30 rounded-full blur-3xl" />
               <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-blue-500/30 rounded-full blur-2xl" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* NEW SECTION — TIME SAVINGS COMPARISON */}
+      <section className="relative bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 py-20 overflow-hidden">
+        {/* Subtle glow orbs */}
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+          {/* Top Supporting Statement */}
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              The Time-Saving Power of TimeGuard AI
+            </h2>
+            <p className="text-lg md:text-xl text-white/60 max-w-3xl mx-auto leading-relaxed">
+              Most businesses waste 40+ hours weekly on scheduling and client communication.
+              <span className="block mt-2 text-blue-400 font-semibold">TimeGuard AI automates it all.</span>
+            </p>
+          </div>
+
+          {/* Main Comparison Grid */}
+          <div className="grid md:grid-cols-[1fr_auto_1fr] gap-6 items-stretch max-w-5xl mx-auto mb-16">
+
+            {/* LEFT: Without TimeGuard AI */}
+            <div className="backdrop-blur-xl bg-gradient-to-br from-red-500/5 to-red-600/10 rounded-3xl p-6 border-2 border-red-500/20 text-center space-y-6">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-red-500/10 rounded-2xl border-2 border-red-500/30">
+                <ClockIcon className="w-10 h-10 text-red-400" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-white/70 mb-4">Without TimeGuard AI</h3>
+                <div className="text-6xl md:text-7xl font-black text-red-400 mb-2 leading-none">40</div>
+                <p className="text-xl text-white/70 font-bold mb-4">hours/week</p>
+                <div className="space-y-2 text-white/50">
+                  <p className="text-base">Manual messaging</p>
+                  <p className="text-base">Scheduling conflicts</p>
+                  <p className="text-base">Missed leads</p>
+                </div>
+              </div>
+            </div>
+
+            {/* CENTER: Transformation Arrow */}
+            <div className="flex flex-col items-center justify-center gap-4 py-4">
+              <div className="bg-gradient-to-r from-blue-500 to-cyan-400 rounded-2xl px-6 py-3 shadow-xl shadow-blue-500/50">
+                <p className="text-white font-black text-lg">TimeGuard AI</p>
+              </div>
+              <ArrowRightIcon className="w-12 h-12 text-blue-400 hidden md:block animate-pulse" />
+              <ArrowRightIcon className="w-10 h-10 text-blue-400 md:hidden rotate-90 animate-pulse" />
+            </div>
+
+            {/* RIGHT: With TimeGuard AI */}
+            <div className="backdrop-blur-xl bg-gradient-to-br from-emerald-500/5 to-cyan-500/10 rounded-3xl p-6 border-2 border-emerald-500/30 text-center space-y-6">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-emerald-500/10 rounded-2xl border-2 border-emerald-500/40">
+                <ClockIcon className="w-10 h-10 text-emerald-400" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-white/70 mb-4">With TimeGuard AI</h3>
+                <div className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-cyan-400 mb-2 leading-none">5-10</div>
+                <p className="text-xl text-white/70 font-bold mb-4">hours/week</p>
+                <div className="space-y-2 text-emerald-400 font-semibold">
+                  <p className="text-base">Automated 24/7</p>
+                  <p className="text-base">Zero missed leads</p>
+                  <p className="text-base">Focus on growth</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Summary Banner */}
+          <div className="backdrop-blur-xl bg-gradient-to-r from-blue-500/10 via-cyan-500/10 to-blue-500/10 rounded-3xl p-6 border border-blue-500/30 shadow-[0_0_60px_rgba(28,110,242,0.2)] max-w-4xl mx-auto">
+            <div className="text-center space-y-6">
+              <div>
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2">
+                  Reclaim <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">40 Hours</span> Monthly
+                </h2>
+                <p className="text-lg md:text-xl text-white/80 max-w-4xl mx-auto leading-relaxed mb-2">
+                  TimeGuard AI handles client messaging, appointment scheduling, and lead qualification 24/7
+                </p>
+                <p className="text-base text-blue-400 font-semibold italic">
+                  "That's an entire work week back in your pocket every month."
+                </p>
+              </div>
+
+              {/* Quick Features Grid */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mx-auto">
+                <div className="flex flex-col items-center gap-2 p-3 bg-slate-900/50 rounded-lg border border-blue-500/20 hover:bg-blue-500/10 hover:border-blue-400/40 transition-all">
+                  <div className="w-8 h-8 rounded-md bg-blue-500/20 flex items-center justify-center">
+                    <CheckCircleIcon className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <span className="text-white font-semibold text-center text-xs">Auto-responds instantly</span>
+                </div>
+                <div className="flex flex-col items-center gap-2 p-3 bg-slate-900/50 rounded-lg border border-blue-500/20 hover:bg-blue-500/10 hover:border-blue-400/40 transition-all">
+                  <div className="w-8 h-8 rounded-md bg-blue-500/20 flex items-center justify-center">
+                    <CheckCircleIcon className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <span className="text-white font-semibold text-center text-xs">Books appointments</span>
+                </div>
+                <div className="flex flex-col items-center gap-2 p-3 bg-slate-900/50 rounded-lg border border-blue-500/20 hover:bg-blue-500/10 hover:border-blue-400/40 transition-all">
+                  <div className="w-8 h-8 rounded-md bg-blue-500/20 flex items-center justify-center">
+                    <CheckCircleIcon className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <span className="text-white font-semibold text-center text-xs">Qualifies leads</span>
+                </div>
+                <div className="flex flex-col items-center gap-2 p-3 bg-slate-900/50 rounded-lg border border-blue-500/20 hover:bg-blue-500/10 hover:border-blue-400/40 transition-all">
+                  <div className="w-8 h-8 rounded-md bg-blue-500/20 flex items-center justify-center">
+                    <CheckCircleIcon className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <span className="text-white font-semibold text-center text-xs">Never sleeps</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -439,11 +553,10 @@ export default function TimeGuardAIPage() {
                       {[...Array(28)].map((_, i) => (
                         <div
                           key={i}
-                          className={`text-center text-xs py-1 rounded ${
-                            [8, 12, 15, 22].includes(i)
-                              ? 'bg-blue-500/30 text-blue-300'
-                              : 'text-white/40 hover:bg-white/5'
-                          }`}
+                          className={`text-center text-xs py-1 rounded ${[8, 12, 15, 22].includes(i)
+                            ? 'bg-blue-500/30 text-blue-300'
+                            : 'text-white/40 hover:bg-white/5'
+                            }`}
                         >
                           {i + 1}
                         </div>
@@ -769,7 +882,7 @@ export default function TimeGuardAIPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/contact?solution=timeguard-ai"
+              href="#lead-form"
               className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 font-bold rounded-lg hover:bg-white/90 transition-all duration-300 transform hover:scale-105 shadow-xl shadow-blue-900/20"
             >
               Book Your Time Assessment Call
@@ -784,6 +897,22 @@ export default function TimeGuardAIPage() {
           </div>
         </div>
       </section>
+
+      {/* Lead Form Section - Blue Theme */}
+      <ConfigurableLeadForm
+        formType="solutions"
+        colorScheme={COLOR_SCHEMES.blue}
+      />
+
+      {/* Sticky Button (Desktop) - Blue Theme */}
+      <StickyGetStartedButton
+        variant="solutions"
+        customGradient="from-blue-500 to-cyan-500"
+        customShadow="shadow-blue-500/30"
+      />
+
+      {/* Mobile Drawer */}
+      <MobileFormDrawer variant="solutions" />
     </main>
   );
 }

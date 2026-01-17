@@ -79,7 +79,7 @@ export default function HomePage() {
           heroProps={{
             headline: SEO_CONFIG.brand.tagline,
             subhead: SEO_CONFIG.brand.description,
-            primaryCTA: { label: "Try a Live Demo", href: "/demos/live" },
+            primaryCTA: { label: "Try a Live Demo", href: "/try-live-demo" },
             secondaryCTA: { label: "See How It Works", href: "#benefits" }
           }}
           metrics={defaultMetrics}

@@ -129,7 +129,7 @@ export const proof = {
     },
     { 
       quote: "Our lead quality improved 3x and we're closing more deals with less effort.", 
-      cite: "Ottawa Healthcare Practice" 
+      cite: "Toronto Healthcare Practice" 
     }
   ],
   logos: ["/logos/sample1.svg", "/logos/sample2.svg", "/logos/sample3.svg"]

@@ -254,18 +254,19 @@ export default function InteractiveWorkflowBuilderPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+    <div className="min-h-screen bg-black">
+      {/* Background effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black via-[#0f172a] to-black" />
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
         <div className="absolute top-40 left-1/2 w-80 h-80 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
       </div>
 
       <div className="relative z-10">
         {/* Header */}
-        <div className="bg-white/10 backdrop-blur-md border-b border-white/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="bg-black/40 backdrop-blur-md border-b border-white/10 pt-32">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-4xl font-bold text-white mb-2">
@@ -326,162 +327,178 @@ export default function InteractiveWorkflowBuilderPage() {
                 </div>
 
                 {/* Template List */}
-                <div className="space-y-3 max-h-96 overflow-y-auto">
-                  {filteredTemplates.map((template) => (
-                    <div
-                      key={template.id}
-                      onClick={() => handleTemplateSelect(template)}
-                      className={`p-4 rounded-lg cursor-pointer transition-all duration-300 ${
-                        selectedTemplate?.id === template.id
-                          ? 'bg-white/30 scale-105 shadow-lg'
-                          : 'bg-white/10 hover:bg-white/20'
-                      }`}
-                    >
-                      <div className="flex items-center space-x-3 mb-2">
-                        <div className={`w-8 h-8 ${template.color} rounded-lg flex items-center justify-center`}>
-                          <template.icon className="w-4 h-4 text-white" />
+                <div className="space-y-3 max-h-96 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-white/5 hover:scrollbar-thumb-white/30">
+                  {filteredTemplates.length > 0 ? (
+                    filteredTemplates.map((template) => (
+                      <div
+                        key={template.id}
+                        onClick={() => handleTemplateSelect(template)}
+                        className={`p-4 rounded-lg cursor-pointer transition-all duration-300 ${
+                          selectedTemplate?.id === template.id
+                            ? 'bg-white/30 border-2 border-blue-400 shadow-lg'
+                            : 'bg-white/10 hover:bg-white/20 border-2 border-transparent'
+                        }`}
+                      >
+                        <div className="flex items-center space-x-3 mb-2">
+                          <div className={`w-8 h-8 ${template.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                            <template.icon className="w-4 h-4 text-white" />
+                          </div>
+                          <h4 className="text-white font-semibold text-sm line-clamp-2">{template.title}</h4>
                         </div>
-                        <h4 className="text-white font-semibold text-sm">{template.title}</h4>
+                        <p className="text-blue-200 text-xs mb-2 line-clamp-2">{template.description}</p>
+                        <div className="flex items-center justify-between text-xs text-blue-300">
+                          <span className="flex items-center space-x-1">
+                            <ClockIcon className="w-3 h-3" />
+                            <span>{template.setupTime}</span>
+                          </span>
+                          <span className="flex items-center space-x-1 font-semibold">
+                            <CurrencyDollarIcon className="w-3 h-3" />
+                            <span>${template.setupCost}</span>
+                          </span>
+                        </div>
                       </div>
-                      <p className="text-blue-200 text-xs mb-2">{template.description}</p>
-                      <div className="flex items-center justify-between text-xs text-blue-300">
-                        <span>{template.setupTime}</span>
-                        <span>${template.setupCost}</span>
-                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8">
+                      <ExclamationCircleIcon className="w-12 h-12 text-white/30 mx-auto mb-3" />
+                      <p className="text-blue-200 text-sm">No templates found</p>
+                      <p className="text-blue-300 text-xs mt-1">Try selecting a different category</p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
             </div>
 
             {/* Center - Workflow Canvas */}
             <div className="lg:col-span-6">
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 min-h-[600px]">
+              <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
                 {selectedTemplate ? (
                   <>
-                    <div className="flex items-center justify-between mb-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                       <div>
                         <h3 className="text-xl font-bold text-white">{selectedTemplate.title}</h3>
-                        <p className="text-blue-200">{selectedTemplate.description}</p>
+                        <p className="text-blue-200 text-sm">{selectedTemplate.description}</p>
                       </div>
-                      <div className="flex items-center space-x-2 text-sm text-green-400">
+                      <div className="flex items-center space-x-2 text-sm text-green-400 flex-shrink-0">
                         <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                         <span>Ready to simulate</span>
                       </div>
                     </div>
 
-                    {/* Workflow Canvas */}
-                    <div className="relative bg-white/5 rounded-xl p-6 min-h-[400px]">
-                      <svg className="w-full h-full absolute inset-0" viewBox="0 0 900 300">
-                        {/* Connection Lines */}
-                        {selectedTemplate.steps.map((step, index) => {
-                          if (index < selectedTemplate.steps.length - 1) {
-                            const currentStep = selectedTemplate.steps[index];
-                            const nextStep = selectedTemplate.steps[index + 1];
-                            const isActive = activeConnections.includes(`connection-${index}`);
-                            
-                            return (
-                              <line
-                                key={`connection-${index}`}
-                                x1={currentStep.position.x + 100}
-                                y1={currentStep.position.y + 50}
-                                x2={nextStep.position.x}
-                                y2={nextStep.position.y + 50}
-                                stroke={isActive ? "#10B981" : "#3B82F6"}
-                                strokeWidth={isActive ? "4" : "2"}
-                                markerEnd="url(#arrowhead)"
-                                className={isActive ? "animate-pulse" : ""}
-                              />
-                            );
-                          }
-                          return null;
-                        })}
-                        
-                        <defs>
-                          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                            <polygon points="0 0, 10 3.5, 0 7" fill="#3B82F6" />
-                          </marker>
-                        </defs>
-                      </svg>
+                    {/* Workflow Canvas - Now scrollable horizontally on mobile */}
+                    <div className="relative bg-white/5 rounded-xl p-4 sm:p-6 overflow-x-auto overflow-y-visible">
+                      <div className="relative min-w-[900px] min-h-[350px]">
+                        <svg className="w-full h-full absolute inset-0 pointer-events-none" preserveAspectRatio="xMinYMin meet" viewBox="0 0 900 300">
+                          {/* Connection Lines */}
+                          {selectedTemplate.steps.map((step, index) => {
+                            if (index < selectedTemplate.steps.length - 1) {
+                              const currentStep = selectedTemplate.steps[index];
+                              const nextStep = selectedTemplate.steps[index + 1];
+                              const isActive = activeConnections.includes(`connection-${index}`);
 
-                      {/* Workflow Steps */}
-                      {selectedTemplate.steps.map((step, index) => {
-                        const isActive = simulationStep >= index;
-                        const isCurrent = simulationStep === index;
-                        
-                        return (
-                          <div
-                            key={step.id}
-                            className={`absolute p-4 rounded-xl border-2 transition-all duration-500 ${
-                              isCurrent 
-                                ? 'bg-green-500/30 border-green-400 scale-110 shadow-lg' 
-                                : isActive 
-                                  ? 'bg-blue-500/30 border-blue-400' 
-                                  : 'bg-white/10 border-white/30'
-                            }`}
-                            style={{
-                              left: step.position.x,
-                              top: step.position.y,
-                              width: '180px'
-                            }}
-                          >
-                            <div className="flex items-center space-x-3 mb-3">
-                              <div className={`w-8 h-8 ${step.color} rounded-lg flex items-center justify-center`}>
-                                <step.icon className="w-4 h-4 text-white" />
-                              </div>
-                              <div>
-                                <h4 className="text-white font-semibold text-sm">{step.title}</h4>
-                                <p className="text-blue-200 text-xs">{step.description}</p>
-                              </div>
-                            </div>
-
-                            {/* Step Inputs */}
-                            {step.inputs.map((input) => {
-                              const fieldId = `workflow-${step.id}-${input.id}`;
-                              const fieldName = `${step.id}_${input.id}`;
                               return (
-                                <div key={input.id} className="mb-2">
-                                  <label htmlFor={fieldId} className="block text-xs text-blue-200 mb-1">
-                                    {input.label}
-                                    {input.required && <span className="text-red-400 ml-1">*</span>}
-                                  </label>
-                                  {input.type === 'select' ? (
-                                    <select
-                                      id={fieldId}
-                                      name={fieldName}
-                                      value={formData[fieldName] || ''}
-                                      onChange={(e) => handleInputChange(step.id, input.id, e.target.value)}
-                                      className="w-full px-2 py-1 bg-white/20 border border-white/30 rounded text-white text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                    >
-                                      <option value="">Select...</option>
-                                      {input.options?.map(option => (
-                                        <option key={option} value={option}>{option}</option>
-                                      ))}
-                                    </select>
-                                  ) : (
-                                    <input
-                                      type={input.type}
-                                      id={fieldId}
-                                      name={fieldName}
-                                      value={formData[fieldName] || ''}
-                                      onChange={(e) => handleInputChange(step.id, input.id, e.target.value)}
-                                      placeholder={input.placeholder}
-                                      className="w-full px-2 py-1 bg-white/20 border border-white/30 rounded text-white text-xs placeholder-blue-200 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                    />
-                                  )}
-                                </div>
+                                <line
+                                  key={`connection-${index}`}
+                                  x1={currentStep.position.x + 100}
+                                  y1={currentStep.position.y + 50}
+                                  x2={nextStep.position.x}
+                                  y2={nextStep.position.y + 50}
+                                  stroke={isActive ? "#10B981" : "#3B82F6"}
+                                  strokeWidth={isActive ? "4" : "2"}
+                                  markerEnd="url(#arrowhead)"
+                                  className={isActive ? "animate-pulse" : ""}
+                                />
                               );
-                            })}
+                            }
+                            return null;
+                          })}
 
-                            {/* Success Indicator */}
-                            {isActive && !isCurrent && (
-                              <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                                <CheckCircleIcon className="w-4 h-4 text-white" />
+                          <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                              <polygon points="0 0, 10 3.5, 0 7" fill="#3B82F6" />
+                            </marker>
+                          </defs>
+                        </svg>
+
+                        {/* Workflow Steps */}
+                        {selectedTemplate.steps.map((step, index) => {
+                          const isActive = simulationStep >= index;
+                          const isCurrent = simulationStep === index;
+
+                          return (
+                            <div
+                              key={step.id}
+                              className={`absolute p-3 sm:p-4 rounded-xl border-2 transition-all duration-500 ${
+                                isCurrent
+                                  ? 'bg-green-500/30 border-green-400 scale-105 shadow-lg z-10'
+                                  : isActive
+                                    ? 'bg-blue-500/30 border-blue-400 z-5'
+                                    : 'bg-white/10 border-white/30'
+                              }`}
+                              style={{
+                                left: step.position.x,
+                                top: step.position.y,
+                                width: '180px'
+                              }}
+                            >
+                              <div className="flex items-start space-x-2 mb-3">
+                                <div className={`w-8 h-8 ${step.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                                  <step.icon className="w-4 h-4 text-white" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="text-white font-semibold text-sm truncate">{step.title}</h4>
+                                  <p className="text-blue-200 text-xs line-clamp-2">{step.description}</p>
+                                </div>
                               </div>
-                            )}
-                          </div>
-                        );
-                      })}
+
+                              {/* Step Inputs */}
+                              {step.inputs.map((input) => {
+                                const fieldId = `workflow-${step.id}-${input.id}`;
+                                const fieldName = `${step.id}_${input.id}`;
+                                return (
+                                  <div key={input.id} className="mb-2">
+                                    <label htmlFor={fieldId} className="block text-xs text-blue-200 mb-1 truncate">
+                                      {input.label}
+                                      {input.required && <span className="text-red-400 ml-1">*</span>}
+                                    </label>
+                                    {input.type === 'select' ? (
+                                      <select
+                                        id={fieldId}
+                                        name={fieldName}
+                                        value={formData[fieldName] || ''}
+                                        onChange={(e) => handleInputChange(step.id, input.id, e.target.value)}
+                                        className="w-full px-2 py-1.5 bg-white/20 border border-white/30 rounded text-white text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                      >
+                                        <option value="">Select...</option>
+                                        {input.options?.map(option => (
+                                          <option key={option} value={option}>{option}</option>
+                                        ))}
+                                      </select>
+                                    ) : (
+                                      <input
+                                        type={input.type}
+                                        id={fieldId}
+                                        name={fieldName}
+                                        value={formData[fieldName] || ''}
+                                        onChange={(e) => handleInputChange(step.id, input.id, e.target.value)}
+                                        placeholder={input.placeholder}
+                                        className="w-full px-2 py-1.5 bg-white/20 border border-white/30 rounded text-white text-xs placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                      />
+                                    )}
+                                  </div>
+                                );
+                              })}
+
+                              {/* Success Indicator */}
+                              {isActive && !isCurrent && (
+                                <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+                                  <CheckCircleIcon className="w-4 h-4 text-white" />
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
 
                     {/* Simulation Results */}

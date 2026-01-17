@@ -88,7 +88,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
 
           <div className="mt-4 flex flex-wrap gap-3 text-xs">
             <Link
-              href="/solutions/custom-solutions"
+              href="#lead-form"
               className="inline-flex items-center rounded-full bg-emerald-500 px-4 py-2 font-semibold text-slate-950 hover:bg-emerald-400"
             >
               Talk about my systems
@@ -209,7 +209,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Link
-              href="/solutions/custom-solutions"
+              href="#lead-form"
               className="inline-flex items-center rounded-full bg-emerald-500 px-4 py-2 text-xs font-medium text-slate-950 hover:bg-emerald-400"
             >
               Book a systems review

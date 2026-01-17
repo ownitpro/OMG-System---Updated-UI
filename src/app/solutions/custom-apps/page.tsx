@@ -20,6 +20,7 @@ import {
   LightBulbIcon
 } from '@heroicons/react/24/outline';
 import type { ComponentType, SVGProps } from 'react';
+import { SolutionsLeadForm, StickyGetStartedButton, MobileFormDrawer } from "@/components/forms";
 
 type AppTemplate = {
   id: number;
@@ -163,48 +164,45 @@ export default function CustomAppsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-        <div className="absolute top-40 left-1/2 w-80 h-80 bg-cyan-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-      </div>
+    <div className="min-h-screen bg-slate-950 font-sans">
 
       <div className="relative z-10">
         {/* Header Section */}
-        <div className="bg-white/10 backdrop-blur-md border-b border-white/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="relative pt-32 pb-20 overflow-hidden">
+          {/* Background effects */}
+          <div className="absolute inset-0 chess-grid opacity-10" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-gradient-to-b from-indigo-500/10 via-transparent to-transparent opacity-50" />
+
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="text-center">
-              <div className="inline-flex items-center px-6 py-3 bg-blue-500/20 backdrop-blur-sm rounded-full border border-blue-500/30 mb-8">
-                <SparklesIcon className="w-5 h-5 mr-2 text-blue-400" />
-                <span className="font-semibold text-blue-400">Custom App Development</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-10 animate-fade-in shadow-2xl">
+                <SparklesIcon className="w-5 h-5 text-indigo-400" />
+                <span className="text-sm font-bold text-indigo-200 uppercase tracking-widest">Enterprise Ready</span>
               </div>
-              
-              <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-                Build Your Perfect
-                <span className="block text-blue-400">Custom Application</span>
+
+              <h1 className="text-5xl md:text-8xl font-extrabold text-white mb-8 leading-[1.05] tracking-tighter">
+                Architecture for <br />
+                <span className="bg-gradient-to-r from-indigo-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent italic">Unlimited Scale</span>
               </h1>
-              
-              <p className="text-xl text-blue-200 max-w-3xl mx-auto mb-8">
-                Choose from our pre-built templates or create a completely custom app tailored to your business needs. 
-                No coding required—we handle everything.
+
+              <p className="text-xl text-white/50 max-w-3xl mx-auto mb-12 font-medium leading-relaxed">
+                Stop compromising with off-the-shelf software. We engineer custom-built applications that map perfectly to your unique operations—delivered with speed and precision.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-5 justify-center mt-12">
                 <button
                   onClick={handleBuildFromScratch}
-                  className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-lg text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                  className="group inline-flex items-center justify-center px-10 py-5 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-2xl font-bold hover:shadow-[0_0_40px_rgba(79,70,229,0.4)] transition-all duration-300 transform hover:scale-105"
                 >
-                  <RocketLaunchIcon className="w-5 h-5 mr-2" />
+                  <RocketLaunchIcon className="w-5 h-5 mr-3 group-hover:translate-x-1 transition-transform" />
                   Build From Scratch
                 </button>
                 <button
                   onClick={() => document.getElementById('templates')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="inline-flex items-center justify-center px-8 py-4 border border-blue-400/30 text-lg font-medium rounded-lg text-blue-400 bg-blue-400/10 hover:bg-blue-400/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center justify-center px-10 py-5 bg-white/5 backdrop-blur-md border border-white/10 text-white rounded-2xl font-bold hover:bg-white/10 transition-all duration-300"
                 >
-                  <EyeIcon className="w-5 h-5 mr-2" />
-                  Explore Templates
+                  <EyeIcon className="w-5 h-5 mr-3" />
+                  Explore Blueprints
                 </button>
               </div>
             </div>
@@ -212,151 +210,153 @@ export default function CustomAppsPage() {
         </div>
 
         {/* Templates Section */}
-        <div id="templates" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Pre-Built App Templates
-            </h2>
-            <p className="text-xl text-blue-200 max-w-2xl mx-auto">
-              Choose from our collection of industry-specific app templates, then customize them to fit your exact needs.
-            </p>
-          </div>
+        <div id="templates" className="relative py-24 md:py-32">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-20">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                Proven <span className="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent italic">Blueprints</span>
+              </h2>
+              <p className="text-xl text-white/50 max-w-2xl leading-relaxed">
+                Scale faster with our library of battle-tested application architectures. Customise every detail to match your growth trajectory.
+              </p>
+            </div>
 
-          {/* Templates Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {customAppTemplates.map((template) => (
-              <div
-                key={template.id}
-                className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 cursor-pointer group"
-                onClick={() => handleViewDetails(template)}
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className={`w-12 h-12 ${template.color} rounded-lg flex items-center justify-center`}>
-                    <template.icon className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm text-blue-300 mb-1">{template.industry}</div>
-                    <div className="flex items-center text-yellow-400">
-                      <StarIcon className="w-4 h-4 mr-1" />
-                      <span className="text-sm font-medium">4.9</span>
+            {/* Templates Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {customAppTemplates.map((template) => (
+                <div
+                  key={template.id}
+                  className="group relative bg-slate-900/40 backdrop-blur-xl rounded-[2.5rem] p-8 border border-white/5 hover:border-indigo-500/30 transition-all duration-500 cursor-pointer overflow-hidden flex flex-col"
+                  onClick={() => handleViewDetails(template)}
+                >
+                  <div className="flex items-start justify-between mb-8">
+                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${template.color.replace('bg-', 'from-').replace('-500', '-600 to-')} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500`}>
+                      <template.icon className="w-7 h-7 text-white" />
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xs font-bold text-indigo-300 uppercase tracking-widest mb-1 opacity-60">{template.industry}</div>
+                      <div className="flex items-center justify-end text-cyan-400 gap-1">
+                        <StarIcon className="w-3.5 h-3.5" />
+                        <span className="text-xs font-bold">V-1.2</span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">
-                  {template.name}
-                </h3>
-                <p className="text-blue-200 text-sm mb-4">{template.tagline}</p>
-                <p className="text-white/80 text-sm mb-6">{template.description}</p>
+                  <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-indigo-300 transition-colors">
+                    {template.name}
+                  </h3>
+                  <p className="text-white/40 text-sm mb-6 font-medium leading-relaxed">
+                    {template.description}
+                  </p>
 
-                <div className="flex items-center justify-between">
-                  <div className="flex flex-wrap gap-2">
-                    {template.features.slice(0, 2).map((feature, index) => (
-                      <span key={index} className="text-xs bg-blue-500/20 text-blue-300 px-2 py-1 rounded-full">
-                        {feature}
-                      </span>
-                    ))}
-                    {template.features.length > 2 && (
-                      <span className="text-xs text-blue-300">+{template.features.length - 2} more</span>
-                    )}
+                  <div className="mt-auto pt-8 border-t border-white/5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-wrap gap-2">
+                        {template.features.slice(0, 2).map((feature, index) => (
+                          <span key={index} className="text-[10px] font-bold uppercase tracking-wider bg-white/5 text-white/60 px-3 py-1.5 rounded-full border border-white/5 group-hover:border-indigo-500/20 transition-colors">
+                            {feature}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center group-hover:bg-indigo-500/20 transition-colors">
+                        <ArrowRightIcon className="w-5 h-5 text-indigo-400 group-hover:translate-x-0.5 transition-transform" />
+                      </div>
+                    </div>
                   </div>
-                  <button className="flex items-center space-x-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors duration-300">
-                    <span>View Details</span>
-                    <ArrowRightIcon className="w-4 h-4" />
-                  </button>
+
+                  {/* Inner glow effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Template Details Modal */}
         {selectedTemplate && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 max-w-4xl w-full border border-white/20 max-h-[90vh] overflow-y-auto">
-              <div className="flex items-start justify-between mb-6">
-                <div className="flex items-center space-x-4">
-                  <div className={`w-16 h-16 ${selectedTemplate.color} rounded-lg flex items-center justify-center`}>
-                    <selectedTemplate.icon className="w-8 h-8 text-white" />
+          <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
+            <div className="bg-slate-900/95 backdrop-blur-2xl rounded-[2.5rem] p-8 max-w-4xl w-full border border-white/5 max-h-[90vh] overflow-y-auto shadow-2xl shadow-indigo-500/20">
+              <div className="flex items-start justify-between mb-8">
+                <div className="flex items-center gap-6">
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${selectedTemplate.color.replace('bg-', 'from-').replace('-500', '-600 to-')} flex items-center justify-center shadow-2xl transition-transform duration-500`}>
+                    <selectedTemplate.icon className="w-7 h-7 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-white">{selectedTemplate.name}</h3>
-                    <p className="text-blue-200">{selectedTemplate.tagline}</p>
+                    <h3 className="text-2xl font-extrabold text-white mb-1 tracking-tight">{selectedTemplate.name}</h3>
+                    <p className="text-indigo-400/60 font-bold text-[10px] uppercase tracking-[0.2em]">{selectedTemplate.tagline}</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setSelectedTemplate(null)}
-                  className="text-white hover:text-blue-300 transition-colors duration-300 text-2xl"
+                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all duration-300"
                 >
                   ✕
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 {/* What the App Does */}
-                <div className="bg-white/10 rounded-lg p-6">
-                  <h4 className="text-white font-semibold mb-4 flex items-center">
-                    <LightBulbIcon className="w-5 h-5 mr-2 text-yellow-400" />
-                    What the App Does
+                <div className="bg-slate-950/40 rounded-2xl p-6 border border-white/5">
+                  <h4 className="text-lg font-bold text-white mb-4 flex items-center gap-3 uppercase tracking-widest text-[9px]">
+                    <LightBulbIcon className="w-3.5 h-3.5 text-cyan-400" />
+                    Strategic Purpose
                   </h4>
-                  <p className="text-white/80 text-sm mb-4">{selectedTemplate.description}</p>
-                  <div className="space-y-2">
-                    <h5 className="text-blue-300 font-medium text-sm">Key Features:</h5>
-                    <ul className="space-y-1">
+                  <p className="text-white/50 text-sm mb-6 font-medium leading-relaxed">{selectedTemplate.description}</p>
+                  <div className="space-y-4">
+                    <h5 className="text-indigo-400 font-bold text-[10px] uppercase tracking-widest">Architectural Components:</h5>
+                    <div className="grid grid-cols-1 gap-3">
                       {selectedTemplate.features.map((feature, index) => (
-                        <li key={index} className="flex items-center text-sm text-white/80">
-                          <CheckCircleIcon className="w-4 h-4 text-green-400 mr-2" />
-                          {feature}
-                        </li>
+                        <div key={index} className="flex items-center gap-4 text-sm text-white/40 bg-white/5 p-4 rounded-2xl border border-white/5">
+                          <CheckCircleIcon className="w-4 h-4 text-indigo-400 flex-shrink-0" />
+                          <span className="font-bold tracking-tight">{feature}</span>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </div>
                 </div>
 
-                {/* Integrations */}
-                <div className="bg-white/10 rounded-lg p-6">
-                  <h4 className="text-white font-semibold mb-4 flex items-center">
-                    <CogIcon className="w-5 h-5 mr-2 text-blue-400" />
-                    Integrations
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedTemplate.integrations.map((integration, index) => (
-                      <span key={index} className="text-xs bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full">
-                        {integration}
-                      </span>
-                    ))}
+                {/* Integrations & Context */}
+                <div className="space-y-6">
+                  <div className="bg-slate-950/40 rounded-2xl p-6 border border-white/5">
+                    <h4 className="text-lg font-bold text-white mb-4 flex items-center gap-3 uppercase tracking-widest text-[9px]">
+                      <CogIcon className="w-3.5 h-3.5 text-indigo-400" />
+                      Data Ecosystem
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedTemplate.integrations.map((integration, index) => (
+                        <span key={index} className="text-[9px] font-bold bg-indigo-500/10 text-indigo-300 px-4 py-2 rounded-full border border-indigo-500/20 uppercase tracking-widest">
+                          {integration}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </div>
 
-              {/* App Structure Overview */}
-              <div className="bg-white/10 rounded-lg p-6 mb-8">
-                <h4 className="text-white font-semibold mb-4">App Structure Overview</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <h5 className="text-blue-300 font-medium mb-2">Front End</h5>
-                    <p className="text-white/80 text-sm">User-friendly interface with dashboards, forms, and interactive elements designed for your specific workflow.</p>
-                  </div>
-                  <div>
-                    <h5 className="text-blue-300 font-medium mb-2">Back End</h5>
-                    <p className="text-white/80 text-sm">Robust data processing, automation logic, and secure integrations that power your app behind the scenes.</p>
+                  <div className="bg-indigo-600/10 rounded-2xl p-6 border border-indigo-500/20">
+                    <h4 className="text-white font-bold mb-3 flex items-center gap-3 uppercase tracking-widest text-[9px]">
+                      <RocketLaunchIcon className="w-3.5 h-3.5 text-indigo-400" />
+                      Deployment Ready
+                    </h4>
+                    <p className="text-white/60 text-xs font-medium leading-relaxed">
+                      This architecture is fully evaluated and ready for custom engineering. Deployment can be initiated within 24 hours of specifications lock.
+                    </p>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-4">
+              {/* Navigation */}
+              <div className="flex items-center gap-4 pt-6 border-t border-white/5">
                 <button
                   onClick={handleBuildSimilar}
-                  className="flex items-center space-x-2 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-colors duration-300"
+                  className="flex-1 flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-xl font-bold transition-all duration-300 transform hover:scale-[1.02] shadow-xl shadow-indigo-500/20"
                 >
                   <RocketLaunchIcon className="w-5 h-5" />
-                  <span>Build Similar</span>
+                  Initialize Blueprint
                 </button>
                 <button
                   onClick={() => setSelectedTemplate(null)}
-                  className="flex items-center space-x-2 px-6 py-3 bg-white/20 hover:bg-white/30 text-white rounded-lg font-semibold transition-colors duration-300"
+                  className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-xl font-bold transition-all duration-300"
                 >
-                  <span>Close</span>
+                  Return
                 </button>
               </div>
             </div>
@@ -365,7 +365,7 @@ export default function CustomAppsPage() {
 
         {/* Customization Builder */}
         {showCustomizationBuilder && (
-          <CustomizationBuilder 
+          <CustomizationBuilder
             template={selectedTemplate}
             onClose={() => setShowCustomizationBuilder(false)}
           />
@@ -373,10 +373,19 @@ export default function CustomAppsPage() {
 
         {/* From Scratch Builder */}
         {showFromScratchBuilder && (
-          <FromScratchBuilder 
+          <FromScratchBuilder
             onClose={() => setShowFromScratchBuilder(false)}
           />
         )}
+
+        {/* Lead Form Section */}
+        <SolutionsLeadForm />
+
+        {/* Sticky Button (Desktop) */}
+        <StickyGetStartedButton variant="solutions" />
+
+        {/* Mobile Drawer */}
+        <MobileFormDrawer variant="solutions" />
       </div>
     </div>
   );
@@ -385,7 +394,7 @@ export default function CustomAppsPage() {
 // Customization Builder Component
 function CustomizationBuilder({ template, onClose }: CustomizationBuilderProps) {
   const [selectedComponents, setSelectedComponents] = useState<Set<string>>(new Set());
-  
+
   const availableComponents = [
     { id: 'dashboard', name: 'Dashboard', description: 'Main control panel with key metrics and navigation' },
     { id: 'forms', name: 'Data Entry Forms', description: 'Custom forms for data collection and user input' },
@@ -408,76 +417,73 @@ function CustomizationBuilder({ template, onClose }: CustomizationBuilderProps) 
   };
 
   const handleBuildRequest = () => {
-    // Navigate to request form
     window.location.href = `/solutions/custom-apps/request?components=${Array.from(selectedComponents).join(',')}`;
   };
 
-  // Suppress unused variable warning - template is used for context
   void template;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 max-w-4xl w-full border border-white/20 max-h-[90vh] overflow-y-auto">
-        <div className="flex items-start justify-between mb-6">
+    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
+      <div className="bg-slate-900/95 backdrop-blur-2xl rounded-[2.5rem] p-8 max-w-3xl w-full border border-white/5 max-h-[90vh] overflow-y-auto shadow-2xl shadow-indigo-500/20">
+        <div className="flex items-start justify-between mb-8">
           <div>
-            <h3 className="text-2xl font-bold text-white">Customize Your App</h3>
-            <p className="text-blue-200">Select the components you want in your custom application</p>
+            <h3 className="text-2xl font-extrabold text-white mb-1">Refine Your <span className="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent italic">Architecture</span></h3>
+            <p className="text-white/40 text-sm font-medium">Select additional modules to augment your base blueprint.</p>
           </div>
           <button
             onClick={onClose}
-            className="text-white hover:text-blue-300 transition-colors duration-300 text-2xl"
+            className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all duration-300"
           >
             ✕
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          {availableComponents.map((component) => (
-            <div
-              key={component.id}
-              className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-300 ${
-                selectedComponents.has(component.id)
-                  ? 'border-blue-500 bg-blue-500/20'
-                  : 'border-white/20 bg-white/5 hover:border-blue-400 hover:bg-white/10'
-              }`}
-              onClick={() => toggleComponent(component.id)}
-            >
-              <div className="flex items-start space-x-3">
-                <div className={`w-6 h-6 rounded border-2 flex items-center justify-center ${
-                  selectedComponents.has(component.id)
-                    ? 'border-blue-500 bg-blue-500'
-                    : 'border-white/40'
-                }`}>
-                  {selectedComponents.has(component.id) && (
-                    <CheckCircleIcon className="w-4 h-4 text-white" />
-                  )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
+          {availableComponents.map((component) => {
+            const isSelected = selectedComponents.has(component.id);
+            return (
+              <div
+                key={component.id}
+                className={`group relative p-4 rounded-2xl border transition-all duration-500 cursor-pointer overflow-hidden ${isSelected
+                  ? 'border-indigo-500/50 bg-indigo-500/10'
+                  : 'border-white/5 bg-slate-950/40 hover:border-indigo-500/20 hover:bg-slate-950/60'
+                  }`}
+                onClick={() => toggleComponent(component.id)}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className={`font-bold tracking-tight text-sm transition-colors ${isSelected ? 'text-indigo-300' : 'text-white'}`}>{component.name}</h4>
+                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all duration-500 ${isSelected
+                    ? 'border-indigo-400 bg-indigo-500 shadow-[0_0_15px_rgba(79,70,229,0.5)]'
+                    : 'border-white/10'
+                    }`}>
+                    {isSelected && (
+                      <CheckCircleIcon className="w-3 h-3 text-white" />
+                    )}
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <h4 className="text-white font-medium">{component.name}</h4>
-                  <p className="text-white/70 text-sm">{component.description}</p>
-                </div>
+                <p className="text-white/40 text-[10px] font-medium leading-relaxed">{component.description}</p>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="text-white/80">
-            {selectedComponents.size} component{selectedComponents.size !== 1 ? 's' : ''} selected
+        <div className="flex items-center justify-between pt-6 border-t border-white/5">
+          <div className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em]">
+            Selected: <span className="text-indigo-400">{selectedComponents.size}</span>
           </div>
-          <div className="flex space-x-4">
+          <div className="flex gap-3">
             <button
               onClick={onClose}
-              className="px-6 py-3 bg-white/20 hover:bg-white/30 text-white rounded-lg font-semibold transition-colors duration-300"
+              className="px-6 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl font-bold transition-all duration-300 text-sm"
             >
               Cancel
             </button>
             <button
               onClick={handleBuildRequest}
               disabled={selectedComponents.size === 0}
-              className="px-6 py-3 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-500 disabled:cursor-not-allowed text-white rounded-lg font-semibold transition-colors duration-300"
+              className="px-10 py-3 bg-gradient-to-r from-indigo-500 to-blue-600 disabled:from-slate-800 disabled:to-slate-800 disabled:text-white/20 disabled:cursor-not-allowed text-white rounded-[1.25rem] font-bold transition-all duration-500 transform hover:scale-105 shadow-xl shadow-indigo-500/10"
             >
-              Build My App
+              Initialize Engineering
             </button>
           </div>
         </div>
@@ -506,50 +512,50 @@ function FromScratchBuilder({ onClose }: FromScratchBuilderProps) {
   const phases = [
     {
       id: 1,
-      title: 'Front End / User Interface',
-      description: 'Choose the user-facing components for your app',
+      title: 'Front End / Interface',
+      description: 'Choose high-fidelity user interaction modules',
       components: [
-        { id: 'dashboard', name: 'Dashboard', description: 'Main control panel with widgets and navigation' },
-        { id: 'forms', name: 'Forms & Input', description: 'Data entry forms and user input interfaces' },
-        { id: 'reports', name: 'Reports & Analytics', description: 'Data visualization and reporting tools' },
-        { id: 'user-portal', name: 'User Portal', description: 'Customer-facing portal for self-service' },
-        { id: 'mobile-ui', name: 'Mobile Interface', description: 'Mobile-responsive design and native features' }
+        { id: 'dashboard', name: 'Control Dashboard', description: 'Central intelligence hub with real-time feedback' },
+        { id: 'forms', name: 'Smart Input', description: 'Dynamic forms with validation and logic' },
+        { id: 'reports', name: 'Advanced Analytics', description: 'High-precision data visualization engine' },
+        { id: 'user-portal', name: 'Secure Portal', description: 'Encrypted access for external stakeholders' },
+        { id: 'mobile-ui', name: 'Hybrid Native', description: 'Full mobile responsiveness with native speed' }
       ]
     },
     {
       id: 2,
-      title: 'Data & Integrations',
-      description: 'Select your data sources and third-party connections',
+      title: 'Data & Architecture',
+      description: 'Engineer the backbone of your application',
       components: [
-        { id: 'database', name: 'Database Setup', description: 'Secure data storage and management' },
-        { id: 'crm-integration', name: 'CRM Integration', description: 'Connect with customer relationship management systems' },
-        { id: 'accounting', name: 'Accounting Software', description: 'QuickBooks, Xero, and other financial tools' },
-        { id: 'communication', name: 'Communication Tools', description: 'Email, Slack, Teams integration' },
-        { id: 'api-connections', name: 'API Connections', description: 'Custom API integrations and webhooks' }
+        { id: 'database', name: 'Scalable DB', description: 'High-concurrency data storage architecture' },
+        { id: 'crm-integration', name: 'ERP/CRM Sync', description: 'Bidirectional sync with enterprise systems' },
+        { id: 'accounting', name: 'Financial Ledger', description: 'Secure transaction and accounting modules' },
+        { id: 'communication', name: 'Omni-Channel', description: 'Unified messaging and internal comms' },
+        { id: 'api-connections', name: 'Custom SDK', description: 'Tailored API endpoints for external access' }
       ]
     },
     {
       id: 3,
-      title: 'Automation & Logic',
-      description: 'Add intelligent automation to your app',
+      title: 'Logic & Automation',
+      description: 'Inject intelligent behavior into every flow',
       components: [
-        { id: 'workflows', name: 'Workflow Automation', description: 'Automate business processes and tasks' },
-        { id: 'notifications', name: 'Smart Notifications', description: 'Automated alerts and communication' },
-        { id: 'triggers', name: 'Event Triggers', description: 'Conditional logic and automated responses' },
-        { id: 'scheduling', name: 'Scheduling System', description: 'Automated scheduling and calendar management' },
-        { id: 'data-processing', name: 'Data Processing', description: 'Automated data analysis and processing' }
+        { id: 'workflows', name: 'Logic Engine', description: 'Custom conditional workflows and branches' },
+        { id: 'notifications', name: 'Signal System', description: 'Smart triggers and multi-stage alerts' },
+        { id: 'triggers', name: 'Event Handlers', description: 'Actionable responses based on data shifts' },
+        { id: 'scheduling', name: 'Resource Allocator', description: 'Automated task and asset scheduling' },
+        { id: 'data-processing', name: 'Compute Unit', description: 'Heavy-lifting background data processing' }
       ]
     },
     {
       id: 4,
-      title: 'Advanced Features',
-      description: 'Add powerful features to make your app stand out',
+      title: 'Global Scale',
+      description: 'Finalize your application for production',
       components: [
-        { id: 'ai-features', name: 'AI Features', description: 'Machine learning and artificial intelligence capabilities' },
-        { id: 'analytics', name: 'Advanced Analytics', description: 'Business intelligence and predictive analytics' },
-        { id: 'security', name: 'Security & Compliance', description: 'Advanced security features and compliance tools' },
-        { id: 'permissions', name: 'Role-based Access', description: 'Granular user permissions and access control' },
-        { id: 'custom-features', name: 'Custom Features', description: 'Bespoke functionality tailored to your needs' }
+        { id: 'ai-features', name: 'Neural Models', description: 'LLM integration and predictive intelligence' },
+        { id: 'analytics', name: 'Executive BI', description: 'Strategic reporting for data-driven growth' },
+        { id: 'security', name: 'SOC-2 Guard', description: 'Hardened security and compliance modules' },
+        { id: 'permissions', name: 'ACL Control', description: 'Granular role-based access architectures' },
+        { id: 'custom-features', name: 'Bespoke Logic', description: 'Unique modules engineered for your ops' }
       ]
     }
   ];
@@ -573,7 +579,6 @@ function FromScratchBuilder({ onClose }: FromScratchBuilderProps) {
   };
 
   const handleBuildRequest = () => {
-    // Navigate to request form with all selected components
     const allComponents = Object.entries(selectedComponents)
       .flatMap(([phase, components]) => Array.from(components))
       .join(',');
@@ -581,83 +586,93 @@ function FromScratchBuilder({ onClose }: FromScratchBuilderProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 max-w-6xl w-full border border-white/20 max-h-[90vh] overflow-y-auto">
-        <div className="flex items-start justify-between mb-6">
+    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
+      <div className="bg-slate-900/95 backdrop-blur-2xl rounded-[2.5rem] p-8 max-w-4xl w-full border border-white/5 max-h-[90vh] overflow-y-auto shadow-2xl shadow-indigo-500/20">
+        <div className="flex items-start justify-between mb-8">
           <div>
-            <h3 className="text-2xl font-bold text-white">Build Your Custom App</h3>
-            <p className="text-blue-200">Select components across four phases to create your perfect app</p>
+            <h3 className="text-2xl font-extrabold text-white mb-1 tracking-tight">Build Your <span className="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent italic">Application</span></h3>
+            <p className="text-white/40 text-sm font-medium">Select components across four phases to engineer your perfect build.</p>
           </div>
           <button
             onClick={onClose}
-            className="text-white hover:text-blue-300 transition-colors duration-300 text-2xl"
+            className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all duration-300"
           >
-            ✕
+            <span className="text-lg">✕</span>
           </button>
         </div>
 
         {/* Phase Navigation */}
-        <div className="flex justify-center mb-8">
-          <div className="flex space-x-4">
+        <div className="flex justify-center mb-10 border-b border-white/5 pb-6">
+          <div className="flex items-center gap-3">
             {phases.map((phase) => (
               <button
                 key={phase.id}
                 onClick={() => setCurrentPhase(phase.id)}
-                className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                  currentPhase === phase.id
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-white/10 text-white/70 hover:bg-white/20'
-                }`}
+                className={`relative px-6 py-2 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all duration-300 ${currentPhase === phase.id
+                  ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-500/20 scale-105'
+                  : 'bg-white/5 text-white/20 hover:text-white/40'
+                  }`}
               >
-                Phase {phase.id}
+                Phase 0{phase.id}
               </button>
             ))}
           </div>
         </div>
 
         {/* Current Phase Content */}
-        <div className="mb-8">
-          <h4 className="text-xl font-bold text-white mb-2">{phases[currentPhase - 1].title}</h4>
-          <p className="text-blue-200 mb-6">{phases[currentPhase - 1].description}</p>
+        <div className="mb-10">
+          <div className="flex items-end justify-between mb-6">
+            <div>
+              <h4 className="text-xl font-bold text-white mb-0.5 uppercase tracking-tight">{phases[currentPhase - 1].title}</h4>
+              <p className="text-indigo-400/60 font-bold text-[10px] uppercase tracking-[0.2em]">{phases[currentPhase - 1].description}</p>
+            </div>
+            <div className="text-[10px] font-bold text-white/20 uppercase tracking-[0.3em]">
+              Selected: {selectedComponents[getPhaseKey(currentPhase)].size} / {phases[currentPhase - 1].components.length}
+            </div>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {phases[currentPhase - 1].components.map((component) => (
-              <div
-                key={component.id}
-                className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-300 ${
-                  selectedComponents[getPhaseKey(currentPhase)].has(component.id)
-                    ? 'border-blue-500 bg-blue-500/20'
-                    : 'border-white/20 bg-white/5 hover:border-blue-400 hover:bg-white/10'
-                }`}
-                onClick={() => toggleComponent(currentPhase, component.id)}
-              >
-                <div className="flex items-start space-x-3">
-                  <div className={`w-6 h-6 rounded border-2 flex items-center justify-center ${
-                    selectedComponents[getPhaseKey(currentPhase)].has(component.id)
-                      ? 'border-blue-500 bg-blue-500'
-                      : 'border-white/40'
-                  }`}>
-                    {selectedComponents[getPhaseKey(currentPhase)].has(component.id) && (
-                      <CheckCircleIcon className="w-4 h-4 text-white" />
-                    )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {phases[currentPhase - 1].components.map((component) => {
+              const isSelected = selectedComponents[getPhaseKey(currentPhase)].has(component.id);
+              return (
+                <div
+                  key={component.id}
+                  className={`group relative p-5 rounded-2xl border transition-all duration-500 cursor-pointer overflow-hidden ${isSelected
+                    ? 'border-indigo-500/50 bg-indigo-500/10'
+                    : 'border-white/5 bg-slate-950/40 hover:border-indigo-500/20 hover:bg-slate-950/60'
+                    }`}
+                  onClick={() => toggleComponent(currentPhase, component.id)}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <h5 className={`text-lg font-bold tracking-tight transition-colors ${isSelected ? 'text-indigo-300' : 'text-white'}`}>{component.name}</h5>
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-500 ${isSelected
+                      ? 'border-indigo-400 bg-indigo-500 shadow-[0_0_15px_rgba(79,70,229,0.5)]'
+                      : 'border-white/10'
+                      }`}>
+                      {isSelected && (
+                        <CheckCircleIcon className="w-3.5 h-3.5 text-white" />
+                      )}
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <h5 className="text-white font-medium">{component.name}</h5>
-                    <p className="text-white/70 text-sm">{component.description}</p>
-                  </div>
+                  <p className="text-white/40 text-xs font-medium leading-relaxed">{component.description}</p>
+
+                  {/* Subtle selection glow */}
+                  {isSelected && (
+                    <div className="absolute -bottom-10 -right-10 w-20 h-20 bg-indigo-500/20 blur-[30px] rounded-full" />
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
         {/* Navigation and Build Button */}
-        <div className="flex items-center justify-between">
-          <div className="flex space-x-4">
+        <div className="flex items-center justify-between pt-6 border-t border-white/5">
+          <div className="flex space-x-3">
             {currentPhase > 1 && (
               <button
                 onClick={() => setCurrentPhase(currentPhase - 1)}
-                className="px-6 py-3 bg-white/20 hover:bg-white/30 text-white rounded-lg font-semibold transition-colors duration-300"
+                className="px-6 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-bold transition-all duration-300 text-sm"
               >
                 Previous
               </button>
@@ -665,23 +680,24 @@ function FromScratchBuilder({ onClose }: FromScratchBuilderProps) {
             {currentPhase < 4 && (
               <button
                 onClick={() => setCurrentPhase(currentPhase + 1)}
-                className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-colors duration-300"
+                className="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold transition-all duration-300 shadow-xl shadow-indigo-500/20 text-sm"
               >
                 Next Phase
               </button>
             )}
           </div>
 
-          <div className="flex items-center space-x-4">
-            <div className="text-white/80">
-              {getTotalSelected()} component{getTotalSelected() !== 1 ? 's' : ''} selected
+          <div className="flex items-center space-x-6">
+            <div className="text-right">
+              <div className="text-xl font-bold text-white">{getTotalSelected()}</div>
+              <div className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Modules</div>
             </div>
             <button
               onClick={handleBuildRequest}
               disabled={getTotalSelected() === 0}
-              className="px-6 py-3 bg-green-500 hover:bg-green-600 disabled:bg-gray-500 disabled:cursor-not-allowed text-white rounded-lg font-semibold transition-colors duration-300"
+              className="px-8 py-3 bg-gradient-to-r from-indigo-500 to-blue-600 disabled:from-slate-800 disabled:to-slate-800 disabled:text-white/20 disabled:cursor-not-allowed text-white rounded-xl font-bold transition-all duration-500 transform hover:scale-105 shadow-xl shadow-indigo-500/10 text-sm"
             >
-              Build My App
+              Initialize Build
             </button>
           </div>
         </div>

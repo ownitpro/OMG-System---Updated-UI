@@ -77,9 +77,8 @@ export const industriesConfig: IndustryConfig[] = [
       { appId: "crm", role: "primary" },        // OMGCRM
       { appId: "svd", role: "primary" },        // SecureVault Docs
       { appId: "leads", role: "primary" },      // OMG Leads
-      { appId: "timeguard", role: "primary" },  // 🆕 TimeGuard AI = core
+      { appId: "iq", role: "primary" },         // OMG IQ = analytics
       // Optional add-ons
-      { appId: "iq", role: "secondary" },       // OMG IQ = optional analytics
       { appId: "ai_mastery", role: "secondary" }, // OMG AI Mastery = optional training
     ],
     recommendedSolutions: [

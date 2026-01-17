@@ -26,6 +26,7 @@ import {
   CheckIcon,
 } from "@heroicons/react/24/outline";
 import ServiceNav from "@/components/marketing/ServiceNav";
+import { ConfigurableLeadForm, COLOR_SCHEMES, StickyGetStartedButton, MobileFormDrawer } from "@/components/forms";
 export default function ContentDevelopmentPage() {
   // Slider state and refs
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -396,7 +397,7 @@ export default function ContentDevelopmentPage() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Link
-              href="/contact"
+              href="#lead-form"
               className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold rounded-lg hover:from-emerald-400 hover:to-teal-400 transition-all duration-300 transform hover:scale-105 shadow-[0_0_30px_rgba(16,185,129,0.4)]"
             >
               Start Your Content Strategy
@@ -824,11 +825,10 @@ export default function ContentDevelopmentPage() {
                       });
                     }
                   }}
-                  className={`h-2.5 rounded-full transition-all duration-300 ${
-                    activeDot === dotIndex
+                  className={`h-2.5 rounded-full transition-all duration-300 ${activeDot === dotIndex
                       ? 'bg-emerald-500 w-6'
                       : 'bg-emerald-500/30 hover:bg-emerald-500/50 w-2.5'
-                  }`}
+                    }`}
                 />
               );
             })}
@@ -1100,6 +1100,22 @@ export default function ContentDevelopmentPage() {
           `}</style>
         </div>
       </section>
+
+      {/* Lead Form Section - Emerald Theme */}
+      <ConfigurableLeadForm
+        formType="marketing"
+        colorScheme={COLOR_SCHEMES.emerald}
+      />
+
+      {/* Sticky Button (Desktop) - Emerald Theme */}
+      <StickyGetStartedButton
+        variant="marketing"
+        customGradient="from-emerald-500 to-teal-500"
+        customShadow="shadow-emerald-500/30"
+      />
+
+      {/* Mobile Drawer */}
+      <MobileFormDrawer variant="marketing" />
     </div>
   );
 }

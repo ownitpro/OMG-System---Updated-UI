@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { 
-  ClockIcon, 
-  CurrencyDollarIcon, 
-  ChartBarIcon, 
+import {
+  ClockIcon,
+  CurrencyDollarIcon,
+  ChartBarIcon,
   HeartIcon,
   ArrowTrendingUpIcon,
   CheckCircleIcon
@@ -120,7 +120,7 @@ export default function ResultsSection() {
         const start = 0;
         const increment = target / (duration / 16);
         let current = start;
-        
+
         const timer = setInterval(() => {
           current += increment;
           if (current >= target) {
@@ -139,7 +139,8 @@ export default function ResultsSection() {
   }, [isVisible]);
 
   return (
-    <section className="py-16 md:py-24 bg-gray-800">
+    <section className="py-24 md:py-32 bg-slate-950 relative overflow-hidden">
+      <div className="absolute inset-0 chess-grid opacity-10" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -155,13 +156,12 @@ export default function ResultsSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           {results.map((result, index) => {
             const Icon = result.icon;
-            
+
             return (
               <div
                 key={result.id}
-                className={`group relative bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                }`}
+                className={`group relative bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                  }`}
                 style={{ transitionDelay: `${index * 200}ms` }}
               >
                 {/* Result Icon */}
@@ -216,9 +216,8 @@ export default function ResultsSection() {
             {testimonials.map((testimonial, index) => (
               <div
                 key={testimonial.id}
-                className={`bg-white/5 backdrop-blur-md rounded-xl p-6 border border-white/10 ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                }`}
+                className={`bg-white/5 backdrop-blur-md rounded-xl p-6 border border-white/10 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                  }`}
                 style={{ transitionDelay: `${(index + 4) * 200}ms` }}
               >
                 <div className="text-center">

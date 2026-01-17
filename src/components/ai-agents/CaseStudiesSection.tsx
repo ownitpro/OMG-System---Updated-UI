@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { 
-  HomeIcon, 
-  WrenchScrewdriverIcon, 
+import {
+  HomeIcon,
+  WrenchScrewdriverIcon,
   HeartIcon,
   BuildingOfficeIcon,
   ChartBarIcon,
@@ -95,7 +95,7 @@ export default function CaseStudiesSection() {
   }, []);
 
   return (
-    <section id="case-studies" className="py-16 md:py-24 bg-gray-800">
+    <section id="case-studies" className="py-24 md:py-32 bg-slate-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -112,13 +112,12 @@ export default function CaseStudiesSection() {
           {caseStudies.map((caseStudy, index) => {
             const Icon = caseStudy.icon;
             const isHovered = hoveredCase === caseStudy.id;
-            
+
             return (
               <div
                 key={caseStudy.id}
-                className={`group relative bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                }`}
+                className={`group relative bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                  }`}
                 style={{ transitionDelay: `${index * 200}ms` }}
                 onMouseEnter={() => setHoveredCase(caseStudy.id)}
                 onMouseLeave={() => setHoveredCase(null)}

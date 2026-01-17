@@ -33,7 +33,7 @@ export function AppsDropdown() {
           .map((app) => {
             const Icon = appIcons[app.id] || DocumentTextIcon;
             const colorMap: Record<string, string> = {
-              svd: 'text-[#47BD79]',
+              svd: 'text-teal-400',
               crm: 'text-blue-400',
               leads: 'text-purple-400',
               iq: 'text-purple-400',
@@ -45,7 +45,7 @@ export function AppsDropdown() {
               <Link
                 key={app.id}
                 href={app.href}
-                className="group flex items-center space-x-3 p-2.5 rounded-xl hover:bg-white/[0.10] hover:shadow-[0_0_12px_rgba(71,189,121,0.15)] transition-all duration-400 ease-premium-out cursor-pointer"
+                className="group flex items-center space-x-3 p-2.5 rounded-xl hover:bg-white/[0.10] hover:shadow-[0_0_12px_rgba(20,184,166,0.15)] transition-all duration-400 ease-premium-out cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
                   if (typeof window !== 'undefined') {
@@ -59,7 +59,7 @@ export function AppsDropdown() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2">
-                    <h4 className="text-white text-[15px] font-medium group-hover:text-[#47BD79] transition-colors duration-400 ease-premium-out">
+                    <h4 className="text-white text-[15px] font-medium group-hover:text-teal-400 transition-colors duration-400 ease-premium-out">
                       {app.label}
                     </h4>
                     {app.status === 'coming_soon' && (
@@ -80,7 +80,7 @@ export function AppsDropdown() {
       <div className="mt-3 pt-3 border-t border-white/[0.15]">
         <Link
           href="/apps"
-          className="flex items-center justify-center w-full px-3 py-2.5 text-[#47BD79] hover:text-[#5fd492] text-[15px] font-medium transition-all duration-400 ease-premium-out cursor-pointer rounded-lg hover:bg-white/[0.08] hover:shadow-[0_0_10px_rgba(71,189,121,0.2)]"
+          className="flex items-center justify-center w-full px-3 py-2.5 text-teal-400 hover:text-teal-300 text-[15px] font-medium transition-all duration-400 ease-premium-out cursor-pointer rounded-lg hover:bg-white/[0.08] hover:shadow-[0_0_10px_rgba(20,184,166,0.2)]"
           onClick={(e) => {
             e.stopPropagation();
             if (typeof window !== 'undefined') {

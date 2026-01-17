@@ -1,5 +1,8 @@
 "use client";
 
+// Force client-side rendering only (no SSR)
+export const dynamic = 'force-dynamic';
+
 import { PortalShellV2 } from "@/components/portal/PortalShellV2";
 import Link from "next/link";
 import { getClientNavV2 } from "@/config/portalNav";
@@ -20,32 +23,38 @@ import {
   CalendarDaysIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { formatCurrency, formatDate, getInvoiceStatus, INVOICE_STATUS } from "@/lib/client/formatters";
+import { useInvoices, useSubscriptions, usePaymentMethods } from "@/hooks/useClientData";
 
 // Mock data - in real app, fetch from API
+// Updated to match API response structure
 const mockInvoices = [
   {
     id: "INV-001",
     amount: 1000.00,
-    status: "PAID",
+    status: "PAID", // API uses: PAID, PENDING, FAILED
     dueDate: "2024-12-15",
     createdAt: "2024-12-01",
     description: "OMG-CRM Pro Plan - December 2024",
+    currency: "CAD",
   },
   {
     id: "INV-002",
     amount: 499.00,
-    status: "SENT",
+    status: "PENDING", // Changed from SENT to PENDING
     dueDate: "2025-01-15",
     createdAt: "2024-12-27",
     description: "SecureVault Docs - Annual Subscription",
+    currency: "CAD",
   },
   {
     id: "INV-003",
     amount: 299.00,
-    status: "OVERDUE",
+    status: "PENDING", // Will show as OVERDUE based on dueDate calculation
     dueDate: "2024-12-20",
     createdAt: "2024-12-05",
     description: "OMG-Leads Starter Plan",
+    currency: "CAD",
   },
 ];
 
@@ -107,78 +116,91 @@ export default function ClientBillingPage() {
   const lockedCount = Object.values(entitlements).filter((s) => s === "locked").length;
   const [activeTab, setActiveTab] = useState<"overview" | "invoices" | "subscriptions" | "payment">("overview");
 
-  // Calculate stats
+  // 🔌 CONNECTED TO API - Fetch real data from database
+  const { data: invoicesData, loading: invoicesLoading, error: invoicesError } = useInvoices();
+  const { data: subscriptionsData, loading: subsLoading, error: subsError } = useSubscriptions();
+  const { data: paymentMethodsData, loading: pmLoading, error: pmError } = usePaymentMethods();
+
+  // Extract arrays from API response - API returns { invoices: [...] } directly
+  const invoices = invoicesData?.invoices || mockInvoices;
+  const subscriptions = subscriptionsData?.subscriptions || mockSubscriptions;
+  const paymentMethods = paymentMethodsData?.paymentMethods || mockPaymentMethods;
+
+  console.log('[DEBUG] Final data being used:', {
+    invoiceNumbers: invoices?.map((i: any) => i.invoiceNumber || i.id).slice(0, 3),
+    subsCount: subscriptions?.length,
+    pmCount: paymentMethods?.length
+  });
+
+  // Don't block rendering - let it show mock data first, then update to real data
+  // Show loading indicator in stats if still loading
+  const isLoading = invoicesLoading || subsLoading || pmLoading;
+
+  // Calculate stats with overdue detection
   const stats = {
-    totalInvoices: mockInvoices.length,
-    paidInvoices: mockInvoices.filter(i => i.status === "PAID").length,
-    pendingInvoices: mockInvoices.filter(i => i.status === "SENT").length,
-    overdueInvoices: mockInvoices.filter(i => i.status === "OVERDUE").length,
-    totalAmount: mockInvoices.reduce((sum, i) => sum + i.amount, 0),
-    paidAmount: mockInvoices.filter(i => i.status === "PAID").reduce((sum, i) => sum + i.amount, 0),
-    activeSubscriptions: mockSubscriptions.filter(s => s.status === "ACTIVE").length,
-    trialSubscriptions: mockSubscriptions.filter(s => s.status === "TRIAL").length,
-    monthlySpend: mockSubscriptions
+    totalInvoices: invoices.length,
+    paidInvoices: invoices.filter(i => i.status === "PAID").length,
+    pendingInvoices: invoices.filter(i => {
+      const status = getInvoiceStatus(i.status, i.dueDate);
+      return status === "PENDING";
+    }).length,
+    overdueInvoices: invoices.filter(i => {
+      const status = getInvoiceStatus(i.status, i.dueDate);
+      return status === "OVERDUE";
+    }).length,
+    totalAmount: invoices.reduce((sum, i) => sum + i.amount, 0),
+    paidAmount: invoices.filter(i => i.status === "PAID").reduce((sum, i) => sum + i.amount, 0),
+    activeSubscriptions: subscriptions.filter(s => s.status === "ACTIVE").length,
+    trialSubscriptions: subscriptions.filter(s => s.status === "TRIAL").length,
+    monthlySpend: subscriptions
       .filter(s => s.status === "ACTIVE" && s.interval === "month")
       .reduce((sum, s) => sum + s.amount, 0),
   };
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "PAID":
-      case "ACTIVE":
-        return (
-          <span className="inline-flex items-center gap-1 rounded-full bg-[#47BD79]/20 border border-[#47BD79]/30 px-2.5 py-1 text-xs font-medium text-[#47BD79]">
-            <CheckCircleIcon className="w-3 h-3" />
-            {status === "PAID" ? "Paid" : "Active"}
-          </span>
-        );
-      case "SENT":
-      case "PENDING":
-        return (
-          <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/20 border border-amber-500/30 px-2.5 py-1 text-xs font-medium text-amber-400">
-            <ClockIcon className="w-3 h-3" />
-            Pending
-          </span>
-        );
-      case "OVERDUE":
-        return (
-          <span className="inline-flex items-center gap-1 rounded-full bg-red-500/20 border border-red-500/30 px-2.5 py-1 text-xs font-medium text-red-400">
-            <ExclamationTriangleIcon className="w-3 h-3" />
-            Overdue
-          </span>
-        );
-      case "TRIAL":
-        return (
-          <span className="inline-flex items-center gap-1 rounded-full bg-[#A855F7]/20 border border-[#A855F7]/30 px-2.5 py-1 text-xs font-medium text-[#A855F7]">
-            <SparklesIcon className="w-3 h-3" />
-            Trial
-          </span>
-        );
-      case "CANCELLED":
-        return (
-          <span className="inline-flex items-center gap-1 rounded-full bg-white/10 border border-white/20 px-2.5 py-1 text-xs font-medium text-white/50">
-            <XMarkIcon className="w-3 h-3" />
-            Cancelled
-          </span>
-        );
-      default:
-        return null;
-    }
+  // Get status badge with automatic overdue detection for invoices
+  const getInvoiceStatusBadge = (invoice: { status: string; dueDate: string }) => {
+    const actualStatus = getInvoiceStatus(invoice.status, invoice.dueDate);
+    const statusConfig = INVOICE_STATUS[actualStatus];
+
+    const Icon = actualStatus === "PAID" ? CheckCircleIcon :
+                 actualStatus === "PENDING" ? ClockIcon :
+                 ExclamationTriangleIcon;
+
+    return (
+      <span className={`inline-flex items-center gap-1 rounded-full ${statusConfig.bgColor} border ${statusConfig.borderColor} px-2.5 py-1 text-xs font-medium ${statusConfig.textColor}`}>
+        <Icon className="w-3 h-3" />
+        {statusConfig.label}
+      </span>
+    );
   };
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(amount);
-  };
+  const getSubscriptionStatusBadge = (status: string) => {
+    const Icon = status === "ACTIVE" ? CheckCircleIcon :
+                 status === "TRIAL" ? SparklesIcon :
+                 XMarkIcon;
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
+    const bgColor = status === "ACTIVE" ? "bg-[#47BD79]/20" :
+                    status === "TRIAL" ? "bg-[#A855F7]/20" :
+                    "bg-white/10";
+
+    const borderColor = status === "ACTIVE" ? "border-[#47BD79]/30" :
+                        status === "TRIAL" ? "border-[#A855F7]/30" :
+                        "border-white/20";
+
+    const textColor = status === "ACTIVE" ? "text-[#47BD79]" :
+                      status === "TRIAL" ? "text-[#A855F7]" :
+                      "text-white/50";
+
+    const label = status === "ACTIVE" ? "Active" :
+                  status === "TRIAL" ? "Trial" :
+                  "Cancelled";
+
+    return (
+      <span className={`inline-flex items-center gap-1 rounded-full ${bgColor} border ${borderColor} px-2.5 py-1 text-xs font-medium ${textColor}`}>
+        <Icon className="w-3 h-3" />
+        {label}
+      </span>
+    );
   };
 
   return (
@@ -274,7 +296,8 @@ export default function ClientBillingPage() {
 
         {/* Overview Tab */}
         {activeTab === "overview" && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Recent Invoices */}
             <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6">
               <div className="flex items-center justify-between mb-4">
@@ -302,8 +325,8 @@ export default function ClientBillingPage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-sm font-medium text-white">{formatCurrency(invoice.amount)}</div>
-                      {getStatusBadge(invoice.status)}
+                      <div className="text-sm font-medium text-white">{formatCurrency(invoice.amount, invoice.currency)}</div>
+                      {getInvoiceStatusBadge(invoice)}
                     </div>
                   </div>
                 ))}
@@ -342,11 +365,12 @@ export default function ClientBillingPage() {
                       <div className="text-sm font-medium text-white">
                         {formatCurrency(sub.amount)}/{sub.interval === "month" ? "mo" : "yr"}
                       </div>
-                      {getStatusBadge(sub.status)}
+                      {getSubscriptionStatusBadge(sub.status)}
                     </div>
                   </div>
                 ))}
               </div>
+            </div>
             </div>
           </div>
         )}
@@ -381,7 +405,7 @@ export default function ClientBillingPage() {
                       <td className="py-4 px-6">
                         <span className="text-sm font-medium text-white">{formatCurrency(invoice.amount)}</span>
                       </td>
-                      <td className="py-4 px-6">{getStatusBadge(invoice.status)}</td>
+                      <td className="py-4 px-6">{getInvoiceStatusBadge(invoice)}</td>
                       <td className="py-4 px-6">
                         <div className="flex items-center justify-end gap-2">
                           <button className="p-2 rounded-lg hover:bg-white/10 text-white/50 hover:text-white transition-colors">
@@ -416,7 +440,7 @@ export default function ClientBillingPage() {
                     <div>
                       <div className="flex items-center gap-2">
                         <h3 className="text-lg font-semibold text-white">{sub.name}</h3>
-                        {getStatusBadge(sub.status)}
+                        {getSubscriptionStatusBadge(sub.status)}
                       </div>
                       <p className="text-sm text-white/50 mt-1">
                         Started {formatDate(sub.startDate)}

@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { 
-  CheckIcon, 
-  StarIcon,
-  RocketLaunchIcon,
-  SparklesIcon
+import {
+  CheckIcon,
+  StarIcon
 } from "@heroicons/react/24/outline";
 
 const plans = [
@@ -85,7 +83,8 @@ export default function PricingSection() {
   const [selectedPlan, setSelectedPlan] = useState(2);
 
   return (
-    <section className="py-16 md:py-24 bg-gray-900">
+    <section className="py-16 md:py-24 relative overflow-hidden bg-slate-950">
+      <div className="absolute inset-0 chess-grid opacity-10" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -102,13 +101,12 @@ export default function PricingSection() {
           {plans.map((plan, index) => {
             const isSelected = selectedPlan === plan.id;
             const isPopular = plan.popular;
-            
+
             return (
               <div
                 key={plan.id}
-                className={`relative group cursor-pointer transition-all duration-300 transform hover:-translate-y-2 ${
-                  isSelected ? 'scale-105' : ''
-                }`}
+                className={`relative group cursor-pointer transition-all duration-300 transform hover:-translate-y-2 ${isSelected ? 'scale-105' : ''
+                  }`}
                 onClick={() => setSelectedPlan(plan.id)}
               >
                 {/* Popular Badge */}
@@ -122,11 +120,10 @@ export default function PricingSection() {
                 )}
 
                 {/* Plan Card */}
-                <div className={`relative bg-white/5 backdrop-blur-md rounded-2xl p-8 border shadow-lg hover:shadow-xl transition-all duration-300 ${
-                  isPopular 
-                    ? 'border-emerald-500/50 ring-2 ring-emerald-500/20' 
+                <div className={`relative bg-white/5 backdrop-blur-md rounded-2xl p-8 border shadow-lg hover:shadow-xl transition-all duration-300 ${isPopular
+                    ? 'border-emerald-500/50 ring-2 ring-emerald-500/20'
                     : 'border-white/10 hover:border-white/20'
-                }`}>
+                  }`}>
                   {/* Plan Header */}
                   <div className="text-center mb-6">
                     <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
@@ -148,11 +145,10 @@ export default function PricingSection() {
                   </div>
 
                   {/* CTA Button */}
-                  <button className={`w-full py-3 px-6 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 ${
-                    isPopular
+                  <button className={`w-full py-3 px-6 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 ${isPopular
                       ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white hover:from-emerald-600 hover:to-blue-600'
                       : 'bg-white/10 text-white border border-white/20 hover:bg-white/20'
-                  }`}>
+                    }`}>
                     {plan.cta}
                   </button>
 
@@ -170,7 +166,7 @@ export default function PricingSection() {
             <h3 className="text-xl font-semibold text-white mb-2">All plans include:</h3>
             <p className="text-gray-300">AI copy + visual + video tools, workflow analytics, support, and industry templates.</p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               "AI copy + visual + video tools",
@@ -186,25 +182,6 @@ export default function PricingSection() {
           </div>
         </div>
 
-        {/* Bottom CTA */}
-        <div className="text-center">
-          <div className="mb-6">
-            <p className="text-white text-lg mb-4">
-              Click Get Started to lock in pricing or start your free demo instantly!
-            </p>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-lg text-gray-900 bg-emerald-400 hover:bg-emerald-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
-              <RocketLaunchIcon className="w-5 h-5 mr-2" />
-              🚀 Try the Free Demo
-            </button>
-            <button className="inline-flex items-center justify-center px-8 py-4 border border-emerald-400/30 text-lg font-medium rounded-lg text-emerald-400 bg-emerald-400/10 hover:bg-emerald-400/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
-              <SparklesIcon className="w-5 h-5 mr-2" />
-              🤝 Speak with a Content Expert
-            </button>
-          </div>
-        </div>
       </div>
     </section>
   );

@@ -5,11 +5,11 @@ import Link from "next/link";
 import { liveDemos } from "@/config/try_live_demo_config";
 import {
   PlayIcon,
-  ClockIcon,
-  CheckCircleIcon,
   SparklesIcon,
-  ArrowRightIcon
+  ArrowRightIcon,
+  ClockIcon
 } from "@heroicons/react/24/outline";
+import DemoCarousel from "@/components/demos/DemoCarousel";
 
 export const metadata: Metadata = {
   title: "Try a Live Demo | OMGsystems",
@@ -124,75 +124,8 @@ export default function TryLiveDemoPage() {
             </div>
           </div>
 
-          {/* Demo Cards Grid - Integrated into Hero */}
-          <div className="grid gap-8 md:grid-cols-2">
-            {liveDemos.map((demo) => (
-              <div
-                key={demo.id}
-                className="group relative backdrop-blur-xl bg-white/5 rounded-2xl border border-white/10 p-8 hover:border-cyan-500/50 hover:shadow-[0_0_40px_rgba(6,182,212,0.15)] transition-all duration-500 hover:-translate-y-1"
-              >
-                {/* Top Accent Line */}
-                <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
-
-                {/* Badge Row */}
-                <div className="mb-6 flex items-center justify-between gap-2">
-                  {demo.badge && (
-                    <span className="inline-flex items-center rounded-full bg-cyan-500/10 border border-cyan-500/30 px-4 py-1.5 text-xs font-semibold text-cyan-400">
-                      {demo.badge}
-                    </span>
-                  )}
-                  <div className="flex items-center gap-1.5 text-xs text-white/50">
-                    <ClockIcon className="w-4 h-4 text-teal-400" />
-                    <span className="font-medium">~{demo.estTimeMinutes} min</span>
-                  </div>
-                </div>
-
-                {/* Title + Summary */}
-                <div className="mb-6">
-                  <h2 className="text-2xl font-bold tracking-tight text-white mb-3 group-hover:text-cyan-400 transition-colors">
-                    {demo.label}
-                  </h2>
-                  <p className="text-base text-white/60 leading-relaxed">{demo.summary}</p>
-                </div>
-
-                {/* Highlights */}
-                <ul className="space-y-3 mb-6">
-                  {demo.highlights.map((item) => (
-                    <li key={item} className="flex items-start gap-3">
-                      <CheckCircleIcon className="w-5 h-5 text-cyan-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm text-white/70 leading-relaxed">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Ideal For */}
-                <div className="mt-auto pt-6 border-t border-white/10">
-                  <p className="text-sm text-white/60 mb-5">
-                    <span className="font-semibold text-white">Ideal for:</span>{" "}
-                    {demo.idealFor}
-                  </p>
-
-                  {/* CTA with Coming Soon */}
-                  <div className="flex items-center gap-3">
-                    <button
-                      disabled
-                      className="inline-flex items-center gap-2 rounded-full bg-white/10 text-white/40 px-5 py-2.5 text-sm font-semibold cursor-not-allowed border border-white/10"
-                    >
-                      <PlayIcon className="w-4 h-4" />
-                      Launch demo
-                    </button>
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 px-4 py-2 text-xs font-semibold text-amber-400">
-                      <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
-                      Coming Soon
-                    </span>
-                  </div>
-                </div>
-
-                {/* Hover Glow Effect */}
-                <div className="pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-gradient-to-br from-cyan-500/0 via-cyan-500/5 to-teal-500/0 opacity-0 blur-xl transition-opacity group-hover:opacity-100" />
-              </div>
-            ))}
-          </div>
+          {/* Demo Carousel - Swipeable horizontal cards */}
+          <DemoCarousel demos={liveDemos} />
         </div>
       </section>
 

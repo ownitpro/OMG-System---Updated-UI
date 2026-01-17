@@ -21,6 +21,7 @@ import {
   PresentationChartLineIcon,
 } from "@heroicons/react/24/outline";
 import ServiceNav from "@/components/marketing/ServiceNav";
+import { MarketingLeadForm, StickyGetStartedButton, MobileFormDrawer } from "@/components/forms";
 
 export default function ServicesPage() {
   const capabilityPoints = [
@@ -653,6 +654,15 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
+
+      {/* Lead Form Section */}
+      <MarketingLeadForm />
+
+      {/* Sticky Button (Desktop) */}
+      <StickyGetStartedButton variant="marketing" />
+
+      {/* Mobile Drawer */}
+      <MobileFormDrawer variant="marketing" />
     </div>
   );
 }

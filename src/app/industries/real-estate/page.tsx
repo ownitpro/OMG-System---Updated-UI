@@ -17,6 +17,7 @@ import {
   CurrencyDollarIcon,
   PhoneIcon,
 } from "@heroicons/react/24/outline";
+import { LeadFormWrapper } from "@/components/forms";
 
 const industry = getIndustryById("re");
 
@@ -244,7 +245,7 @@ export default function RealEstateIndustryPage() {
           {/* CTA Buttons */}
           <div className="flex flex-wrap gap-4 justify-center mb-16">
             <Link
-              href="/solutions/custom-solutions"
+              href="#lead-form"
               className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-green-500 px-6 py-3 font-semibold text-slate-950 shadow-lg hover:from-emerald-400 hover:to-green-400 transition-all duration-300 hover:scale-105 hover:shadow-emerald-500/25"
             >
               Talk about my systems
@@ -627,7 +628,7 @@ export default function RealEstateIndustryPage() {
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
-              href="/solutions/custom-solutions"
+              href="#lead-form"
               className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 font-semibold text-emerald-600 shadow-lg hover:bg-white/90 transition-all duration-300 hover:scale-105"
             >
               Talk about my real estate systems
@@ -642,6 +643,14 @@ export default function RealEstateIndustryPage() {
           </div>
         </div>
       </section>
+
+      {/* Lead Form Section - Emerald Theme */}
+      <LeadFormWrapper
+        variant="industries"
+        colorScheme="emerald"
+        customGradient="from-emerald-500 to-green-500"
+        customShadow="shadow-emerald-500/30"
+      />
     </main>
   );
 }

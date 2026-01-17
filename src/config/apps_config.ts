@@ -60,7 +60,7 @@ export const appsConfig: AppConfig[] = [
       "Give your team and clients one secure place to upload, organize, and share documents—without email chaos.",
     status: "live",
     theme: "securevault",
-    primaryColor: "#00C57A",
+    primaryColor: "#14B8A6", // Teal-500 to match SVD page theme
     industries: [
       { industryId: "pm", priority: "primary", weight: 90 },
       { industryId: "re", priority: "primary", weight: 85 },
@@ -119,7 +119,7 @@ export const appsConfig: AppConfig[] = [
       "Connect your ads to your CRM with smart scoring, automated follow-up, and real ROI tracking.",
     status: "live",
     theme: "leads",
-    primaryColor: "#8C3AFF",
+    primaryColor: "#2563EB",
     industries: [
       { industryId: "re", priority: "primary", weight: 100 }, // 🔥 Real estate = #1
       { industryId: "pm", priority: "primary", weight: 90 }, // Updated to primary

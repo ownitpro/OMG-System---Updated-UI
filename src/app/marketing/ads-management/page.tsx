@@ -21,6 +21,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import ServiceNav from "@/components/marketing/ServiceNav";
+import { MarketingLeadForm, StickyGetStartedButton, MobileFormDrawer } from "@/components/forms";
 
 export default function AdsManagementPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -315,7 +316,7 @@ export default function AdsManagementPage() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Link
-              href="/contact"
+              href="#lead-form"
               className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold rounded-lg hover:from-blue-400 hover:to-cyan-400 transition-all duration-300 transform hover:scale-105 shadow-[0_0_30px_rgba(59,130,246,0.4)]"
             >
               Get Your Free Ad Audit
@@ -708,9 +709,8 @@ export default function AdsManagementPage() {
                 >
                   <span className="font-semibold text-white">{faq.question}</span>
                   <ArrowRightIcon
-                    className={`w-5 h-5 text-blue-400 transition-transform duration-300 ${
-                      openFaq === index ? "rotate-90" : ""
-                    }`}
+                    className={`w-5 h-5 text-blue-400 transition-transform duration-300 ${openFaq === index ? "rotate-90" : ""
+                      }`}
                   />
                 </button>
                 {openFaq === index && (
@@ -768,6 +768,15 @@ export default function AdsManagementPage() {
           </p>
         </div>
       </section>
+
+      {/* Lead Form Section */}
+      <MarketingLeadForm />
+
+      {/* Sticky Button (Desktop) */}
+      <StickyGetStartedButton variant="marketing" />
+
+      {/* Mobile Drawer */}
+      <MobileFormDrawer variant="marketing" />
     </div>
   );
 }

@@ -16,6 +16,7 @@ import { RelationBadge } from "@/components/ui/RelationBadge";
 import { RelationLegend } from "@/components/ui/RelationLegend";
 import { getSolutionById } from "@/config/solutions_config";
 import { getIndustriesForSolution } from "@/config/relationships";
+import { LeadFormWrapper } from "@/components/forms";
 
 export const metadata: Metadata = {
   title: "Custom Solutions – Systems Designed Around Your Business | OMGsystems",
@@ -306,7 +307,7 @@ export default function CustomSolutionsPage() {
           {/* CTAs */}
           <div className="flex flex-wrap gap-4 justify-center mb-16">
             <Link
-              href="/contact"
+              href="#lead-form"
               className="group inline-flex items-center rounded-full bg-gradient-to-r from-orange-500 to-amber-500 px-8 py-4 font-semibold text-white shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-300 transform hover:scale-105"
             >
               Schedule a systems review
@@ -699,7 +700,7 @@ export default function CustomSolutionsPage() {
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
-              href="/contact"
+              href="#lead-form"
               className="group inline-flex items-center rounded-full bg-white px-8 py-4 font-semibold text-orange-600 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
             >
               Talk about my systems
@@ -714,6 +715,14 @@ export default function CustomSolutionsPage() {
           </div>
         </div>
       </section>
+
+      {/* Lead Form Section - Orange Theme */}
+      <LeadFormWrapper
+        variant="solutions"
+        colorScheme="orange"
+        customGradient="from-orange-500 to-amber-500"
+        customShadow="shadow-orange-500/30"
+      />
     </main>
   );
 }

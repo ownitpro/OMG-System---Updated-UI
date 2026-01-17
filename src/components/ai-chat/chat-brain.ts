@@ -140,7 +140,7 @@ export class ChatBrain {
         security: 'All data is stored in Canada with encryption at rest and in transit. We maintain PHIPA and PIPEDA compliance.',
         pricing: 'Pricing varies by industry and team size. We provide tailored proposals based on your specific needs.',
         onboarding: 'Most onboarding completes in 1-3 weeks depending on complexity and integrations required.',
-        support: 'We provide email and phone support during business hours, with priority support for enterprise clients.'
+        support: 'We provide email and SMS support 24/7, with priority support for enterprise clients.'
       }
     };
   }

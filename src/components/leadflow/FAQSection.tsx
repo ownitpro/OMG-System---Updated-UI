@@ -8,7 +8,7 @@ export default function FAQSection() {
   const faqs = [
     {
       question: "Do you work in my industry?",
-      answer: "Absolutely. We've helped real estate, healthcare, cleaning services, accounting, project management, and more."
+      answer: "While we can work with any industry, we dominate in four key sectors: Real Estate, Property Management, Contractors, and Accounting. These are our specialties where we've proven massive ROI and know every workflow inside-out."
     },
     {
       question: "What if I already run Facebook ads?",
@@ -30,10 +30,9 @@ export default function FAQSection() {
 
   return (
     <section className="relative py-16 md:py-24 bg-gradient-to-br from-[#2B2A2A] via-[#1f1e1e] to-[#2B2A2A]">
-      {/* Emerald glow effects */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[120px] h-[200px] bg-gradient-to-r from-[#47BD79]/10 via-emerald-500/6 to-transparent rounded-full blur-2xl"></div>
-        <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[120px] h-[200px] bg-gradient-to-l from-[#47BD79]/10 via-emerald-500/6 to-transparent rounded-full blur-2xl"></div>
+        <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[120px] h-[200px] bg-gradient-to-r from-blue-600/10 via-blue-500/6 to-transparent rounded-full blur-2xl"></div>
+        <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[120px] h-[200px] bg-gradient-to-l from-blue-600/10 via-blue-500/6 to-transparent rounded-full blur-2xl"></div>
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -47,19 +46,18 @@ export default function FAQSection() {
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 hover:border-[#47BD79]/30 transition-all duration-200 overflow-hidden"
+              className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 hover:border-blue-500/30 transition-all duration-200 overflow-hidden"
             >
               <button
-                className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#47BD79]/50 focus:ring-inset transition-colors duration-200"
+                className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-inset transition-colors duration-200"
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
               >
                 <span className="text-lg font-semibold text-white">
                   {faq.question}
                 </span>
                 <svg
-                  className={`w-5 h-5 text-[#47BD79] transform transition-transform duration-200 ${
-                    openIndex === index ? 'rotate-180' : ''
-                  }`}
+                  className={`w-5 h-5 text-blue-500 transform transition-transform duration-200 ${openIndex === index ? 'rotate-180' : ''
+                    }`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"

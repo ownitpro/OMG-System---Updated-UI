@@ -21,11 +21,11 @@ export type Entitlements = Record<ProductKey, EntitlementStatus>;
 // Week 1 mock data (change anytime)
 export const MOCK_ENTITLEMENTS: Entitlements = {
   omg_build: "locked", // will show Coming Soon separately
-  omg_crm: "active",
-  securevault_docs: "active",
-  omg_leads: "active",
-  omg_iq: "active",
-  omg_ai_mastery: "active",
+  omg_crm: "locked",
+  securevault_docs: "locked",
+  omg_leads: "locked",
+  omg_iq: "locked",
+  omg_ai_mastery: "locked",
 
   timeguard_ai: "locked",
   automations: "locked",

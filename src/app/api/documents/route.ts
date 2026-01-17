@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/auth'
-import { db } from '@/lib/db'
+import { prisma } from '@/lib/db'
 import { createSecureVaultClient, fileUtils } from '@/lib/securevault'
 import { z } from 'zod'
 
@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get user's organization
-    const user = await db.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       include: {
         memberships: {
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get documents from database
-    const documents = await db.attachment.findMany({
+    const documents = await prisma.attachment.findMany({
       where,
       include: {
         project: {
@@ -71,7 +71,7 @@ export async function GET(request: NextRequest) {
     })
 
     // Get total count
-    const total = await db.attachment.count({ where })
+    const total = await prisma.attachment.count({ where })
 
     return NextResponse.json({ 
       documents,
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get user's organization
-    const user = await db.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       include: {
         memberships: {
@@ -156,7 +156,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Save document metadata to database
-    const document = await db.attachment.create({
+    const document = await prisma.attachment.create({
       data: {
         organizationId: organizationId,
         projectId: validatedData.projectId,
@@ -179,7 +179,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Log the action
-    await db.auditLog.create({
+    await prisma.auditLog.create({
       data: {
         organizationId: organizationId,
         userId: session.user.id,
@@ -196,7 +196,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Track usage
-    await db.usageEvent.create({
+    await prisma.usageEvent.create({
       data: {
         organizationId: organizationId,
         eventType: 'document_uploaded',

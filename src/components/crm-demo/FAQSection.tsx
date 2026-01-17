@@ -49,20 +49,19 @@ export default function FAQSection() {
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden hover:border-[#47BD79]/30 transition-all duration-600 ease-premium-out"
+              className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden hover:border-sky-500/30 transition-all duration-600 ease-premium-out"
             >
               <button
                 onClick={() => toggleFAQ(index)}
-                className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#47BD79]/50 focus:ring-inset transition-colors"
+                className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:ring-inset transition-colors"
                 aria-expanded={openIndex === index}
               >
                 <span className="text-lg font-semibold text-white pr-4">
                   {faq.question}
                 </span>
                 <ChevronDownIcon
-                  className={`w-5 h-5 text-white/50 transition-transform duration-200 ${
-                    openIndex === index ? 'rotate-180' : ''
-                  }`}
+                  className={`w-5 h-5 text-white/50 transition-transform duration-200 ${openIndex === index ? 'rotate-180' : ''
+                    }`}
                 />
               </button>
 
@@ -108,13 +107,13 @@ export default function FAQSection() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="/contact"
-                className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#47BD79] hover:bg-[#3da86a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#47BD79] transition-all duration-600 ease-premium-out shadow-[0_0_20px_rgba(71,189,121,0.4)]"
+                className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-all duration-600 ease-premium-out shadow-[0_0_20px_rgba(14,165,233,0.4)]"
               >
                 Contact Support
               </a>
               <a
                 href="/try-live-demo"
-                className="inline-flex items-center justify-center px-6 py-3 border border-white/20 text-base font-medium rounded-lg text-white bg-white/5 hover:bg-white/10 hover:border-[#47BD79]/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#47BD79] transition-all duration-600 ease-premium-out"
+                className="inline-flex items-center justify-center px-6 py-3 border border-white/20 text-base font-medium rounded-lg text-white bg-white/5 hover:bg-white/10 hover:border-sky-500/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-all duration-600 ease-premium-out"
               >
                 Try Live Demo
               </a>

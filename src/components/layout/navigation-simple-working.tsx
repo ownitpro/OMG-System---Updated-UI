@@ -224,7 +224,7 @@ export default function NavigationSimpleWorking() {
                       SecureVault Docs Demo
                     </Link>
                     <Link
-                      href="/demos"
+                      href="/try-live-demo"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       onClick={() => setActiveDropdown(null)}
                     >
@@ -519,7 +519,7 @@ export default function NavigationSimpleWorking() {
                     SecureVault Docs Demo
                   </Link>
                   <Link
-                    href="/demos"
+                    href="/try-live-demo"
                     className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
                     onClick={closeMobileMenu}
                   >

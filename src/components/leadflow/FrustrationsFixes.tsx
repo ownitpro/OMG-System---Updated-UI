@@ -36,11 +36,10 @@ export default function FrustrationsFixes() {
 
   return (
     <section className="relative py-16 md:py-24 bg-gradient-to-br from-[#2B2A2A] via-[#1f1e1e] to-[#2B2A2A]">
-      {/* Emerald glow effects */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/4 left-0 w-[150px] h-[250px] bg-gradient-to-r from-[#47BD79]/10 via-emerald-500/6 to-transparent rounded-full blur-2xl"></div>
-        <div className="absolute bottom-1/4 right-0 w-[150px] h-[250px] bg-gradient-to-l from-[#47BD79]/10 via-emerald-500/6 to-transparent rounded-full blur-2xl"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-gradient-to-br from-[#47BD79]/8 via-emerald-500/5 to-transparent rounded-full blur-2xl"></div>
+        <div className="absolute top-1/4 left-0 w-[150px] h-[250px] bg-gradient-to-r from-blue-600/10 via-blue-500/6 to-transparent rounded-full blur-2xl"></div>
+        <div className="absolute bottom-1/4 right-0 w-[150px] h-[250px] bg-gradient-to-l from-blue-600/10 via-blue-500/6 to-transparent rounded-full blur-2xl"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-gradient-to-br from-indigo-600/8 via-blue-500/5 to-transparent rounded-full blur-2xl"></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -57,7 +56,7 @@ export default function FrustrationsFixes() {
           {frustrations.map((item, index) => (
             <div
               key={index}
-              className="group bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 hover:border-[#47BD79]/30 transition-all duration-300 hover:-translate-y-1"
+              className="group bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 hover:border-blue-500/30 transition-all duration-300 hover:-translate-y-1"
             >
               {/* Frustration icon & title */}
               <div className="flex items-center mb-4">
@@ -70,8 +69,8 @@ export default function FrustrationsFixes() {
               </div>
 
               {/* Fix section */}
-              <div className="bg-[#47BD79]/10 rounded-xl p-4 border-l-4 border-[#47BD79]">
-                <p className="text-sm font-semibold text-[#47BD79] mb-1">
+              <div className="bg-blue-600/10 rounded-xl p-4 border-l-4 border-blue-500">
+                <p className="text-sm font-semibold text-blue-400 mb-1">
                   Our fix:
                 </p>
                 <p className="text-white/80 text-sm">

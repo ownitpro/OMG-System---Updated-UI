@@ -1,49 +1,79 @@
-// OMGsystems Database Schema
-// Comprehensive schema for multi-tenant SaaS platform
+// OMG Systems - Aurora PostgreSQL Schema
+// Client-First Backend Implementation
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
-// User Management
+// ═══════════════════════════════════════════════════════════════
+// CORE MODELS (Used by both Client & Admin)
+// ═══════════════════════════════════════════════════════════════
+
+enum UserRole {
+  ADMIN
+  CLIENT
+  OWNER
+}
+
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  image     String?
-  password  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  lastLoginAt DateTime?
+  id                String    @id @default(cuid())
+  email             String    @unique
+  name              String?
+  password          String?
+  role              UserRole  @default(CLIENT)
+  phone             String?
+  company           String?
+  position          String?
+  avatar            String?
+  emailVerified     DateTime?
+  twoFactorEnabled  Boolean   @default(false)
+  twoFactorSecret   String?
+  stripeCustomerId  String?   @unique
+  resetToken        String?
+  resetTokenExpiry  DateTime?
 
-  // MFA fields
-  mfaEnabled   Boolean   @default(false)
-  mfaSecret    String?
-  backupCodes  Json      @default("[]")
+  // Relationships
+  organizationId    String?
+  organization      Organization? @relation(fields: [organizationId], references: [id])
 
-  // Relations
-  memberships UserMembership[]
-  sessions    Session[]
-  accounts    Account[]
-  orders      Order[]
-  projects    Project[]
-  tasks       Task[]
-  messages    Message[]
-  documents   Document[]  // Added documents relation
-  comments    Comment[]
-  tickets     Ticket[]
-  auditLogs   AuditLog[]
-  betaInvitations BetaInvitation[]
-  betaInvitedBy   BetaInvitation[] @relation("BetaInvitedBy")
-  feedback        Feedback[]
-  assignedFeedback Feedback[] @relation("FeedbackAssigned")
-  launchPlans     LaunchPlan[]
+  // Client-side relations
+  subscriptions     Subscription[]
+  invoices          Invoice[]
+  paymentMethods    PaymentMethod[]
+  strategySessions  StrategySession[]
+  timeEntries       TimeEntry[]
+  supportTickets    SupportTicket[]
+  adCampaigns       AdCampaign[]
+  contentProjects   ContentProject[]
+  automations       Automation[]
+  brandAssets       BrandAsset[]
+  designRequests    DesignRequest[]
+  customProjects    CustomProject[]
 
+  // Admin-side relations (created by)
+  ordersCreated     Order[]           @relation("OrderCreator")
+  couponsCreated    Coupon[]          @relation("CouponCreator")
+
+  // Security
+  activeSessions    ActiveSession[]
+  loginHistory      LoginHistory[]
+
+  // NextAuth
+  accounts          Account[]
+  sessions          Session[]
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([organizationId])
+  @@index([email])
+  @@index([role])
   @@map("users")
 }
 
@@ -86,117 +116,263 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
-// Organization & Membership
 model Organization {
   id          String   @id @default(cuid())
   name        String
   slug        String   @unique
-  displayName String?  // Added for admin settings
-  description String?
-  logo        String?
+  email       String?
+  phone       String?
   website     String?
-  industry    String?
-  size        String?
-  timezone    String?  // Added for admin settings
+  logo        String?
+
+  // Relations
+  users       User[]
+  orders      Order[]
+  coupons     Coupon[]
+  analytics   AnalyticsEvent[]
+  leads       Lead[]
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  // Relations
-  memberships     UserMembership[]
-  projects        Project[]
-  orders          Order[]
-  invoices        Invoice[]
-  attachments     Attachment[]
-  secureDocs      SecureDoc[]
-  documents       Document[]     // Added document model
-  subscriptions   Subscription[] // Added subscription model
-  tickets         Ticket[]
-  webhookEndpoints WebhookEndpoint[]
-  usageEvents     UsageEvent[]
-  auditLogs       AuditLog[]
-  featureFlags    FeatureFlag[]  // Added feature flags relation
-  betaInvitations BetaInvitation[]
-  feedback        Feedback[]
-
+  @@index([slug])
   @@map("organizations")
 }
 
-model UserMembership {
-  id             String   @id @default(cuid())
-  userId         String
-  organizationId String
-  role           Role     @default(CLIENT)
-  status         String   @default("active") // active, suspended, pending
-  joinedAt       DateTime @default(now())
-  createdAt      DateTime @default(now())  // Added missing field
-  updatedAt      DateTime @updatedAt
+// ═══════════════════════════════════════════════════════════════
+// CLIENT PORTAL MODELS
+// ═══════════════════════════════════════════════════════════════
 
-  // Relations
-  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+// --- Billing ---
 
-  @@unique([userId, organizationId])
-  @@map("user_memberships")
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  TRIALING
+  PAUSED
 }
 
-enum Role {
-  ADMIN
-  STAFF
-  CLIENT
+model Subscription {
+  id                   String             @id @default(cuid())
+  stripeSubscriptionId String?            @unique
+  plan                 String
+  status               SubscriptionStatus @default(ACTIVE)
+  currentPeriodStart   DateTime
+  currentPeriodEnd     DateTime
+  cancelAtPeriodEnd    Boolean            @default(false)
+
+  userId               String
+  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@map("subscriptions")
 }
 
-// Products & Orders
-model Product {
-  id          String   @id @default(cuid())
-  name        String
-  slug        String   @unique
+enum InvoiceStatus {
+  PAID
+  PENDING
+  FAILED
+  REFUNDED
+}
+
+model Invoice {
+  id              String        @id @default(cuid())
+  stripeInvoiceId String?       @unique
+  invoiceNumber   String        @unique
+  amount          Float
+  currency        String        @default("CAD")
+  status          InvoiceStatus @default(PENDING)
+  dueDate         DateTime
+  paidAt          DateTime?
+  description     String?
+
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime      @default(now())
+
+  @@index([userId])
+  @@index([status])
+  @@map("invoices")
+}
+
+model PaymentMethod {
+  id                    String   @id @default(cuid())
+  stripePaymentMethodId String?  @unique
+  type                  String   // card, bank_account
+  last4                 String
+  brand                 String?  // visa, mastercard
+  expiryMonth           Int?
+  expiryYear            Int?
+  isDefault             Boolean  @default(false)
+
+  userId                String
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt             DateTime @default(now())
+
+  @@index([userId])
+  @@map("payment_methods")
+}
+
+// --- Strategy Sessions ---
+
+enum SessionStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+  RESCHEDULED
+  NO_SHOW
+}
+
+model StrategySession {
+  id              String        @id @default(cuid())
+  title           String
+  description     String?
+  scheduledAt     DateTime
+  durationMinutes Int           @default(60)
+  status          SessionStatus @default(SCHEDULED)
+  meetingLink     String?
+  notes           String?
+  recordingUrl    String?
+
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([scheduledAt])
+  @@index([status])
+  @@map("strategy_sessions")
+}
+
+// --- Timeguard AI ---
+
+model TimeEntry {
+  id          String    @id @default(cuid())
+  project     String
   description String?
-  category    String   // CRM, SecureVault, IndustryIQ, ContentEngine
-  features    Json?    // Array of features
-  pricing     Json?    // Pricing tiers and plans
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  startTime   DateTime
+  endTime     DateTime?
+  duration    Int?      // Minutes (calculated)
+  billable    Boolean   @default(true)
+  tags        String[]
 
-  // Relations
-  orderItems OrderItem[]
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("products")
+  createdAt   DateTime  @default(now())
+
+  @@index([userId])
+  @@index([startTime])
+  @@index([project])
+  @@map("time_entries")
 }
 
-model Order {
-  id             String      @id @default(cuid())
-  userId         String
-  organizationId String
-  status         OrderStatus @default(PENDING)
-  total          Float
-  currency       String      @default("USD")
-  stripePaymentIntentId String?
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+// --- Support ---
 
-  // Relations
-  user       User        @relation(fields: [userId], references: [id])
-  organization Organization @relation(fields: [organizationId], references: [id])
-  items      OrderItem[]
-  invoices   Invoice[]
-
-  @@map("orders")
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  WAITING_RESPONSE
+  RESOLVED
+  CLOSED
 }
 
-model OrderItem {
-  id        String  @id @default(cuid())
-  orderId   String
-  productId String
-  quantity  Int     @default(1)
-  price     Float
-
-  // Relations
-  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id])
-
-  @@map("order_items")
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
 }
+
+model SupportTicket {
+  id          String         @id @default(cuid())
+  subject     String
+  description String
+  status      TicketStatus   @default(OPEN)
+  priority    TicketPriority @default(MEDIUM)
+  category    String?
+
+  userId      String
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  messages    TicketMessage[]
+
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@map("support_tickets")
+}
+
+model TicketMessage {
+  id        String   @id @default(cuid())
+  content   String
+  isStaff   Boolean  @default(false)
+  authorId  String
+
+  ticketId  String
+  ticket    SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([ticketId])
+  @@map("ticket_messages")
+}
+
+// --- Security ---
+
+model ActiveSession {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  device       String?
+  browser      String?
+  os           String?
+  ip           String?
+  location     String?
+  lastActive   DateTime @default(now())
+
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt    DateTime @default(now())
+
+  @@index([userId])
+  @@map("active_sessions")
+}
+
+model LoginHistory {
+  id        String   @id @default(cuid())
+  ip        String?
+  device    String?
+  browser   String?
+  location  String?
+  success   Boolean  @default(true)
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("login_history")
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ADMIN PORTAL MODELS
+// ═══════════════════════════════════════════════════════════════
+
+// --- Orders ---
 
 enum OrderStatus {
   PENDING
@@ -206,478 +382,446 @@ enum OrderStatus {
   REFUNDED
 }
 
-// Invoicing & Billing
-model Invoice {
-  id             String        @id @default(cuid())
+model Order {
+  id            String      @id @default(cuid())
+  orderNumber   String      @unique
+  customerName  String
+  customerEmail String
+  product       String
+  amount        Float
+  currency      String      @default("CAD")
+  status        OrderStatus @default(PENDING)
+  notes         String?
+
   organizationId String
-  orderId        String?
-  number         String        @unique
-  status         InvoiceStatus @default(DRAFT)
-  amount         Float
-  currency       String        @default("USD")
-  dueDate        DateTime?
-  paidAt         DateTime?
-  stripeInvoiceId String?
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
-  // Relations
-  organization Organization @relation(fields: [organizationId], references: [id])
-  order        Order?       @relation(fields: [orderId], references: [id])
+  createdById   String
+  createdBy     User        @relation("OrderCreator", fields: [createdById], references: [id])
 
-  @@map("invoices")
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([organizationId])
+  @@index([status])
+  @@index([orderNumber])
+  @@index([createdAt])
+  @@map("orders")
 }
 
-enum InvoiceStatus {
-  DRAFT
-  SENT
-  PAID
-  OVERDUE
-  CANCELLED
+// --- Coupons ---
+
+enum CouponType {
+  PERCENTAGE
+  FIXED_AMOUNT
 }
 
-// Project Management
-model Project {
-  id             String        @id @default(cuid())
-  organizationId String
-  userId         String
-  name           String
+enum CouponCategory {
+  PROMO
+  PARTNER
+  LOYALTY
+  SEASONAL
+  REFERRAL
+  OTHER
+}
+
+model Coupon {
+  id             String          @id @default(cuid())
+  code           String          @unique
   description    String?
-  status         ProjectStatus @default(PLANNING)
-  priority       String        @default("medium") // low, medium, high, urgent
-  startDate      DateTime?
-  dueDate        DateTime?
-  completedAt    DateTime?
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  type           CouponType
+  value          Float           // Percent off (0-100) or fixed cents
+
+  // Limits
+  maxUses        Int?            // Max total redemptions
+  currentUses    Int             @default(0)
+  minPurchase    Float?          // Minimum order amount (cents)
+  maxDiscount    Float?          // Cap on discount amount (cents)
+
+  // Scheduling
+  startsAt       DateTime?       // When coupon becomes active
+  expiresAt      DateTime?       // When coupon expires
+
+  // Status & Category
+  isActive       Boolean         @default(true)
+  isPublic       Boolean         @default(false)  // Show on public /promotions page
+  category       CouponCategory  @default(OTHER)
+
+  // Targeting (JSON fields for flexibility)
+  appliesTo      String?         // JSON - "all" or ["product1", "product2"]
+  assignedTo     String?         // JSON - "all" or ["client1", "client2"]
+
+  // Restrictions
+  firstTimeOnly  Boolean         @default(false)
+
+  // Stacking
+  stackable      Boolean         @default(false)
+  stackGroup     String?
+  priority       Int             @default(0)
+
+  // Tracking
+  totalSavings   Float           @default(0)  // Total $ saved by customers
+  note           String?         // Admin notes
 
   // Relations
-  organization Organization @relation(fields: [organizationId], references: [id])
-  user         User         @relation(fields: [userId], references: [id])
-  tasks        Task[]
-  messages     Message[]
-  attachments  Attachment[]
-
-  @@map("projects")
-}
-
-enum ProjectStatus {
-  PLANNING
-  IN_PROGRESS
-  REVIEW
-  COMPLETED
-  ON_HOLD
-  CANCELLED
-}
-
-model Task {
-  id          String     @id @default(cuid())
-  projectId   String
-  userId      String
-  title       String
-  description String?
-  status      TaskStatus @default(TODO)
-  priority    String     @default("medium")
-  dueDate     DateTime?
-  completedAt DateTime?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-
-  // Relations
-  project  Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  user     User      @relation(fields: [userId], references: [id])
-  comments Comment[]
-
-  @@map("tasks")
-}
-
-enum TaskStatus {
-  TODO
-  IN_PROGRESS
-  REVIEW
-  COMPLETED
-  CANCELLED
-}
-
-// Communication
-model Message {
-  id         String   @id @default(cuid())
-  projectId  String
-  userId     String
-  content    String
-  type       String   @default("message") // message, update, announcement
-  isRead     Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  // Relations
-  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  user    User    @relation(fields: [userId], references: [id])
-
-  @@map("messages")
-}
-
-model Comment {
-  id        String   @id @default(cuid())
-  taskId    String
-  userId    String
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relations
-  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id])
-
-  @@map("comments")
-}
-
-// File Management
-model Attachment {
-  id             String   @id @default(cuid())
   organizationId String
-  projectId      String?
-  name           String
-  originalName   String
-  mimeType       String
-  size           Int
-  secureVaultId  String   // Reference to SecureVault file
-  url            String?  // Signed URL for access
-  expiresAt      DateTime?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  organization   Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
-  // Relations
-  organization Organization @relation(fields: [organizationId], references: [id])
-  project      Project?     @relation(fields: [projectId], references: [id])
+  createdById    String
+  createdBy      User            @relation("CouponCreator", fields: [createdById], references: [id])
 
-  @@map("attachments")
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([organizationId])
+  @@index([code])
+  @@index([isActive])
+  @@index([category])
+  @@index([expiresAt])
+  @@map("coupons")
 }
 
-model SecureDoc {
-  id             String   @id @default(cuid())
-  organizationId String
-  name           String
-  description    String?
-  secureVaultId  String   // Reference to SecureVault file
-  url            String?  // Signed URL for access
-  expiresAt      DateTime?
-  isPublic       Boolean  @default(false)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+// --- Analytics ---
 
-  // Relations
-  organization Organization @relation(fields: [organizationId], references: [id])
-
-  @@map("secure_docs")
+enum EventType {
+  PAGE_VIEW
+  BUTTON_CLICK
+  FORM_SUBMIT
+  API_CALL
+  ERROR
+  PURCHASE
+  SIGNUP
+  LOGIN
+  LOGOUT
 }
 
-// Support & Ticketing
-model Ticket {
-  id             String       @id @default(cuid())
-  organizationId String
-  userId         String
-  subject        String
-  description    String
-  status         TicketStatus @default(OPEN)
-  priority       String       @default("medium")
-  category       String?      // technical, billing, feature_request
-  assignedTo     String?
-  resolvedAt     DateTime?
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-
-  // Relations
-  organization Organization @relation(fields: [organizationId], references: [id])
-  user         User         @relation(fields: [userId], references: [id])
-
-  @@map("tickets")
-}
-
-enum TicketStatus {
-  OPEN
-  IN_PROGRESS
-  RESOLVED
-  CLOSED
-}
-
-// Webhooks & Integrations
-model WebhookEndpoint {
-  id             String   @id @default(cuid())
-  organizationId String
-  url            String
-  eventTypes     String // Comma-separated event types
-  secret         String
-  isActive       Boolean  @default(true)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  // Relations
-  organization Organization @relation(fields: [organizationId], references: [id])
-  webhookEvents WebhookEvent[]
-
-  @@map("webhook_endpoints")
-}
-
-model WebhookEvent {
-  id               String   @id @default(cuid())
-  webhookEndpointId String
-  eventType        String
-  payload          Json
-  status           String   @default("pending") // pending, sent, failed
-  attempts         Int      @default(0)
-  lastAttemptAt    DateTime?
-  createdAt        DateTime @default(now())
-
-  // Relations
-  webhookEndpoint WebhookEndpoint @relation(fields: [webhookEndpointId], references: [id], onDelete: Cascade)
-
-  @@map("webhook_events")
-}
-
-// Usage Tracking & Analytics
-model UsageEvent {
-  id             String   @id @default(cuid())
-  organizationId String
-  eventType      String   // document_uploaded, api_call, storage_used
+model AnalyticsEvent {
+  id             String    @id @default(cuid())
+  eventType      EventType
+  eventName      String
+  page           String?
+  userId         String?
+  sessionId      String?
   metadata       Json?
-  value          Float? // For metering (storage size, API calls, etc.)
-  createdAt      DateTime @default(now())
 
-  // Relations
-  organization Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
-  @@map("usage_events")
+  createdAt      DateTime  @default(now())
+
+  @@index([organizationId])
+  @@index([eventType])
+  @@index([createdAt])
+  @@index([userId])
+  @@map("analytics_events")
 }
 
-// Audit & Compliance
+// --- Audit Logs ---
+
 model AuditLog {
-  id             String   @id @default(cuid())
-  organizationId String
-  userId         String
-  action         String   // user_login, role_changed, invoice_created, etc.
-  resourceType   String?  // user, project, invoice, etc.
-  resourceId     String?
-  metadata       Json?
-  ipAddress      String?
-  userAgent      String?
-  createdAt      DateTime @default(now())
+  id          String   @id @default(cuid())
+  action      String
+  entity      String
+  entityId    String?
+  changes     Json?
+  userId      String
+  userEmail   String
+  ip          String?
 
-  // Relations
-  organization Organization @relation(fields: [organizationId], references: [id])
-  user         User         @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
 
+  @@index([userId])
+  @@index([entity])
+  @@index([createdAt])
   @@map("audit_logs")
 }
 
-// Demo Requests
-model DemoRequest {
-  id          String   @id @default(cuid())
-  appSlug     String   // "crm" or "securevault-docs"
-  industry    String?
-  answers     Json?    // Form answers
-  bookedAt    DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+// ═══════════════════════════════════════════════════════════════
+// CLIENT PORTAL FEATURE MODELS
+// ═══════════════════════════════════════════════════════════════
 
-  // Relations
-  leadId      String?
-  lead        Lead?    @relation(fields: [leadId], references: [id])
+model AdCampaign {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("demo_requests")
+  name          String
+  description   String?
+  platform      String   // "Google", "Facebook", "LinkedIn", etc.
+  status        String   @default("DRAFT") // DRAFT, ACTIVE, PAUSED, COMPLETED
+
+  budget        Float
+  spent         Float    @default(0)
+  currency      String   @default("CAD")
+
+  startDate     DateTime
+  endDate       DateTime?
+
+  // Metrics
+  impressions   Int      @default(0)
+  clicks        Int      @default(0)
+  conversions   Int      @default(0)
+  ctr           Float?   // Click-through rate
+  cpc           Float?   // Cost per click
+
+  targetAudience String?
+  adCreativeUrl  String?
+  landingPageUrl String?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@map("ad_campaigns")
 }
 
-// Lead Management
-model Lead {
-  id        String   @id @default(cuid())
-  name      String?  // Added name field
-  contact   String?
-  email     String?
-  orgName   String?
-  company   String?  // Added missing field
-  source    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model ContentProject {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Relations
-  demoRequests DemoRequest[]
+  title         String
+  description   String?
+  type          String   // "Blog", "Video", "Social", "Email", "Ebook", etc.
+  status        String   @default("DRAFT") // DRAFT, IN_PROGRESS, REVIEW, PUBLISHED
 
-  @@map("leads")
+  dueDate       DateTime?
+  publishedAt   DateTime?
+
+  assignedTo    String?  // Team member or external writer
+  wordCount     Int?
+  targetKeywords String?  // JSON array as string
+
+  draftUrl      String?
+  finalUrl      String?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([dueDate])
+  @@map("content_projects")
 }
 
-// Subscription Management
-model Subscription {
-  id                String             @id @default(cuid())
-  organizationId    String
-  name              String
-  status            SubscriptionStatus @default(TRIAL)
-  plan              String
-  amount            Float
-  currency          String             @default("USD")
-  interval          String             // monthly, yearly
-  startDate         DateTime           @default(now())  // Added missing field
-  endDate           DateTime?          // Added missing field
-  currentPeriodStart DateTime
-  currentPeriodEnd   DateTime?
-  cancelAtPeriodEnd Boolean            @default(false)
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
+model Automation {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Relations
-  organization Organization @relation(fields: [organizationId], references: [id])
+  name          String
+  description   String?
+  type          String   // "Email", "Workflow", "Notification", "Data Sync", etc.
+  status        String   @default("INACTIVE") // INACTIVE, ACTIVE, PAUSED, ERROR
 
-  @@map("subscriptions")
+  trigger       String   // JSON config: what starts the automation
+  actions       String   // JSON config: what the automation does
+
+  totalRuns     Int      @default(0)
+  successfulRuns Int     @default(0)
+  failedRuns    Int      @default(0)
+  lastRunAt     DateTime?
+  lastRunStatus String?  // "SUCCESS", "FAILED", "PARTIAL"
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@map("automations")
 }
 
-enum SubscriptionStatus {
-  TRIAL
-  ACTIVE
-  PAST_DUE
+model BrandAsset {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name          String
+  description   String?
+  type          String   // "Logo", "Color Palette", "Typography", "Template", "Guide", etc.
+  category      String?  // "Primary", "Secondary", "Social Media", etc.
+
+  fileUrl       String?
+  thumbnailUrl  String?
+  fileSize      Int?     // in bytes
+  fileFormat    String?  // "PNG", "SVG", "PDF", "AI", etc.
+
+  dimensions    String?  // "1920x1080" or JSON for multiple sizes
+  colorCodes    String?  // JSON array of hex codes
+
+  version       String   @default("1.0")
+  tags          String?  // JSON array
+
+  downloadCount Int      @default(0)
+  lastDownloadAt DateTime?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+  @@index([type])
+  @@map("brand_assets")
+}
+
+enum DesignRequestStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
   CANCELLED
-  UNPAID
 }
 
-// Document Management (for portal)
-model Document {
-  id             String   @id @default(cuid())
-  organizationId String
+model DesignRequest {
+  id             String               @id @default(cuid())
   userId         String
-  name           String
-  url            String
-  size           Int
-  mimeType       String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  user           User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Relations
-  organization Organization @relation(fields: [organizationId], references: [id])
-  user         User         @relation(fields: [userId], references: [id])
+  projectName    String
+  designType     String
+  description    String               @db.Text
+  deadline       DateTime?
+  budget         String?
+  existingAssets String?              @db.Text
+  status         DesignRequestStatus  @default(PENDING)
 
-  @@map("documents")
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@map("design_requests")
 }
 
-// System Settings
-model SystemSetting {
-  id          String   @id @default(cuid())
-  key         String   @unique
-  value       String
-  type        String   @default("string") // string, boolean, number, json
-  description String?  // Added missing field
-  createdAt   DateTime @default(now())  // Added missing field
-  updatedAt   DateTime @updatedAt  // Added missing field
+model CustomProject {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("system_settings")
+  name            String
+  description     String?
+  type            String   // "Integration", "Custom Development", "Consulting", etc.
+  status          String   @default("PLANNING") // PLANNING, IN_PROGRESS, REVIEW, COMPLETED, ON_HOLD
+
+  startDate       DateTime?
+  targetEndDate   DateTime?
+  completedAt     DateTime?
+
+  progress        Int      @default(0) // 0-100
+
+  milestones      String?  // JSON array of milestone objects
+  deliverables    String?  // JSON array of deliverable objects
+  nextDeliverable String?
+
+  assignedTeam    String?  // JSON array of team members
+  estimatedHours  Int?
+  actualHours     Int?
+
+  budget          Float?
+  spent           Float?
+  currency        String   @default("CAD")
+
+  repositoryUrl   String?
+  documentationUrl String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@map("custom_projects")
 }
 
-// Feature Flags
-model FeatureFlag {
-  id             String  @id @default(cuid())
-  organizationId String?
-  key            String
-  value          Boolean @default(false)
-  isGlobal       Boolean @default(false)
-  isEnabled      Boolean @default(false)  // Added missing field
-  name           String?  // Added missing field
-  description    String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+// ═══════════════════════════════════════════════════════════════
+// LEAD CAPTURE MODELS
+// ═══════════════════════════════════════════════════════════════
 
-  // Relations
-  organization Organization? @relation(fields: [organizationId], references: [id])
-
-  @@unique([organizationId, key])
-  @@map("feature_flags")
+enum LeadSource {
+  APPS
+  SOLUTIONS
+  MARKETING
+  INDUSTRIES
+  AI_AGENTS
+  CONTENT_ENGINE
+  CUSTOM_APPS
+  SMART_AUTOMATIONS
+  CONTACT
 }
 
-// Beta Testing
-model BetaInvitation {
-  id             String   @id @default(cuid())
-  email          String
-  name           String
-  company        String
-  role           String   @default("client") // admin, client
-  betaTier       String   @default("internal") // internal, friendly, public
-  notes          String?
-  invitedBy      String
-  organizationId String
-  status         String   @default("pending") // pending, accepted, declined, expired
-  invitationToken String  @unique
-  expiresAt      DateTime
-  acceptedAt     DateTime?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  // Relations
-  user            User?         @relation(fields: [invitedBy], references: [id])
-  organization    Organization  @relation(fields: [organizationId], references: [id])
-  invitedByUser   User          @relation("BetaInvitedBy", fields: [invitedBy], references: [id])
-
-  @@map("beta_invitations")
+enum LeadStatus {
+  NEW
+  CONTACTED
+  NURTURING
+  QUALIFIED
+  CONVERTED
+  LOST
 }
 
-// Feedback System
-model Feedback {
-  id                    String   @id @default(cuid())
-  organizationId        String
-  userId               String
-  category             String   // ui-ux, performance, features, bug, suggestion, other
-  rating               Int      // 1-5 star rating
-  feedback             String
-  page                 String?  // Which page the feedback was submitted from
-  userAgent            String?
-  browserInfo          String?
-  featureRequest       Boolean  @default(false)
-  bugReport            Boolean  @default(false)
-  improvementSuggestion Boolean @default(false)
-  status               String   @default("new") // new, in_progress, resolved, closed
-  priority             String   @default("medium") // low, medium, high, urgent
-  assignedTo           String?  // Admin user assigned to handle this feedback
-  resolution           String?  // How the feedback was resolved
-  resolvedAt           DateTime?
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+model Lead {
+  id              String      @id @default(cuid())
 
-  // Relations
-  organization Organization @relation(fields: [organizationId], references: [id])
-  user         User         @relation(fields: [userId], references: [id])
-  assignedUser User?        @relation("FeedbackAssigned", fields: [assignedTo], references: [id])
+  // Contact Information (Common to all forms)
+  name            String
+  email           String
+  phone           String?
+  company         String?
 
-  @@map("feedback")
-}
+  // Lead Metadata
+  source          LeadSource
+  status          LeadStatus  @default(NEW)
+  industry        String?     // Industry (for Industries form or general)
+  message         String?     // Message/Challenge/Description
+  tags            String?     // JSON array of tags
 
-// Launch Management
-model LaunchPlan {
-  id                String   @id @default(cuid())
-  name              String
-  description       String?
-  launchDate        DateTime
-  rolloutPercentage Int      @default(25) // 10, 25, 50, 100
-  status            String   @default("draft") // draft, scheduled, in_progress, completed, cancelled
-  notes             String?
-  createdBy         String
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  // Apps Form Fields
+  interestedApps  String?     // JSON array: ["crm", "leads", "securevault"]
+  crmIndustry     String?     // Industry template selection
 
-  // Relations
-  createdByUser User @relation(fields: [createdBy], references: [id])
+  // Solutions Form Fields
+  solutionInterested String?  // "timeguard-ai", "automations", "strategy-session", "custom-solutions"
+  teamSize        String?     // "1-5", "6-20", "21-50", "51-100", "100+"
 
-  @@map("launch_plans")
-}
+  // Marketing Form Fields
+  servicesInterested String?  // JSON array: ["ads", "branding", "content"]
+  budget          String?     // "<$1k", "$1k-5k", "$5k-10k", "$10k+"
+  goals           String?     // Marketing goals text
 
-// AI Agents Quote Requests
-model QuoteRequest {
-  id               String   @id @default(cuid())
-  fullName         String
-  companyName      String
-  email            String
-  industry         String
-  agentRole        String
-  timeline         String?
-  additionalDetails String?
-  status           String   @default("NEW") // NEW, CONTACTED, QUOTED, CONVERTED, LOST
-  source           String   @default("WEBSITE") // WEBSITE, AI_AGENTS_PAGE, REFERRAL, etc.
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  
-  @@map("quote_requests")
+  // Industries Form Fields
+  companySize     String?     // "1-5", "6-20", "21-50", "51-100", "100+"
+  challenges      String?     // Biggest challenge text
+
+  // AI Agents Form Fields
+  agentType       String?     // "lead-capture", "customer-support", "scheduling", "data-entry", "email-automation", "custom"
+  agentDescription String?    // What the agent should do
+  preferredStartDate DateTime? // When they want to start
+
+  // Content Engine Form Fields
+  contentTypes    String?     // JSON array: ["blog-posts", "social-media", "email-campaigns", "video-scripts", "ad-copy", "whitepapers"]
+  monthlyVolume   String?     // "1-10", "11-25", "26-50", "50+"
+  contentChallenge String?    // Biggest content challenge text
+
+  // Custom Apps Form Fields
+  selectedModules String?     // JSON array: ["dashboard", "forms", "user-portal", "crm-integration", "database", "notifications", "scheduling", "workflows", "analytics", "ai-features"]
+  coreObjectives  String?     // What problem are we solving? Technical goals
+  additionalNotes String?     // Timeline constraints, budget ranges, integration endpoints
+
+  // Contact Form Fields
+  subject         String?     // Contact form subject
+  timeline        String?     // Project timeline
+
+  // Additional form data (JSON for future extensibility)
+  formData        String?     // JSON object for any additional custom fields
+
+  // Organization (if lead becomes a customer)
+  organizationId  String?
+  organization    Organization? @relation(fields: [organizationId], references: [id])
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([source])
+  @@index([status])
+  @@index([email])
+  @@index([createdAt])
+  @@index([organizationId])
+  @@map("leads")
 }

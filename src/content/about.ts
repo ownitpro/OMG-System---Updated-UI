@@ -65,11 +65,11 @@ export type AboutContent = {
 export const about: AboutContent = {
   hero: {
     eyebrow: "Who we are",
-    title: "We build systems that remove busywork and grow your revenue",
+    title: "Automate Operations. Multiply Profits.",
     subtitle:
-      "OMGsystems designs industry-specific workflows for property management, real estate, contractors, accounting, cleaning, and healthcare — with privacy-first architecture and measurable outcomes.",
+      "Turn chaos into a predictable revenue machine. Our industry-specific workflows for property management, real estate, contractors, and accounting are built to save time and increase cash flow from day one.",
     primaryCta: { label: "Book a strategy call", href: "/contact?type=strategy", id: "about_cta_strategy" },
-    secondaryCta: { label: "Try live demos", href: "/apps/demo", id: "about_cta_demos" },
+    secondaryCta: { label: "Try live demos", href: "/try-live-demo", id: "about_cta_demos" },
     badges: [
       "Onboarding in 1–3 weeks depending on complexity",
       "Canadian data residency",
@@ -139,33 +139,23 @@ export const about: AboutContent = {
     items: [
       {
         title: "Property Management",
-        blurb: "Automated owner statements & maintenance flows",
+        blurb: "Maximize occupancy and streamline bookings with automated tenant flows.",
         href: "/industries/property-management",
       },
       {
         title: "Real Estate",
-        blurb: "Self-bookings, contract automation, post-close nurture",
+        blurb: "Close deals faster with automated contract pipelines and client nurturing.",
         href: "/industries/real-estate",
       },
       {
         title: "Contractors",
-        blurb: "Lead-to-quote, payment & update automation",
+        blurb: "Win more bids and get paid instantly with automated quoting and invoicing.",
         href: "/industries/contractors",
       },
       {
         title: "Accounting",
-        blurb: "Document workflows, onboarding & e-sign automation",
+        blurb: "Eliminate administrative bottlenecks with secure, automated document collection.",
         href: "/industries/accounting",
-      },
-      {
-        title: "Cleaning",
-        blurb: "Route optimization, job scheduling & billing automation",
-        href: "/industries/cleaning",
-      },
-      {
-        title: "Healthcare",
-        blurb: "Scheduling, intake, claims & alert automation",
-        href: "/industries/healthcare",
       },
     ],
   },
@@ -225,7 +215,7 @@ export const about: AboutContent = {
     title: "Ready to automate your growth?",
     subtitle: "Tell us your goals; we'll map a fast path to value.",
     primaryCta: { label: "Book a strategy call", href: "/contact?type=strategy", id: "about_cta_strategy_bottom" },
-    secondaryCta: { label: "Try the CRM demo", href: "/apps/demo/crm", id: "about_cta_crm_demo" },
+    secondaryCta: { label: "Try the CRM demo", href: "/try-live-demo", id: "about_cta_crm_demo" },
   },
 
   analytics: {

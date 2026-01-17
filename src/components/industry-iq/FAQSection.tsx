@@ -6,7 +6,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 const faqs = [
   {
     question: "Which industries are supported?",
-    answer: "Absolutely. Industry IQ covers real estate, healthcare, cleaning, accounting, project management, and more—tailored to each industry's specific metrics and benchmarks.",
+    answer: "While we can work with any industry, we dominate in four key sectors: Real Estate, Property Management, Contractors, and Accounting. These are our specialties where we've proven massive ROI and know every workflow inside-out.",
   },
   {
     question: "Can this integrate with my current reporting/dashboard tools?",
@@ -34,7 +34,7 @@ const faqs = [
   },
   {
     question: "Is my data secure?",
-    answer: "Absolutely. Industry IQ uses enterprise-grade security with encryption at rest and in transit. We're SOC 2 compliant and follow strict data privacy standards to protect your business information.",
+    answer: "Absolutely. Industry IQ uses enterprise-grade security with encryption at rest and in transit. We follow strict data privacy standards to protect your business information.",
   },
 ];
 

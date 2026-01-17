@@ -22,7 +22,7 @@ const faqs = [
   },
   {
     question: "Can I try it for my industry?",
-    answer: "Absolutely—tailored workflows for your vertical. Our demos are specifically designed for different industries, so you'll see exactly how OMGsystems works for your business type."
+    answer: "Absolutely! While we can work with any industry, we dominate in Real Estate, Property Management, Contractors, and Accounting. Our demos are specifically designed to show you exactly how OMGsystems crushes it for your business type."
   },
   {
     question: "What happens after?",

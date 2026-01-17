@@ -44,7 +44,7 @@ const plans = [
       "Industry IQ",
       "Content Engine",
       "Dedicated account manager",
-      "24/7 phone support"
+      "24/7 priority support"
     ],
     popular: false
   }

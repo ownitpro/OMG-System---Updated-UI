@@ -207,9 +207,175 @@ export async function sendFeedbackNotification(data: FeedbackNotificationData) {
   }
 }
 
+interface StrategySessionUpdateData {
+  email: string;
+  name: string | null;
+  sessionTitle: string;
+  sessionDate: string;
+  sessionTime: string;
+  duration: number;
+  meetingLink?: string | null;
+  notes?: string | null;
+  status?: string;
+  changedFields: string[];
+}
+
+export async function sendStrategySessionUpdate(data: StrategySessionUpdateData) {
+  const transporter = createTransporter();
+
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const formatTime = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+  };
+
+  const changesText = data.changedFields.map(field => {
+    switch(field) {
+      case 'meetingLink': return '📹 Meeting link added';
+      case 'notes': return '📝 Session notes updated';
+      case 'status': return `📊 Status changed to ${data.status}`;
+      case 'scheduledAt': return '📅 Session date/time updated';
+      default: return `${field} updated`;
+    }
+  }).join('<br>');
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <title>Strategy Session Updated</title>
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #47BD79, #3da86a); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+        .content { background: white; padding: 30px; border: 1px solid #e5e7eb; }
+        .session-details { background: #f0f9ff; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #47BD79; }
+        .changes { background: #fef3c7; padding: 15px; border-radius: 8px; margin: 20px 0; }
+        .button { display: inline-block; background: #47BD79; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+        .footer { background: #f9fafb; padding: 20px; text-align: center; border-radius: 0 0 8px 8px; }
+        .meeting-link { background: #10b981; color: white; padding: 12px; border-radius: 6px; text-align: center; margin: 15px 0; }
+        .meeting-link a { color: white; text-decoration: none; font-weight: bold; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>🔔 Strategy Session Updated</h1>
+          <p>Your session has been updated by our team</p>
+        </div>
+
+        <div class="content">
+          <h2>Hi ${data.name || 'there'},</h2>
+
+          <p>Your strategy session <strong>"${data.sessionTitle}"</strong> has been updated.</p>
+
+          <div class="changes">
+            <h3>📋 What's Changed:</h3>
+            <p>${changesText}</p>
+          </div>
+
+          <div class="session-details">
+            <h3>📅 Session Details:</h3>
+            <ul style="list-style: none; padding: 0;">
+              <li><strong>Title:</strong> ${data.sessionTitle}</li>
+              <li><strong>Date:</strong> ${formatDate(data.sessionDate)}</li>
+              <li><strong>Time:</strong> ${formatTime(data.sessionDate)}</li>
+              <li><strong>Duration:</strong> ${data.duration} minutes</li>
+              ${data.status ? `<li><strong>Status:</strong> ${data.status}</li>` : ''}
+            </ul>
+
+            ${data.meetingLink ? `
+            <div class="meeting-link">
+              <p style="margin: 0 0 8px 0;">📹 <strong>Join Meeting:</strong></p>
+              <a href="${data.meetingLink}" target="_blank">${data.meetingLink}</a>
+            </div>
+            ` : ''}
+
+            ${data.notes ? `
+            <div style="margin-top: 15px;">
+              <strong>📝 Notes:</strong>
+              <p style="margin: 8px 0; padding: 10px; background: white; border-radius: 4px;">${data.notes}</p>
+            </div>
+            ` : ''}
+          </div>
+
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/portal/client/strategy-session" class="button">View in Portal</a>
+          </div>
+
+          <p><em>If you have any questions, please don't hesitate to contact our team.</em></p>
+        </div>
+
+        <div class="footer">
+          <p>Questions? Reply to this email or contact our support team.</p>
+          <p>© 2026 OMGsystems. All rights reserved.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  const text = `
+    Strategy Session Updated
+
+    Hi ${data.name || 'there'},
+
+    Your strategy session "${data.sessionTitle}" has been updated.
+
+    What's Changed:
+    ${data.changedFields.join(', ')}
+
+    Session Details:
+    - Title: ${data.sessionTitle}
+    - Date: ${formatDate(data.sessionDate)}
+    - Time: ${formatTime(data.sessionDate)}
+    - Duration: ${data.duration} minutes
+    ${data.status ? `- Status: ${data.status}` : ''}
+    ${data.meetingLink ? `\n- Meeting Link: ${data.meetingLink}` : ''}
+    ${data.notes ? `\n- Notes: ${data.notes}` : ''}
+
+    View your session in the portal: ${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/portal/client/strategy-session
+
+    Questions? Reply to this email.
+
+    © 2026 OMGsystems
+  `;
+
+  const mailOptions = {
+    from: `"OMGsystems Strategy Sessions" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+    to: data.email,
+    subject: `🔔 Strategy Session Updated: ${data.sessionTitle}`,
+    text,
+    html,
+  };
+
+  try {
+    const result = await transporter.sendMail(mailOptions);
+    console.log('Strategy session update email sent:', result.messageId);
+    return result;
+  } catch (error) {
+    console.error('Failed to send strategy session update email:', error);
+    throw error;
+  }
+}
+
 export async function sendLaunchAnnouncement(emails: string[], launchDate: string) {
   const transporter = createTransporter();
-  
+
   const html = `
     <!DOCTYPE html>
     <html>
@@ -231,19 +397,19 @@ export async function sendLaunchAnnouncement(emails: string[], launchDate: strin
           <h1>🎉 OMGsystems is Launching!</h1>
           <p>Thank you for being part of our beta journey</p>
         </div>
-        
+
         <div class="content">
           <div class="launch-date">
             <h2>Launch Date: ${launchDate}</h2>
             <p>Get ready for the full release!</p>
           </div>
-          
+
           <p>Dear Beta Tester,</p>
-          
+
           <p>We're thrilled to announce that OMGsystems will be launching on <strong>${launchDate}</strong>!</p>
-          
+
           <p>Your feedback and participation in our beta program have been invaluable in shaping the final product. Thank you for being part of this journey.</p>
-          
+
           <h3>What's Next?</h3>
           <ul>
             <li>Your beta access will continue until launch</li>
@@ -251,10 +417,10 @@ export async function sendLaunchAnnouncement(emails: string[], launchDate: strin
             <li>Special beta tester benefits and pricing</li>
             <li>Priority support and onboarding</li>
           </ul>
-          
+
           <p>We can't wait to share the full OMGsystems experience with you!</p>
         </div>
-        
+
         <div class="footer">
           <p>© 2025 OMGsystems. All rights reserved.</p>
         </div>

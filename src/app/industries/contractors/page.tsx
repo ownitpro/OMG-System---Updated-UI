@@ -19,6 +19,7 @@ import {
   CalculatorIcon,
   CalendarDaysIcon,
 } from "@heroicons/react/24/outline";
+import { LeadFormWrapper } from "@/components/forms";
 
 const industry = getIndustryById("cont");
 
@@ -308,7 +309,7 @@ export default function ContractorsPage() {
           {/* CTA Buttons */}
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
-              href="/solutions/strategy-session"
+              href="#lead-form"
               className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-yellow-500 to-amber-500 px-8 py-4 font-semibold text-slate-900 shadow-lg shadow-yellow-500/25 hover:shadow-yellow-500/40 transition-all duration-300 hover:scale-105"
             >
               Book a Strategy Session
@@ -498,11 +499,10 @@ export default function ContractorsPage() {
                 className="group backdrop-blur-xl bg-white/5 rounded-2xl border border-white/10 p-6 hover:border-yellow-500/40 hover:bg-white/[0.07] transition-all duration-300 hover:-translate-y-1"
               >
                 <div className="flex items-center justify-between mb-4">
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    app.role === "primary"
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${app.role === "primary"
                       ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
                       : "bg-white/10 text-white/60 border border-white/20"
-                  }`}>
+                    }`}>
                     {app.role === "primary" ? "Core" : "Add-on"}
                   </span>
                   <ArrowRightIcon className="w-5 h-5 text-white/30 group-hover:text-yellow-400 transition-colors" />
@@ -653,7 +653,7 @@ export default function ContractorsPage() {
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
-              href="/solutions/strategy-session"
+              href="#lead-form"
               className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-8 py-4 font-semibold text-white shadow-lg hover:bg-slate-800 transition-all duration-300 hover:scale-105"
             >
               Book Your Strategy Session
@@ -668,6 +668,14 @@ export default function ContractorsPage() {
           </div>
         </div>
       </section>
+
+      {/* Lead Form Section - Orange Theme */}
+      <LeadFormWrapper
+        variant="industries"
+        colorScheme="orange"
+        customGradient="from-yellow-500 to-amber-500"
+        customShadow="shadow-yellow-500/30"
+      />
     </main>
   );
 }

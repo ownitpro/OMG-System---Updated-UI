@@ -23,6 +23,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import ServiceNav from "@/components/marketing/ServiceNav";
+import { MarketingLeadForm, StickyGetStartedButton, MobileFormDrawer } from "@/components/forms";
 
 export default function BrandingCreativePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -272,7 +273,7 @@ export default function BrandingCreativePage() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Link
-              href="/contact"
+              href="#lead-form"
               className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-purple-500 to-violet-500 text-white font-bold rounded-lg hover:from-purple-400 hover:to-violet-400 transition-all duration-300 transform hover:scale-105 shadow-[0_0_30px_rgba(168,85,247,0.4)]"
             >
               Start Your Brand Transformation
@@ -386,11 +387,10 @@ export default function BrandingCreativePage() {
               <button
                 key={index}
                 onClick={() => setActiveTab(index)}
-                className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                  activeTab === index
+                className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${activeTab === index
                     ? "bg-gradient-to-r from-purple-500 to-violet-500 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]"
                     : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
-                }`}
+                  }`}
               >
                 <span className="flex items-center gap-2">
                   <category.icon className="w-5 h-5" />
@@ -618,6 +618,15 @@ export default function BrandingCreativePage() {
           </div>
         </div>
       </section>
+
+      {/* Lead Form Section */}
+      <MarketingLeadForm />
+
+      {/* Sticky Button (Desktop) */}
+      <StickyGetStartedButton variant="marketing" />
+
+      {/* Mobile Drawer */}
+      <MobileFormDrawer variant="marketing" />
     </div>
   );
 }

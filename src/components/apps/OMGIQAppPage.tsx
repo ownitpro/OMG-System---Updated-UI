@@ -139,10 +139,10 @@ export function OMGIQAppPage() {
             </p>
             <div className="flex items-center justify-center gap-x-6 pt-10">
               <Link
-                href="/apps/demo?app=omg-iq"
+                href="/apps#waiting-list-form"
                 className="rounded-xl bg-[#A855F7] px-6 py-3 text-base font-semibold text-white shadow-[0_0_20px_rgba(71,189,121,0.4)] hover:bg-[#9333EA] hover:shadow-[0_0_30px_rgba(71,189,121,0.5)] transition-all duration-300"
               >
-                Get Started
+                Get Started for Free
               </Link>
               <Link
                 href="/apps/omg-iq/sample"
@@ -565,14 +565,14 @@ export function OMGIQAppPage() {
                   ))}
                 </ul>
                 <Link
-                  href={`/apps/demo?app=omg-iq&plan=${plan.name.toLowerCase()}`}
+                  href="/apps#waiting-list-form"
                   className={`block w-full rounded-xl px-4 py-3 text-center font-semibold transition-all duration-300 mt-8 ${
                     plan.popular
                       ? 'bg-[#A855F7] text-white shadow-[0_0_20px_rgba(71,189,121,0.4)] hover:bg-[#9333EA] hover:shadow-[0_0_30px_rgba(71,189,121,0.5)]'
                       : 'bg-white/10 text-white hover:bg-white/20'
                   }`}
                 >
-                  Get Started
+                  Get Started for Free
                 </Link>
               </div>
             ))}

@@ -59,7 +59,7 @@ export const metadata: Metadata = {
 
 export default function AIAgentsPage() {
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-slate-950">
       <AIAgentsPageTracker />
       <HeroSection />
       <BenefitsSection />

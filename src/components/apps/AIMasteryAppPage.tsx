@@ -772,7 +772,7 @@ export function AIMasteryAppPage() {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-16 sm:py-24 bg-slate-950">
+      <section id="pricing" className="py-16 sm:py-24 bg-slate-950">
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -828,7 +828,7 @@ export function AIMasteryAppPage() {
                   </ul>
 
                   <Link
-                    href={plan.cta.href}
+                    href="/app/login"
                     className={`block w-full text-center rounded-xl px-6 py-4 font-semibold text-white transition-all duration-300 ${
                       isIndividual
                         ? "bg-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:bg-amber-400 hover:shadow-[0_0_30px_rgba(245,158,11,0.5)]"
@@ -937,7 +937,7 @@ export function AIMasteryAppPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-10">
               <Link
-                href={finalCta.primaryCta.href}
+                href="/app/login"
                 className="w-full sm:w-auto rounded-xl bg-gradient-to-r from-amber-500 to-emerald-500 px-8 py-4 text-base font-semibold text-white shadow-[0_0_30px_rgba(245,158,11,0.5)] hover:shadow-[0_0_50px_rgba(245,158,11,0.6)] transition-all duration-300 hover:scale-105"
               >
                 {finalCta.primaryCta.label}

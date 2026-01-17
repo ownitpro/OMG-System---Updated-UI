@@ -16,6 +16,7 @@ import {
   EyeSlashIcon,
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/outline";
+import { formatDateTime, formatTimeAgo } from "@/lib/client/formatters";
 
 export default function ClientSecurityPage() {
   const nav = getClientNavV2();
@@ -37,41 +38,93 @@ export default function ClientSecurityPage() {
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
   const [showTwoFactorSetup, setShowTwoFactorSetup] = useState(false);
 
-  // Mock active sessions
+  // Updated to match API response structure (ActiveSession model)
   const sessions = [
     {
       id: "1",
-      device: "Chrome on Windows",
+      sessionToken: "token_abc123",
+      device: "Windows",
+      browser: "Chrome 120",
+      os: "Windows 11",
+      ip: "192.168.1.100",
       location: "New York, NY",
-      ip: "192.168.1.xxx",
-      lastActive: "Now",
+      lastActive: new Date().toISOString(), // Now
+      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
       current: true,
     },
     {
       id: "2",
-      device: "Safari on iPhone",
+      sessionToken: "token_def456",
+      device: "iPhone 14",
+      browser: "Safari 17",
+      os: "iOS 17",
+      ip: "192.168.1.105",
       location: "New York, NY",
-      ip: "192.168.1.xxx",
-      lastActive: "2 hours ago",
+      lastActive: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
+      createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
       current: false,
     },
     {
       id: "3",
-      device: "Firefox on MacOS",
+      sessionToken: "token_ghi789",
+      device: "MacBook Pro",
+      browser: "Firefox 121",
+      os: "macOS 14",
+      ip: "10.0.0.50",
       location: "Boston, MA",
-      ip: "10.0.0.xxx",
-      lastActive: "3 days ago",
+      lastActive: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days ago
+      createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
       current: false,
     },
   ];
 
-  // Mock login history
+  // Updated to match API response structure (LoginHistory model)
   const loginHistory = [
-    { date: "Dec 27, 2024 10:30 AM", device: "Chrome on Windows", location: "New York, NY", status: "success" },
-    { date: "Dec 26, 2024 3:15 PM", device: "Safari on iPhone", location: "New York, NY", status: "success" },
-    { date: "Dec 25, 2024 9:00 AM", device: "Chrome on Windows", location: "New York, NY", status: "success" },
-    { date: "Dec 24, 2024 11:45 PM", device: "Unknown Device", location: "Miami, FL", status: "blocked" },
-    { date: "Dec 24, 2024 6:20 PM", device: "Chrome on Windows", location: "New York, NY", status: "success" },
+    {
+      id: "1",
+      ip: "192.168.1.100",
+      device: "Windows",
+      browser: "Chrome 120",
+      location: "New York, NY",
+      success: true,
+      createdAt: "2024-12-27T10:30:00Z"
+    },
+    {
+      id: "2",
+      ip: "192.168.1.105",
+      device: "iPhone 14",
+      browser: "Safari 17",
+      location: "New York, NY",
+      success: true,
+      createdAt: "2024-12-26T15:15:00Z"
+    },
+    {
+      id: "3",
+      ip: "192.168.1.100",
+      device: "Windows",
+      browser: "Chrome 120",
+      location: "New York, NY",
+      success: true,
+      createdAt: "2024-12-25T09:00:00Z"
+    },
+    {
+      id: "4",
+      ip: "45.123.45.67",
+      device: "Unknown",
+      browser: "Unknown",
+      location: "Miami, FL",
+      success: false,
+      createdAt: "2024-12-24T23:45:00Z"
+    },
+    {
+      id: "5",
+      ip: "192.168.1.100",
+      device: "Windows",
+      browser: "Chrome 120",
+      location: "New York, NY",
+      success: true,
+      createdAt: "2024-12-24T18:20:00Z"
+    },
   ];
 
   const handlePasswordChange = async () => {
@@ -389,7 +442,7 @@ export default function ClientSecurityPage() {
                       )}
                     </div>
                     <div className="text-xs text-white/50">
-                      {session.location} • {session.ip} • {session.lastActive}
+                      {session.location} • {session.ip} • {formatTimeAgo(session.lastActive)}
                     </div>
                   </div>
                 </div>
@@ -429,13 +482,13 @@ export default function ClientSecurityPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/10">
-                {loginHistory.map((entry, index) => (
-                  <tr key={index}>
-                    <td className="py-4 text-sm text-white/70">{entry.date}</td>
-                    <td className="py-4 text-sm text-white/70">{entry.device}</td>
+                {loginHistory.map((entry) => (
+                  <tr key={entry.id}>
+                    <td className="py-4 text-sm text-white/70">{formatDateTime(entry.createdAt)}</td>
+                    <td className="py-4 text-sm text-white/70">{entry.browser} on {entry.device}</td>
                     <td className="py-4 text-sm text-white/70">{entry.location}</td>
                     <td className="py-4">
-                      {entry.status === "success" ? (
+                      {entry.success ? (
                         <span className="inline-flex items-center gap-1 rounded-full bg-[#47BD79]/20 border border-[#47BD79]/30 px-2 py-0.5 text-xs text-[#47BD79]">
                           <CheckCircleIcon className="w-3 h-3" /> Success
                         </span>

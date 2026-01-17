@@ -14,13 +14,15 @@ import {
   ShieldCheckIcon,
   LightBulbIcon,
   ExclamationTriangleIcon,
-  InformationCircleIcon,
   EnvelopeIcon,
   DocumentTextIcon,
   UserGroupIcon,
   ChartBarIcon,
   CalendarIcon,
-  BellIcon
+  BellIcon,
+  BoltIcon,
+  StarIcon,
+  ArrowRightIcon
 } from '@heroicons/react/24/outline';
 
 // Automation data (same as in main page)
@@ -31,7 +33,8 @@ const automationTemplates = [
     description: 'Automatically nurture leads with personalized email sequences',
     category: 'Marketing',
     icon: EnvelopeIcon,
-    color: 'bg-blue-500',
+    color: 'from-blue-600 to-blue-500',
+    bgColor: 'bg-blue-500',
     status: 'active',
     successRate: 94,
     timeSaved: '15 hours/week',
@@ -62,7 +65,8 @@ const automationTemplates = [
     description: 'Automatically process and categorize incoming invoices',
     category: 'Finance',
     icon: DocumentTextIcon,
-    color: 'bg-green-500',
+    color: 'from-green-600 to-green-500',
+    bgColor: 'bg-green-500',
     status: 'active',
     successRate: 98,
     timeSaved: '8 hours/week',
@@ -93,7 +97,8 @@ const automationTemplates = [
     description: 'Streamline new customer setup and welcome process',
     category: 'Sales',
     icon: UserGroupIcon,
-    color: 'bg-purple-500',
+    color: 'from-purple-600 to-purple-500',
+    bgColor: 'bg-purple-500',
     status: 'paused',
     successRate: 96,
     timeSaved: '12 hours/week',
@@ -124,7 +129,8 @@ const automationTemplates = [
     description: 'Automatically generate and distribute weekly reports',
     category: 'Analytics',
     icon: ChartBarIcon,
-    color: 'bg-orange-500',
+    color: 'from-orange-600 to-orange-500',
+    bgColor: 'bg-orange-500',
     status: 'active',
     successRate: 100,
     timeSaved: '6 hours/week',
@@ -155,7 +161,8 @@ const automationTemplates = [
     description: 'Intelligently assign tasks based on workload and expertise',
     category: 'Operations',
     icon: CalendarIcon,
-    color: 'bg-pink-500',
+    color: 'from-pink-600 to-pink-500',
+    bgColor: 'bg-pink-500',
     status: 'active',
     successRate: 92,
     timeSaved: '10 hours/week',
@@ -186,7 +193,8 @@ const automationTemplates = [
     description: 'Send automated follow-up reminders for pending actions',
     category: 'Communication',
     icon: BellIcon,
-    color: 'bg-indigo-500',
+    color: 'from-indigo-600 to-indigo-500',
+    bgColor: 'bg-indigo-500',
     status: 'active',
     successRate: 89,
     timeSaved: '5 hours/week',
@@ -228,7 +236,7 @@ export default function AutomationDetailPage() {
 
   const runSimulation = () => {
     if (!automation) return;
-    
+
     setIsSimulating(true);
     setCurrentStep(0);
 
@@ -246,209 +254,248 @@ export default function AutomationDetailPage() {
   };
 
   const handlePurchase = () => {
-    // Store automation data and redirect to checkout
-    sessionStorage.setItem('selectedAutomation', JSON.stringify(automation));
-    router.push('/automation/smart-automations/checkout');
+    // Redirect to catalog page with automation id param and scroll to form
+    router.push(`/automation/smart-automations?automation=${automation.id}#lead-form`);
   };
 
   if (!automation) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-900 to-cyan-900 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-white">Loading automation details...</p>
+          <div className="w-16 h-16 rounded-2xl bg-emerald-500/20 flex items-center justify-center mx-auto mb-6 animate-pulse">
+            <BoltIcon className="w-8 h-8 text-emerald-400" />
+          </div>
+          <p className="text-white/60 font-medium">Loading automation details...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-900 to-cyan-900">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-emerald-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-teal-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-        <div className="absolute top-40 left-1/2 w-80 h-80 bg-cyan-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-      </div>
+    <div className="min-h-screen bg-slate-950 font-sans">
+      {/* Background Elements */}
+      <div className="absolute inset-0 chess-grid opacity-10" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-gradient-to-b from-emerald-500/10 via-transparent to-transparent opacity-50" />
 
       <div className="relative z-10">
         {/* Header */}
-        <div className="bg-white/10 backdrop-blur-md border-b border-white/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
+        <div className="relative pt-32 pb-8 border-b border-white/5">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div className="flex items-center gap-6">
                 <button
                   onClick={() => router.back()}
-                  className="flex items-center space-x-2 text-emerald-300 hover:text-white transition-colors duration-300"
+                  className="flex items-center gap-2 text-white/40 hover:text-emerald-400 transition-colors duration-300 group"
                 >
-                  <ArrowLeftIcon className="w-5 h-5" />
-                  <span>Back</span>
+                  <ArrowLeftIcon className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                  <span className="text-sm font-bold uppercase tracking-widest">Back</span>
                 </button>
-                <div className="flex items-center space-x-4">
-                  <div className={`w-12 h-12 ${automation.color} rounded-lg flex items-center justify-center`}>
-                    <automation.icon className="w-6 h-6 text-white" />
+
+                <div className="h-8 w-px bg-white/10" />
+
+                <div className="flex items-center gap-5">
+                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${automation.color} flex items-center justify-center shadow-lg`}>
+                    <automation.icon className="w-8 h-8 text-white" />
                   </div>
                   <div>
-                    <h1 className="text-3xl font-bold text-white">{automation.name}</h1>
-                    <p className="text-emerald-200">{automation.category} Automation</p>
+                    <div className="flex items-center gap-3 mb-1">
+                      <h1 className="text-3xl md:text-4xl font-bold text-white">{automation.name}</h1>
+                      <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
+                        automation.status === 'active'
+                          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                          : 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'
+                      }`}>
+                        {automation.status}
+                      </span>
+                    </div>
+                    <p className="text-emerald-400/60 text-sm font-bold uppercase tracking-[0.2em]">{automation.category} Automation</p>
                   </div>
                 </div>
               </div>
-              <div className="flex items-center space-x-4">
-                <button
-                  onClick={runSimulation}
-                  disabled={isSimulating}
-                  className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
-                    isSimulating 
-                      ? 'bg-orange-500 text-white cursor-not-allowed' 
-                      : 'bg-emerald-500 hover:bg-emerald-600 text-white'
-                  }`}
-                >
-                  {isSimulating ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                      <span>Running...</span>
-                    </>
-                  ) : (
-                    <>
-                      <PlayIcon className="w-5 h-5" />
-                      <span>Run Demo</span>
-                    </>
-                  )}
-                </button>
-              </div>
+
+              <button
+                onClick={runSimulation}
+                disabled={isSimulating}
+                className={`flex items-center gap-2 px-8 py-4 rounded-2xl font-bold text-sm transition-all duration-300 ${
+                  isSimulating
+                    ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30 cursor-not-allowed'
+                    : 'bg-emerald-600 text-white hover:bg-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.3)]'
+                }`}
+              >
+                {isSimulating ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-orange-400/30 border-t-orange-400 rounded-full animate-spin" />
+                    <span>Simulating...</span>
+                  </>
+                ) : (
+                  <>
+                    <PlayIcon className="w-5 h-5" />
+                    <span>Run Demo</span>
+                  </>
+                )}
+              </button>
             </div>
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            {/* Main Content */}
-            <div className="lg:col-span-2 space-y-8">
-              
+        {/* Main Content */}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+
+            {/* Left Column - Main Content */}
+            <div className="lg:col-span-3 space-y-8">
+
               {/* Problem & Solution */}
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 border border-white/20">
-                <h2 className="text-2xl font-bold text-white mb-6">Problem & Solution</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-red-500/20 border border-red-400/50 rounded-lg p-6">
-                    <div className="flex items-center space-x-3 mb-4">
-                      <ExclamationTriangleIcon className="w-6 h-6 text-red-400" />
-                      <h3 className="text-lg font-semibold text-white">Pain Point</h3>
-                    </div>
-                    <p className="text-red-200">{automation.painPoint}</p>
+              <div className="bg-slate-900/40 backdrop-blur-xl rounded-[2rem] p-8 border border-white/5 shadow-2xl">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+                    <LightBulbIcon className="w-5 h-5 text-emerald-400" />
                   </div>
-                  
-                  <div className="bg-green-500/20 border border-green-400/50 rounded-lg p-6">
-                    <div className="flex items-center space-x-3 mb-4">
-                      <LightBulbIcon className="w-6 h-6 text-green-400" />
-                      <h3 className="text-lg font-semibold text-white">Our Solution</h3>
+                  <h2 className="text-2xl font-bold text-white">Problem & Solution</h2>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="relative bg-red-500/5 border border-red-500/20 rounded-2xl p-6 overflow-hidden group hover:border-red-500/30 transition-colors">
+                    <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-red-500/5 blur-[60px] rounded-full" />
+                    <div className="relative">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center">
+                          <ExclamationTriangleIcon className="w-5 h-5 text-red-400" />
+                        </div>
+                        <h3 className="text-lg font-bold text-white">Pain Point</h3>
+                      </div>
+                      <p className="text-red-200/70 text-sm leading-relaxed">{automation.painPoint}</p>
                     </div>
-                    <p className="text-green-200">{automation.solution}</p>
+                  </div>
+
+                  <div className="relative bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-6 overflow-hidden group hover:border-emerald-500/30 transition-colors">
+                    <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-emerald-500/5 blur-[60px] rounded-full" />
+                    <div className="relative">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+                          <SparklesIcon className="w-5 h-5 text-emerald-400" />
+                        </div>
+                        <h3 className="text-lg font-bold text-white">Our Solution</h3>
+                      </div>
+                      <p className="text-emerald-200/70 text-sm leading-relaxed">{automation.solution}</p>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Interactive Demo */}
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 border border-white/20">
-                <h2 className="text-2xl font-bold text-white mb-6">How It Works</h2>
-                
+              {/* Interactive Demo Steps */}
+              <div className="bg-slate-900/40 backdrop-blur-xl rounded-[2rem] p-8 border border-white/5 shadow-2xl">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center">
+                    <BoltIcon className="w-5 h-5 text-cyan-400" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-white">How It Works</h2>
+                </div>
+
                 <div className="space-y-4">
-                  {automation.demoSteps.map((step: string, index: number) => (
-                    <div
-                      key={index}
-                      className={`flex items-center space-x-4 p-4 rounded-lg transition-all duration-500 ${
-                        isSimulating && index <= currentStep
-                          ? 'bg-emerald-500/30 border border-emerald-400 scale-105'
-                          : 'bg-white/10 border border-white/20'
-                      }`}
-                    >
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        isSimulating && index <= currentStep
-                          ? 'bg-emerald-500 text-white'
-                          : 'bg-white/20 text-white/70'
-                      }`}>
-                        {isSimulating && index < currentStep ? (
-                          <CheckCircleIcon className="w-5 h-5" />
-                        ) : (
-                          <span className="text-sm font-semibold">{index + 1}</span>
+                  {automation.demoSteps.map((step: string, index: number) => {
+                    const isCompleted = isSimulating && index < currentStep;
+                    const isCurrent = isSimulating && index === currentStep;
+                    const isActive = isSimulating && index <= currentStep;
+
+                    return (
+                      <div
+                        key={index}
+                        className={`flex items-center gap-4 p-5 rounded-2xl transition-all duration-500 ${
+                          isActive
+                            ? 'bg-emerald-500/10 border border-emerald-500/30 scale-[1.02]'
+                            : 'bg-white/5 border border-white/5 hover:border-white/10'
+                        }`}
+                      >
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-500 ${
+                          isCompleted
+                            ? 'bg-emerald-500 text-white'
+                            : isCurrent
+                            ? 'bg-emerald-500/20 text-emerald-400 ring-2 ring-emerald-500/50 ring-offset-2 ring-offset-slate-950'
+                            : 'bg-white/10 text-white/40'
+                        }`}>
+                          {isCompleted ? (
+                            <CheckCircleIcon className="w-5 h-5" />
+                          ) : (
+                            <span className="text-sm font-bold">{index + 1}</span>
+                          )}
+                        </div>
+                        <p className={`text-sm font-medium transition-colors duration-300 ${
+                          isActive ? 'text-white' : 'text-white/50'
+                        }`}>
+                          {step}
+                        </p>
+                        {isCurrent && (
+                          <div className="ml-auto w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                         )}
                       </div>
-                      <p className={`text-sm ${
-                        isSimulating && index <= currentStep
-                          ? 'text-white font-semibold'
-                          : 'text-emerald-200'
-                      }`}>
-                        {step}
-                      </p>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Features */}
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 border border-white/20">
-                <h2 className="text-2xl font-bold text-white mb-6">Key Features</h2>
-                
+              {/* Key Features */}
+              <div className="bg-slate-900/40 backdrop-blur-xl rounded-[2rem] p-8 border border-white/5 shadow-2xl">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                    <StarIcon className="w-5 h-5 text-purple-400" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-white">Key Features</h2>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {automation.features.map((feature: string, index: number) => (
-                    <div key={index} className="flex items-start space-x-3">
-                      <CheckCircleIcon className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-emerald-200 text-sm">{feature}</span>
+                    <div
+                      key={index}
+                      className="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:border-emerald-500/20 transition-colors group"
+                    >
+                      <div className="w-6 h-6 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-emerald-500/20 transition-colors">
+                        <CheckCircleIcon className="w-4 h-4 text-emerald-400" />
+                      </div>
+                      <span className="text-white/70 text-sm leading-relaxed">{feature}</span>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
 
-            {/* Sidebar */}
-            <div className="space-y-6">
-              
-              {/* Pricing */}
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
-                <h3 className="text-xl font-bold text-white mb-4">Pricing</h3>
-                
-                <div className="space-y-4">
-                  <div className="bg-green-500/20 border border-green-400/50 rounded-lg p-4">
-                    <div className="flex items-center space-x-3 mb-2">
-                      <CurrencyDollarIcon className="w-5 h-5 text-green-400" />
-                      <span className="text-green-300 font-medium">Setup Cost</span>
-                    </div>
-                    <div className="text-2xl font-bold text-white">${automation.setupPrice}</div>
-                    <div className="text-green-200 text-sm">One-time implementation</div>
-                  </div>
-                  
-                  <div className="bg-blue-500/20 border border-blue-400/50 rounded-lg p-4">
-                    <div className="flex items-center space-x-3 mb-2">
-                      <ClockIcon className="w-5 h-5 text-blue-400" />
-                      <span className="text-blue-300 font-medium">Monthly Cost</span>
-                    </div>
-                    <div className="text-2xl font-bold text-white">${automation.monthlyPrice}</div>
-                    <div className="text-blue-200 text-sm">Ongoing maintenance</div>
-                  </div>
-                </div>
-              </div>
+            {/* Right Column - Sidebar */}
+            <div className="lg:col-span-2 space-y-6 lg:sticky lg:top-32 lg:self-start">
 
               {/* Performance Metrics */}
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
-                <h3 className="text-xl font-bold text-white mb-4">Performance</h3>
-                
+              <div className="bg-slate-900/40 backdrop-blur-xl rounded-[2rem] p-6 border border-white/5 shadow-2xl">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-xl bg-teal-500/10 flex items-center justify-center">
+                    <ChartBarIcon className="w-5 h-5 text-teal-400" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">Performance</h3>
+                </div>
+
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-emerald-300">Success Rate</span>
-                    <span className="text-white font-semibold">{automation.successRate}%</span>
+                  <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5">
+                    <span className="text-white/50 text-sm font-medium">Success Rate</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-20 h-2 rounded-full bg-white/10 overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full"
+                          style={{ width: `${automation.successRate}%` }}
+                        />
+                      </div>
+                      <span className="text-white font-bold text-sm">{automation.successRate}%</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-emerald-300">Time Saved</span>
-                    <span className="text-white font-semibold">{automation.timeSaved}</span>
+
+                  <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5">
+                    <span className="text-white/50 text-sm font-medium">Time Saved</span>
+                    <span className="text-white font-bold text-sm">{automation.timeSaved}</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-emerald-300">Status</span>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      automation.status === 'active' 
-                        ? 'bg-green-500/20 text-green-300' 
-                        : 'bg-yellow-500/20 text-yellow-300'
+
+                  <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5">
+                    <span className="text-white/50 text-sm font-medium">Status</span>
+                    <span className={`px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest ${
+                      automation.status === 'active'
+                        ? 'bg-emerald-500/10 text-emerald-400'
+                        : 'bg-yellow-500/10 text-yellow-400'
                     }`}>
                       {automation.status}
                     </span>
@@ -456,33 +503,44 @@ export default function AutomationDetailPage() {
                 </div>
               </div>
 
-              {/* Purchase Button */}
-              <div className="bg-gradient-to-r from-emerald-500/20 to-blue-500/20 border border-emerald-400/50 rounded-xl p-6">
-                <h3 className="text-xl font-bold text-white mb-4">Ready to Deploy?</h3>
-                <p className="text-emerald-200 text-sm mb-6">
-                  Get this automation set up and running in your business within 2-3 weeks.
-                </p>
-                
-                <button
-                  onClick={handlePurchase}
-                  className="w-full flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
-                >
-                  <CreditCardIcon className="w-5 h-5" />
-                  <span>Purchase & Deploy</span>
-                </button>
-                
-                <div className="mt-4 space-y-2 text-sm text-emerald-300">
-                  <div className="flex items-center space-x-2">
-                    <ShieldCheckIcon className="w-4 h-4" />
-                    <span>Secure deployment</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <SparklesIcon className="w-4 h-4" />
-                    <span>Customized for your business</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RocketLaunchIcon className="w-4 h-4" />
-                    <span>Setup in 2-3 weeks</span>
+              {/* Purchase CTA */}
+              <div className="relative bg-gradient-to-br from-emerald-500/10 via-slate-900/40 to-cyan-500/10 backdrop-blur-xl rounded-[2rem] p-6 border border-emerald-500/20 shadow-2xl overflow-hidden">
+                <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-emerald-500/10 blur-[80px] rounded-full" />
+
+                <div className="relative">
+                  <h3 className="text-xl font-bold text-white mb-3">Ready to Deploy?</h3>
+                  <p className="text-white/50 text-sm mb-6 leading-relaxed">
+                    Get this automation set up and running in your business within 2-3 weeks.
+                  </p>
+
+                  <button
+                    onClick={handlePurchase}
+                    className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-bold text-sm transition-all duration-300 shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:shadow-[0_0_40px_rgba(16,185,129,0.4)] group"
+                  >
+                    <BellIcon className="w-5 h-5" />
+                    <span>Join the Waitlist</span>
+                    <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </button>
+
+                  <div className="mt-6 space-y-3">
+                    <div className="flex items-center gap-3 text-sm">
+                      <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center">
+                        <ShieldCheckIcon className="w-4 h-4 text-emerald-400" />
+                      </div>
+                      <span className="text-white/60">Secure deployment</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm">
+                      <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center">
+                        <SparklesIcon className="w-4 h-4 text-cyan-400" />
+                      </div>
+                      <span className="text-white/60">Customized for your business</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm">
+                      <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center">
+                        <RocketLaunchIcon className="w-4 h-4 text-purple-400" />
+                      </div>
+                      <span className="text-white/60">Setup in 2-3 weeks</span>
+                    </div>
                   </div>
                 </div>
               </div>

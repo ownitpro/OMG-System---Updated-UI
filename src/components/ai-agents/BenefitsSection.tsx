@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { 
-  ChartBarIcon, 
-  ClockIcon, 
+import {
+  ChartBarIcon,
+  ClockIcon,
   CurrencyDollarIcon,
   UserGroupIcon,
   CheckCircleIcon,
@@ -116,7 +116,7 @@ export default function BenefitsSection() {
         const start = 0;
         const increment = target / (duration / 16);
         let current = start;
-        
+
         const timer = setInterval(() => {
           current += increment;
           if (current >= target) {
@@ -135,46 +135,62 @@ export default function BenefitsSection() {
   }, [isVisible]);
 
   return (
-    <section className="py-16 md:py-24 bg-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-24 md:py-32 overflow-hidden bg-slate-950">
+      {/* Background decorations */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-[0.03]">
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="neural-nodes" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="1" fill="white" />
+                <path d="M2 2 L100 2 M2 2 L2 100" stroke="white" strokeWidth="0.5" fill="none" opacity="0.2" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#neural-nodes)" />
+          </svg>
+        </div>
+        <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-[100px] animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '2s' }} />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Why Business Teams Are Turning to AI Agents
+        <div className="mb-20">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Intelligent <span className="bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent italic">Outcomes</span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            The Results Are In:
+          <p className="text-xl text-white/50 max-w-2xl leading-relaxed">
+            The transition from traditional software to autonomous teammates is more than a trend—it's the new standard for operational excellence.
           </p>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
           {stats.map((stat, index) => {
-            const isHovered = false;
-            
             return (
               <div
                 key={stat.id}
-                className={`group relative bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                }`}
-                style={{ transitionDelay: `${index * 200}ms` }}
+                className={`group relative bg-slate-900/40 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 hover:border-purple-500/40 transition-all duration-500 transform hover:-translate-y-1 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                  }`}
+                style={{ transitionDelay: `${index * 150}ms` }}
               >
-                {/* Stat Content */}
-                <div className="text-center mb-4">
-                  <div className="text-3xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">
+                {/* Neural Pulse Node */}
+                <div className="absolute top-6 right-6 w-2 h-2 rounded-full bg-purple-500 group-hover:animate-ping" />
+
+                <div className="relative z-10">
+                  <div className="text-4xl font-bold text-white mb-4 tracking-tight group-hover:text-purple-400 transition-colors">
                     {stat.id === 1 && animatedStats.productivity > 0 ? `${animatedStats.productivity}%` : stat.metric}
                   </div>
-                  <p className="text-gray-300 text-sm leading-relaxed mb-3">
+                  <p className="text-white/60 text-sm leading-relaxed mb-6 font-medium">
                     {stat.label}
                   </p>
-                  <div className="text-xs text-gray-400">
-                    Source: {stat.source}
+                  <div className="flex items-center gap-2">
+                    <div className="h-px flex-1 bg-white/10" />
+                    <span className="text-[10px] uppercase tracking-widest text-white/30 font-bold group-hover:text-purple-500/50 transition-colors">
+                      {stat.source}
+                    </span>
                   </div>
                 </div>
-
-                {/* Hover Effect Overlay */}
-                <div className={`absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none`}></div>
               </div>
             );
           })}
@@ -189,79 +205,89 @@ export default function BenefitsSection() {
         </div>
 
         {/* Client Outcomes */}
-        <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10 shadow-lg mb-16">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold text-white mb-4">Client Outcomes / Social Proof</h3>
-            <div className="flex justify-center space-x-1 mb-4">
-              {[...Array(5)].map((_, i) => (
-                <StarIcon key={i} className="w-5 h-5 text-yellow-400" />
-              ))}
-            </div>
-          </div>
+        <div className="bg-slate-900/60 backdrop-blur-2xl rounded-[3rem] p-12 border border-white/10 shadow-2xl mb-24 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5" />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {outcomes.map((outcome, index) => {
-              const Icon = outcome.icon;
-              
-              return (
-                <div
-                  key={outcome.id}
-                  className={`text-center ${
-                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                  }`}
-                  style={{ transitionDelay: `${(index + 4) * 200}ms` }}
-                >
-                  <div className="flex items-center justify-center mb-4">
-                    <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${colorClasses[outcome.color as keyof typeof colorClasses]} flex items-center justify-center`}>
-                      <Icon className="w-6 h-6 text-white" />
+          <div className="relative z-10">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-16 border-b border-white/5 pb-12">
+              <div>
+                <h3 className="text-3xl font-bold text-white mb-2">Technical Authority</h3>
+                <p className="text-white/50">Performance metrics from across our active agent network.</p>
+              </div>
+              <div className="flex items-center gap-1 bg-white/5 px-6 py-3 rounded-2xl border border-white/10">
+                {[...Array(5)].map((_, i) => (
+                  <StarIcon key={i} className="w-5 h-5 text-purple-400 fill-purple-400" />
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+              {outcomes.map((outcome, index) => {
+                const Icon = outcome.icon;
+
+                return (
+                  <div
+                    key={outcome.id}
+                    className={`transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                      }`}
+                    style={{ transitionDelay: `${(index + 4) * 150}ms` }}
+                  >
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${colorClasses[outcome.color as keyof typeof colorClasses]} flex items-center justify-center p-2.5 shadow-lg shadow-purple-500/10`}>
+                        <Icon className="w-full h-full text-white" />
+                      </div>
+                      <div className="text-white/30 font-bold text-lg tracking-tighter">0{index + 1}</div>
                     </div>
+                    <div className="text-4xl font-bold text-white mb-2 tracking-tight transition-transform hover:scale-105 inline-block cursor-default">{outcome.metric}</div>
+                    <div className="text-white/40 text-sm font-semibold uppercase tracking-widest">{outcome.label}</div>
                   </div>
-                  <div className="text-2xl font-bold text-white mb-2">{outcome.metric}</div>
-                  <div className="text-gray-300 text-sm">{outcome.label}</div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
 
-        {/* Testimonials */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Testimonials - Signature Row */}
+        <div className="max-w-4xl mx-auto mb-24">
           {testimonials.map((testimonial, index) => (
             <div
               key={testimonial.id}
-              className={`bg-white/5 backdrop-blur-md rounded-xl p-6 border border-white/10 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}
-              style={{ transitionDelay: `${(index + 8) * 200}ms` }}
+              className={`relative bg-gradient-to-br from-white/5 to-transparent backdrop-blur-xl rounded-[2.5rem] p-10 md:p-16 border border-white/10 overflow-hidden group transition-all duration-700 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                }`}
             >
-              <div className="text-center">
-                <div className="text-4xl mb-4">💬</div>
-                <blockquote className="text-gray-300 mb-4 italic">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-[80px] -mr-32 -mt-32" />
+
+              <div className="relative z-10 text-center">
+                <blockquote className="text-2xl md:text-3xl text-white/90 mb-10 italic font-light leading-relaxed">
                   "{testimonial.quote}"
                 </blockquote>
-                <div className="text-white font-semibold">{testimonial.author}</div>
-                <div className="text-gray-400 text-sm">{testimonial.role}</div>
-                <div className="text-emerald-400 text-sm">{testimonial.company}</div>
+                <div className="flex flex-col items-center">
+                  <div className="text-xl font-bold text-white mb-1">{testimonial.author}</div>
+                  <div className="text-purple-400 font-medium tracking-wide uppercase text-xs mb-4">
+                    {testimonial.role} — {testimonial.company}
+                  </div>
+                  <div className="h-12 w-px bg-gradient-to-b from-purple-500 to-transparent" />
+                </div>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Trusted by Businesses */}
-        <div className="mt-16 text-center">
-          <h3 className="text-xl font-semibold text-white mb-6">Trusted by Businesses Across Industries</h3>
-          <div className="flex flex-wrap justify-center gap-4 text-white/60">
+        {/* Industry Footprint */}
+        <div className="pt-24 border-t border-white/5">
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            <span className="text-white/30 text-xs font-bold uppercase tracking-[0.3em] mr-4">Proven Operations In:</span>
             {[
               "Property Management",
-              "Real Estate", 
-              "Contractors",
-              "Healthcare",
-              "Accounting",
-              "Cleaning Services"
+              "Real Estate Sales",
+              "Field Contractors",
+              "Clinical Healthcare",
+              "Tax & Accounting",
+              "Growth Agencies"
             ].map((industry, index) => (
               <span
                 key={index}
-                className="px-4 py-2 bg-white/5 rounded-full text-sm border border-white/10"
+                className="px-6 py-3 bg-white/5 hover:bg-white/10 rounded-2xl text-xs font-bold text-white/50 hover:text-purple-400 border border-white/10 transition-all duration-300 cursor-default"
               >
                 {industry}
               </span>

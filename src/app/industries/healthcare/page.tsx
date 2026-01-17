@@ -10,6 +10,7 @@ import ImplementationTimeline from "@/components/healthcare/ImplementationTimeli
 import FAQSection from "@/components/healthcare/FAQSection";
 import FinalCTASection from "@/components/healthcare/FinalCTASection";
 import HealthcarePageTracker from "@/components/healthcare/HealthcarePageTracker";
+import { LeadFormWrapper } from "@/components/forms";
 
 export const metadata: Metadata = {
   title: "CareFlow Automation | Healthcare Workflow Automation | OMGsystems",
@@ -54,6 +55,9 @@ export default function HealthcarePage() {
       <FAQSection />
       <FinalCTASection />
       <HealthcarePageTracker />
+
+      {/* Lead Form Section */}
+      <LeadFormWrapper variant="industries" />
     </div>
   );
 }

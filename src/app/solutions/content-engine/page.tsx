@@ -6,8 +6,8 @@ import IndustryTemplatesSection from "@/components/content-engine/IndustryTempla
 import HowItWorksSection from "@/components/content-engine/HowItWorksSection";
 import ResultsSection from "@/components/content-engine/ResultsSection";
 import PricingSection from "@/components/content-engine/PricingSection";
-import FinalCTASection from "@/components/content-engine/FinalCTASection";
 import ContentEnginePageTracker from "@/components/content-engine/ContentEnginePageTracker";
+import { ContentEngineLeadForm } from "@/components/forms";
 
 export const metadata: Metadata = {
   title: "Content Engine – Effortless AI-Powered Content Creation | OMGsystems",
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
 
 export default function ContentEnginePage() {
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-slate-950 font-sans">
       <ContentEnginePageTracker />
       <HeroSection />
       <FeaturesSection />
@@ -68,7 +68,9 @@ export default function ContentEnginePage() {
       <HowItWorksSection />
       <ResultsSection />
       <PricingSection />
-      <FinalCTASection />
+
+      {/* Lead Form Section */}
+      <ContentEngineLeadForm />
     </div>
   );
 }

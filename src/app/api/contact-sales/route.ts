@@ -1,53 +1,106 @@
-import { NextRequest, NextResponse } from 'next/server';
+// app/api/contact-sales/route.ts
+import { NextResponse } from "next/server";
+import { z } from "zod";
+import { prisma } from "@/lib/db";
 
-export async function POST(request: NextRequest) {
+/**
+ * Contact Sales API endpoint
+ * Handles sales inquiries from /contact-sales page
+ * Stores lead with product interest information
+ */
+
+const Payload = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  phone: z.string().optional().default(""),
+  company: z.string().optional().default(""),
+  industry: z.string().min(1),
+  product: z.string().optional().default("Not Sure"),
+  message: z.string().optional().default(""),
+  source: z.string().optional().default("contact-sales"),
+  timestamp: z.string().optional(),
+});
+
+export async function POST(req: Request) {
   try {
-    const body = await request.json();
-    
-    // Validate required fields
-    const { name, email, industry } = body;
-    if (!name || !email || !industry) {
+    const json = await req.json();
+    const parsed = Payload.safeParse(json);
+
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: "Invalid payload", issues: parsed.error.flatten() },
         { status: 400 }
       );
     }
 
-    // Log the submission (in a real app, this would go to a database)
-    console.log('Contact Sales Submission:', {
-      timestamp: new Date().toISOString(),
-      name,
-      email,
-      phone: body.phone || 'Not provided',
-      company: body.company || 'Not provided',
-      industry,
-      product: body.product || 'Not specified',
-      message: body.message || 'No message',
-      source: body.source || 'contact-sales',
-      userAgent: request.headers.get('user-agent'),
-      ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
+    const data = parsed.data;
+
+    // 1) Create Lead
+    const lead = await prisma.lead.create({
+      data: {
+        orgName: data.company || null,
+        contact: data.name,
+        email: data.email,
+        source: data.source || "contact-sales",
+      },
     });
 
-    // In a real application, you would:
-    // 1. Save to database
-    // 2. Send email notification to sales team
-    // 3. Add to CRM system
-    // 4. Send confirmation email to customer
-    
-    // For now, we'll just return success
+    // 2) Create DemoRequest with product interest
+    const appSlug = getAppSlugFromProduct(data.product);
+
+    const demo = await prisma.demoRequest.create({
+      data: {
+        appSlug: appSlug,
+        leadId: lead.id,
+        industry: data.industry,
+        answers: {
+          product: data.product,
+          phone: data.phone,
+          message: data.message,
+          source: data.source,
+          timestamp: data.timestamp || new Date().toISOString(),
+        },
+      },
+    });
+
+    // 3) Log for debugging
+    console.log(`[/api/contact-sales] New lead: ${lead.contact} (${lead.email}) - ${data.industry} - ${data.product}`);
+
     return NextResponse.json(
-      { 
-        success: true, 
-        message: 'Contact sales request submitted successfully' 
+      {
+        ok: true,
+        leadId: lead.id,
+        demoRequestId: demo.id,
+        message: "Sales inquiry received successfully"
       },
       { status: 200 }
     );
-
-  } catch (error) {
-    console.error('Error processing contact sales request:', error);
+  } catch (err) {
+    console.error("[/api/contact-sales] error", err);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Failed to process your request. Please try again." },
       { status: 500 }
     );
   }
+}
+
+/**
+ * Map product selection to app slug for DemoRequest
+ */
+function getAppSlugFromProduct(product: string): string {
+  const productMapping: Record<string, string> = {
+    "AI Agents": "ai-agents",
+    "Smart Automations": "automations",
+    "Workflow Builder": "workflow-builder",
+    "CRM": "crm",
+    "Lead Flow Engine": "leadflow",
+    "SecureVault Docs": "securevault-docs",
+    "Content Engine": "content-engine",
+    "Industry IQ": "industry-iq",
+    "Custom Apps": "custom-apps",
+    "Analytics & Reporting": "analytics",
+    "Not Sure": "general",
+  };
+
+  return productMapping[product] || "general";
 }

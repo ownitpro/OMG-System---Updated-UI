@@ -24,30 +24,30 @@ export function Hero({
   return (
     <section className="relative overflow-hidden bg-white">
       {/* Subtle lime-to-white gradient */}
-      <div 
-        className="absolute inset-0 bg-gradient-to-br from-green-50/40 via-transparent to-transparent"
+      <div
+        className="absolute inset-0 bg-gradient-to-br from-blue-50/40 via-transparent to-transparent"
         aria-hidden="true"
       />
-      
+
       <Container className="relative py-20 lg:py-24">
         <div className="text-center max-w-4xl mx-auto">
           {eyebrow && (
-            <div className="text-sm font-semibold text-green-600 mb-4 uppercase tracking-wide">
+            <div className="text-sm font-semibold text-blue-600 mb-4 uppercase tracking-wide">
               {eyebrow}
             </div>
           )}
-          
+
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             {title}
           </h1>
-          
+
           <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
             {subtitle}
           </p>
-          
+
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
-            <Button asChild size="lg" className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg rounded-2xl">
+            <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg rounded-2xl text-center">
               <Link href={primaryCta.href}>
                 {primaryCta.label}
                 <ArrowRightIcon className="ml-2 h-5 w-5" />
@@ -61,12 +61,12 @@ export function Hero({
               </Button>
             )}
           </div>
-          
+
           {/* Trust Pills */}
           {badges && badges.length > 0 && (
             <div className="flex flex-wrap justify-center gap-3">
               {badges.map((badge, index) => (
-                <span 
+                <span
                   key={index}
                   className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-full text-sm font-medium text-gray-700"
                 >

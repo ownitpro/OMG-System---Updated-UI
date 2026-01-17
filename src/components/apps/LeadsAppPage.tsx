@@ -65,22 +65,22 @@ export function LeadsAppPage({ app }: Props) {
 
   const leadTypes = [
     { name: "Sarah M.", company: "TechCorp", type: "Enterprise", color: "blue" },
-    { name: "Mike R.", company: "StartupXYZ", type: "SMB", color: "green" },
-    { name: "Lisa K.", company: "Global Inc", type: "Enterprise", color: "purple" },
-    { name: "David L.", company: "LocalBiz", type: "Local", color: "orange" },
-    { name: "Emma S.", company: "ScaleUp", type: "Growth", color: "pink" },
-    { name: "John D.", company: "MegaCorp", type: "Enterprise", color: "indigo" }
+    { name: "Mike R.", company: "StartupXYZ", type: "SMB", color: "indigo" },
+    { name: "Lisa K.", company: "Global Inc", type: "Enterprise", color: "slate" },
+    { name: "David L.", company: "LocalBiz", type: "Local", color: "blue" },
+    { name: "Emma S.", company: "ScaleUp", type: "Growth", color: "indigo" },
+    { name: "John D.", company: "MegaCorp", type: "Enterprise", color: "slate" }
   ];
 
   return (
     <main className="min-h-screen bg-slate-950 overflow-x-hidden">
-      {/* Hero Section - Purple gradient theme */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-purple-900 via-violet-900 to-indigo-900">
+      {/* Hero Section - Dark Blue theme */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950">
         {/* Animated Background Elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-violet-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-          <div className="absolute top-40 left-1/2 w-80 h-80 bg-fuchsia-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
+          <div className="absolute top-40 left-1/2 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -89,26 +89,26 @@ export function LeadsAppPage({ app }: Props) {
             {/* Left Content - Main Message */}
             <div className="text-white animate-in slide-in-from-left duration-1000 text-center lg:text-left">
               <div className="flex items-center justify-center lg:justify-start mb-6">
-                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-violet-500 rounded-xl flex items-center justify-center mr-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center mr-4">
                   <BoltIcon className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-purple-400 font-semibold text-lg">{app.label}</span>
+                <span className="text-blue-400 font-semibold text-lg">{app.label}</span>
               </div>
 
-              <h1 className="font-bold leading-tight mb-6 bg-gradient-to-r from-white via-purple-100 to-violet-200 bg-clip-text text-transparent" style={{fontSize: "clamp(2.5rem, 5vw, 4.5rem)"}}>
+              <h1 className="font-bold leading-tight mb-6 bg-gradient-to-r from-white via-blue-100 to-indigo-200 bg-clip-text text-transparent" style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)" }}>
                 Capture & Convert
                 <br />
-                <span className="text-purple-400">Every Lead</span>
+                <span className="text-blue-400">Every Lead</span>
               </h1>
 
-              <p className="text-gray-200 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0" style={{fontSize: "clamp(1rem, 2vw, 1.25rem)"}}>
+              <p className="text-gray-200 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0" style={{ fontSize: "clamp(1rem, 2vw, 1.25rem)" }}>
                 {app.summary}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 mb-8 animate-in slide-in-from-left duration-1000 delay-300">
                 <Link
                   href="/try-live-demo?product=leadflow"
-                  className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-semibold rounded-xl text-white bg-gradient-to-r from-purple-500 to-violet-500 hover:from-purple-400 hover:to-violet-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all duration-300 transform hover:scale-105 shadow-xl"
+                  className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-semibold rounded-xl text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105 shadow-xl shadow-blue-900/40"
                 >
                   <span className="mr-2">Try Live Demo</span>
                   <ArrowRightIcon className="w-5 h-5" />
@@ -124,11 +124,11 @@ export function LeadsAppPage({ app }: Props) {
               {/* Trust Indicators */}
               <div className="flex flex-wrap items-center gap-6 text-sm text-gray-300 animate-in slide-in-from-left duration-1000 delay-500">
                 <div className="flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full mr-2 animate-pulse"></div>
+                  <div className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse"></div>
                   Real-time capture
                 </div>
                 <div className="flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
-                  <div className="w-2 h-2 bg-violet-400 rounded-full mr-2 animate-pulse" style={{animationDelay: "0.5s"}}></div>
+                  <div className="w-2 h-2 bg-indigo-400 rounded-full mr-2 animate-pulse" style={{ animationDelay: "0.5s" }}></div>
                   Smart qualification
                 </div>
               </div>
@@ -148,7 +148,7 @@ export function LeadsAppPage({ app }: Props) {
                   <div className="absolute inset-4 bg-white/5 rounded-xl border border-white/20 overflow-hidden">
 
                     {/* Header */}
-                    <div className="bg-gradient-to-r from-purple-500 to-violet-500 p-3 text-white text-sm font-semibold">
+                    <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-3 text-white text-sm font-semibold">
                       Live Lead Capture
                     </div>
 
@@ -158,9 +158,8 @@ export function LeadsAppPage({ app }: Props) {
                         {leadTypes.map((lead, index) => (
                           <div
                             key={index}
-                            className={`bg-white/10 rounded-lg p-3 border border-white/20 transition-all duration-500 ${
-                              currentLead === index && isAnimating ? 'scale-105 bg-white/20 shadow-lg' : 'opacity-70'
-                            }`}
+                            className={`bg-white/10 rounded-lg p-3 border border-white/20 transition-all duration-500 ${currentLead === index && isAnimating ? 'scale-105 bg-white/20 shadow-lg' : 'opacity-70'
+                              }`}
                             style={{
                               animation: currentLead === index && isAnimating ? 'leadSlideIn 0.5s ease-out' : 'none'
                             }}
@@ -198,9 +197,9 @@ export function LeadsAppPage({ app }: Props) {
                   </div>
 
                   {/* Flow Indicator */}
-                  <div className="absolute bottom-4 left-4 right-4 bg-gradient-to-r from-purple-500/20 to-violet-500/20 rounded-lg p-2 border border-purple-400/30">
+                  <div className="absolute bottom-4 left-4 right-4 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 rounded-lg p-2 border border-blue-400/30">
                     <div className="flex items-center text-white text-xs">
-                      <div className="w-2 h-2 bg-purple-400 rounded-full mr-2 animate-pulse"></div>
+                      <div className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse"></div>
                       <span className="font-semibold">ACTIVE</span>
                       <span className="ml-2">Lead Flow Processing</span>
                     </div>
@@ -208,9 +207,9 @@ export function LeadsAppPage({ app }: Props) {
 
                   {/* Floating Success Icons */}
                   <div className="absolute top-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-violet-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-                    <div className="w-2 h-2 bg-fuchsia-400 rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></div>
+                    <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-2 h-2 bg-sky-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
                   </div>
                 </div>
 
@@ -261,7 +260,7 @@ export function LeadsAppPage({ app }: Props) {
             />
 
             {/* Animated glowing dot */}
-            <circle r="6" fill="#A855F7" filter="url(#glow)">
+            <circle r="6" fill="#3B82F6" filter="url(#glow)">
               <animateMotion
                 dur="4s"
                 repeatCount="indefinite"
@@ -274,7 +273,7 @@ export function LeadsAppPage({ app }: Props) {
             </circle>
 
             {/* Second dot with offset for trail effect */}
-            <circle r="4" fill="#A855F7" opacity="0.6" filter="url(#glow)">
+            <circle r="4" fill="#3B82F6" opacity="0.6" filter="url(#glow)">
               <animateMotion
                 dur="4s"
                 repeatCount="indefinite"
@@ -288,7 +287,7 @@ export function LeadsAppPage({ app }: Props) {
             </circle>
 
             {/* Third dot for extended trail */}
-            <circle r="2" fill="#A855F7" opacity="0.3" filter="url(#glow)">
+            <circle r="2" fill="#3B82F6" opacity="0.3" filter="url(#glow)">
               <animateMotion
                 dur="4s"
                 repeatCount="indefinite"
@@ -306,11 +305,11 @@ export function LeadsAppPage({ app }: Props) {
 
       {/* Frustrations / Pain Points - Timeline Journey Style */}
       <section className="relative py-16 bg-slate-950">
-        {/* Emerald glow effects */}
+        {/* Blue glow effects */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute top-1/4 left-0 w-[150px] h-[300px] bg-gradient-to-r from-red-500/10 via-red-500/5 to-transparent rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-0 w-[150px] h-[300px] bg-gradient-to-l from-[#A855F7]/15 via-purple-500/8 to-transparent rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-gradient-to-br from-[#A855F7]/8 via-purple-500/5 to-transparent rounded-full blur-2xl"></div>
+          <div className="absolute bottom-1/4 right-0 w-[150px] h-[300px] bg-gradient-to-l from-blue-600/15 via-indigo-500/8 to-transparent rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-gradient-to-br from-blue-600/8 via-indigo-500/5 to-transparent rounded-full blur-2xl"></div>
         </div>
 
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -323,10 +322,10 @@ export function LeadsAppPage({ app }: Props) {
             </p>
           </div>
 
-          {/* Timeline Journey - Green (Solution) always LEFT, Red (Pain) always RIGHT */}
+          {/* Timeline Journey - Blue (Solution) always LEFT, Red (Pain) always RIGHT */}
           <div className="relative pb-8">
             {/* Central timeline line - hidden on mobile, visible on md+ */}
-            <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-[#A855F7]/60 via-[#A855F7]/40 to-[#A855F7] rounded-full" style={{ height: 'calc(100% - 80px)' }} />
+            <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-blue-600/60 via-blue-600/40 to-indigo-600 rounded-full" style={{ height: 'calc(100% - 80px)' }} />
 
             {/* Timeline nodes */}
             <div className="space-y-8 md:space-y-0">
@@ -345,16 +344,16 @@ export function LeadsAppPage({ app }: Props) {
                     key={index}
                     className="relative flex flex-col md:flex-row items-center md:mb-16"
                   >
-                    {/* Solution side (GREEN) - Always LEFT */}
+                    {/* Solution side (BLUE) - Always LEFT */}
                     <div className="w-full md:w-5/12 mb-4 md:mb-0 md:pr-8 md:text-right">
-                      <div className="bg-[#A855F7]/10 backdrop-blur-xl rounded-2xl p-6 border border-[#A855F7]/30 hover:border-[#A855F7]/50 transition-all duration-300 hover:-translate-y-1 shadow-[0_0_20px_rgba(168,85,247,0.1)]">
+                      <div className="bg-blue-600/10 backdrop-blur-xl rounded-2xl p-6 border border-blue-600/30 hover:border-blue-600/50 transition-all duration-300 hover:-translate-y-1 shadow-[0_0_20px_rgba(37,99,235,0.1)]">
                         <div className="flex items-center mb-3 md:justify-end">
-                          <div className="w-10 h-10 bg-[#A855F7]/20 rounded-xl flex items-center justify-center mr-3 md:mr-0 md:order-last md:ml-3">
-                            <svg className="w-5 h-5 text-[#A855F7]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <div className="w-10 h-10 bg-blue-600/20 rounded-xl flex items-center justify-center mr-3 md:mr-0 md:order-last md:ml-3">
+                            <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
                           </div>
-                          <p className="text-sm font-semibold text-[#A855F7]">LeadFlow Solution</p>
+                          <p className="text-sm font-semibold text-blue-400">LeadFlow Solution</p>
                         </div>
                         <p className="text-white/80 text-sm leading-relaxed">{solutions[index]}</p>
                       </div>
@@ -362,7 +361,7 @@ export function LeadsAppPage({ app }: Props) {
 
                     {/* Timeline node (center) */}
                     <div className="hidden md:flex w-2/12 justify-center relative z-10">
-                      <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#A855F7] to-red-500 p-0.5 shadow-[0_0_20px_rgba(168,85,247,0.3)]">
+                      <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-600 to-red-500 p-0.5 shadow-[0_0_20px_rgba(37,99,235,0.3)]">
                         <div className="w-full h-full rounded-full bg-slate-950 flex items-center justify-center">
                           <span className="text-white font-bold text-lg">{index + 1}</span>
                         </div>
@@ -372,8 +371,8 @@ export function LeadsAppPage({ app }: Props) {
                     {/* Mobile node */}
                     <div className="flex md:hidden w-full justify-center my-4">
                       <div className="flex items-center">
-                        <div className="h-0.5 w-8 bg-gradient-to-r from-[#A855F7] to-[#A855F7]/50"></div>
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#A855F7] to-red-500 p-0.5 mx-2">
+                        <div className="h-0.5 w-8 bg-gradient-to-r from-blue-600 to-blue-600/50"></div>
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-red-500 p-0.5 mx-2">
                           <div className="w-full h-full rounded-full bg-slate-950 flex items-center justify-center">
                             <span className="text-white font-bold text-sm">{index + 1}</span>
                           </div>
@@ -403,7 +402,7 @@ export function LeadsAppPage({ app }: Props) {
 
             {/* Journey end indicator - with proper spacing */}
             <div className="flex justify-center mt-16 pt-4">
-              <div className="bg-gradient-to-r from-[#A855F7] to-purple-500 rounded-full px-8 py-4 shadow-[0_0_30px_rgba(168,85,247,0.3)]">
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full px-8 py-4 shadow-[0_0_30px_rgba(37,99,235,0.3)]">
                 <span className="text-white font-semibold text-lg">Predictable Growth Achieved</span>
               </div>
             </div>
@@ -431,13 +430,13 @@ export function LeadsAppPage({ app }: Props) {
           <div className="hidden md:block">
             <div className="grid grid-cols-4 gap-4 auto-rows-[180px]">
               {/* Step 1 - Large card spanning 2 cols */}
-              <div className="col-span-2 row-span-1 bg-gradient-to-br from-[#A855F7]/20 to-[#A855F7]/5 backdrop-blur-xl rounded-3xl p-6 border border-[#A855F7]/30 hover:border-[#A855F7]/50 transition-all duration-300 hover:-translate-y-1 shadow-[0_0_30px_rgba(168,85,247,0.15)] group">
+              <div className="col-span-2 row-span-1 bg-gradient-to-br from-blue-600/20 to-blue-600/5 backdrop-blur-xl rounded-3xl p-6 border border-blue-600/30 hover:border-blue-600/50 transition-all duration-300 hover:-translate-y-1 shadow-[0_0_30px_rgba(37,99,235,0.15)] group">
                 <div className="flex items-start gap-4 h-full">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#A855F7] to-purple-600 flex items-center justify-center flex-shrink-0 shadow-[0_0_20px_rgba(168,85,247,0.4)] group-hover:scale-105 transition-transform">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center flex-shrink-0 shadow-[0_0_20px_rgba(37,99,235,0.4)] group-hover:scale-105 transition-transform">
                     <span className="text-white font-bold text-2xl">1</span>
                   </div>
                   <div className="flex-1">
-                    <p className="text-[10px] uppercase tracking-wider text-[#A855F7] mb-1">Start Here</p>
+                    <p className="text-[10px] uppercase tracking-wider text-blue-400 mb-1">Start Here</p>
                     <h3 className="text-xl font-bold text-white mb-2">{steps[0]?.title}</h3>
                     <p className="text-sm text-white/60 leading-relaxed">{steps[0]?.body}</p>
                   </div>
@@ -445,9 +444,9 @@ export function LeadsAppPage({ app }: Props) {
               </div>
 
               {/* Step 2 - Regular card */}
-              <div className="col-span-1 row-span-1 bg-white/5 backdrop-blur-xl rounded-3xl p-5 border border-white/10 hover:border-[#A855F7]/30 transition-all duration-300 hover:-translate-y-1 group">
+              <div className="col-span-1 row-span-1 bg-white/5 backdrop-blur-xl rounded-3xl p-5 border border-white/10 hover:border-blue-500/30 transition-all duration-300 hover:-translate-y-1 group">
                 <div className="flex flex-col h-full">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#A855F7] to-purple-600 flex items-center justify-center mb-3 shadow-[0_0_15px_rgba(168,85,247,0.3)] group-hover:scale-105 transition-transform">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center mb-3 shadow-[0_0_15px_rgba(37,99,235,0.3)] group-hover:scale-105 transition-transform">
                     <span className="text-white font-bold">2</span>
                   </div>
                   <h3 className="text-base font-bold text-white mb-1">{steps[1]?.title}</h3>
@@ -456,9 +455,9 @@ export function LeadsAppPage({ app }: Props) {
               </div>
 
               {/* Step 3 - Regular card */}
-              <div className="col-span-1 row-span-1 bg-white/5 backdrop-blur-xl rounded-3xl p-5 border border-white/10 hover:border-[#A855F7]/30 transition-all duration-300 hover:-translate-y-1 group">
+              <div className="col-span-1 row-span-1 bg-white/5 backdrop-blur-xl rounded-3xl p-5 border border-white/10 hover:border-blue-500/30 transition-all duration-300 hover:-translate-y-1 group">
                 <div className="flex flex-col h-full">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#A855F7] to-purple-600 flex items-center justify-center mb-3 shadow-[0_0_15px_rgba(168,85,247,0.3)] group-hover:scale-105 transition-transform">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center mb-3 shadow-[0_0_15px_rgba(37,99,235,0.3)] group-hover:scale-105 transition-transform">
                     <span className="text-white font-bold">3</span>
                   </div>
                   <h3 className="text-base font-bold text-white mb-1">{steps[2]?.title}</h3>
@@ -467,9 +466,9 @@ export function LeadsAppPage({ app }: Props) {
               </div>
 
               {/* Step 4 - Regular card */}
-              <div className="col-span-1 row-span-1 bg-white/5 backdrop-blur-xl rounded-3xl p-5 border border-white/10 hover:border-[#A855F7]/30 transition-all duration-300 hover:-translate-y-1 group">
+              <div className="col-span-1 row-span-1 bg-white/5 backdrop-blur-xl rounded-3xl p-5 border border-white/10 hover:border-blue-500/30 transition-all duration-300 hover:-translate-y-1 group">
                 <div className="flex flex-col h-full">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#A855F7] to-purple-600 flex items-center justify-center mb-3 shadow-[0_0_15px_rgba(168,85,247,0.3)] group-hover:scale-105 transition-transform">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center mb-3 shadow-[0_0_15px_rgba(37,99,235,0.3)] group-hover:scale-105 transition-transform">
                     <span className="text-white font-bold">4</span>
                   </div>
                   <h3 className="text-base font-bold text-white mb-1">{steps[3]?.title}</h3>
@@ -478,9 +477,9 @@ export function LeadsAppPage({ app }: Props) {
               </div>
 
               {/* Step 5 - Regular card */}
-              <div className="col-span-1 row-span-1 bg-white/5 backdrop-blur-xl rounded-3xl p-5 border border-white/10 hover:border-[#A855F7]/30 transition-all duration-300 hover:-translate-y-1 group">
+              <div className="col-span-1 row-span-1 bg-white/5 backdrop-blur-xl rounded-3xl p-5 border border-white/10 hover:border-blue-500/30 transition-all duration-300 hover:-translate-y-1 group">
                 <div className="flex flex-col h-full">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#A855F7] to-purple-600 flex items-center justify-center mb-3 shadow-[0_0_15px_rgba(168,85,247,0.3)] group-hover:scale-105 transition-transform">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center mb-3 shadow-[0_0_15px_rgba(37,99,235,0.3)] group-hover:scale-105 transition-transform">
                     <span className="text-white font-bold">5</span>
                   </div>
                   <h3 className="text-base font-bold text-white mb-1">{steps[4]?.title}</h3>
@@ -489,13 +488,13 @@ export function LeadsAppPage({ app }: Props) {
               </div>
 
               {/* Step 6 - Large card spanning 2 cols (finish emphasis) */}
-              <div className="col-span-2 row-span-1 bg-gradient-to-br from-[#A855F7]/20 to-[#A855F7]/5 backdrop-blur-xl rounded-3xl p-6 border border-[#A855F7]/30 hover:border-[#A855F7]/50 transition-all duration-300 hover:-translate-y-1 shadow-[0_0_30px_rgba(168,85,247,0.15)] group">
+              <div className="col-span-2 row-span-1 bg-gradient-to-br from-blue-600/20 to-blue-600/5 backdrop-blur-xl rounded-3xl p-6 border border-blue-600/30 hover:border-blue-600/50 transition-all duration-300 hover:-translate-y-1 shadow-[0_0_30px_rgba(37,99,235,0.15)] group">
                 <div className="flex items-start gap-4 h-full">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#A855F7] to-purple-600 flex items-center justify-center flex-shrink-0 shadow-[0_0_20px_rgba(168,85,247,0.4)] group-hover:scale-105 transition-transform">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center flex-shrink-0 shadow-[0_0_20px_rgba(37,99,235,0.4)] group-hover:scale-105 transition-transform">
                     <span className="text-white font-bold text-2xl">6</span>
                   </div>
                   <div className="flex-1">
-                    <p className="text-[10px] uppercase tracking-wider text-[#A855F7] mb-1">Final Step</p>
+                    <p className="text-[10px] uppercase tracking-wider text-blue-400 mb-1">Final Step</p>
                     <h3 className="text-xl font-bold text-white mb-2">{steps[5]?.title}</h3>
                     <p className="text-sm text-white/60 leading-relaxed">{steps[5]?.body}</p>
                   </div>
@@ -508,19 +507,19 @@ export function LeadsAppPage({ app }: Props) {
           <div className="md:hidden">
             <div className="relative pl-2">
               {/* Vertical line */}
-              <div className="absolute left-[20px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#A855F7] via-[#A855F7]/60 to-[#A855F7]/20 rounded-full" />
+              <div className="absolute left-[20px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-600 via-blue-600/60 to-blue-600/20 rounded-full" />
 
               {steps.map((step, index) => (
                 <div key={index} className="relative flex items-start mb-8 last:mb-0">
                   {/* Node */}
-                  <div className={`rounded-full bg-gradient-to-br from-[#A855F7] to-purple-600 flex items-center justify-center z-10 flex-shrink-0 shadow-[0_0_15px_rgba(168,85,247,0.3)] ${index === 0 || index === 5 ? 'w-12 h-12' : 'w-10 h-10'}`}>
+                  <div className={`rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center z-10 flex-shrink-0 shadow-[0_0_15px_rgba(37,99,235,0.3)] ${index === 0 || index === 5 ? 'w-12 h-12' : 'w-10 h-10'}`}>
                     <span className={`text-white font-bold ${index === 0 || index === 5 ? 'text-lg' : ''}`}>{index + 1}</span>
                   </div>
 
                   {/* Content */}
                   <div className="ml-4">
                     {(index === 0 || index === 5) && (
-                      <p className="text-[10px] uppercase tracking-wider text-[#A855F7] mb-1">
+                      <p className="text-[10px] uppercase tracking-wider text-blue-400 mb-1">
                         {index === 0 ? 'Start Here' : 'Final Step'}
                       </p>
                     )}
@@ -538,9 +537,9 @@ export function LeadsAppPage({ app }: Props) {
       <section className="relative py-16 bg-slate-950">
         {/* Emerald glow effects */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[120px] h-[200px] bg-gradient-to-r from-[#A855F7]/10 via-purple-500/6 to-transparent rounded-full blur-2xl"></div>
-          <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[120px] h-[200px] bg-gradient-to-l from-[#A855F7]/10 via-purple-500/6 to-transparent rounded-full blur-2xl"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[150px] bg-gradient-to-br from-[#A855F7]/8 via-purple-500/5 to-transparent rounded-full blur-2xl"></div>
+          <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[120px] h-[200px] bg-gradient-to-r from-blue-600/10 via-indigo-500/6 to-transparent rounded-full blur-2xl"></div>
+          <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[120px] h-[200px] bg-gradient-to-l from-blue-600/10 via-indigo-500/6 to-transparent rounded-full blur-2xl"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[150px] bg-gradient-to-br from-blue-600/8 via-indigo-500/5 to-transparent rounded-full blur-2xl"></div>
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -582,20 +581,20 @@ export function LeadsAppPage({ app }: Props) {
               {deliverables.map((deliverable, index) => (
                 <div
                   key={index}
-                  className="flex-none w-[300px] sm:w-[320px] bg-white/5 backdrop-blur-xl rounded-3xl p-6 border border-white/10 hover:border-[#A855F7]/40 transition-all duration-300 group"
+                  className="flex-none w-[300px] sm:w-[320px] bg-white/5 backdrop-blur-xl rounded-3xl p-6 border border-white/10 hover:border-blue-500/40 transition-all duration-300 group"
                 >
                   {/* Numbered badge + checkmark */}
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#A855F7] to-purple-600 flex items-center justify-center shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-[0_0_15px_rgba(37,99,235,0.3)]">
                       <span className="text-white font-bold">{index + 1}</span>
                     </div>
-                    <div className="w-10 h-10 bg-[#A855F7]/20 rounded-xl flex items-center justify-center">
-                      <CheckCircleIcon className="w-5 h-5 text-[#A855F7]" />
+                    <div className="w-10 h-10 bg-blue-600/20 rounded-xl flex items-center justify-center">
+                      <CheckCircleIcon className="w-5 h-5 text-blue-500" />
                     </div>
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-[#A855F7] transition-colors">
+                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
                     {deliverable.title}
                   </h3>
 
@@ -603,7 +602,7 @@ export function LeadsAppPage({ app }: Props) {
                   <ul className="space-y-2">
                     {deliverable.bullets.map((bullet, i) => (
                       <li key={i} className="flex items-start gap-2 text-white/70 text-sm">
-                        <span className="text-[#A855F7] mt-0.5">•</span>
+                        <span className="text-blue-500 mt-0.5">•</span>
                         <span>{bullet}</span>
                       </li>
                     ))}
@@ -634,9 +633,9 @@ export function LeadsAppPage({ app }: Props) {
       <section className="relative py-16 bg-slate-950">
         {/* Emerald glow effects */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[120px] h-[200px] bg-gradient-to-r from-[#A855F7]/10 via-purple-500/6 to-transparent rounded-full blur-2xl"></div>
-          <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[120px] h-[200px] bg-gradient-to-l from-[#A855F7]/10 via-purple-500/6 to-transparent rounded-full blur-2xl"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[150px] bg-gradient-to-br from-[#A855F7]/8 via-purple-500/5 to-transparent rounded-full blur-2xl"></div>
+          <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[120px] h-[200px] bg-gradient-to-r from-blue-600/10 via-indigo-500/6 to-transparent rounded-full blur-2xl"></div>
+          <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[120px] h-[200px] bg-gradient-to-l from-blue-600/10 via-indigo-500/6 to-transparent rounded-full blur-2xl"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[150px] bg-gradient-to-br from-blue-600/8 via-indigo-500/5 to-transparent rounded-full blur-2xl"></div>
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -651,9 +650,9 @@ export function LeadsAppPage({ app }: Props) {
             {proof.quotes.map((item, index) => (
               <div
                 key={index}
-                className="bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-[#A855F7]/20 hover:border-[#A855F7]/40 transition-colors shadow-[0_0_20px_rgba(168,85,247,0.08)]"
+                className="bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-blue-600/20 hover:border-blue-600/40 transition-colors shadow-[0_0_20px_rgba(37,99,235,0.08)]"
               >
-                <div className="flex text-[#A855F7] mb-4">
+                <div className="flex text-blue-500 mb-4">
                   {[...Array(5)].map((_, i) => (
                     <svg key={i} className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -663,7 +662,7 @@ export function LeadsAppPage({ app }: Props) {
                 <p className="text-white/90 italic text-lg leading-relaxed mb-6">
                   "{item.quote}"
                 </p>
-                <p className="text-[#A855F7] font-semibold">
+                <p className="text-blue-400 font-semibold">
                   — {item.cite}
                 </p>
               </div>
@@ -683,13 +682,13 @@ export function LeadsAppPage({ app }: Props) {
 
       {/* Final CTA - Slate 950 Theme */}
       <section className="relative py-20 bg-slate-950">
-        {/* Multiple smaller purple glows */}
+        {/* Multiple smaller blue glows */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[80px] h-[120px] bg-gradient-to-r from-[#A855F7]/15 via-purple-500/10 to-transparent rounded-full blur-xl"></div>
-          <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[80px] h-[120px] bg-gradient-to-l from-[#A855F7]/15 via-purple-500/10 to-transparent rounded-full blur-xl"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[120px] bg-gradient-to-br from-[#A855F7]/12 via-purple-500/8 to-transparent rounded-full blur-xl"></div>
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[150px] h-[80px] bg-gradient-to-b from-[#A855F7]/10 to-transparent rounded-full blur-xl"></div>
-          <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[150px] h-[80px] bg-gradient-to-t from-[#A855F7]/10 to-transparent rounded-full blur-xl"></div>
+          <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[80px] h-[120px] bg-gradient-to-r from-blue-600/15 via-indigo-500/10 to-transparent rounded-full blur-xl"></div>
+          <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[80px] h-[120px] bg-gradient-to-l from-blue-600/15 via-indigo-500/10 to-transparent rounded-full blur-xl"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[120px] bg-gradient-to-br from-blue-600/12 via-indigo-500/8 to-transparent rounded-full blur-xl"></div>
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[150px] h-[80px] bg-gradient-to-b from-blue-600/10 to-transparent rounded-full blur-xl"></div>
+          <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[150px] h-[80px] bg-gradient-to-t from-blue-600/10 to-transparent rounded-full blur-xl"></div>
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -702,14 +701,14 @@ export function LeadsAppPage({ app }: Props) {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/book-demo?app=leadflow"
-              className="inline-flex items-center justify-center px-8 py-4 bg-[#A855F7] text-white font-bold rounded-xl hover:bg-purple-600 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-[#A855F7]/25"
+              className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-600/25"
             >
               Get Your LeadFlow Strategy Call
               <ArrowRightIcon className="w-5 h-5 ml-2" />
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center px-8 py-4 bg-white/5 backdrop-blur-xl text-white border-2 border-[#A855F7] font-bold rounded-xl hover:bg-white/10 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-[#A855F7]/20"
+              className="inline-flex items-center justify-center px-8 py-4 bg-white/5 backdrop-blur-xl text-white border-2 border-blue-600 font-bold rounded-xl hover:bg-white/10 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-600/20"
             >
               Talk to Sales
               <ArrowRightIcon className="w-5 h-5 ml-2" />
@@ -720,9 +719,9 @@ export function LeadsAppPage({ app }: Props) {
 
       {/* FAQ Section - Accordion Style */}
       <section className="relative py-16 bg-slate-950">
-        {/* Emerald glow effects */}
+        {/* Blue glow effects */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-gradient-to-br from-[#A855F7]/8 via-purple-500/5 to-transparent rounded-full blur-2xl"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-gradient-to-br from-blue-600/8 via-indigo-500/5 to-transparent rounded-full blur-2xl"></div>
         </div>
 
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -738,7 +737,7 @@ export function LeadsAppPage({ app }: Props) {
             {faqs.map((faq, index) => (
               <div
                 key={index}
-                className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden transition-all duration-300 hover:border-[#A855F7]/30"
+                className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden transition-all duration-300 hover:border-blue-500/30"
               >
                 {/* Question Header - Clickable */}
                 <button
@@ -746,32 +745,28 @@ export function LeadsAppPage({ app }: Props) {
                   className="w-full flex items-center justify-between p-6 text-left"
                 >
                   <div className="flex items-center gap-4">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-300 ${
-                      openFaqIndex === index ? 'bg-[#A855F7]' : 'bg-white/10'
-                    }`}>
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-300 ${openFaqIndex === index ? 'bg-blue-600' : 'bg-white/10'
+                      }`}>
                       <span className="text-white font-bold text-sm">?</span>
                     </div>
-                    <h3 className={`text-lg font-semibold transition-colors duration-300 ${
-                      openFaqIndex === index ? 'text-[#A855F7]' : 'text-white'
-                    }`}>
+                    <h3 className={`text-lg font-semibold transition-colors duration-300 ${openFaqIndex === index ? 'text-blue-400' : 'text-white'
+                      }`}>
                       {faq.q}
                     </h3>
                   </div>
                   <ChevronDownIcon
-                    className={`w-5 h-5 text-white/60 transition-transform duration-300 flex-shrink-0 ${
-                      openFaqIndex === index ? 'rotate-180 text-[#A855F7]' : ''
-                    }`}
+                    className={`w-5 h-5 text-white/60 transition-transform duration-300 flex-shrink-0 ${openFaqIndex === index ? 'rotate-180 text-blue-400' : ''
+                      }`}
                   />
                 </button>
 
                 {/* Answer - Collapsible */}
                 <div
-                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                    openFaqIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                  }`}
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${openFaqIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                    }`}
                 >
                   <div className="px-6 pb-6 pt-0">
-                    <div className="pl-12 border-l-2 border-[#A855F7]/30">
+                    <div className="pl-12 border-l-2 border-blue-600/30">
                       <p className="text-white/70 leading-relaxed">{faq.a}</p>
                     </div>
                   </div>

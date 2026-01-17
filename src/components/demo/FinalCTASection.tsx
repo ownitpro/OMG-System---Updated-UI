@@ -23,7 +23,7 @@ export default function FinalCTASection() {
           Join thousands of businesses already using OMGsystems to streamline their operations and grow faster.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <Button 
+          <Button
             onClick={handleStartDemo}
             className="bg-white hover:bg-gray-100 text-emerald-600 px-10 py-4 text-xl rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
           >
@@ -34,12 +34,12 @@ export default function FinalCTASection() {
             variant="outline"
             className="border-white text-white hover:bg-white hover:text-emerald-600 px-10 py-4 text-xl rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1"
           >
-            <Link href="/contact-sales">
+            <Link href="/industries#lead-form">
               Contact Sales for Enterprise
             </Link>
           </Button>
         </div>
-        
+
         <div className="mt-12 text-sm text-emerald-100">
           <p>Trusted by 10,000+ businesses worldwide</p>
         </div>

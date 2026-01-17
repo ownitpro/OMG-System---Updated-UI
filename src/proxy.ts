@@ -7,7 +7,7 @@ export default auth((req) => {
   const path = req.nextUrl.pathname;
 
   // Redirect unauthenticated users from protected routes
-  if (!token && (path.startsWith("/dashboard") || path.startsWith("/admin"))) {
+  if (!token && (path.startsWith("/dashboard") || path.startsWith("/admin") || path.startsWith("/portal"))) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
@@ -31,5 +31,5 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/admin/:path*"],
+  matcher: ["/dashboard/:path*", "/admin/:path*", "/portal/:path*", "/login"],
 };

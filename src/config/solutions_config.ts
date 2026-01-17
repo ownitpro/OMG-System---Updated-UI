@@ -37,6 +37,7 @@ export type SolutionConfig = {
   bullets?: string[];
   ctaLabel?: string;
   ctaHref?: string;
+  accentColor?: string; // Hex color for card accent (border, bullet, button)
 };
 
 export const solutionsConfig: SolutionConfig[] = [
@@ -168,6 +169,7 @@ export const solutionsConfig: SolutionConfig[] = [
     ],
     ctaLabel: "Explore Custom Solutions",
     ctaHref: "/solutions/custom-solutions",
+    accentColor: "#F97316", // Orange accent for Custom Solutions
     apps: [
       // 🔹 Primary apps (we design the best mix for you)
       { appId: "svd", role: "primary" },   // SecureVault Docs – doc spine

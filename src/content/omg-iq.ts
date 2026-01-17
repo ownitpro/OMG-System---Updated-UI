@@ -19,7 +19,7 @@ export const hero = {
   subtitle: "OMGIQ finds what matters in your industry, turns it into clear, short digests, and delivers it to you and your team either through Email or SMS.",
   primaryCta: {
     label: "Get Started",
-    href: "/apps/demo?app=omg-iq",
+    href: "/signup",
   },
   secondaryCta: {
     label: "See a Sample Digest",
@@ -246,7 +246,7 @@ export const finalCta = {
   subtitle: "Start your free 7-day trial and see how OMGIQ keeps you ahead without the time sink.",
   primaryCta: {
     label: "Start now (free 7-day trial)",
-    href: "/apps/demo?app=omg-iq",
+    href: "/apps#waiting-list-form",
   },
   secondaryCta: {
     label: "See a sample digest",

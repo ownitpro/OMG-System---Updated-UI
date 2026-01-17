@@ -1,7 +1,7 @@
 "use client";
 
-import { 
-  LightbulbIcon,
+import {
+  LightBulbIcon,
   VideoCameraIcon,
   ChartBarIcon,
   ArrowPathIcon,
@@ -15,7 +15,7 @@ const processSteps = [
     title: "Strategy & Audience Discovery",
     description: "We dig deep into your ideal client, industry players, and messaging.",
     benefit: "We target the right people — not just anyone.",
-    icon: LightbulbIcon,
+    icon: LightBulbIcon,
     color: "text-blue-600"
   },
   {
@@ -79,9 +79,8 @@ export default function ProcessSection() {
           {processSteps.map((step, index) => (
             <div
               key={step.id}
-              className={`flex flex-col lg:flex-row items-center gap-8 ${
-                index % 2 === 1 ? 'lg:flex-row-reverse' : ''
-              }`}
+              className={`flex flex-col lg:flex-row items-center gap-8 ${index % 2 === 1 ? 'lg:flex-row-reverse' : ''
+                }`}
             >
               {/* Content */}
               <div className="flex-1">
@@ -95,13 +94,13 @@ export default function ProcessSection() {
                       <h3 className="text-xl font-bold text-gray-900">{step.title}</h3>
                     </div>
                   </div>
-                  
+
                   <div className="space-y-4">
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-2">What Happens:</h4>
                       <p className="text-gray-600">{step.description}</p>
                     </div>
-                    
+
                     <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-lg">
                       <h4 className="font-semibold text-emerald-800 mb-2">Why It Matters:</h4>
                       <p className="text-emerald-700">{step.benefit}</p>
@@ -132,8 +131,8 @@ export default function ProcessSection() {
               Let's build your predictable lead machine together. Book your strategy call and see how we can transform your marketing.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <a 
-                href="/contact-sales" 
+              <a
+                href="/industries#lead-form"
                 className="bg-white text-emerald-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-colors duration-200"
               >
                 Book Your Strategy Call

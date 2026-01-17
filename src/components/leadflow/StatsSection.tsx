@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { 
-  ExclamationTriangleIcon, 
-  ChartBarIcon, 
+import {
+  ExclamationTriangleIcon,
+  ChartBarIcon,
   CurrencyDollarIcon,
   ClockIcon,
   BuildingOfficeIcon
@@ -72,19 +72,18 @@ export default function StatsSection() {
           {stats.map((stat, index) => (
             <div
               key={stat.id}
-              className={`bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-              }`}
+              className={`bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+                }`}
               style={{ transitionDelay: `${index * 150}ms` }}
             >
               <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-r from-emerald-100 to-blue-100 rounded-2xl mb-6">
                 <stat.icon className={`w-8 h-8 ${stat.color}`} />
               </div>
-              
+
               <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
                 {stat.value}
               </div>
-              
+
               <p className="text-gray-600 leading-relaxed">
                 {stat.label}
               </p>
@@ -102,8 +101,8 @@ export default function StatsSection() {
               Stop guessing with your marketing. Get a system that works consistently, every single day.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <a 
-                href="/contact-sales" 
+              <a
+                href="/industries#lead-form"
                 className="bg-white text-emerald-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors duration-200"
               >
                 Get Your Strategy Call

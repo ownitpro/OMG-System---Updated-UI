@@ -16,9 +16,9 @@ import {
   BriefcaseIcon,
   MapIcon,
   ClipboardDocumentCheckIcon,
-  VideoCameraIcon,
 } from "@heroicons/react/24/outline";
 import { SolutionRelationsStrip } from "@/components/solutions/SolutionRelationsStrip";
+import { LeadFormWrapper } from "@/components/forms";
 
 export const metadata: Metadata = {
   title: "Custom AI & Systems Strategy Session – Turn Chaos into a Clear Game Plan | OMGsystems",
@@ -69,11 +69,6 @@ const sessionBenefits = [
     title: "Custom Action Plan",
     description: "Leave with a prioritized list of automations to implement immediately.",
     icon: RocketLaunchIcon,
-  },
-  {
-    title: "Recorded Session + Notes",
-    description: "Get a full recording and detailed notes so you can reference everything and share with your team.",
-    icon: VideoCameraIcon,
   },
 ];
 
@@ -153,33 +148,27 @@ const benefits = [
 const faqs = [
   {
     question: "What happens during the 2-hour session?",
-    answer:
-      "We start with a comprehensive audit of your business systems, identify bottlenecks, and then create a custom AI + automation roadmap tailored to your specific needs. You'll leave with a clear action plan you can start implementing immediately.",
+    answer: "We start with a comprehensive audit of your business systems, identify bottlenecks, and then create a custom AI + automation roadmap tailored to your specific needs. You'll leave with a clear action plan you can start implementing immediately.",
   },
   {
     question: "Do I need to prepare anything beforehand?",
-    answer:
-      "Just come ready to discuss your current processes, tools, and pain points. We'll handle the rest. A brief questionnaire will be sent before the session to help us prepare.",
+    answer: "Just come ready to discuss your current processes, tools, and pain points. We'll handle the rest. A brief questionnaire will be sent before the session to help us prepare.",
   },
   {
     question: "What if I'm not tech-savvy?",
-    answer:
-      "Perfect! This session is designed for business owners, not tech experts. We explain everything in plain language and focus on practical solutions you can actually use.",
+    answer: "Perfect! This session is designed for business owners, not tech experts. We explain everything in plain language and focus on practical solutions you can actually use.",
   },
   {
     question: "Can I bring my team?",
-    answer:
-      "Absolutely! We recommend having key team members present so everyone understands the roadmap and can contribute insights about current workflows.",
+    answer: "Absolutely! We recommend having key team members present so everyone understands the roadmap and can contribute insights about current workflows.",
   },
   {
     question: "What happens after the session?",
-    answer:
-      "You'll receive a detailed roadmap document with all recommendations, tool suggestions, and next steps. You can implement it yourself, or we can help you execute it through our Automations or Custom Solutions services.",
+    answer: "You'll receive a detailed roadmap document with all recommendations, tool suggestions, and next steps. You can implement it yourself, or we can help you execute it through our Automations or Custom Solutions services.",
   },
   {
     question: "Is the $999 price really limited time?",
-    answer:
-      "Yes. This is a special introductory price. The regular price is $3,000. Book now to lock in the $999 rate.",
+    answer: "Yes. This is a special introductory price. The regular price is $3,000. Book now to lock in the $999 rate.",
   },
 ];
 
@@ -188,23 +177,15 @@ export default function StrategySessionPage() {
     <main className="min-h-screen bg-slate-950">
       {/* 1. HERO SECTION - Chess Board Background */}
       <section className="relative overflow-hidden bg-slate-950 pt-40 sm:pt-52 pb-20 sm:pb-32">
-        {/* Chess Board Grid Pattern */}
         <div className="absolute inset-0 chess-grid"></div>
-
-        {/* Gradient fade at bottom to blend chess grid into next section */}
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent pointer-events-none"></div>
 
-        {/* Animated Diagonal Dots (Chess Piece Movements) */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="diagonal-dot absolute w-2 h-2 bg-purple-500/60 rounded-full" style={{ top: '10%', left: '5%' }}></div>
           <div className="diagonal-dot-2 absolute w-3 h-3 bg-purple-400/40 rounded-full" style={{ top: '30%', left: '15%' }}></div>
           <div className="diagonal-dot-3 absolute w-2 h-2 bg-violet-500/50 rounded-full" style={{ top: '50%', left: '25%' }}></div>
-          <div className="diagonal-dot absolute w-2 h-2 bg-purple-500/60 rounded-full" style={{ top: '20%', left: '60%', animationDelay: '1s' }}></div>
-          <div className="diagonal-dot-2 absolute w-3 h-3 bg-purple-400/40 rounded-full" style={{ top: '40%', left: '70%', animationDelay: '3s' }}></div>
-          <div className="diagonal-dot-3 absolute w-2 h-2 bg-violet-500/50 rounded-full" style={{ top: '60%', left: '80%', animationDelay: '5s' }}></div>
         </div>
 
-        {/* Glow Orbs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="glow-float absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
           <div className="glow-float-delayed absolute bottom-1/4 right-1/4 w-80 h-80 bg-violet-500/15 rounded-full blur-3xl"></div>
@@ -212,12 +193,11 @@ export default function StrategySessionPage() {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left: Copy + CTAs */}
             <div className="space-y-6">
               <p className="inline-flex items-center rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-1.5 text-sm font-medium text-purple-300">
-                Solution · Strategy Session
+                <RocketLaunchIcon className="w-4 h-4 mr-2" />
+                AI-POWERED STRATEGY • SYSTEMS • AUTOMATION
               </p>
-
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
                 <span className="bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent">
                   Turn Chaos into a Clear
@@ -225,12 +205,9 @@ export default function StrategySessionPage() {
                 <br />
                 <span className="text-white">AI Game Plan</span>
               </h1>
-
               <p className="text-xl text-white/80 leading-relaxed">
                 Get a personalized roadmap to automate your busywork, fix bottlenecks, and build systems that scale.
               </p>
-
-              {/* Benefit Pills */}
               <div className="flex flex-wrap gap-3">
                 <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-purple-500/20 text-sm text-white/80">
                   <CheckCircleIcon className="w-4 h-4 text-purple-400" />
@@ -240,24 +217,16 @@ export default function StrategySessionPage() {
                   <CheckCircleIcon className="w-4 h-4 text-purple-400" />
                   Custom AI roadmap
                 </span>
-                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-purple-500/20 text-sm text-white/80">
-                  <CheckCircleIcon className="w-4 h-4 text-purple-400" />
-                  Clear action plan
-                </span>
               </div>
-
-              {/* Price Card */}
               <div className="backdrop-blur-xl bg-white/5 rounded-xl p-5 border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.1)]">
                 <p className="text-white text-lg">
                   Regularly <span className="line-through text-white/40">$3,000</span> — now{" "}
                   <span className="bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent font-bold text-3xl">$999</span>
-                  <span className="text-white/60 text-sm ml-2">for a limited time</span>
                 </p>
               </div>
-
               <div className="flex flex-col sm:flex-row gap-4 pt-2">
                 <Link
-                  href="/contact?solution=strategy-session"
+                  href="#lead-form"
                   className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-purple-500 to-violet-500 text-white font-bold rounded-xl hover:from-purple-600 hover:to-violet-600 transition-all duration-300 transform hover:scale-105 shadow-[0_0_30px_rgba(168,85,247,0.3)]"
                 >
                   Book My Strategy Session
@@ -272,11 +241,9 @@ export default function StrategySessionPage() {
               </div>
             </div>
 
-            {/* Right: Visual - Session Preview Card */}
             <div className="relative">
               <div className="backdrop-blur-xl bg-white/5 rounded-2xl border border-purple-500/20 p-8 shadow-[0_0_40px_rgba(168,85,247,0.15)]">
                 <div className="space-y-6">
-                  {/* Dashboard Header */}
                   <div className="flex items-center justify-between border-b border-white/10 pb-4">
                     <div>
                       <h3 className="text-xl font-bold text-white">Strategy Session</h3>
@@ -286,8 +253,6 @@ export default function StrategySessionPage() {
                       <LightBulbIcon className="w-6 h-6 text-white" />
                     </div>
                   </div>
-
-                  {/* Key Metrics Cards */}
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-slate-900/60 backdrop-blur-sm rounded-xl p-4 border border-purple-500/10">
                       <div className="text-2xl font-bold text-white">2hr</div>
@@ -298,34 +263,6 @@ export default function StrategySessionPage() {
                       <div className="text-xs text-white/60">Custom</div>
                     </div>
                   </div>
-
-                  {/* Process Steps */}
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-3 bg-slate-900/60 backdrop-blur-sm rounded-xl p-3 border border-purple-500/10">
-                      <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-violet-500 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-white font-bold text-sm">1</span>
-                      </div>
-                      <span className="text-sm text-white/80">Business Audit</span>
-                    </div>
-                    <div className="flex items-center space-x-3 bg-slate-900/60 backdrop-blur-sm rounded-xl p-3 border border-purple-500/10">
-                      <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-violet-500 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-white font-bold text-sm">2</span>
-                      </div>
-                      <span className="text-sm text-white/80">Bottleneck Analysis</span>
-                    </div>
-                    <div className="flex items-center space-x-3 bg-slate-900/60 backdrop-blur-sm rounded-xl p-3 border border-purple-500/10">
-                      <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-violet-500 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-white font-bold text-sm">3</span>
-                      </div>
-                      <span className="text-sm text-white/80">AI Roadmap</span>
-                    </div>
-                  </div>
-
-                  {/* CTA Badge */}
-                  <div className="bg-gradient-to-r from-purple-500 to-violet-500 text-white rounded-xl p-4 text-center">
-                    <div className="font-semibold">Limited Time: $999</div>
-                    <div className="text-xs opacity-80">Regularly $3,000</div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -333,7 +270,7 @@ export default function StrategySessionPage() {
         </div>
       </section>
 
-      {/* 2. WHAT'S INCLUDED SECTION - Bento Grid */}
+      {/* 2. WHAT'S INCLUDED SECTION */}
       <section id="whats-included" className="py-20 sm:py-28 bg-slate-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -347,10 +284,8 @@ export default function StrategySessionPage() {
               In just 2 hours, you'll get a complete business audit and a custom AI + automation roadmap.
             </p>
           </div>
-
-          {/* Bento Grid */}
           <div className="grid md:grid-cols-2 gap-6 mb-8">
-            {sessionBenefits.slice(0, 4).map((benefit, index) => (
+            {sessionBenefits.map((benefit, index) => (
               <div
                 key={index}
                 className="group backdrop-blur-xl bg-white/5 rounded-2xl border border-purple-500/20 p-8 hover:border-purple-500/40 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] transition-all duration-500"
@@ -371,27 +306,10 @@ export default function StrategySessionPage() {
               </div>
             ))}
           </div>
-
-          {/* Full-width 5th item */}
-          <div className="group backdrop-blur-xl bg-white/5 rounded-2xl border border-purple-500/20 p-8 hover:border-purple-500/40 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] transition-all duration-500">
-            <div className="flex items-start gap-5">
-              <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500/20 to-violet-500/20 border border-purple-500/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent">
-                  5
-                </span>
-              </div>
-              <div>
-                <h3 className="font-bold text-white text-xl mb-2 group-hover:text-purple-300 transition-colors">
-                  {sessionBenefits[4].title}
-                </h3>
-                <p className="text-white/60">{sessionBenefits[4].description}</p>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
-      {/* 3. WHO THIS IS FOR SECTION - Horizontal Scroll Carousel */}
+      {/* 3. WHO THIS IS FOR SECTION */}
       <section className="py-20 sm:py-28 bg-slate-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -401,54 +319,29 @@ export default function StrategySessionPage() {
                 For
               </span>
             </h2>
-            <p className="text-lg text-white/60 max-w-3xl mx-auto">
-              If you're ready to stop guessing and start executing, this session is for you.
-            </p>
           </div>
-
-          {/* Drag to explore hint */}
-          <p className="text-center text-white/40 text-sm mb-6 md:hidden">← Drag to explore →</p>
-
-          {/* Horizontal Scroll Carousel */}
-          <div className="relative">
-            {/* Gradient fade edges */}
-            <div className="hidden md:block absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none"></div>
-            <div className="hidden md:block absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none"></div>
-
-            <div className="flex gap-6 overflow-x-auto hide-scrollbar pb-4 md:grid md:grid-cols-4 md:overflow-visible">
-              {whoThisIsFor.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex-shrink-0 w-72 md:w-auto group backdrop-blur-xl bg-white/5 rounded-2xl border border-purple-500/20 p-6 hover:border-purple-500/40 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)] transition-all duration-500"
-                >
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500/20 to-violet-500/20 border border-purple-500/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <item.icon className="w-7 h-7 text-purple-400" />
-                  </div>
-                  <h3 className="font-bold text-white text-lg mb-2 group-hover:text-purple-300 transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="text-white/60 text-sm">{item.description}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {whoThisIsFor.map((item, index) => (
+              <div
+                key={index}
+                className="group backdrop-blur-xl bg-white/5 rounded-2xl border border-purple-500/20 p-6 hover:border-purple-500/40 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)] transition-all duration-500"
+              >
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500/20 to-violet-500/20 border border-purple-500/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <item.icon className="w-7 h-7 text-purple-400" />
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Bottom Quote */}
-          <div className="mt-12 text-center">
-            <div className="inline-block backdrop-blur-xl bg-white/5 rounded-2xl border border-purple-500/20 px-8 py-4">
-              <p className="text-lg text-white/80 italic">
-                "If you've ever thought <span className="text-purple-400 font-semibold">there has to be a better way</span>—this session is for you."
-              </p>
-            </div>
+                <h3 className="font-bold text-white text-lg mb-2 group-hover:text-purple-300 transition-colors">
+                  {item.title}
+                </h3>
+                <p className="text-white/60 text-sm">{item.description}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 4. SESSION OUTLINE - Vertical Timeline */}
+      {/* 4. SESSION OUTLINE */}
       <section className="py-20 sm:py-28 bg-slate-950 relative overflow-hidden">
-        {/* Subtle chess grid background */}
         <div className="absolute inset-0 chess-grid opacity-30"></div>
-
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
@@ -457,54 +350,29 @@ export default function StrategySessionPage() {
                 Game Plan
               </span>
             </h2>
-            <p className="text-lg text-white/60 max-w-2xl mx-auto">
-              Here's exactly what happens during your strategy session.
-            </p>
           </div>
-
-          {/* Vertical Timeline */}
-          <div className="relative">
-            {/* Connecting Line */}
-            <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-500/50 via-purple-500/30 to-purple-500/50 md:-translate-x-0.5">
-              {/* Animated particles on line - flowing from top to bottom */}
-              <div className="timeline-particle w-3 h-3 bg-purple-400 rounded-full -left-[5px] shadow-[0_0_10px_rgba(168,85,247,0.8)]"></div>
-              <div className="timeline-particle w-2.5 h-2.5 bg-purple-500 rounded-full -left-[4px] shadow-[0_0_8px_rgba(168,85,247,0.6)]" style={{ animationDelay: '3.3s' }}></div>
-              <div className="timeline-particle w-2 h-2 bg-violet-400 rounded-full -left-[3px] shadow-[0_0_6px_rgba(139,92,246,0.6)]" style={{ animationDelay: '6.6s' }}></div>
-            </div>
-
-            <div className="space-y-12">
-              {sessionOutline.map((item, index) => (
-                <div
-                  key={index}
-                  className={`relative flex gap-6 md:gap-12 ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}
-                >
-                  {/* Node */}
-                  <div className="absolute left-6 md:left-1/2 md:-translate-x-1/2 w-12 h-12 bg-gradient-to-br from-purple-500 to-violet-500 rounded-full flex items-center justify-center z-10 strategic-pulse">
-                    <span className="text-white font-bold text-lg">{item.step}</span>
-                  </div>
-
-                  {/* Content Card */}
-                  <div className={`ml-24 md:ml-0 md:w-[calc(50%-3rem)] ${index % 2 === 1 ? 'md:mr-auto md:ml-0' : 'md:ml-auto md:mr-0'}`}>
-                    <div className="group backdrop-blur-xl bg-white/5 rounded-2xl border border-purple-500/20 p-6 hover:border-purple-500/40 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)] transition-all duration-500">
-                      <span className="inline-block px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-medium mb-3">
-                        {item.time}
-                      </span>
-                      <h3 className="font-bold text-white text-xl mb-2 group-hover:text-purple-300 transition-colors">
-                        {item.title}
-                      </h3>
-                      <p className="text-white/60 text-sm">{item.description}</p>
-                    </div>
-                  </div>
+          <div className="space-y-12">
+            {sessionOutline.map((item, index) => (
+              <div key={index} className="relative flex gap-8">
+                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-purple-500 to-violet-500 rounded-full flex items-center justify-center z-10 font-bold text-white">
+                  {item.step}
                 </div>
-              ))}
-            </div>
+                <div className="backdrop-blur-xl bg-white/5 rounded-2xl border border-purple-500/20 p-6 flex-grow">
+                  <span className="inline-block px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-medium mb-3">
+                    {item.time}
+                  </span>
+                  <h3 className="font-bold text-white text-xl mb-2">{item.title}</h3>
+                  <p className="text-white/60 text-sm">{item.description}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 5. BENEFITS SECTION - Horizontal Cards with Left Border */}
+      {/* 5. BENEFITS SECTION */}
       <section className="py-20 sm:py-28 bg-slate-950">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
               Why Book a{" "}
@@ -513,31 +381,156 @@ export default function StrategySessionPage() {
               </span>
             </h2>
           </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {benefits.map((benefit, index) => (
               <div
                 key={index}
-                className="group backdrop-blur-xl bg-white/5 rounded-2xl border border-purple-500/20 p-6 border-l-4 border-l-purple-500 hover:border-l-purple-400 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)] transition-all duration-500 hover:-translate-y-1"
+                className="group backdrop-blur-xl bg-white/5 rounded-2xl border border-purple-500/20 p-6 border-l-4 border-l-purple-500 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)] transition-all duration-500"
               >
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-violet-500/20 border border-purple-500/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <benefit.icon className="w-6 h-6 text-purple-400" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-white text-lg mb-1 group-hover:text-purple-300 transition-colors">
-                      {benefit.title}
-                    </h3>
-                    <p className="text-white/60 text-sm">{benefit.description}</p>
-                  </div>
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-violet-500/20 border border-purple-500/30 flex items-center justify-center mb-4">
+                  <benefit.icon className="w-6 h-6 text-purple-400" />
                 </div>
+                <h3 className="font-bold text-white text-lg mb-2">{benefit.title}</h3>
+                <p className="text-white/60 text-sm">{benefit.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 6. FAQ SECTION - Smooth Accordion */}
+      {/* The Empire Blueprint ROI Segment - THE ARCHITECTURAL FORCE MULTIPLIER (Standout Design) */}
+      <section className="relative w-full overflow-hidden bg-slate-950 py-32 border-y border-white/5">
+        {/* Full-width Immersive Background */}
+        <div className="absolute inset-0">
+          {/* Layer 1: High-Density Chess Grid */}
+          <div className="absolute inset-0 bg-[url('/chess-grid.png')] bg-[length:50px_50px] opacity-[0.04] [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]"></div>
+
+          {/* Layer 2: Massive Edge Flux Gradients */}
+          <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[800px] h-[800px] bg-purple-600/10 blur-[180px] rounded-full animate-pulse-slow"></div>
+          <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[800px] h-[800px] bg-violet-600/10 blur-[180px] rounded-full animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
+
+          {/* Layer 3: Central Deep-Space Glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-slate-950/20"></div>
+        </div>
+
+        {/* Massive Background Watermark */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[25rem] font-black text-purple-600/[0.015] select-none pointer-events-none tracking-tighter italic whitespace-nowrap leading-none">
+          EMPIRE
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+
+            {/* Left Column: The Aggressive Vision */}
+            <div className="relative z-10 space-y-8">
+              <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-purple-500/10 backdrop-blur-2xl rounded-full border border-purple-500/30">
+                <div className="w-2.5 h-2.5 rounded-full bg-purple-400 animate-ping"></div>
+                <span className="text-[11px] font-black text-purple-300 uppercase tracking-[0.4em]">The Empire Protocol</span>
+              </div>
+
+              <div className="space-y-3">
+                <h3 className="text-5xl md:text-7xl font-black text-white leading-[0.85] tracking-tighter">
+                  DOUBLE <br />
+                  <span className="bg-gradient-to-r from-purple-300 via-violet-400 to-indigo-300 bg-clip-text text-transparent italic">REVENUE</span>.
+                </h3>
+                <h3 className="text-5xl md:text-7xl font-black text-white leading-[0.85] tracking-tighter">
+                  HALVE <br />
+                  <span className="bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">EFFORT</span>.
+                </h3>
+              </div>
+
+              <p className="text-xl text-white/50 leading-relaxed font-light max-w-lg">
+                We don't just "optimize"—we <span className="text-white font-medium italic underline decoration-purple-500/50 underline-offset-8">re-engineer</span> your entire operation to handle massive volume without the corresponding labor friction.
+              </p>
+
+              <div className="flex flex-wrap gap-12 pt-4">
+                <div className="space-y-2">
+                  <div className="text-xs font-black text-purple-400/70 uppercase tracking-[0.2em] flex items-center gap-2">
+                    <div className="w-1 h-4 bg-purple-500 rounded-full"></div>
+                    Wealth Ceiling
+                  </div>
+                  <div className="text-5xl font-black text-white">+200%</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="text-xs font-black text-violet-400/70 uppercase tracking-[0.2em] flex items-center gap-2">
+                    <div className="w-1 h-4 bg-violet-500 rounded-full"></div>
+                    Operational Slack
+                  </div>
+                  <div className="text-5xl font-black text-white">42h<span className="text-lg text-violet-400/50 ml-1">saved</span></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: The "Force Modulator" Interface */}
+            <div className="relative z-10">
+              <div className="absolute -inset-20 bg-purple-600/10 blur-[120px] rounded-full"></div>
+
+              <div className="relative group perspective-1000">
+                {/* Glass Control Panel */}
+                <div className="backdrop-blur-3xl bg-slate-900/70 p-10 rounded-[3.5rem] border border-white/10 shadow-[0_0_100px_rgba(139,92,246,0.15)] transition-all duration-1000 group-hover:shadow-[0_0_130px_rgba(139,92,246,0.25)]">
+
+                  {/* Panel Header */}
+                  <div className="flex items-center justify-between mb-12 border-b border-white/5 pb-8">
+                    <div className="space-y-1.5">
+                      <p className="text-[9px] font-black text-purple-400/60 uppercase tracking-[0.5em]">Engine State</p>
+                      <h4 className="text-3xl font-black text-white italic">EMPIRE SCALE</h4>
+                    </div>
+                    <div className="w-16 h-16 bg-gradient-to-br from-purple-500 via-violet-600 to-indigo-700 rounded-[1.5rem] flex items-center justify-center shadow-2xl shadow-purple-900/80 group-hover:rotate-6 transition-all duration-700">
+                      <RocketLaunchIcon className="w-8 h-8 text-white" />
+                    </div>
+                  </div>
+
+                  {/* Performance Meters */}
+                  <div className="space-y-12">
+                    <div className="space-y-5">
+                      <div className="flex justify-between items-end">
+                        <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">System Autonomy</span>
+                        <span className="text-3xl font-black text-purple-400">92%</span>
+                      </div>
+                      <div className="h-4 bg-black/40 rounded-full overflow-hidden p-1 border border-white/5 shadow-inner">
+                        <div className="h-full w-[92%] bg-gradient-to-r from-purple-600 via-violet-500 to-purple-400 rounded-full shadow-[0_0_20px_rgba(168,85,247,0.5)]"></div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-5">
+                      <div className="flex justify-between items-end">
+                        <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">Capacity Headroom</span>
+                        <span className="text-3xl font-black text-violet-400 italic">MAXIMUM</span>
+                      </div>
+                      <div className="h-4 bg-black/40 rounded-full overflow-hidden p-1 border border-white/5 shadow-inner">
+                        <div className="h-full w-full bg-gradient-to-r from-violet-700 via-purple-500 to-violet-700 rounded-full"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* ROI Control Summary */}
+                  <div className="mt-14 pt-14 border-t border-white/5 grid grid-cols-2 gap-10 text-center">
+                    <div>
+                      <p className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em] mb-3">Leverage Ratio</p>
+                      <p className="text-5xl font-black text-white tracking-tighter">12.5<span className="text-xl ml-1 text-purple-500 font-black">X</span></p>
+                    </div>
+                    <div>
+                      <p className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em] mb-3">Margin Float</p>
+                      <p className="text-5xl font-black text-white tracking-tighter">2.0<span className="text-xl ml-1 text-violet-500 font-black">X</span></p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating Meta-Badges */}
+                <div className="absolute -top-10 -right-10 px-8 py-5 bg-purple-500/10 backdrop-blur-3xl rounded-[2rem] border border-purple-500/40 shadow-3xl rotate-6">
+                  <div className="text-[11px] font-black text-purple-200 uppercase tracking-[0.15em] flex items-center gap-3">
+                    <SparklesIcon className="w-4 h-4 text-purple-400" />
+                    Elite Architectural Lead
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500/40 to-transparent"></div>
+      </section>
+
+      {/* 6. FAQ SECTION */}
       <section id="faq" className="py-20 sm:py-28 bg-slate-950">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -548,7 +541,6 @@ export default function StrategySessionPage() {
               </span>
             </h2>
           </div>
-
           <div className="space-y-4">
             {faqs.map((faq, index) => (
               <details
@@ -575,20 +567,10 @@ export default function StrategySessionPage() {
         </div>
       </section>
 
-      {/* 7. FINAL CTA SECTION - Gradient Banner with Glow */}
+      {/* 7. FINAL CTA SECTION */}
       <section className="py-20 sm:py-28 relative overflow-hidden">
-        {/* Gradient Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-purple-700 to-violet-700"></div>
-
-        {/* Chess Grid Overlay */}
         <div className="absolute inset-0 chess-grid opacity-20"></div>
-
-        {/* Animated Glow Orbs */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="glow-float absolute top-1/4 left-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-          <div className="glow-float-delayed absolute bottom-1/4 right-1/4 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
-        </div>
-
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
             Ready to Turn Chaos into a Clear Game Plan?
@@ -596,30 +578,28 @@ export default function StrategySessionPage() {
           <p className="text-xl text-white/90 mb-4 max-w-2xl mx-auto">
             In 2 hours, you'll have a custom AI roadmap, clear action items, and a path to 10+ hours saved every week.
           </p>
-          <p className="text-lg text-white/70 mb-8">
-            <span className="line-through">$3,000</span> → <span className="font-bold text-white">$999</span> for a limited time
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
             <Link
-              href="/contact?solution=strategy-session"
+              href="#lead-form"
               className="inline-flex items-center justify-center px-10 py-5 bg-white text-purple-600 font-bold rounded-xl hover:bg-white/90 transition-all duration-300 transform hover:scale-105 shadow-[0_0_30px_rgba(255,255,255,0.3)]"
             >
               Book Your Strategy Session Now
               <ArrowRightIcon className="w-5 h-5 ml-2" />
             </Link>
           </div>
-
-          <p className="text-white/60 text-sm">
-            Limited spots available each month
-          </p>
         </div>
       </section>
 
-      {/* 8. Solution Relations Strip */}
       <div className="bg-slate-950 border-t border-white/5">
         <SolutionRelationsStrip solutionId="strategy_session" />
       </div>
+
+      <LeadFormWrapper
+        variant="solutions"
+        colorScheme="purple"
+        customGradient="from-purple-500 to-violet-500"
+        customShadow="shadow-purple-500/30"
+      />
     </main>
   );
 }

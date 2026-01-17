@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/auth'
-import { db } from '@/lib/db'
+import { prisma } from '@/lib/db'
 import { z } from 'zod'
 
 const createProjectSchema = z.object({
@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get user's organization memberships
-    const user = await db.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       include: {
         memberships: {
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
     const organizationId = user.memberships[0].organizationId
 
     // Get projects for the user's organization
-    const projects = await db.project.findMany({
+    const projects = await prisma.project.findMany({
       where: {
         organizationId: organizationId
       },
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
     const validatedData = createProjectSchema.parse(body)
 
     // Get user's organization
-    const user = await db.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       include: {
         memberships: {
@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
     const organizationId = user.memberships[0].organizationId
 
     // Create the project
-    const project = await db.project.create({
+    const project = await prisma.project.create({
       data: {
         name: validatedData.name,
         description: validatedData.description,
@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Log the action
-    await db.auditLog.create({
+    await prisma.auditLog.create({
       data: {
         organizationId: organizationId,
         userId: session.user.id,

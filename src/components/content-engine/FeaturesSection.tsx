@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { 
-  SparklesIcon, 
-  DocumentTextIcon, 
-  PhotoIcon, 
-  VideoCameraIcon, 
-  SpeakerWaveIcon, 
-  GlobeAltIcon 
+import {
+  SparklesIcon,
+  DocumentTextIcon,
+  PhotoIcon,
+  VideoCameraIcon,
+  SpeakerWaveIcon,
+  GlobeAltIcon
 } from "@heroicons/react/24/outline";
 
 const features = [
@@ -113,7 +113,8 @@ export default function FeaturesSection() {
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
 
   return (
-    <section className="py-16 md:py-24 bg-gray-800">
+    <section className="py-24 md:py-32 bg-slate-950 relative overflow-hidden">
+      <div className="absolute inset-0 chess-grid opacity-10" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -134,16 +135,15 @@ export default function FeaturesSection() {
           {features.map((feature, index) => {
             const Icon = feature.icon;
             const isHovered = hoveredFeature === feature.id;
-            
+
             return (
               <div
                 key={feature.id}
-                className={`group relative bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 ${
-                  isHovered ? 'scale-105' : ''
-                }`}
+                className={`group relative bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 ${isHovered ? 'scale-105' : ''
+                  }`}
                 onMouseEnter={() => setHoveredFeature(feature.id)}
                 onMouseLeave={() => setHoveredFeature(null)}
-                style={{ 
+                style={{
                   transitionDelay: `${index * 100}ms`,
                   opacity: 1,
                   transform: 'translateY(0)'

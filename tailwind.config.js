@@ -232,6 +232,9 @@ module.exports = {
         /* Marquee Animations */
         'marquee-left': 'marqueeLeft 30s linear infinite',
         'marquee-right': 'marqueeRight 30s linear infinite',
+        /* Toast Animations */
+        'slide-in-right': 'slideInRight 0.3s ease-out',
+        'slide-out-right': 'slideOutRight 0.3s ease-in',
       },
       keyframes: {
         fadeIn: {
@@ -300,10 +303,19 @@ module.exports = {
           '0%': { opacity: '0', transform: 'translateY(20px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
+        slideInRight: {
+          '0%': { transform: 'translateX(100%)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+        slideOutRight: {
+          '0%': { transform: 'translateX(0)', opacity: '1' },
+          '100%': { transform: 'translateX(100%)', opacity: '0' },
+        },
       },
     },
   },
   plugins: [
     require('@tailwindcss/line-clamp'),
+    require('tailwind-scrollbar')({ nocompatible: true }),
   ],
 };

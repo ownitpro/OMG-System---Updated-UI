@@ -109,11 +109,11 @@ export default function TestimonialsSection() {
                 <StarIcon key={i} className="w-6 h-6 text-yellow-400" />
               ))}
             </div>
-            
+
             <blockquote className="text-2xl md:text-3xl font-medium text-gray-900 mb-8 italic">
               "{testimonials[currentTestimonial].quote}"
             </blockquote>
-            
+
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
               <div className="text-center sm:text-left">
                 <div className="font-semibold text-xl text-gray-900">
@@ -126,22 +126,21 @@ export default function TestimonialsSection() {
                   {testimonials[currentTestimonial].industry}
                 </div>
               </div>
-              
+
               <div className="bg-emerald-100 text-emerald-800 px-4 py-2 rounded-full font-semibold">
                 {testimonials[currentTestimonial].results}
               </div>
             </div>
-            
+
             {/* Testimonial Indicators */}
             <div className="flex justify-center mt-8 space-x-2">
               {testimonials.map((_, index) => (
                 <button
                   key={index}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentTestimonial 
-                      ? 'bg-emerald-500' 
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentTestimonial
+                      ? 'bg-emerald-500'
                       : 'bg-gray-300 hover:bg-gray-400'
-                  }`}
+                    }`}
                   onClick={() => setCurrentTestimonial(index)}
                 />
               ))}
@@ -161,11 +160,11 @@ export default function TestimonialsSection() {
                   <StarIcon key={i} className="w-4 h-4 text-yellow-400" />
                 ))}
               </div>
-              
+
               <blockquote className="text-gray-700 mb-4 italic">
                 "{testimonial.quote}"
               </blockquote>
-              
+
               <div className="flex items-center justify-between">
                 <div>
                   <div className="font-semibold text-gray-900">
@@ -193,8 +192,8 @@ export default function TestimonialsSection() {
               Stop struggling with inconsistent results. Get a system that delivers qualified leads consistently, just like these businesses.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <a 
-                href="/contact-sales" 
+              <a
+                href="/industries#lead-form"
                 className="bg-white text-emerald-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-colors duration-200"
               >
                 Get Your Success Story Started

@@ -216,7 +216,7 @@ const pricing = [
     features: [
       "Custom security policies",
       "Dedicated account manager",
-      "24/7 phone support",
+      "24/7 priority support",
       "Custom training",
       "On-premise deployment",
       "Advanced compliance tools"

@@ -15,13 +15,13 @@ export default function PricingCTASection() {
           <p className="text-xl mb-8 text-emerald-100">
             Get started with Industry IQ and unlock the power of AI-driven business intelligence
           </p>
-          
+
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
             <Button asChild className="bg-emerald-400 hover:bg-emerald-500 text-gray-900 px-8 py-3 text-lg rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1">
               <Link href="/apps/demo">Start Free Trial</Link>
             </Button>
             <Button asChild variant="outline" className="border-white text-white hover:bg-white hover:text-gray-900 px-8 py-3 text-lg rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1">
-              <Link href="/contact-sales">Request Demo</Link>
+              <Link href="/industries#lead-form">Request Demo</Link>
             </Button>
           </div>
 

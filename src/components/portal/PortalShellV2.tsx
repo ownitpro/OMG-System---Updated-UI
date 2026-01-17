@@ -241,6 +241,7 @@ const DEFAULT_COMMAND_ITEMS: CommandItem[] = [
   { label: "Products", description: "Manage product catalog", kind: "internal", href: "/portal/admin/products" },
   { label: "Clients", description: "View and manage clients", kind: "internal", href: "/portal/admin/users" },
   { label: "Coupons", description: "Manage discount coupons", kind: "internal", href: "/portal/admin/coupons" },
+  { label: "Strategy Sessions", description: "Manage client strategy sessions", kind: "internal", href: "/portal/admin/strategy-sessions" },
   { label: "Client Analytics", description: "View client analytics", kind: "internal", href: "/portal/admin/analytics" },
   { label: "Coupon Analytics", description: "Coupon performance stats", kind: "internal", href: "/portal/admin/coupons/analytics" },
   { label: "Access Control", description: "Manage user permissions", kind: "internal", href: "/portal/admin/access" },
@@ -261,6 +262,7 @@ export function PortalShellV2({
   lockedCount,
   upgradeHref,
   entitlements,
+  fullWidth,
 }: {
   role: "client" | "admin";
   title: string;
@@ -270,6 +272,7 @@ export function PortalShellV2({
   lockedCount?: number;
   upgradeHref?: string;
   entitlements?: Record<string, string>;
+  fullWidth?: boolean;
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
@@ -452,7 +455,7 @@ export function PortalShellV2({
           <CommandSearch items={commandItems || DEFAULT_COMMAND_ITEMS} />
 
           {/* Page Content */}
-          <div className="mx-auto max-w-7xl px-4 py-8">{children}</div>
+          <div className={`mx-auto px-4 py-8 ${fullWidth ? 'max-w-full' : 'max-w-7xl'}`}>{children}</div>
         </main>
       </div>
     </div>

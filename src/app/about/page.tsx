@@ -336,7 +336,7 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-4 gap-8 text-center">
             {stats.stats.map((stat, index) => (
               <div key={index} className="group">
-                <div className="text-5xl md:text-6xl font-bold text-white mb-2 group-hover:scale-110 transition-transform">
+                <div className="text-5xl md:text-6xl font-bold text-white mb-2 group-hover:scale-110 transition-transform whitespace-nowrap">
                   {stat.value}
                 </div>
                 <div className="text-emerald-100 text-lg">{stat.label}</div>
@@ -370,24 +370,38 @@ export default function AboutPage() {
             </p>
           </div>
 
-          {/* Industries Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Industries Grid - Modern Interactive Design */}
+          <div className="grid md:grid-cols-2 gap-x-16 gap-y-16">
             {industries.items.map((industry, index) => (
               <Link
                 key={index}
                 href={industry.href}
-                className="group p-6 rounded-2xl backdrop-blur-xl bg-white/5 border border-white/10 hover:border-emerald-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10"
+                className="group relative block"
               >
-                <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-emerald-400 transition-colors">
-                  {industry.title}
-                </h3>
-                <p className="text-white/60 mb-4">{industry.blurb}</p>
-                <span className="inline-flex items-center text-emerald-400 text-sm font-medium group-hover:translate-x-1 transition-transform">
-                  Learn more
-                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </span>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-3xl font-bold text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-emerald-400 group-hover:to-teal-400 transition-all duration-300">
+                    {industry.title}
+                  </h3>
+                  <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-emerald-500/50 group-hover:bg-emerald-500/10 transition-all duration-300">
+                    <svg
+                      className="w-5 h-5 text-white/50 group-hover:text-emerald-400 transition-colors duration-300 transform group-hover:-rotate-45"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </div>
+                </div>
+
+                <p className="text-lg text-white/60 leading-relaxed mb-6 group-hover:text-white/80 transition-colors duration-300">
+                  {industry.blurb}
+                </p>
+
+                {/* Animated Gradient Line */}
+                <div className="absolute -bottom-4 left-0 w-full h-[1px] bg-white/10 overflow-hidden">
+                  <div className="w-full h-full bg-gradient-to-r from-emerald-500 to-teal-500 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+                </div>
               </Link>
             ))}
           </div>

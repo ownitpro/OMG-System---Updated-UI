@@ -69,7 +69,7 @@ export function AudienceSection() {
             Who We Serve
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Whether you're a solo realtor in Toronto or a multi-agent brokerage in Ottawa, 
+            Whether you're a solo realtor in Toronto or a multi-agent brokerage in Toronto, 
             our Real Estate Suite scales with you.
           </p>
         </div>

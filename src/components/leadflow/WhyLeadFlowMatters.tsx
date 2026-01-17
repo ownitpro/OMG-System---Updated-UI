@@ -55,8 +55,8 @@ export default function WhyLeadFlowMatters() {
     <section ref={sectionRef} className="relative py-16 md:py-24 bg-black">
       {/* Emerald glow effects */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[120px] h-[200px] bg-gradient-to-r from-[#47BD79]/10 via-emerald-500/6 to-transparent rounded-full blur-2xl"></div>
-        <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[120px] h-[200px] bg-gradient-to-l from-[#47BD79]/10 via-emerald-500/6 to-transparent rounded-full blur-2xl"></div>
+        <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[120px] h-[200px] bg-gradient-to-r from-blue-600/10 via-blue-500/6 to-transparent rounded-full blur-2xl"></div>
+        <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[120px] h-[200px] bg-gradient-to-l from-blue-600/10 via-blue-500/6 to-transparent rounded-full blur-2xl"></div>
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
@@ -69,10 +69,10 @@ export default function WhyLeadFlowMatters() {
           {metrics.map((metric, index) => (
             <div
               key={index}
-              className="bg-white/5 backdrop-blur-xl rounded-xl p-6 border border-white/10 hover:border-[#47BD79]/30 transition-all duration-300 transform hover:-translate-y-1"
+              className="bg-white/5 backdrop-blur-xl rounded-xl p-6 border border-white/10 hover:border-blue-500/30 transition-all duration-300 transform hover:-translate-y-1"
             >
               <div className="text-center">
-                <div className="text-4xl font-bold text-[#47BD79] mb-2">
+                <div className="text-4xl font-bold text-blue-400 mb-2">
                   {isVisible ? (
                     <CountUpAnimation
                       end={metric.value}

@@ -13,7 +13,7 @@ import {
 const demos = [
   {
     name: 'Try a Live Demo',
-    href: '/demos/live',
+    href: '/try-live-demo',
     icon: PlayIcon,
     description: 'Interactive platform tour with real data',
     duration: '5-10 min',
@@ -92,7 +92,7 @@ export function DemosDropdown() {
       
       <div className="mt-4 pt-4 border-t border-gray-200/50">
         <Link
-          href="/demos"
+          href="/try-live-demo"
           className="flex items-center justify-center w-full px-4 py-2 text-blue-600 hover:text-blue-700 font-medium transition-colors duration-300"
         >
           View All Demos

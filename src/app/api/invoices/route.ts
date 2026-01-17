@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/auth'
-import { db } from '@/lib/db'
+import { prisma } from '@/lib/db'
 import { z } from 'zod'
 
 const createInvoiceSchema = z.object({
@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get user's organization
-    const user = await db.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       include: {
         memberships: {
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
     const organizationId = user.memberships[0].organizationId
 
     // Get invoices for the organization
-    const invoices = await db.invoice.findMany({
+    const invoices = await prisma.invoice.findMany({
       where: {
         organizationId: organizationId
       },
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
     const validatedData = createInvoiceSchema.parse(body)
 
     // Get user's organization
-    const user = await db.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       include: {
         memberships: {
@@ -96,13 +96,13 @@ export async function POST(request: NextRequest) {
     const organizationId = user.memberships[0].organizationId
 
     // Generate invoice number
-    const invoiceCount = await db.invoice.count({
+    const invoiceCount = await prisma.invoice.count({
       where: { organizationId: organizationId }
     })
     const invoiceNumber = `INV-${new Date().getFullYear()}-${String(invoiceCount + 1).padStart(4, '0')}`
 
     // Create the invoice
-    const invoice = await db.invoice.create({
+    const invoice = await prisma.invoice.create({
       data: {
         organizationId: organizationId,
         orderId: validatedData.orderId,
@@ -124,7 +124,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Log the action
-    await db.auditLog.create({
+    await prisma.auditLog.create({
       data: {
         organizationId: organizationId,
         userId: session.user.id,

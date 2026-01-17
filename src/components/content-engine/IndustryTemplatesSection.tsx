@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { 
-  ShoppingBagIcon, 
-  HomeIcon, 
-  HeartIcon, 
+import {
+  ShoppingBagIcon,
+  HomeIcon,
+  HeartIcon,
   ComputerDesktopIcon,
   BuildingStorefrontIcon,
   UserGroupIcon
@@ -161,7 +161,8 @@ export default function IndustryTemplatesSection() {
   const [hoveredIndustry, setHoveredIndustry] = useState<number | null>(null);
 
   return (
-    <section className="py-16 md:py-24 bg-gray-800">
+    <section className="py-16 md:py-24 bg-slate-950 overflow-hidden relative">
+      <div className="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent top-0 opacity-20" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -178,16 +179,15 @@ export default function IndustryTemplatesSection() {
           {industries.map((industry, index) => {
             const Icon = industry.icon;
             const isHovered = hoveredIndustry === industry.id;
-            
+
             return (
               <div
                 key={industry.id}
-                className={`group relative bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 ${
-                  isHovered ? 'scale-105' : ''
-                }`}
+                className={`group relative bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 ${isHovered ? 'scale-105' : ''
+                  }`}
                 onMouseEnter={() => setHoveredIndustry(industry.id)}
                 onMouseLeave={() => setHoveredIndustry(null)}
-                style={{ 
+                style={{
                   transitionDelay: `${index * 100}ms`,
                   opacity: 1,
                   transform: 'translateY(0)'

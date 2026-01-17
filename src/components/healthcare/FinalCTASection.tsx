@@ -18,7 +18,7 @@ export default function FinalCTASection() {
         <p className="text-xl text-emerald-100 mb-8 max-w-2xl mx-auto">
           Join Ontario healthcare providers already using CareFlow Automation to streamline their operations and improve patient care.
         </p>
-        
+
         <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
           <Button
             className="bg-white text-emerald-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
@@ -27,7 +27,7 @@ export default function FinalCTASection() {
             Request a Demo
           </Button>
           <Link
-            href="/contact-sales"
+            href="#lead-form"
             className="inline-flex items-center justify-center px-8 py-3 text-lg font-medium text-white border-2 border-white rounded-full hover:bg-white hover:text-emerald-600 transition-all duration-300"
           >
             Contact Sales

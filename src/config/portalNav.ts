@@ -31,6 +31,7 @@ import {
   QuestionMarkCircleIcon,
   LockClosedIcon,
   CreditCardIcon,
+  InboxIcon,
 } from "@heroicons/react/24/outline";
 
 export function getClientNav(): NavGroup[] {
@@ -100,14 +101,14 @@ export function getClientNavV2(): NavGroupV2[] {
     {
       title: "Strategy Session",
       items: [
-        { label: "Strategy Session", href: "/portal/client/strategy-session", icon: CalendarIcon, comingSoon: true },
+        { label: "Strategy Session", href: "/portal/client/strategy-session", icon: CalendarIcon },
       ],
     },
     {
       title: "Services",
       items: [
-        { label: "Automations", href: "/portal/client/automations", icon: BoltIcon },
-        { label: "AI Solutions", href: "/portal/client/ai-solutions", icon: SparklesIcon },
+        { label: "Automations", href: "/portal/client/automations", icon: BoltIcon, comingSoon: true },
+        { label: "AI Solutions", href: "/portal/client/ai-solutions", icon: SparklesIcon, comingSoon: true },
         { label: "Custom Solutions", href: "/portal/client/custom-solutions", icon: PuzzlePieceIcon, comingSoon: true },
       ],
     },
@@ -193,6 +194,12 @@ export function getAdminNavV2(): NavGroupV2[] {
       ],
     },
     {
+      title: "Leads",
+      items: [
+        { label: "All Leads", href: "/portal/admin/leads", icon: InboxIcon },
+      ],
+    },
+    {
       title: "Commerce",
       items: [
         { label: "Orders", href: "/portal/admin/orders", icon: ShoppingCartIcon },
@@ -205,6 +212,12 @@ export function getAdminNavV2(): NavGroupV2[] {
       items: [
         { label: "Clients", href: "/portal/clients", icon: UsersIcon },
         { label: "Access Control", href: "/portal/admin/access", icon: KeyIcon },
+      ],
+    },
+    {
+      title: "Sessions",
+      items: [
+        { label: "Strategy Sessions", href: "/portal/admin/strategy-sessions", icon: CalendarIcon },
       ],
     },
     {

@@ -11,6 +11,7 @@ import ImplementationTimeline from "@/components/cleaning/ImplementationTimeline
 import FAQSection from "@/components/cleaning/FAQSection";
 import FinalCTASection from "@/components/cleaning/FinalCTASection";
 import CleaningPageTracker from "@/components/cleaning/CleaningPageTracker";
+import { LeadFormWrapper } from "@/components/forms";
 
 export const metadata: Metadata = {
   title: "Cleaning Operations Engine™ | Cleaning Business Automation | OMGsystems",
@@ -56,6 +57,9 @@ export default function CleaningPage() {
       <FAQSection />
       <FinalCTASection />
       <CleaningPageTracker />
+
+      {/* Lead Form Section */}
+      <LeadFormWrapper variant="industries" />
     </div>
   );
 }

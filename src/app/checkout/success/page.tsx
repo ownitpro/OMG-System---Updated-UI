@@ -65,18 +65,18 @@ function CheckoutSuccessContent({ dashboardHref }: { dashboardHref: string }) {
     if (status !== "done") return;
 
     const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          router.push(`${dashboardHref}?purchased=${encodeURIComponent(productName)}`);
-          return 0;
-        }
-        return prev - 1;
-      });
+      setCountdown((prev) => prev - 1);
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [status, router, productName, dashboardHref]);
+  }, [status]);
+
+  // Handle redirect when countdown reaches 0
+  React.useEffect(() => {
+    if (countdown === 0 && status === "done") {
+      router.push(`${dashboardHref}?purchased=${encodeURIComponent(productName)}`);
+    }
+  }, [countdown, status, router, dashboardHref, productName]);
 
   return (
     <div className="rounded-2xl border border-white/10 bg-[#1e293b] p-6 md:p-8">

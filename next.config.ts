@@ -7,8 +7,7 @@ const nextConfig: NextConfig = {
   // Note: cacheComponents is incompatible with dynamic route segment config
   // If you need cacheComponents, remove all `export const dynamic` statements
   // cacheComponents: true,
-  // Empty turbopack config to silence Next.js 16 warning (allows fallback to webpack)
-  turbopack: {},
+  // Disabled turbopack for faster, more stable builds
   serverExternalPackages: ['@swc/helpers'],
   // Suppress HMR module errors
   onDemandEntries: {
@@ -103,10 +102,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       // Global Book a Demo fallback
-      { source: '/book-a-demo', destination: '/apps/demo', permanent: true },
-      { source: '/book-demo', destination: '/apps/demo', permanent: true },
+      { source: '/book-a-demo', destination: '/try-live-demo', permanent: true },
+      { source: '/book-demo', destination: '/try-live-demo', permanent: true },
       // Old paths
-      { source: '/demo', destination: '/apps/demo', permanent: true },
+      { source: '/demo', destination: '/try-live-demo', permanent: true },
+      { source: '/apps/demo', destination: '/try-live-demo', permanent: true },
       // Product-specific
       { source: '/securevault-demo', destination: '/apps/demo/securevault-docs', permanent: true },
       { source: '/crm-demo', destination: '/apps/demo/crm', permanent: true },

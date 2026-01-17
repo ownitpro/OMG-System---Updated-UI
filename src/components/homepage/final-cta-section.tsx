@@ -33,7 +33,7 @@ export function FinalCTASection({
   // Safety checks - provide defaults if props are missing
   const safePrimaryCTA = primaryCTA || {
     label: "Get Started",
-    href: "/apps/demo"
+    href: "/try-live-demo"
   };
 
   return (
@@ -179,7 +179,7 @@ export const defaultFinalCTAData: FinalCTASectionProps = {
   subheadline: "Let us show you how your business can run itself with OMGsystems.",
   primaryCTA: {
     label: "Try Live Demos",
-    href: "/apps/demo"
+    href: "/try-live-demo"
   },
   secondaryCTA: {
     label: "Start Free Trial",

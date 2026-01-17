@@ -58,8 +58,8 @@ export function LeadFlowStrategyForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const [errors, setErrors] = useState<Partial<FormData>>({});
-  
+  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     email: "",
@@ -75,39 +75,39 @@ export function LeadFlowStrategyForm() {
   });
 
   const validateForm = (): boolean => {
-    const newErrors: Partial<FormData> = {};
-    
+    const newErrors: Partial<Record<keyof FormData, string>> = {};
+
     if (!formData.fullName.trim()) {
       newErrors.fullName = "Full name is required";
     }
-    
+
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Please enter a valid email address";
     }
-    
+
     if (!formData.industry) {
       newErrors.industry = "Please select your industry";
     }
-    
+
     if (!formData.hasRunAds) {
       newErrors.hasRunAds = "Please let us know if you've run ads before";
     }
-    
+
     if (!formData.leadGoal.trim()) {
       newErrors.leadGoal = "Please tell us your lead goal";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleInputChange = (field: keyof FormData, value: string | string[]) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev: FormData) => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
+      setErrors((prev: Partial<Record<keyof FormData, string>>) => ({ ...prev, [field]: undefined }));
     }
   };
 
@@ -120,14 +120,14 @@ export function LeadFlowStrategyForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
-    
+
     setIsSubmitting(true);
     setSubmitStatus('idle');
-    
+
     try {
       const response = await fetch('/api/leadflow-strategy', {
         method: 'POST',
@@ -136,18 +136,18 @@ export function LeadFlowStrategyForm() {
         },
         body: JSON.stringify(formData),
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to submit form');
       }
-      
+
       setSubmitStatus('success');
-      
+
       // Redirect to thank you page or show success message
       setTimeout(() => {
         router.push('/thank-you?type=leadflow-strategy');
       }, 2000);
-      
+
     } catch (error) {
       console.error('Error submitting form:', error);
       setSubmitStatus('error');
@@ -189,9 +189,8 @@ export function LeadFlowStrategyForm() {
           autoComplete="name"
           value={formData.fullName}
           onChange={(e) => handleInputChange('fullName', e.target.value)}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-            errors.fullName ? 'border-red-500' : 'border-gray-300'
-          }`}
+          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.fullName ? 'border-red-500' : 'border-gray-300'
+            }`}
           placeholder="Enter your full name"
         />
         {errors.fullName && <p className="mt-1 text-sm text-red-600">{errors.fullName}</p>}
@@ -209,9 +208,8 @@ export function LeadFlowStrategyForm() {
           autoComplete="email"
           value={formData.email}
           onChange={(e) => handleInputChange('email', e.target.value)}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-            errors.email ? 'border-red-500' : 'border-gray-300'
-          }`}
+          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.email ? 'border-red-500' : 'border-gray-300'
+            }`}
           placeholder="Enter your email address"
         />
         {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
@@ -260,9 +258,8 @@ export function LeadFlowStrategyForm() {
           id="industry"
           value={formData.industry}
           onChange={(e) => handleInputChange('industry', e.target.value)}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-            errors.industry ? 'border-red-500' : 'border-gray-300'
-          }`}
+          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.industry ? 'border-red-500' : 'border-gray-300'
+            }`}
         >
           <option value="">Select your industry</option>
           {INDUSTRIES.map(industry => (
@@ -361,9 +358,8 @@ export function LeadFlowStrategyForm() {
           value={formData.leadGoal}
           onChange={(e) => handleInputChange('leadGoal', e.target.value)}
           rows={3}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-            errors.leadGoal ? 'border-red-500' : 'border-gray-300'
-          }`}
+          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.leadGoal ? 'border-red-500' : 'border-gray-300'
+            }`}
           placeholder="Describe your lead generation goals and what you want to achieve"
         />
         {errors.leadGoal && <p className="mt-1 text-sm text-red-600">{errors.leadGoal}</p>}

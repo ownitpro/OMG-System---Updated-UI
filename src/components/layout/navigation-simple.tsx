@@ -29,7 +29,7 @@ export default function NavigationSimple() {
               Apps
             </Link>
             <Link
-              href="/demos"
+              href="/try-live-demo"
               className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium"
             >
               Demos

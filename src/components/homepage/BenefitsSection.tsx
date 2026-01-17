@@ -21,7 +21,7 @@ const outcomes = [
     metric: "10,000+",
     label: "Businesses Served",
     icon: UserGroupIcon,
-    color: "emerald"
+    color: "teal"
   },
   {
     id: 2,
@@ -43,18 +43,18 @@ const benefits = [
   {
     id: 1,
     title: "SecureVault Docs",
-    description: "Secure document management with automated filing, sharing, and compliance tracking.",
+    description: "Upload a file and it auto-organizes, tracks deadlines and expirations, and keeps you ahead — without manual work.",
     icon: ShieldCheckIcon,
-    features: ["Secure document storage", "Automated filing", "Compliance tracking", "Team collaboration"],
+    features: ["Auto-organizes files", "Tracks deadlines & expirations", "Alerts before due dates", "PIN-protected sharing"],
     cta: "Try SecureVault Docs",
     href: "/apps/securevault-docs",
-    color: "#A855F7",
-    bgColor: "bg-[#A855F7]/20",
-    textColor: "text-[#A855F7]",
-    borderColor: "border-[#A855F7]/30",
-    glowColor: "rgba(168, 85, 247, 0.3)",
-    buttonBg: "bg-[#A855F7]",
-    buttonHover: "hover:bg-[#9333ea]"
+    color: "#14B8A6",
+    bgColor: "bg-teal-500/20",
+    textColor: "text-teal-400",
+    borderColor: "border-teal-500/30",
+    glowColor: "rgba(20, 184, 166, 0.3)",
+    buttonBg: "bg-gradient-to-r from-teal-500 to-cyan-500",
+    buttonHover: "hover:from-teal-600 hover:to-cyan-600"
   },
   {
     id: 2,
@@ -64,13 +64,13 @@ const benefits = [
     features: ["24/7 appointment scheduling", "Automated lead filtering", "Message handling", "Time protection"],
     cta: "Try TimeGuard AI",
     href: "/solutions/timeguard-ai",
-    color: "#47BD79",
-    bgColor: "bg-[#47BD79]/20",
-    textColor: "text-[#47BD79]",
-    borderColor: "border-[#47BD79]/30",
-    glowColor: "rgba(71, 189, 121, 0.3)",
-    buttonBg: "bg-[#47BD79]",
-    buttonHover: "hover:bg-[#3da86a]"
+    color: "#3B82F6",
+    bgColor: "bg-[#3B82F6]/20",
+    textColor: "text-[#3B82F6]",
+    borderColor: "border-[#3B82F6]/30",
+    glowColor: "rgba(59, 130, 246, 0.3)",
+    buttonBg: "bg-[#3B82F6]",
+    buttonHover: "hover:bg-[#2563eb]"
   },
   {
     id: 3,
@@ -124,15 +124,15 @@ export default function HomepageBenefitsSection() {
       <div className="absolute inset-0 bg-gradient-to-b from-black via-black via-80% to-[#0f172a]" />
 
       {/* Background glow orbs - positioned away from edges */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#47BD79]/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#A855F7]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-teal-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Transform Your Business with
-            <span className="text-[#47BD79]"> Intelligent Automation</span>
+            <span className="text-teal-400"> Intelligent Automation</span>
           </h2>
           <p className="text-xl text-white/70 max-w-3xl mx-auto">
             Join thousands of businesses already using OMGsystems to automate workflows,
@@ -172,7 +172,7 @@ export default function HomepageBenefitsSection() {
                   <div className="grid grid-cols-2 gap-2">
                     {benefit.features.map((feature, featureIndex) => (
                       <div key={featureIndex} className="flex items-center space-x-2">
-                        <CheckCircleIcon className="w-4 h-4 text-[#47BD79] flex-shrink-0" />
+                        <CheckCircleIcon className={`w-4 h-4 ${benefit.textColor} flex-shrink-0`} />
                         <span className="text-sm text-white/60">{feature}</span>
                       </div>
                     ))}
@@ -202,11 +202,11 @@ export default function HomepageBenefitsSection() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {outcomes.map((outcome, index) => {
               const colorMap: Record<string, { text: string; glow: string }> = {
-                emerald: { text: 'text-[#47BD79]', glow: 'rgba(71, 189, 121, 0.3)' },
+                teal: { text: 'text-teal-400', glow: 'rgba(20, 184, 166, 0.3)' },
                 blue: { text: 'text-[#3B82F6]', glow: 'rgba(59, 130, 246, 0.3)' },
                 purple: { text: 'text-[#A855F7]', glow: 'rgba(168, 85, 247, 0.3)' }
               };
-              const colors = colorMap[outcome.color] || colorMap.emerald;
+              const colors = colorMap[outcome.color] || colorMap.teal;
 
               return (
                 <div

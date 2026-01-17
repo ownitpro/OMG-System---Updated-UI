@@ -1,15 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { 
+import {
   BuildingOfficeIcon,
   HomeIcon,
   WrenchScrewdriverIcon,
   CalculatorIcon,
-  HeartIcon,
-  SparklesIcon,
   ArrowRightIcon,
-  PlayIcon,
   ChartBarIcon
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -30,8 +27,8 @@ const caseStudies = [
     ],
     testimonial: "",
     company: "",
-    cta: "View Case Study",
-    href: "/case-studies/property-management"
+    cta: "View Industry Solutions",
+    href: "/case-studies#property-management"
   },
   {
     id: 2,
@@ -48,8 +45,8 @@ const caseStudies = [
     ],
     testimonial: "",
     company: "",
-    cta: "View Case Study",
-    href: "/case-studies/real-estate"
+    cta: "View Industry Solutions",
+    href: "/case-studies#real-estate"
   },
   {
     id: 3,
@@ -66,8 +63,8 @@ const caseStudies = [
     ],
     testimonial: "",
     company: "",
-    cta: "View Case Study",
-    href: "/case-studies/contractors"
+    cta: "View Industry Solutions",
+    href: "/case-studies#contractors"
   },
   {
     id: 4,
@@ -84,44 +81,8 @@ const caseStudies = [
     ],
     testimonial: "",
     company: "",
-    cta: "View Case Study",
-    href: "/case-studies/accounting"
-  },
-  {
-    id: 5,
-    title: "Healthcare Practice Modernization",
-    industry: "Healthcare",
-    icon: HeartIcon,
-    color: "red",
-    challenge: "Administrative burden and patient communication",
-    solution: "Automated scheduling and patient management",
-    results: [
-      { metric: "70%", label: "Less Admin Time" },
-      { metric: "50%", label: "Higher Patient Throughput" },
-      { metric: "90%", label: "Patient Satisfaction" }
-    ],
-    testimonial: "",
-    company: "",
-    cta: "View Case Study",
-    href: "/case-studies/healthcare"
-  },
-  {
-    id: 6,
-    title: "Cleaning Service Scaling",
-    industry: "Cleaning",
-    icon: SparklesIcon,
-    color: "teal",
-    challenge: "Manual scheduling and billing processes",
-    solution: "Automated scheduling and instant billing system",
-    results: [
-      { metric: "60%", label: "Higher Productivity" },
-      { metric: "Instant", label: "Billing Time" },
-      { metric: "40%", label: "More Bookings" }
-    ],
-    testimonial: "",
-    company: "",
-    cta: "View Case Study",
-    href: "/case-studies/cleaning"
+    cta: "View Industry Solutions",
+    href: "/case-studies#accounting"
   }
 ];
 
@@ -165,7 +126,7 @@ export default function HomepageCaseStudiesSection() {
         </div>
 
         {/* Case Studies Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
           {caseStudies.map((caseStudy, index) => {
             // Color mapping for consistent styling
             const colorMap: Record<string, { bg: string; border: string; text: string; glow: string }> = {

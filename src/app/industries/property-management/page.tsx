@@ -20,6 +20,7 @@ import {
   BellAlertIcon,
   KeyIcon,
 } from "@heroicons/react/24/outline";
+import { LeadFormWrapper } from "@/components/forms";
 
 const industry = getIndustryById("pm");
 
@@ -317,7 +318,7 @@ export default function PropertyManagementPage() {
           {/* CTA Buttons */}
           <div className="flex flex-wrap gap-4 justify-center mb-16">
             <Link
-              href="/solutions/custom-solutions"
+              href="#lead-form"
               className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-blue-500 px-6 py-3 font-semibold text-white shadow-lg hover:from-sky-400 hover:to-blue-400 transition-all duration-300 hover:scale-105 hover:shadow-sky-500/25"
             >
               Talk about my systems
@@ -587,9 +588,6 @@ export default function PropertyManagementPage() {
                     {app.id === "iq" && (
                       <p>Occupancy rates, maintenance costs, and portfolio performance at a glance.</p>
                     )}
-                    {app.id === "timeguard" && (
-                      <p>Track team hours, vendor time, and project costs across your properties.</p>
-                    )}
                   </div>
 
                   {/* CTA */}
@@ -744,7 +742,7 @@ export default function PropertyManagementPage() {
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
-              href="/solutions/custom-solutions"
+              href="#lead-form"
               className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 font-semibold text-sky-600 shadow-lg hover:bg-white/90 transition-all duration-300 hover:scale-105"
             >
               Talk about my property systems
@@ -759,6 +757,14 @@ export default function PropertyManagementPage() {
           </div>
         </div>
       </section>
+
+      {/* Lead Form Section - Blue Theme */}
+      <LeadFormWrapper
+        variant="industries"
+        colorScheme="blue"
+        customGradient="from-sky-500 to-blue-500"
+        customShadow="shadow-sky-500/30"
+      />
     </main>
   );
 }

@@ -57,12 +57,12 @@ export default function ProblemsSolutionsSection() {
               {/* Solutions Column */}
               <div className="space-y-6">
                 <div className="flex items-center mb-6">
-                  <CheckCircleIcon className="w-6 h-6 text-[#47BD79] mr-3" />
+                  <CheckCircleIcon className="w-6 h-6 text-sky-400 mr-3" />
                   <h3 className="text-xl font-semibold text-white">Our Solution</h3>
                 </div>
                 {problemsSolutions.map((item, index) => (
-                  <div key={index} className="bg-[#47BD79]/10 border border-[#47BD79]/20 rounded-lg p-4">
-                    <p className="text-[#47BD79] font-medium">{item.solution}</p>
+                  <div key={index} className="bg-sky-500/10 border border-sky-500/20 rounded-lg p-4">
+                    <p className="text-sky-300 font-medium">{item.solution}</p>
                   </div>
                 ))}
               </div>
@@ -72,9 +72,9 @@ export default function ProblemsSolutionsSection() {
 
         {/* Bottom CTA */}
         <div className="mt-12 text-center">
-          <div className="inline-flex items-center px-6 py-3 bg-blue-500/10 border border-blue-500/30 rounded-full">
-            <div className="w-2 h-2 bg-blue-400 rounded-full mr-3 animate-pulse"></div>
-            <span className="text-blue-400 font-medium">
+          <div className="inline-flex items-center px-6 py-3 bg-sky-500/10 border border-sky-500/30 rounded-full">
+            <div className="w-2 h-2 bg-sky-400 rounded-full mr-3 animate-pulse"></div>
+            <span className="text-sky-400 font-medium">
               Ready to solve these problems? Try our CRM today
             </span>
           </div>
