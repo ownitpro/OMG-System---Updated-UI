@@ -94,7 +94,8 @@
       "Bash(xargs kill:*)",
       "Bash(git add:*)",
       "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: configure launch without SSO for Monday deployment\n\n- Disable SSO authentication for initial product launch\n- Update product launch URLs to use environment variables\n- Configure SecureVault Docs production URL \\(https://omgsystem.com\\)\n- Add comprehensive deployment documentation\n\nChanges:\n- src/config/appLinks.ts: Add environment variable support for product URLs\n- src/components/portal/PortalCard.tsx: Disable SSO by default \\(useSSO=false\\)\n- src/app/portal/client/page.tsx: Remove explicit useSSO prop\n\nDocumentation:\n- LAUNCH_WITHOUT_SSO_GUIDE.md: Complete guide for Monday launch\n- ACCOUNT_LINKING_SOLUTION.md: Future SSO account linking solution\n- UPGRADE_FLOW_SOLUTION.md: Centralized upgrade flow implementation\n- MANAGER_INFORMATION_NEEDED.md: Requirements for SSO integration\n- MANAGER_QUICK_CHECKLIST.md: Quick checklist for manager\n- INTEGRATION_OVERVIEW_FOR_MANAGER.md: Visual integration overview\n- COMPLETE_INTEGRATION_SUMMARY.md: Comprehensive integration summary\n\nLaunch behavior: Users click Launch → Opens product URL in new tab → Separate login required \\(temporary\\)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(git commit:*)"
     ]
   }
 }
