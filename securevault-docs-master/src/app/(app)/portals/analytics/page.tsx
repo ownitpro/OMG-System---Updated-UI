@@ -144,8 +144,8 @@ export default function AnalyticsPage() {
         </button>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-black text-navy font-display">Portal Analytics</h1>
-            <p className="mt-2 text-slate-500 font-medium">
+            <h1 className="text-3xl font-black text-white text-shadow-md font-display">Portal Analytics</h1>
+            <p className="mt-2 text-white text-shadow-sm font-semibold">
               Insights and metrics for {activeOrg?.name || 'your organization'}
             </p>
           </div>
@@ -185,8 +185,8 @@ export default function AnalyticsPage() {
             </span>
           </div>
           <h3 className="text-3xl font-black text-navy font-display">{analytics.totalPortals}</h3>
-          <p className="text-sm mt-1 text-slate-500 font-medium">Total Portals</p>
-          <p className="text-xs mt-2 text-slate-400 font-medium">
+          <p className="text-base mt-1 text-white text-shadow-sm font-semibold">Total Portals</p>
+          <p className="text-sm mt-2 text-white/80 text-shadow-sm font-medium">
             {analytics.expiredPortals} expired
           </p>
           <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-600" />
@@ -206,8 +206,8 @@ export default function AnalyticsPage() {
             )}
           </div>
           <h3 className="text-3xl font-black text-navy font-display">{analytics.totalUploads}</h3>
-          <p className="text-sm mt-1 text-slate-500 font-medium">Total Uploads</p>
-          <p className="text-xs mt-2 text-slate-400 font-medium">
+          <p className="text-base mt-1 text-white text-shadow-sm font-semibold">Total Uploads</p>
+          <p className="text-sm mt-2 text-white/80 text-shadow-sm font-medium">
             {analytics.uploadsThisMonth} this month
           </p>
           <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 to-green-600" />
@@ -224,10 +224,10 @@ export default function AnalyticsPage() {
             </span>
           </div>
           <h3 className="text-3xl font-black text-navy font-display">
-            {analytics.completedRequests}<span className="text-slate-400 text-xl">/{analytics.totalRequests}</span>
+            {analytics.completedRequests}<span className="text-white/60 text-xl">/{analytics.totalRequests}</span>
           </h3>
-          <p className="text-sm mt-1 text-slate-500 font-medium">Requests Completed</p>
-          <p className="text-xs mt-2 text-slate-400 font-medium">
+          <p className="text-base mt-1 text-white text-shadow-sm font-semibold">Requests Completed</p>
+          <p className="text-sm mt-2 text-white/80 text-shadow-sm font-medium">
             {analytics.pendingRequests} pending
           </p>
           <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-400 to-purple-600" />
@@ -244,8 +244,8 @@ export default function AnalyticsPage() {
           <h3 className="text-3xl font-black text-navy font-display">
             {analytics.avgCompletionTime.toFixed(1)}
           </h3>
-          <p className="text-sm mt-1 text-slate-500 font-medium">Avg. Days to Complete</p>
-          <p className="text-xs mt-2 text-slate-400 font-medium">Per request</p>
+          <p className="text-base mt-1 text-white text-shadow-sm font-semibold">Avg. Days to Complete</p>
+          <p className="text-sm mt-2 text-white/80 text-shadow-sm font-medium">Per request</p>
           <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 to-amber-600" />
         </div>
       </div>
@@ -268,13 +268,13 @@ export default function AnalyticsPage() {
 
                 return (
                   <div key={idx}>
-                    <div className="flex items-center justify-between text-sm mb-1.5">
-                      <span className="text-slate-500 font-medium">{item.date}</span>
-                      <span className="font-bold text-navy">{item.count}</span>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-white text-shadow-sm font-semibold text-base">{item.date}</span>
+                      <span className="font-bold text-white text-shadow-sm">{item.count}</span>
                     </div>
-                    <div className="w-full rounded-full h-2.5 bg-slate-100 overflow-hidden">
+                    <div className="w-full rounded-full h-2.5 bg-white/20 overflow-hidden">
                       <div
-                        className="bg-gradient-to-r from-teal-mid to-teal-bright h-full rounded-full transition-all duration-500"
+                        className="bg-gradient-to-r from-teal-500 to-teal-400 h-full rounded-full transition-all duration-500"
                         style={{ width: `${barWidth}%` }}
                       />
                     </div>

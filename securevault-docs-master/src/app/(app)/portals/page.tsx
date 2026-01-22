@@ -160,10 +160,10 @@ function PortalsView() {
       <div className="flex flex-col gap-4 sm:gap-6 mb-6 sm:mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-white dark:text-white font-display">
+            <h2 className="text-2xl font-bold text-white text-shadow-md font-display">
               Client Portals
             </h2>
-            <p className="text-sm font-medium text-white/90 dark:text-slate-200 mt-1">
+            <p className="text-sm font-medium text-readable-muted text-shadow-sm mt-1">
               Create and manage secure client portals
             </p>
           </div>
@@ -186,8 +186,8 @@ function PortalsView() {
               <BarChart3 className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h3 className="font-bold text-white dark:text-white text-lg">Analytics</h3>
-              <p className="text-sm text-white/80 dark:text-slate-200 font-medium">View portal metrics</p>
+              <h3 className="font-bold text-white text-shadow-sm text-lg">Analytics</h3>
+              <p className="text-sm text-readable-muted text-shadow-sm font-medium">View portal metrics</p>
             </div>
           </button>
 
@@ -199,8 +199,8 @@ function PortalsView() {
               <Upload className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h3 className="font-bold text-white dark:text-white text-lg">Bulk Create</h3>
-              <p className="text-sm text-white/80 dark:text-slate-200 font-medium">Upload CSV to create multiple</p>
+              <h3 className="font-bold text-white text-shadow-sm text-lg">Bulk Create</h3>
+              <p className="text-sm text-readable-muted text-shadow-sm font-medium">Upload CSV to create multiple</p>
             </div>
           </button>
         </div>
@@ -214,8 +214,8 @@ function PortalsView() {
         <div className="glass-card p-6 hover:translate-y-[-2px] transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-white dark:text-white">Active Portals</p>
-              <p className="text-3xl font-black text-white dark:text-white mt-2 font-display">{portals.length}</p>
+              <p className="text-sm font-medium text-navy dark:text-white text-shadow-sm">Active Portals</p>
+              <p className="text-3xl font-black text-navy dark:text-white text-shadow-md mt-2 font-display">{portals.length}</p>
             </div>
             <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/20">
               <Users className="w-6 h-6 text-white" />
@@ -226,8 +226,8 @@ function PortalsView() {
         <div className="glass-card p-6 hover:translate-y-[-2px] transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-white dark:text-white">Documents</p>
-              <p className="text-3xl font-black text-white dark:text-white mt-2 font-display">0</p>
+              <p className="text-sm font-medium text-navy dark:text-white text-shadow-sm">Documents</p>
+              <p className="text-3xl font-black text-navy dark:text-white text-shadow-md mt-2 font-display">0</p>
             </div>
             <div className="p-3 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 shadow-lg shadow-amber-500/20">
               <FolderOpen className="w-6 h-6 text-white" />
@@ -238,8 +238,8 @@ function PortalsView() {
         <div className="glass-card p-6 hover:translate-y-[-2px] transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-white dark:text-white">Activity</p>
-              <p className="text-3xl font-black text-white dark:text-white mt-2 font-display">0</p>
+              <p className="text-sm font-medium text-navy dark:text-white text-shadow-sm">Activity</p>
+              <p className="text-3xl font-black text-navy dark:text-white text-shadow-md mt-2 font-display">0</p>
             </div>
             <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg shadow-purple-500/20">
               <Clock className="w-6 h-6 text-white" />
@@ -253,17 +253,17 @@ function PortalsView() {
         {loading ? (
           <div className="p-12 text-center">
             <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-white border-r-transparent"></div>
-            <p className="mt-4 text-sm text-white dark:text-white">Loading portals...</p>
+            <p className="mt-4 text-sm text-white text-shadow-sm">Loading portals...</p>
           </div>
         ) : portals.length === 0 ? (
           <div className="p-16 text-center">
             <div className="inline-flex p-4 rounded-2xl mb-4 bg-teal-500/10">
               <Sparkles className="w-12 h-12 text-teal-500" />
             </div>
-            <h3 className="text-xl font-bold mb-2 text-white dark:text-white font-display">
+            <h3 className="text-xl font-bold mb-2 text-white text-shadow-md font-display">
               Set up your first portal
             </h3>
-            <p className="text-sm mb-6 max-w-md mx-auto text-white/80 dark:text-slate-200">
+            <p className="text-sm mb-6 max-w-md mx-auto text-readable-muted text-shadow-sm">
               Create a secure client portal to share documents and collect information from your clients seamlessly.
             </p>
             <button
@@ -285,7 +285,7 @@ function PortalsView() {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="font-bold text-white dark:text-white text-lg font-display">
+                      <h3 className="font-bold text-navy dark:text-white text-shadow-sm text-lg font-display">
                         {portal.title || portal.externalName || portal.name}
                       </h3>
                       <span className="px-2 py-0.5 text-xs font-bold rounded bg-teal-500/10 text-teal-600 dark:text-teal-400 uppercase tracking-wider">
@@ -293,11 +293,11 @@ function PortalsView() {
                       </span>
                     </div>
 
-                    <p className="text-sm text-white/70 dark:text-slate-200">
+                    <p className="text-sm text-navy dark:text-slate-200 text-shadow-sm">
                       {portal.clientEmail || portal.client?.email || portal.email}
                     </p>
 
-                    <div className="flex items-center gap-4 mt-3 text-sm text-white/60 dark:text-slate-300 font-medium">
+                    <div className="flex items-center gap-4 mt-3 text-sm text-navy dark:text-slate-300 text-shadow-sm font-medium">
                       <span className="flex items-center gap-1.5">
                         <Calendar className="w-4 h-4" />
                         Created {new Date(portal.createdAt).toLocaleDateString()}
@@ -318,7 +318,7 @@ function PortalsView() {
                   <div className="ml-4 flex items-center gap-2">
                     <button
                       onClick={() => router.push(`/portals/${portal.id}`)}
-                      className="px-4 py-2 text-sm font-semibold rounded-lg transition-colors bg-white/40 hover:bg-white/60 text-white border border-white/30"
+                      className="btn-enhanced-secondary px-4 py-2 text-sm"
                     >
                       View Details
                     </button>
@@ -802,10 +802,10 @@ function RequestsView() {
     <div className="animate-fadeIn">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+          <h2 className={`text-xl font-semibold text-shadow-md ${isDarkMode ? 'text-white' : 'text-white'}`}>
             Document Requests
           </h2>
-          <p className={`text-sm mt-1 ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
+          <p className={`text-sm mt-1 text-readable-muted text-shadow-sm ${isDarkMode ? 'text-slate-400' : 'text-white/80'}`}>
             Request documents from clients through portals
           </p>
         </div>
@@ -908,7 +908,7 @@ function RequestsView() {
             <h3 className="text-xl font-bold mb-2 text-navy dark:text-white font-display">
               No requests yet
             </h3>
-            <p className="text-sm mb-6 max-w-md mx-auto text-slate-500 dark:text-slate-400">
+            <p className="text-sm mb-6 max-w-md mx-auto text-readable-muted text-shadow-sm">
               Create your first document request to start collecting documents from clients
             </p>
             <button
@@ -931,7 +931,7 @@ function RequestsView() {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         {getStatusIcon(request.status)}
-                        <h3 className="font-bold text-navy dark:text-white text-lg font-display">{request.title}</h3>
+                        <h3 className="font-bold text-navy dark:text-white text-shadow-sm text-lg font-display">{request.title}</h3>
                         <span className={`px-2 py-0.5 text-xs font-bold rounded uppercase tracking-wider ${getStatusColor(request.status)}`}>
                           {getStatusText(request.status)}
                         </span>
@@ -942,7 +942,7 @@ function RequestsView() {
                         )}
                       </div>
 
-                      <div className="flex items-center gap-4 text-sm mb-4 text-slate-400 dark:text-slate-500 font-medium">
+                      <div className="flex items-center gap-4 text-sm mb-4 text-navy dark:text-slate-200 text-shadow-sm font-medium">
                         <span>Client: {request.clientName}</span>
                         <span>•</span>
                         <span className="flex items-center gap-1.5">
@@ -963,10 +963,10 @@ function RequestsView() {
                       {/* Progress Bar */}
                       <div className="mb-4">
                         <div className="flex items-center justify-between text-sm mb-2">
-                          <span className="text-slate-500 dark:text-slate-400 font-medium">
+                          <span className="text-readable-muted text-shadow-sm font-medium">
                             {progress.uploaded} of {progress.total} documents uploaded
                           </span>
-                          <span className="font-bold text-navy dark:text-white">{progress.percentage}%</span>
+                          <span className="font-bold text-navy dark:text-white text-shadow-sm">{progress.percentage}%</span>
                         </div>
                         <div className="w-full rounded-full h-2 bg-slate-100 dark:bg-slate-700/50">
                           <div
@@ -1031,21 +1031,25 @@ function RequestsView() {
       {/* Create Request Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-[9999] p-4 sm:p-6 animate-fadeIn">
-          <div className="rounded-2xl p-6 sm:p-8 max-w-3xl w-full max-h-[85vh] overflow-y-auto shadow-2xl animate-slideUp bg-white border border-slate-200">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-slate-900 font-display">Create Document Request</h2>
-              <button
-                onClick={() => {
-                  setShowCreateModal(false);
-                  resetModalForm();
-                }}
-                className="p-2 rounded-lg transition-colors text-slate-400 hover:text-slate-600 hover:bg-slate-100"
-              >
-                <X className="w-5 h-5" />
-              </button>
+          <div className="relative w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden animate-slideUp bg-gradient-to-br from-teal-600 to-teal-500 my-8">
+            {/* Header with gradient */}
+            <div className="relative px-6 py-5 bg-white/10 backdrop-blur-sm border-b border-white/20">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold text-white font-display">Create Document Request</h2>
+                <button
+                  onClick={() => {
+                    setShowCreateModal(false);
+                    resetModalForm();
+                  }}
+                  className="p-2 rounded-xl transition-colors hover:bg-white/10 text-white/80 hover:text-white"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
-            <div className="space-y-6">
+            {/* Form Content */}
+            <div className="p-6 sm:p-8 space-y-6 bg-white/95 backdrop-blur-sm max-h-[calc(85vh-80px)] overflow-y-auto">
               {/* Client Information */}
               <div>
                 <h3 className="text-sm font-bold mb-3 text-slate-900">Client Information</h3>
@@ -1059,7 +1063,7 @@ function RequestsView() {
                       value={clientName}
                       onChange={(e) => setClientName(e.target.value)}
                       placeholder="John Smith"
-                      className="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all font-medium"
+                      className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all font-medium"
                     />
                   </div>
                   <div>
@@ -1071,7 +1075,7 @@ function RequestsView() {
                       value={clientEmail}
                       onChange={(e) => setClientEmail(e.target.value)}
                       placeholder="john@example.com"
-                      className="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all font-medium"
+                      className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all font-medium"
                     />
                   </div>
                 </div>
@@ -1085,7 +1089,7 @@ function RequestsView() {
                     onChange={(e) => setClientPin(e.target.value)}
                     placeholder="e.g., 1234"
                     maxLength={20}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all font-medium"
+                    className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all font-medium"
                   />
                   <p className="text-xs mt-2 text-slate-600 font-medium">
                     The client will need to enter this PIN to access the portal. The PIN will be emailed to them.
@@ -1106,7 +1110,7 @@ function RequestsView() {
                         setSelectedTemplate('');
                         setCustomItems([]);
                       }}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all font-medium [&>option]:text-slate-900 [&>option]:bg-white"
+                      className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all font-medium [&>option]:text-slate-900 [&>option]:bg-white"
                     >
                       <option value="">Select industry...</option>
                       {industries.map((industry) => (
@@ -1122,7 +1126,7 @@ function RequestsView() {
                       value={selectedTemplate}
                       onChange={(e) => handleTemplateChange(e.target.value)}
                       disabled={!selectedIndustry}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed [&>option]:text-slate-900 [&>option]:bg-white"
+                      className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed [&>option]:text-slate-900 [&>option]:bg-white"
                     >
                       <option value="">Select template...</option>
                       {getTemplatesForIndustry().map((template) => (
@@ -1139,9 +1143,9 @@ function RequestsView() {
               </div>
 
               {/* Due Date */}
-              <div className="p-5 border rounded-2xl transition-colors bg-slate-50 border-slate-200">
+              <div className="p-5 border rounded-2xl transition-colors bg-white/40 backdrop-blur-sm border-white/30">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="p-1.5 rounded-lg bg-teal-500/10">
+                  <div className="p-1.5 rounded-lg bg-teal-500/20 backdrop-blur-sm">
                     <Calendar className="w-4 h-4 text-teal-600" />
                   </div>
                   <label className="text-sm font-bold text-slate-900">
@@ -1214,7 +1218,7 @@ function RequestsView() {
                     onChange={(e) => setNewItemLabel(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleAddCustomItem()}
                     placeholder="Enter document name (e.g., W-2, Invoice, Contract)"
-                    className="flex-1 px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all font-medium"
+                    className="flex-1 px-4 py-3 rounded-xl border-2 border-slate-200 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all font-medium"
                   />
                   <button
                     onClick={handleAddCustomItem}
@@ -1224,37 +1228,37 @@ function RequestsView() {
                   </button>
                 </div>
               </div>
-            </div>
 
-            {/* Actions */}
-            <div className="flex items-center justify-end gap-3 mt-6 pt-6 border-t border-slate-200">
-              <button
-                onClick={() => {
-                  setShowCreateModal(false);
-                  resetModalForm();
-                }}
-                className="px-6 py-3 rounded-xl transition-colors bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold border border-slate-300"
-                disabled={creating}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleCreateRequest}
-                disabled={creating}
-                className="px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl hover:from-teal-600 hover:to-teal-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg shadow-teal-500/25 transition-all font-bold"
-              >
-                {creating ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Creating...
-                  </>
-                ) : (
-                  <>
-                    <Plus className="w-4 h-4" />
-                    Create Request
-                  </>
-                )}
-              </button>
+              {/* Actions */}
+              <div className="flex items-center justify-end gap-3 mt-6 pt-6 border-t border-slate-200">
+                <button
+                  onClick={() => {
+                    setShowCreateModal(false);
+                    resetModalForm();
+                  }}
+                  className="px-6 py-3 rounded-xl transition-colors bg-white hover:bg-slate-50 text-slate-700 font-bold border-2 border-slate-200"
+                  disabled={creating}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleCreateRequest}
+                  disabled={creating}
+                  className="px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl hover:from-teal-600 hover:to-teal-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg shadow-teal-500/25 transition-all font-bold"
+                >
+                  {creating ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Creating...
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-4 h-4" />
+                      Create Request
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -1,8 +1,5 @@
 import { NextResponse } from 'next/server';
-import bcrypt from 'bcrypt';
 import { requireBusinessAccount, createAccountTypeError } from '@/lib/auth/accountTypeGuard';
-
-const BCRYPT_SALT_ROUNDS = 10;
 
 type Params = { params: Promise<{ orgId: string }> };
 
@@ -93,7 +90,11 @@ export async function POST(request: Request, { params }: Params) {
     const portalId = randomUUID();
 
     // Hash the PIN before storing (keep original for email)
-    const hashedPin = pin ? await bcrypt.hash(pin, BCRYPT_SALT_ROUNDS) : null;
+    let hashedPin = null;
+    if (pin) {
+      const bcrypt = await import('bcrypt');
+      hashedPin = await bcrypt.default.hash(pin, 10);
+    }
 
     // Insert portal into database
     const portal = await queryOne(

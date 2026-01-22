@@ -361,8 +361,8 @@ export default function MembersPage() {
             }}
             className={`flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02] flex-shrink-0 ${
               isDarkMode
-                ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white hover:from-emerald-700 hover:to-emerald-600 shadow-emerald-500/25 hover:shadow-emerald-500/40'
-                : 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white hover:from-emerald-700 hover:to-emerald-600 shadow-emerald-500/30 hover:shadow-emerald-500/50'
+                ? 'bg-gradient-to-r from-teal-600 to-teal-500 text-white hover:from-teal-700 hover:to-teal-600 shadow-teal-500/25 hover:shadow-teal-500/40'
+                : 'bg-gradient-to-r from-teal-600 to-teal-500 text-white hover:from-teal-700 hover:to-teal-600 shadow-teal-500/30 hover:shadow-teal-500/50'
             }`}
           >
             <UserPlus className="w-5 h-5" />
@@ -384,10 +384,10 @@ export default function MembersPage() {
                 const org = organizations.find(o => o.id === e.target.value)
                 setSelectedOrg(org || null)
               }}
-              className={`appearance-none px-4 py-2.5 pr-10 rounded-xl border focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300 ${
+              className={`appearance-none px-4 py-2.5 pr-10 rounded-xl border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 ${
                 isDarkMode
                   ? 'bg-slate-700/50 border-slate-600 text-white'
-                  : 'bg-white border-gray-200 text-gray-900'
+                  : 'glass-card border-white/20 text-slate-900'
               }`}
             >
               {organizations.map((org) => (
@@ -422,7 +422,7 @@ export default function MembersPage() {
 
         {members.length === 0 ? (
           <div className={`text-center py-12 rounded-xl border-2 border-dashed ${
-            isDarkMode ? 'border-slate-700 bg-slate-800/30' : 'border-gray-200 bg-gray-50'
+            isDarkMode ? 'border-slate-700 bg-slate-800/30' : 'border-white/30 glass-card'
           }`}>
             <Users className={`w-12 h-12 mx-auto mb-4 ${isDarkMode ? 'text-slate-600' : 'text-gray-300'}`} />
             <p className={`${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>No members found</p>
@@ -442,7 +442,7 @@ export default function MembersPage() {
                   } ${
                     isDarkMode
                       ? 'bg-slate-800/50 border-slate-700 hover:bg-slate-800 hover:border-slate-600'
-                      : 'bg-white border-gray-200 hover:bg-gray-50 hover:border-gray-300'
+                      : 'glass-card border-white/20 hover:bg-white/60'
                   }`}
                   style={{ animationDelay: `${(index + 2) * 50}ms` }}
                 >
@@ -483,8 +483,8 @@ export default function MembersPage() {
                               className={`appearance-none pl-2 pr-6 py-1 text-xs rounded-lg font-semibold cursor-pointer transition-colors border ${
                                 member.role === 'admin'
                                   ? isDarkMode ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' : 'bg-amber-500 text-white border-amber-500'
-                                  : isDarkMode ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-emerald-500 text-white border-emerald-500'
-                              } focus:outline-none focus:ring-2 focus:ring-emerald-500`}
+                                  : isDarkMode ? 'bg-teal-500/20 text-teal-400 border-teal-500/30' : 'bg-teal-500 text-white border-teal-500'
+                              } focus:outline-none focus:ring-2 focus:ring-teal-500`}
                             >
                               <option value="admin">Admin</option>
                               <option value="member">Member</option>
@@ -500,7 +500,7 @@ export default function MembersPage() {
                           <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-lg font-semibold ${
                             member.role === 'admin'
                               ? isDarkMode ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-500 text-white'
-                              : isDarkMode ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-500 text-white'
+                              : isDarkMode ? 'bg-teal-500/20 text-teal-400' : 'bg-teal-500 text-white'
                           }`}>
                             <RoleIcon className="w-3.5 h-3.5" />
                             {roleConfig.label}
@@ -559,7 +559,7 @@ export default function MembersPage() {
                   } ${
                     isExpired
                       ? isDarkMode ? 'bg-red-500/5 border-red-500/30' : 'bg-red-50 border-red-200'
-                      : isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-gray-200'
+                      : isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'glass-card border-white/20'
                   }`}
                   style={{ animationDelay: `${(index + 5) * 50}ms` }}
                 >
@@ -644,17 +644,17 @@ export default function MembersPage() {
             }}
           />
 
-          <div className="relative w-full max-w-md rounded-3xl shadow-2xl overflow-hidden animate-scaleIn bg-white border border-slate-200 my-8">
-            <div className="relative px-6 py-5 bg-gradient-to-r from-emerald-50 to-teal-50 border-b border-slate-200 rounded-t-3xl">
+          <div className="relative w-full max-w-md rounded-3xl shadow-2xl overflow-hidden animate-scaleIn bg-gradient-to-br from-teal-600 to-teal-500 my-8">
+            <div className="relative px-6 py-5 bg-white/10 backdrop-blur-sm border-b border-white/20 rounded-t-3xl">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-emerald-100">
-                  <UserPlus className="w-5 h-5 text-emerald-600" />
+                <div className="p-2.5 rounded-xl bg-white/20 backdrop-blur-sm">
+                  <UserPlus className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900 font-display">
+                  <h3 className="text-lg font-bold text-white font-display">
                     Invite Team Member
                   </h3>
-                  <p className="text-sm text-slate-600 font-medium">
+                  <p className="text-sm text-white/80 font-medium">
                     Invite a user to {selectedOrg?.name}
                   </p>
                 </div>
@@ -665,13 +665,13 @@ export default function MembersPage() {
                   setInviteData({ email: '', role: 'member' })
                   setInviteUrl(null)
                 }}
-                className="absolute top-4 right-4 p-2 rounded-xl transition-colors hover:bg-slate-100 text-slate-400 hover:text-slate-700"
+                className="absolute top-4 right-4 p-2 rounded-xl transition-colors hover:bg-white/10 text-white/80 hover:text-white"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="p-6 space-y-5 bg-white">
+            <div className="p-6 space-y-5 bg-white/95 backdrop-blur-sm">
               <div>
                 <label className="block text-sm font-bold mb-2 text-slate-900">
                   Email Address <span className="text-red-500">*</span>
@@ -684,7 +684,7 @@ export default function MembersPage() {
                     type="email"
                     value={inviteData.email}
                     onChange={(e) => setInviteData({ ...inviteData, email: e.target.value })}
-                    className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300 text-slate-900 placeholder:text-slate-400 font-medium"
+                    className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-300 text-slate-900 placeholder:text-slate-400 font-medium"
                     placeholder="user@example.com"
                   />
                 </div>
@@ -701,7 +701,7 @@ export default function MembersPage() {
                   <select
                     value={inviteData.role}
                     onChange={(e) => setInviteData({ ...inviteData, role: e.target.value })}
-                    className="w-full appearance-none px-4 py-3 rounded-xl border-2 border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300 text-slate-900 font-medium"
+                    className="w-full appearance-none px-4 py-3 rounded-xl border-2 border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-300 text-slate-900 font-medium"
                   >
                     <option value="viewer">Viewer - Can view documents</option>
                     <option value="member">Member - Can view and edit documents</option>
@@ -746,7 +746,7 @@ export default function MembersPage() {
               )}
             </div>
 
-            <div className="flex gap-3 px-6 py-4 border-t border-slate-200 bg-slate-50">
+            <div className="flex gap-3 px-6 py-4 border-t border-white/10 bg-white/5 backdrop-blur-sm">
               <button
                 onClick={() => {
                   setShowInviteModal(false)
@@ -762,7 +762,7 @@ export default function MembersPage() {
                 <button
                   onClick={handleInvite}
                   disabled={inviting || !inviteData.email.trim()}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 text-white hover:from-emerald-700 hover:to-emerald-600 shadow-emerald-500/30"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-bold bg-gradient-to-r from-teal-600 to-teal-500 text-white hover:from-teal-700 hover:to-teal-600 shadow-teal-500/30"
                 >
                   {inviting ? (
                     <>

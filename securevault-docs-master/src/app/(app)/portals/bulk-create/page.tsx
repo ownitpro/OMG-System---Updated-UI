@@ -215,13 +215,13 @@ Bob Johnson,bob@example.com,,2025-02-28,Financial review`;
       <div>
         <button
           onClick={() => router.push('/portals')}
-          className="flex items-center gap-2 text-sm text-slate-500 hover:text-navy mb-4 font-medium transition-colors"
+          className="flex items-center gap-2 text-sm text-white text-shadow-sm hover:text-white/80 mb-4 font-semibold transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to portals
         </button>
-        <h1 className="text-3xl font-black text-navy font-display">Bulk Create Portals</h1>
-        <p className="mt-2 text-slate-500 font-medium">Upload a CSV file to create multiple portals at once</p>
+        <h1 className="text-3xl font-black text-white text-shadow-md font-display">Bulk Create Portals</h1>
+        <p className="mt-2 text-base text-white text-shadow-sm font-semibold">Upload a CSV file to create multiple portals at once</p>
       </div>
 
       {/* Instructions */}
@@ -231,8 +231,8 @@ Bob Johnson,bob@example.com,,2025-02-28,Financial review`;
             <Info className="w-5 h-5 text-blue-600 flex-shrink-0" />
           </div>
           <div className="flex-1">
-            <h3 className="font-bold text-navy text-lg font-display mb-3">How to use bulk creation:</h3>
-            <ol className="text-sm text-slate-600 space-y-2 list-decimal list-inside font-medium font-outfit">
+            <h3 className="font-bold text-white text-shadow-sm text-lg font-display mb-3">How to use bulk creation:</h3>
+            <ol className="text-base text-white text-shadow-sm space-y-2 list-decimal list-inside font-semibold font-outfit">
               <li>Download the CSV template below</li>
               <li>Fill in your portal details (clientName and clientEmail are required)</li>
               <li>Upload the completed CSV file</li>
@@ -244,22 +244,22 @@ Bob Johnson,bob@example.com,,2025-02-28,Financial review`;
 
       {/* Template Download */}
       <div className="glass-card rounded-2xl p-6 sm:p-8">
-        <h2 className="text-xl font-black text-navy font-display mb-4">Step 1: Download Template</h2>
+        <h2 className="text-xl font-black text-white text-shadow-md font-display mb-4">Step 1: Download Template</h2>
         <button
           onClick={downloadTemplate}
-          className="flex items-center gap-2 px-6 py-3 bg-white/40 hover:bg-white/60 text-navy rounded-xl transition-all border border-white/40 font-bold shadow-sm hover:shadow-md"
+          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-500 text-white rounded-xl transition-all shadow-lg shadow-teal-500/25 hover:from-teal-700 hover:to-teal-600 hover:shadow-teal-500/40 font-bold hover:-translate-y-0.5"
         >
           <Download className="w-5 h-5" />
           Download CSV Template
         </button>
-        <p className="text-sm text-slate-500 mt-3 font-medium">
+        <p className="text-base text-white text-shadow-sm mt-3 font-semibold">
           Required fields: clientName, clientEmail | Optional: pin, expiresAt, description
         </p>
       </div>
 
       {/* File Upload */}
       <div className="glass-card rounded-2xl p-6 sm:p-8">
-        <h2 className="text-xl font-black text-navy font-display mb-4">Step 2: Upload CSV</h2>
+        <h2 className="text-xl font-black text-white text-shadow-md font-display mb-4">Step 2: Upload CSV</h2>
         <label className="block w-full">
           <input
             type="file"
@@ -278,16 +278,16 @@ Bob Johnson,bob@example.com,,2025-02-28,Financial review`;
                 <div className="p-4 rounded-full bg-teal-500/10 mb-4">
                   <FileSpreadsheet className="w-10 h-10 text-teal-600" />
                 </div>
-                <p className="text-navy font-bold text-lg font-display">{file.name}</p>
-                <p className="text-sm text-slate-500 mt-1 font-medium">{rows.length} portals found</p>
+                <p className="text-white text-shadow-sm font-bold text-lg font-display">{file.name}</p>
+                <p className="text-base text-white text-shadow-sm mt-1 font-semibold">{rows.length} portals found</p>
               </div>
             ) : (
               <div className="flex flex-col items-center group">
                 <div className="p-4 rounded-full bg-slate-100 group-hover:bg-teal-500/10 transition-colors mb-4">
                   <Upload className="w-10 h-10 text-slate-400 group-hover:text-teal-600 transition-colors" />
                 </div>
-                <p className="text-navy font-bold text-lg font-display">Click to upload CSV</p>
-                <p className="text-sm text-slate-400 mt-1 font-medium">or drag and drop</p>
+                <p className="text-white text-shadow-sm font-bold text-lg font-display">Click to upload CSV</p>
+                <p className="text-base text-white text-shadow-sm mt-1 font-semibold">or drag and drop</p>
               </div>
             )}
           </div>
@@ -298,7 +298,7 @@ Bob Johnson,bob@example.com,,2025-02-28,Financial review`;
       {rows.length > 0 && (
         <div className="glass-card rounded-2xl p-6 sm:p-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-black text-navy font-display">
+            <h2 className="text-xl font-black text-white text-shadow-md font-display">
               Step 3: Review & Create ({rows.length} portals)
             </h2>
             {!completed && (
@@ -361,15 +361,15 @@ Bob Johnson,bob@example.com,,2025-02-28,Financial review`;
               <tbody className="divide-y divide-white/10">
                 {rows.map((row, idx) => (
                   <tr key={idx} className="transition-colors hover:bg-white/30">
-                    <td className="p-4 text-slate-500 font-medium">{row.index}</td>
+                    <td className="p-4 text-white text-shadow-sm font-semibold">{row.index}</td>
                     <td className="p-4">{getStatusIcon(row.status)}</td>
-                    <td className="p-4 font-bold text-navy">{row.clientName}</td>
-                    <td className="p-4 text-slate-500 font-medium">{row.clientEmail}</td>
-                    <td className="p-4 text-slate-500 font-mono tracking-wider">
-                      {row.pin || <span className="text-slate-400 opacity-50">auto</span>}
+                    <td className="p-4 font-bold text-white text-shadow-sm">{row.clientName}</td>
+                    <td className="p-4 text-white text-shadow-sm font-semibold">{row.clientEmail}</td>
+                    <td className="p-4 text-white text-shadow-sm font-mono font-semibold tracking-wider">
+                      {row.pin || <span className="text-white/60 text-shadow-sm opacity-50">auto</span>}
                     </td>
-                    <td className="p-4 text-slate-500 font-medium">
-                      {row.expiresAt || <span className="text-slate-400 opacity-50">never</span>}
+                    <td className="p-4 text-white text-shadow-sm font-semibold">
+                      {row.expiresAt || <span className="text-white/60 text-shadow-sm opacity-50">never</span>}
                     </td>
                     <td className="p-4">
                       {row.status === 'success' && row.portalId && (
@@ -392,8 +392,8 @@ Bob Johnson,bob@example.com,,2025-02-28,Financial review`;
 
           {completed && (
             <div className="mt-6 flex justify-between items-center">
-              <p className="text-sm text-slate-600 font-medium">
-                Created <span className="font-bold text-navy">{stats.success}</span> of <span className="font-bold text-navy">{stats.total}</span> portals successfully
+              <p className="text-base text-white text-shadow-sm font-semibold">
+                Created <span className="font-bold text-white text-shadow-sm">{stats.success}</span> of <span className="font-bold text-white text-shadow-sm">{stats.total}</span> portals successfully
               </p>
               <div className="flex gap-3">
                 <button

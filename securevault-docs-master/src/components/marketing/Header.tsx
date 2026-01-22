@@ -6,7 +6,13 @@ import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+
+  // Wait for component to mount to prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Close menu on route change
   useEffect(() => {
@@ -15,6 +21,8 @@ export default function Header() {
 
   // Lock scroll
   useEffect(() => {
+    if (!mounted) return;
+
     if (isMobileMenuOpen) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -23,7 +31,7 @@ export default function Header() {
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [isMobileMenuOpen]);
+  }, [isMobileMenuOpen, mounted]);
 
   return (
     <>
@@ -80,19 +88,21 @@ export default function Header() {
         </nav>
       </div>
 
-      {/* Mobile Drawer */}
-      {isMobileMenuOpen && (
-        <div
-          className="lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
-      )}
+      {/* Mobile Drawer - Only render after mounting to prevent hydration issues */}
+      {mounted && (
+        <>
+          {isMobileMenuOpen && (
+            <div
+              className="lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+          )}
 
-      <div
-        className={`lg:hidden fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] transform transition-transform duration-300 ease-in-out ${
-          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        } bg-slate-900/95 backdrop-blur-xl border-l border-slate-700 shadow-2xl`}
-      >
+          <div
+            className={`lg:hidden fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] transform transition-transform duration-300 ease-in-out ${
+              isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+            } bg-slate-900/95 backdrop-blur-xl border-l border-slate-700 shadow-2xl`}
+          >
         <div className="flex items-center justify-between px-4 py-4 border-b border-slate-700">
           <span className="text-lg font-semibold text-white">Menu</span>
            <button
@@ -123,7 +133,9 @@ export default function Header() {
               <Link href="/signup" className="w-full px-4 py-3 min-h-[48px] flex items-center justify-center text-base font-semibold rounded-xl btn-enhanced-secondary">Get Started Free</Link>
            </div>
         </div>
-      </div>
+          </div>
+        </>
+      )}
     </>
   );
 }

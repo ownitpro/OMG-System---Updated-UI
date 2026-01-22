@@ -192,7 +192,7 @@ export function AppTopNav() {
             {/* Sign Out - hidden on mobile, shown in mobile menu */}
             <button
               onClick={() => signOut()}
-              className="hidden md:flex items-center justify-center px-6 py-2 min-h-[44px] text-sm font-bold tracking-tight rounded-full btn-premium-primary hover:shadow-lg hover:shadow-teal-500/30 hover:-translate-y-0.5"
+              className="hidden md:flex items-center justify-center px-6 py-2 min-h-[44px] text-sm font-bold tracking-tight rounded-full bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg shadow-teal-500/25 hover:from-teal-700 hover:to-teal-600 hover:shadow-teal-500/40 transition-all hover:-translate-y-0.5"
             >
               Sign out
             </button>

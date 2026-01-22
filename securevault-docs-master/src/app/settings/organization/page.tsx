@@ -437,18 +437,18 @@ export default function OrganizationSettingsPage() {
           />
 
           {/* Modal */}
-          <div className="relative w-full max-w-md rounded-3xl shadow-2xl overflow-hidden animate-scaleIn bg-white my-8">
+          <div className="relative w-full max-w-md rounded-3xl shadow-2xl overflow-hidden animate-scaleIn bg-gradient-to-br from-purple-600 to-purple-500 my-8">
             {/* Header with gradient */}
-            <div className="relative px-6 py-5 bg-gradient-to-r from-purple-50 to-blue-50 border-b border-slate-200 rounded-t-3xl">
+            <div className="relative px-6 py-5 bg-white/10 backdrop-blur-sm border-b border-white/20 rounded-t-3xl">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-purple-500/10">
-                  <Sparkles className="w-5 h-5 text-purple-600" />
+                <div className="p-2.5 rounded-xl bg-white/20 backdrop-blur-sm">
+                  <Sparkles className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900 font-display">
+                  <h3 className="text-lg font-bold text-white font-display">
                     Create Organization
                   </h3>
-                  <p className="text-sm text-slate-600 font-medium">
+                  <p className="text-sm text-white/80 font-medium">
                     Set up your new workspace
                   </p>
                 </div>
@@ -458,14 +458,14 @@ export default function OrganizationSettingsPage() {
                   setShowCreateModal(false)
                   setFormData({ name: '', description: '' })
                 }}
-                className="absolute top-5 right-5 p-2 rounded-xl transition-colors hover:bg-slate-100 text-slate-400 hover:text-slate-700"
+                className="absolute top-5 right-5 p-2 rounded-xl transition-colors hover:bg-white/10 text-white/80 hover:text-white"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Form */}
-            <div className="p-6 space-y-5 bg-white">
+            <div className="p-6 space-y-5 bg-white/95 backdrop-blur-sm">
               <div>
                 <label className="block text-sm font-bold text-slate-900 mb-2">
                   Organization Name <span className="text-red-500">*</span>
@@ -495,7 +495,7 @@ export default function OrganizationSettingsPage() {
             </div>
 
             {/* Actions */}
-            <div className="flex gap-3 px-6 py-4 border-t border-slate-200 bg-slate-50">
+            <div className="flex gap-3 px-6 py-4 border-t border-white/10 bg-white/5 backdrop-blur-sm">
               <button
                 onClick={() => {
                   setShowCreateModal(false)
