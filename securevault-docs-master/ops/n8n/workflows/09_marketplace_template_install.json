@@ -1,0 +1,68 @@
+{
+  "name": "09 Marketplace Template Install",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "svd/marketplace/install",
+        "methods": ["POST"]
+      },
+      "id": "1",
+      "name": "Inbound",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 280]
+    },
+    {
+      "parameters": {
+        "requestMethod": "GET",
+        "url": "={{$env.SVD_MARKETPLACE_BASE}}/catalog/{{ $json.body.templateId }}",
+        "jsonParameters": true
+      },
+      "id": "2",
+      "name": "Fetch Template",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [480, 240]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "={{$env.SVD_API_BASE}}/org/{{ $json.body.orgId }}/install",
+        "jsonParameters": true,
+        "bodyParametersJson": "={\"template\": {{$json}}}"
+      },
+      "id": "3",
+      "name": "Apply to Org",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [740, 280]
+    }
+  ],
+  "connections": {
+    "Inbound": {
+      "main": [
+        [
+          {
+            "node": "Fetch Template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Template": {
+      "main": [
+        [
+          {
+            "node": "Apply to Org",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "version": 2
+}
+

@@ -1,0 +1,17 @@
+{
+  "ts": "2025-11-18T20:20:00Z",
+  "orgId": "org_abc123",
+  "from": "sender@example.com",
+  "to": "vault+org_abc123@securevaultdocs.com",
+  "subject": "Invoice #12345",
+  "body": "Please find attached invoice.",
+  "attachments": [
+    {
+      "filename": "invoice_12345.pdf",
+      "contentType": "application/pdf",
+      "size": 245678,
+      "content": "base64_encoded_content_here"
+    }
+  ]
+}
+

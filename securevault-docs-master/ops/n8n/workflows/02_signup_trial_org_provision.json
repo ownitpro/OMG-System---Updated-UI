@@ -1,0 +1,95 @@
+{
+  "name": "02 Signup → Trial → Org Provision",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "svd/signup",
+        "methods": ["POST"],
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "1",
+      "name": "Signup (Webhook)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Validate minimal payload\nconst b = $json.body||{}; if(!b.email){throw new Error('email required');}\nreturn [{email:b.email,name:b.name||'', plan:b.plan||'starter', vertical:b.vertical||'business'}];"
+      },
+      "id": "2",
+      "name": "Validate",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "={{$env.SVD_API_BASE}}/internal/provision/org",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\n  \"email\": \"{{$json.email}}\",\n  \"plan\": \"{{$json.plan}}\",\n  \"trialDays\": 7\n}"
+      },
+      "id": "3",
+      "name": "Provision Org",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [740, 220]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "={{$env.SVD_API_BASE}}/billing/checkout/session",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\"email\": \"{{$json.email}}\", \"plan\": \"{{$json.plan}}\"}"
+      },
+      "id": "4",
+      "name": "Create Stripe Session (stub)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [740, 380],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "svd_Stripe",
+          "name": "svd_Stripe"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Signup (Webhook)": {
+      "main": [
+        [
+          {
+            "node": "Validate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate": {
+      "main": [
+        [
+          {
+            "node": "Provision Org",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create Stripe Session (stub)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "version": 2
+}
+

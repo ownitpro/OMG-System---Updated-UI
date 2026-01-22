@@ -1,0 +1,190 @@
+{
+  "name": "06 Drive Poll Connectors",
+  "nodes": [
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 10,
+              "unit": "minutes"
+            }
+          ]
+        }
+      },
+      "id": "1",
+      "name": "Timer",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [200, 160]
+    },
+    {
+      "parameters": {
+        "operation": "list",
+        "drive": "myDrive",
+        "options": {
+          "pageSize": 10,
+          "q": "modifiedTime > now() - 10m"
+        }
+      },
+      "id": "2",
+      "name": "Google Drive (list)",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 2,
+      "position": [500, 60],
+      "credentials": {
+        "googleApi": {
+          "id": "svd_GDrive",
+          "name": "svd_GDrive"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "list",
+        "options": {
+          "limit": 10
+        }
+      },
+      "id": "3",
+      "name": "OneDrive (list)",
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 2,
+      "position": [500, 160],
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "svd_OneDrive",
+          "name": "svd_OneDrive"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "list",
+        "path": "/",
+        "recursive": false
+      },
+      "id": "4",
+      "name": "Dropbox (list)",
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 2,
+      "position": [500, 260],
+      "credentials": {
+        "dropboxApi": {
+          "id": "svd_Dropbox",
+          "name": "svd_Dropbox"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "list",
+        "resource": "file",
+        "options": {
+          "parentId": "0",
+          "limit": 10
+        }
+      },
+      "id": "5",
+      "name": "Box (list)",
+      "type": "n8n-nodes-base.box",
+      "typeVersion": 1,
+      "position": [500, 360],
+      "credentials": {
+        "boxOAuth2Api": {
+          "id": "svd_Box",
+          "name": "svd_Box"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "={{$env.SVD_API_BASE}}/ingest/drive",
+        "jsonParameters": true,
+        "bodyParametersJson": "={\"source\": \"={{$node[\"Current Node\"].name}}\", \"items\": {{$json}}}"
+      },
+      "id": "6",
+      "name": "Send to Ingest API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [780, 210]
+    }
+  ],
+  "connections": {
+    "Timer": {
+      "main": [
+        [
+          {
+            "node": "Google Drive (list)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "OneDrive (list)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Dropbox (list)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Box (list)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive (list)": {
+      "main": [
+        [
+          {
+            "node": "Send to Ingest API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OneDrive (list)": {
+      "main": [
+        [
+          {
+            "node": "Send to Ingest API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dropbox (list)": {
+      "main": [
+        [
+          {
+            "node": "Send to Ingest API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Box (list)": {
+      "main": [
+        [
+          {
+            "node": "Send to Ingest API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "version": 2
+}
+

@@ -1,0 +1,236 @@
+[
+  {
+    "id": "acct-basic-2025",
+    "name": "Accounting — Basic Vault",
+    "type": "business",
+    "description": "Basic accounting vault structure for small businesses",
+    "folders": [
+      "Tax Returns",
+      "Bookkeeping",
+      "Payroll",
+      "Receipts",
+      "Invoices",
+      "Banking"
+    ],
+    "labels": [
+      "T2",
+      "GST/HST",
+      "Payroll",
+      "Receipt",
+      "Invoice",
+      "Bookkeeping",
+      "Banking"
+    ],
+    "checklist": [
+      "brand_firm_logo",
+      "enable_object_lock",
+      "create_client_intake_link",
+      "enable_receipt_ocr",
+      "invite_bookkeepers"
+    ]
+  },
+  {
+    "id": "acct-advanced-2025",
+    "name": "Accounting — Advanced Vault",
+    "type": "business",
+    "description": "Advanced accounting vault with multiple clients",
+    "folders": [
+      "Clients",
+      "Tax Returns",
+      "Bookkeeping",
+      "Payroll",
+      "Receipts",
+      "Invoices",
+      "Banking",
+      "Compliance"
+    ],
+    "labels": [
+      "T2",
+      "T3",
+      "GST/HST",
+      "Payroll",
+      "Receipt",
+      "Invoice",
+      "Bookkeeping",
+      "Banking",
+      "Annual Return",
+      "Certificate"
+    ],
+    "checklist": [
+      "brand_firm_logo",
+      "enable_object_lock",
+      "create_client_intake_link",
+      "enable_receipt_ocr",
+      "invite_bookkeepers",
+      "setup_client_portals",
+      "enable_auto_classification"
+    ]
+  },
+  {
+    "id": "personal-tax-2025",
+    "name": "Personal Tax Vault",
+    "type": "personal",
+    "description": "Personal tax document organization",
+    "folders": [
+      "Tax Returns",
+      "T4s",
+      "T5s",
+      "Receipts",
+      "Medical",
+      "Charitable Donations"
+    ],
+    "labels": [
+      "T1",
+      "T4",
+      "T5",
+      "Receipt",
+      "Medical",
+      "CRA"
+    ],
+    "checklist": [
+      "enable_receipt_ocr",
+      "setup_tax_season_reminders",
+      "enable_auto_classification"
+    ]
+  },
+  {
+    "id": "legal-firm-2025",
+    "name": "Legal Firm Vault",
+    "type": "business",
+    "description": "Document organization for legal firms",
+    "folders": [
+      "Clients",
+      "Contracts",
+      "Agreements",
+      "NDAs",
+      "Correspondence",
+      "Court Documents"
+    ],
+    "labels": [
+      "Contract",
+      "Agreement",
+      "NDA",
+      "Certificate",
+      "License"
+    ],
+    "checklist": [
+      "brand_firm_logo",
+      "enable_object_lock",
+      "create_client_portals",
+      "setup_retention_policies",
+      "enable_watermarking"
+    ]
+  },
+  {
+    "id": "real-estate-2025",
+    "name": "Real Estate Vault",
+    "type": "business",
+    "description": "Real estate transaction document management",
+    "folders": [
+      "Properties",
+      "Purchase Agreements",
+      "Mortgage Documents",
+      "Insurance",
+      "Property Taxes",
+      "Maintenance Records"
+    ],
+    "labels": [
+      "Contract",
+      "Agreement",
+      "Certificate",
+      "Insurance",
+      "Receipt",
+      "Statement"
+    ],
+    "checklist": [
+      "enable_object_lock",
+      "create_property_folders",
+      "enable_auto_classification",
+      "setup_expiry_alerts"
+    ]
+  },
+  {
+    "id": "startup-2025",
+    "name": "Startup Vault",
+    "type": "business",
+    "description": "Startup document organization",
+    "folders": [
+      "Incorporation",
+      "Cap Table",
+      "Board Meetings",
+      "Contracts",
+      "Financial Statements",
+      "Compliance"
+    ],
+    "labels": [
+      "Incorporation",
+      "Shareholder",
+      "Board Meeting",
+      "Contract",
+      "Financial Statement",
+      "Annual Return"
+    ],
+    "checklist": [
+      "enable_object_lock",
+      "invite_founders",
+      "setup_board_meeting_templates",
+      "enable_auto_classification"
+    ]
+  },
+  {
+    "id": "medical-practice-2025",
+    "name": "Medical Practice Vault",
+    "type": "business",
+    "description": "Medical practice document management",
+    "folders": [
+      "Patient Records",
+      "Insurance",
+      "Billing",
+      "Compliance",
+      "Licenses",
+      "Continuing Education"
+    ],
+    "labels": [
+      "Medical",
+      "Insurance",
+      "Invoice",
+      "Certificate",
+      "License",
+      "ID"
+    ],
+    "checklist": [
+      "enable_object_lock",
+      "setup_hipaa_compliance",
+      "enable_encryption",
+      "create_patient_intake_links"
+    ]
+  },
+  {
+    "id": "nonprofit-2025",
+    "name": "Nonprofit Vault",
+    "type": "business",
+    "description": "Nonprofit organization document management",
+    "folders": [
+      "Board Meetings",
+      "Financial Statements",
+      "Grants",
+      "Donations",
+      "Compliance",
+      "Annual Returns"
+    ],
+    "labels": [
+      "Board Meeting",
+      "Financial Statement",
+      "Receipt",
+      "Annual Return",
+      "Certificate"
+    ],
+    "checklist": [
+      "enable_object_lock",
+      "invite_board_members",
+      "setup_grant_tracking",
+      "enable_auto_classification"
+    ]
+  }
+]
+

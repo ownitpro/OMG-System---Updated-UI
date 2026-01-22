@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  db:
+      image: postgres:15-alpine
+      container_name: securevault-postgres
+      restart: always
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: securevault
+      ports:
+        - "5434:5432"
+      volumes:
+        - securevault_data:/var/lib/postgresql/data
+        - ./scripts/init-local-db.sql:/docker-entrypoint-initdb.d/init.sql
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U postgres"]
+        interval: 5s
+        timeout: 5s
+        retries: 5
+
+volumes:
+  securevault_data:

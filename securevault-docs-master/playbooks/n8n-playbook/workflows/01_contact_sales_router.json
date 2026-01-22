@@ -1,0 +1,207 @@
+{
+  "name": "01_contact_sales_router",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "svd/contact-sales",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "svd-contact-sales"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.body.email}}",
+              "operation": "isNotEmpty"
+            },
+            {
+              "value1": "={{$json.body.name}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "validate",
+      "name": "Validate",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://person.clearbit.com/v2/combined/find?email={{$json.body.email}}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.CLEARBIT_API_KEY}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "enrich",
+      "name": "Enrich (Clearbit)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [650, 200],
+      "notes": "Optional: only if CLEARBIT_API_KEY is set"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "={{$env.GOOGLE_SHEET_ID}}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "list",
+          "cachedResultName": "Leads"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{$now}}",
+            "name": "={{$json.body.name}}",
+            "email": "={{$json.body.email}}",
+            "company": "={{$json.body.company}}",
+            "size": "={{$json.body.size}}",
+            "interest": "={{$json.body.interest}}",
+            "message": "={{$json.body.message}}",
+            "enriched": "={{$json('Enrich (Clearbit)').body.company?.name || 'N/A'}}"
+          }
+        },
+        "options": {}
+      },
+      "id": "crm-sheet",
+      "name": "Create Lead (Sheet)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [850, 300],
+      "credentials": {
+        "googleSheetsOAuth2": {
+          "id": "svd_google_sheets",
+          "name": "svd_google_sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "webhookUrl": "={{$env.SLACK_WEBHOOK_URL}}",
+        "text": "New lead: {{$json.body.name}} ({{$json.body.company}})",
+        "options": {}
+      },
+      "id": "slack",
+      "name": "Notify Slack",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [1050, 200],
+      "credentials": {
+        "slackApi": {
+          "id": "svd_slack_webhook",
+          "name": "svd_slack_webhook"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{$env.SES_SMTP_USER}}",
+        "toEmail": "={{$json.body.email}}",
+        "subject": "Thank you for contacting SecureVault Docs",
+        "text": "Hi {{$json.body.name}},\n\nWe received your message and will get back to you soon.\n\nBest,\nSecureVault Docs Team",
+        "options": {}
+      },
+      "id": "email",
+      "name": "Send Confirmation",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [1050, 400],
+      "credentials": {
+        "smtp": {
+          "id": "svd_ses_smtp",
+          "name": "svd_ses_smtp"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://app.posthog.com/capture/",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"api_key\":\"{{$env.POSTHOG_API_KEY}}\",\"event\":\"contact_sales_submitted\",\"properties\":{\"email\":\"{{$json.body.email}}\",\"company\":\"{{$json.body.company}}\"}}",
+        "options": {}
+      },
+      "id": "posthog",
+      "name": "PostHog Event",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1050, 600],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "svd_posthog",
+          "name": "svd_posthog"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\":true,\"messageId\":\"{{$json.body.email}}\"}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1250, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{"node": "Validate", "type": "main", "index": 0}]]
+    },
+    "Validate": {
+      "main": [[{"node": "Enrich (Clearbit)", "type": "main", "index": 0}, {"node": "Create Lead (Sheet)", "type": "main", "index": 0}]]
+    },
+    "Enrich (Clearbit)": {
+      "main": [[{"node": "Create Lead (Sheet)", "type": "main", "index": 0}]]
+    },
+    "Create Lead (Sheet)": {
+      "main": [[{"node": "Notify Slack", "type": "main", "index": 0}, {"node": "Send Confirmation", "type": "main", "index": 0}, {"node": "PostHog Event", "type": "main", "index": 0}]]
+    },
+    "Notify Slack": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    },
+    "Send Confirmation": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    },
+    "PostHog Event": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-18T20:00:00.000Z",
+  "versionId": "1"
+}
+

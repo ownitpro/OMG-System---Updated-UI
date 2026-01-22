@@ -1,0 +1,42 @@
+{
+  "name": "SVD Request File Ops",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhooks/n8n/request-file",
+        "responseMode": "responseNode"
+      },
+      "type": "n8n-nodes-base.webhook",
+      "name": "Webhook"
+    },
+    {
+      "parameters": {
+        "url": "={{$env.SVD_API_BASE}}/demo/portals",
+        "jsonParameters": true,
+        "sendBody": true,
+        "bodyParametersJson": "={ orgId: $json.orgId, recipient: { email: $json.recipientEmail, name: $json.recipientName }, label: $json.label }"
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "name": "Create Portal (mock)"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{$env.SVD_SES_FROM}}",
+        "toEmail": "={{$json.recipientEmail}}",
+        "subject": "Upload request from SecureVault Docs",
+        "text": "You've been invited to upload: {{$json.label}}.\nLink: https://dev.securevaultdocs.com/portal/{{$node[\"Create Portal (mock)\"].json.portalId || 'p_demo'}}"
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "name": "Send Upload Link"
+    },
+    {
+      "parameters": {
+        "responseBody": "={ ok: true, portalId: $node[\"Create Portal (mock)\"].json.portalId || 'p_demo' }"
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "name": "Respond"
+    }
+  ]
+}
+

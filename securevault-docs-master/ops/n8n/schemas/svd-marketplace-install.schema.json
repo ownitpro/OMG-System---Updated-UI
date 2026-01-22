@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Marketplace Install",
+  "type": "object",
+  "required": ["templateId", "mode"],
+  "properties": {
+    "templateId": {"type": "string"},
+    "mode": {"type": "string", "enum": ["dry-run", "install-business", "install-personal"]},
+    "orgId": {"type": ["string", "null"]}
+  }
+}
+

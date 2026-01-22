@@ -1,0 +1,128 @@
+{
+  "name": "13_templates_marketplace_install",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "svd/templates/install",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "svd-templates-install"
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "fileName": "mappings/templates_catalog.json",
+        "options": {}
+      },
+      "id": "read-catalog",
+      "name": "Read Templates Catalog",
+      "type": "n8n-nodes-base.readBinaryFile",
+      "typeVersion": 1,
+      "position": [450, 300],
+      "notes": "Or use HTTP to fetch from repo"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Fetch and parse template catalog\nconst catalog = JSON.parse($input.first().binary.data.toString());\nconst templateId = $input.item.json.body.templateId;\n\nconst template = catalog.find(t => t.id === templateId);\n\nif (!template) {\n  throw new Error(`Template ${templateId} not found`);\n}\n\nreturn template;"
+      },
+      "id": "find-template",
+      "name": "Find Template",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.body.mode}}",
+              "operation": "equal",
+              "value2": "dry-run"
+            }
+          ]
+        }
+      },
+      "id": "if-dryrun",
+      "name": "If Dry Run",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Dry-run: return actions without executing\nconst template = $('Find Template').item.json;\n\nreturn {\n  mode: 'dry-run',\n  templateId: template.id,\n  actions: [\n    { type: 'create_folders', folders: template.folders },\n    { type: 'create_labels', labels: template.labels },\n    { type: 'apply_checklist', checklist: template.checklist }\n  ]\n};"
+      },
+      "id": "dry-run",
+      "name": "Dry Run Mapper",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1050, 200]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/api/demo/apply-template",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"orgId\":\"{{$json.body.orgId}}\",\"userId\":\"{{$json.body.userId}}\",\"templateId\":\"{{$('Find Template').item.json.id}}\",\"folders\":{{JSON.stringify($('Find Template').item.json.folders)}},\"labels\":{{JSON.stringify($('Find Template').item.json.labels)}},\"checklist\":{{JSON.stringify($('Find Template').item.json.checklist)}}}",
+        "options": {}
+      },
+      "id": "apply-template",
+      "name": "Apply Template",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1050, 400],
+      "notes": "Dev: mock endpoint"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\":true,\"installed\":{{$('If Dry Run').item.json.mode !== 'dry-run'}},\"actions\":{{JSON.stringify($('Dry Run Mapper').item.json.actions || [])}}}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1250, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{"node": "Read Templates Catalog", "type": "main", "index": 0}]]
+    },
+    "Read Templates Catalog": {
+      "main": [[{"node": "Find Template", "type": "main", "index": 0}]]
+    },
+    "Find Template": {
+      "main": [[{"node": "If Dry Run", "type": "main", "index": 0}]]
+    },
+    "If Dry Run": {
+      "main": [[{"node": "Dry Run Mapper", "type": "main", "index": 0}], [{"node": "Apply Template", "type": "main", "index": 0}]]
+    },
+    "Dry Run Mapper": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    },
+    "Apply Template": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-18T20:00:00.000Z",
+  "versionId": "1"
+}
+

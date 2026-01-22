@@ -1,0 +1,66 @@
+{
+  "name": "05 Email → Vault Ingest (push)",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "svd/ingest/email",
+        "methods": ["POST"]
+      },
+      "id": "1",
+      "name": "Inbound (Webhook/Mailhook)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Expect {orgId, from, subject, attachments:[{filename,url(multipart)}]}\nreturn [$json.body];"
+      },
+      "id": "2",
+      "name": "Parse",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "={{$env.SVD_API_BASE}}/ingest/email",
+        "jsonParameters": true,
+        "bodyParametersJson": "={{JSON.stringify($json)}}"
+      },
+      "id": "3",
+      "name": "Submit to Ingest API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [720, 300]
+    }
+  ],
+  "connections": {
+    "Inbound (Webhook/Mailhook)": {
+      "main": [
+        [
+          {
+            "node": "Parse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse": {
+      "main": [
+        [
+          {
+            "node": "Submit to Ingest API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "version": 2
+}
+

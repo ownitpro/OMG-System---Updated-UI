@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG to PNG Converter</title>
+    <style>
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        h1 {
+            color: #1a1f36;
+            margin-bottom: 10px;
+        }
+        .instructions {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #4f46e5;
+        }
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .logo-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .logo-card.dark {
+            background: #1a1f36;
+        }
+        .logo-preview {
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 20px;
+        }
+        .logo-card.dark .logo-preview {
+            border-color: #334155;
+        }
+        .logo-name {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1a1f36;
+        }
+        .logo-card.dark .logo-name {
+            color: #f1f5f9;
+        }
+        button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            width: 100%;
+        }
+        button:hover {
+            background: #4338ca;
+        }
+        button:active {
+            background: #3730a3;
+        }
+        .success {
+            color: #16a34a;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        .scale-selector {
+            margin-bottom: 10px;
+        }
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>SVG to PNG Converter</h1>
+    <div class="instructions">
+        <h3>Instructions:</h3>
+        <ol>
+            <li>Open this HTML file in your browser</li>
+            <li>Select your desired resolution for each logo</li>
+            <li>Click "Download PNG" button on each logo</li>
+            <li>The PNG file will be saved to your downloads folder</li>
+        </ol>
+        <p><strong>Recommended:</strong> Use 2x or 3x scale for high-quality prints and displays.</p>
+    </div>
+
+    <div class="logo-grid" id="logoGrid"></div>
+
+    <script>
+        const logos = [
+            { file: 'securevault-logo-primary.svg', name: 'Primary Logo', dark: false },
+            { file: 'securevault-logo-icon-only.svg', name: 'Icon Only', dark: false },
+            { file: 'securevault-logo-wordmark.svg', name: 'Wordmark', dark: false },
+            { file: 'securevault-logo-horizontal-light.svg', name: 'Horizontal (Light)', dark: false },
+            { file: 'securevault-logo-horizontal-dark.svg', name: 'Horizontal (Dark)', dark: true },
+            { file: 'securevault-logo-stacked.svg', name: 'Stacked', dark: false },
+            { file: 'securevault-logo-monochrome-black.svg', name: 'Monochrome Black', dark: false },
+            { file: 'securevault-logo-monochrome-white.svg', name: 'Monochrome White', dark: true },
+            { file: 'securevault-favicon.svg', name: 'Favicon', dark: false }
+        ];
+
+        async function convertSvgToPng(svgFile, scale, filename) {
+            try {
+                const response = await fetch(svgFile);
+                const svgText = await response.text();
+
+                const parser = new DOMParser();
+                const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+                const svgElement = svgDoc.documentElement;
+
+                const viewBox = svgElement.getAttribute('viewBox');
+                let width, height;
+
+                if (viewBox) {
+                    const [, , w, h] = viewBox.split(' ').map(Number);
+                    width = w * scale;
+                    height = h * scale;
+                } else {
+                    width = (parseInt(svgElement.getAttribute('width')) || 400) * scale;
+                    height = (parseInt(svgElement.getAttribute('height')) || 120) * scale;
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+
+                return new Promise((resolve, reject) => {
+                    img.onload = () => {
+                        ctx.drawImage(img, 0, 0, width, height);
+                        canvas.toBlob((blob) => {
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = filename.replace('.svg', '.png');
+                            a.click();
+                            URL.revokeObjectURL(url);
+                            resolve();
+                        }, 'image/png');
+                    };
+
+                    img.onerror = reject;
+                    const svgBlob = new Blob([svgText], { type: 'image/svg+xml' });
+                    img.src = URL.createObjectURL(svgBlob);
+                });
+            } catch (error) {
+                console.error('Conversion error:', error);
+                alert('Error converting SVG. Please check the console.');
+            }
+        }
+
+        function createLogoCard(logo) {
+            const card = document.createElement('div');
+            card.className = `logo-card ${logo.dark ? 'dark' : ''}`;
+
+            card.innerHTML = `
+                <div class="logo-name">${logo.name}</div>
+                <div class="logo-preview">
+                    <img src="${logo.file}" alt="${logo.name}" style="max-width: 100%; max-height: 150px;">
+                </div>
+                <div class="scale-selector">
+                    <select id="scale-${logo.file}">
+                        <option value="1">1x (Default Size)</option>
+                        <option value="2" selected>2x (Recommended)</option>
+                        <option value="3">3x (High Quality)</option>
+                        <option value="4">4x (Print Quality)</option>
+                    </select>
+                </div>
+                <button onclick="downloadPNG('${logo.file}', '${logo.name}')">Download PNG</button>
+                <div class="success" id="success-${logo.file}">✓ Downloaded!</div>
+            `;
+
+            return card;
+        }
+
+        async function downloadPNG(file, name) {
+            const scale = parseFloat(document.getElementById(`scale-${file}`).value);
+            const successMsg = document.getElementById(`success-${file}`);
+
+            try {
+                await convertSvgToPng(file, scale, file);
+                successMsg.style.display = 'block';
+                setTimeout(() => {
+                    successMsg.style.display = 'none';
+                }, 3000);
+            } catch (error) {
+                alert(`Error downloading ${name}`);
+            }
+        }
+
+        // Initialize
+        const grid = document.getElementById('logoGrid');
+        logos.forEach(logo => {
+            grid.appendChild(createLogoCard(logo));
+        });
+
+        // Make downloadPNG available globally
+        window.downloadPNG = downloadPNG;
+    </script>
+</body>
+</html>

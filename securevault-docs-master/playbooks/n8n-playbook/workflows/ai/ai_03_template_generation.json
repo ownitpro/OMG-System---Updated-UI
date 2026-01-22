@@ -1,0 +1,164 @@
+{
+  "name": "AI Template Generation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "svd/ai/generate-template",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook - Template Request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "svd-ai-template"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.item.json.body || $input.item.json;\nreturn {\n  businessType: body.businessType,\n  useCase: body.useCase,\n  industry: body.industry,\n  requiredDocuments: body.requiredDocuments || []\n};"
+      },
+      "id": "parse-input",
+      "name": "Parse Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "model": "claude-3-5-sonnet-20241022",
+        "options": {
+          "temperature": 0.7,
+          "maxTokens": 2000
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a document request template generator. Create professional, clear document request templates for businesses."
+            },
+            {
+              "role": "user",
+              "content": "=Generate a document request template:\n\nBusiness Type: {{$json.businessType}}\nUse Case: {{$json.useCase}}\nIndustry: {{$json.industry}}\nRequired Documents: {{JSON.stringify($json.requiredDocuments)}}\n\nRespond in JSON:\n{\n  \"title\": \"template title\",\n  \"description\": \"template description\",\n  \"items\": [\n    {\"key\": \"doc_key\", \"label\": \"Document Label\", \"required\": true, \"description\": \"optional description\"}\n  ]\n}"
+            }
+          ]
+        }
+      },
+      "id": "ai-generate",
+      "name": "AI Template Generation (Claude 3.5 Sonnet)",
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [650, 300],
+      "credentials": {
+        "anthropicApi": {
+          "id": "anthropic_api_key",
+          "name": "Anthropic API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const aiResponse = $input.item.json;\nlet template;\n\ntry {\n  const responseText = typeof aiResponse === 'string' ? aiResponse : JSON.stringify(aiResponse);\n  const jsonMatch = responseText.match(/\\{[\\s\\S]*\\}/);\n  template = jsonMatch ? JSON.parse(jsonMatch[0]) : aiResponse;\n} catch (e) {\n  template = {\n    title: 'Document Request',\n    description: 'Please upload the following documents',\n    items: []\n  };\n}\n\nreturn {\n  ...$('Parse Input').item.json,\n  template: template\n};"
+      },
+      "id": "parse-response",
+      "name": "Parse AI Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/api/templates/create",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"title\": \"{{$json.template.title}}\",\n  \"description\": \"{{$json.template.description}}\",\n  \"items\": {{JSON.stringify($json.template.items)}},\n  \"businessType\": \"{{$json.businessType}}\",\n  \"useCase\": \"{{$json.useCase}}\"\n}",
+        "options": {}
+      },
+      "id": "save-template",
+      "name": "Save Template",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"ok\": true,\n  \"template\": {{JSON.stringify($json.template)}}\n}",
+        "options": {}
+      },
+      "id": "webhook-response",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1250, 300]
+    }
+  ],
+  "connections": {
+    "Webhook - Template Request": {
+      "main": [
+        [
+          {
+            "node": "Parse Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Input": {
+      "main": [
+        [
+          {
+            "node": "AI Template Generation (Claude 3.5 Sonnet)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Template Generation (Claude 3.5 Sonnet)": {
+      "main": [
+        [
+          {
+            "node": "Parse AI Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse AI Response": {
+      "main": [
+        [
+          {
+            "node": "Save Template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Template": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-01-15T00:00:00.000Z",
+  "versionId": "1"
+}
+

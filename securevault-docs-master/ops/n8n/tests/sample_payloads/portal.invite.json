@@ -1,0 +1,12 @@
+{
+  "ts": "2025-11-18T20:25:00Z",
+  "orgId": "org_abc123",
+  "portalId": "portal_xyz789",
+  "inviteeEmail": "client@example.com",
+  "inviteeName": "John Client",
+  "inviterEmail": "admin@acme.com",
+  "inviterName": "Jane Admin",
+  "expiresAt": "2025-12-18T20:25:00Z",
+  "message": "Please upload your documents to this secure portal"
+}
+

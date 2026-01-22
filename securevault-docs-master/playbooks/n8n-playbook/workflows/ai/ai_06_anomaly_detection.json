@@ -1,0 +1,110 @@
+{
+  "name": "AI Anomaly Detection",
+  "nodes": [
+    {
+      "parameters": {
+        "cronExpression": "0 * * * *"
+      },
+      "id": "scheduled-trigger",
+      "name": "Scheduled - Hourly",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/api/security/access-logs",
+        "options": {}
+      },
+      "id": "get-logs",
+      "name": "Get Access Logs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "options": {
+          "temperature": 0.1,
+          "maxTokens": 500
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a security analyst. Detect unusual patterns in document access logs."
+            },
+            {
+              "role": "user",
+              "content": "=Analyze these access logs for anomalies:\n\n{{JSON.stringify($json.accessLogs)}}\n\nRespond in JSON:\n{\n  \"anomalies\": [\n    {\"type\": \"anomaly_type\", \"severity\": \"low|medium|high\", \"description\": \"...\", \"documentId\": \"...\", \"userId\": \"...\"}\n  ]\n}"
+            }
+          ]
+        }
+      },
+      "id": "ai-detect",
+      "name": "AI Anomaly Detection (GPT-4o)",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/api/security/alerts",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{JSON.stringify($json)}}",
+        "options": {}
+      },
+      "id": "send-alerts",
+      "name": "Send Security Alerts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [850, 300]
+    }
+  ],
+  "connections": {
+    "Scheduled - Hourly": {
+      "main": [
+        [
+          {
+            "node": "Get Access Logs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Access Logs": {
+      "main": [
+        [
+          {
+            "node": "AI Anomaly Detection (GPT-4o)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Anomaly Detection (GPT-4o)": {
+      "main": [
+        [
+          {
+            "node": "Send Security Alerts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-01-15T00:00:00.000Z",
+  "versionId": "1"
+}

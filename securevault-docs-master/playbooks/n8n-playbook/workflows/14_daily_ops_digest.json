@@ -1,0 +1,79 @@
+{
+  "name": "14 Daily Ops Digest",
+  "nodes": [
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "mode": "custom",
+              "cronExpression": "0 13 * * *"
+            }
+          ]
+        }
+      },
+      "id": "1",
+      "name": "Every Day 8am ET",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [200, 260]
+    },
+    {
+      "parameters": {
+        "requestMethod": "GET",
+        "url": "={{$env.SVD_BACKOFFICE_BASE}}/digest/daily"
+      },
+      "id": "2",
+      "name": "Fetch Digest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [460, 260]
+    },
+    {
+      "parameters": {
+        "fromEmail": "ops@securevaultdocs.com",
+        "toEmail": "={{$env.SVD_ALERT_EMAIL}}",
+        "subject": "SVD Daily Ops Digest",
+        "text": "={{JSON.stringify($json,null,2)}}"
+      },
+      "id": "3",
+      "name": "Email Digest",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [720, 260],
+      "credentials": {
+        "smtp": {
+          "id": "svd_SES",
+          "name": "svd_SES"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every Day 8am ET": {
+      "main": [
+        [
+          {
+            "node": "Fetch Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Digest": {
+      "main": [
+        [
+          {
+            "node": "Email Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "version": 2
+}
+

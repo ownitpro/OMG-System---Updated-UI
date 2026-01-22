@@ -1,0 +1,231 @@
+{
+  "info": {
+    "name": "SecureVault Docs n8n Webhooks",
+    "description": "Test collection for SVD n8n webhooks (production-ready pack)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Contact Sales",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ts\": \"2025-11-18T20:10:00Z\",\n  \"source\": \"contact_sales\",\n  \"name\": \"Jamie Ops\",\n  \"email\": \"jamie@acme.com\",\n  \"company\": \"Acme LLP\",\n  \"size\": \"5-15\",\n  \"interest\": \"Business - Growth\",\n  \"message\": \"Need demo + QBO integration\"\n}"
+        },
+        "url": {
+          "raw": "{{N8N_BASE_URL}}/webhook/svd/contact-sales",
+          "host": ["{{N8N_BASE_URL}}"],
+          "path": ["webhook", "svd", "contact-sales"]
+        }
+      }
+    },
+    {
+      "name": "Request Docs Created",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ts\": \"2025-11-18T20:15:00Z\",\n  \"orgId\": \"org_abc123\",\n  \"requestId\": \"req_xyz789\",\n  \"requesterEmail\": \"requester@acme.com\",\n  \"clientEmail\": \"client@example.com\",\n  \"expiresAt\": \"2025-12-18T20:15:00Z\",\n  \"message\": \"Please upload your tax documents\",\n  \"checklist\": [\"T1\", \"T2\", \"Receipts\"]\n}"
+        },
+        "url": {
+          "raw": "{{N8N_BASE_URL}}/webhook/svd/request-docs-created",
+          "host": ["{{N8N_BASE_URL}}"],
+          "path": ["webhook", "svd", "request-docs-created"]
+        }
+      }
+    },
+    {
+      "name": "Portal Invite",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ts\": \"2025-11-18T20:25:00Z\",\n  \"orgId\": \"org_abc123\",\n  \"portalId\": \"portal_xyz789\",\n  \"inviteeEmail\": \"client@example.com\",\n  \"inviteeName\": \"John Client\",\n  \"inviterEmail\": \"admin@acme.com\",\n  \"inviterName\": \"Jane Admin\",\n  \"expiresAt\": \"2025-12-18T20:25:00Z\",\n  \"message\": \"Please upload your documents to this secure portal\"\n}"
+        },
+        "url": {
+          "raw": "{{N8N_BASE_URL}}/webhook/svd/portal-invite",
+          "host": ["{{N8N_BASE_URL}}"],
+          "path": ["webhook", "svd", "portal-invite"]
+        }
+      }
+    },
+    {
+      "name": "Email to Vault",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ts\": \"2025-11-18T20:20:00Z\",\n  \"orgId\": \"org_abc123\",\n  \"from\": \"sender@example.com\",\n  \"to\": \"vault+org_abc123@securevaultdocs.com\",\n  \"subject\": \"Invoice #12345\",\n  \"body\": \"Please find attached invoice.\",\n  \"attachments\": [\n    {\n      \"filename\": \"invoice_12345.pdf\",\n      \"contentType\": \"application/pdf\",\n      \"size\": 245678,\n      \"content\": \"base64_encoded_content_here\"\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{N8N_BASE_URL}}/webhook/svd/email-to-vault",
+          "host": ["{{N8N_BASE_URL}}"],
+          "path": ["webhook", "svd", "email-to-vault"]
+        }
+      }
+    },
+    {
+      "name": "Usage Meters",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"orgId\": \"org_abc\",\n  \"period\": \"2025-11\",\n  \"meters\": {\n    \"uploads_gb\": 12.5,\n    \"ocr_pages\": 760,\n    \"egress_gb\": 3.2\n  }\n}"
+        },
+        "url": {
+          "raw": "{{N8N_BASE_URL}}/webhook/svd/usage/meters",
+          "host": ["{{N8N_BASE_URL}}"],
+          "path": ["webhook", "svd", "usage", "meters"]
+        }
+      }
+    },
+    {
+      "name": "Stripe Webhook",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Stripe-Signature",
+            "value": "t=1234567890,v1=signature_here"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"evt_1234567890\",\n  \"type\": \"checkout.session.completed\",\n  \"data\": {\n    \"object\": {\n      \"id\": \"cs_test_abc123\",\n      \"customer\": \"cus_xyz789\",\n      \"subscription\": \"sub_def456\",\n      \"amount_total\": 2900,\n      \"currency\": \"cad\",\n      \"metadata\": {\n        \"orgId\": \"org_abc123\",\n        \"planId\": \"business_growth\"\n      }\n    }\n  }\n}"
+        },
+        "url": {
+          "raw": "{{N8N_BASE_URL}}/webhook/svd/stripe",
+          "host": ["{{N8N_BASE_URL}}"],
+          "path": ["webhook", "svd", "stripe"]
+        }
+      }
+    },
+    {
+      "name": "Templates Install",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"orgId\": \"org_abc123\",\n  \"templateId\": \"acct-basic-2025\",\n  \"userId\": \"user_xyz789\"\n}"
+        },
+        "url": {
+          "raw": "{{N8N_BASE_URL}}/webhook/svd/templates/install",
+          "host": ["{{N8N_BASE_URL}}"],
+          "path": ["webhook", "svd", "templates", "install"]
+        }
+      }
+    },
+    {
+      "name": "Demo Switch",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"orgId\": \"org_demo_123\",\n  \"dataset\": \"business\"\n}"
+        },
+        "url": {
+          "raw": "{{N8N_BASE_URL}}/webhook/svd/demo/switch",
+          "host": ["{{N8N_BASE_URL}}"],
+          "path": ["webhook", "svd", "demo", "switch"]
+        }
+      }
+    },
+    {
+      "name": "Beta Terms Agree",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": \"user_xyz789\",\n  \"email\": \"user@example.com\",\n  \"version\": \"1.0\",\n  \"ts\": \"2025-11-18T20:30:00Z\"\n}"
+        },
+        "url": {
+          "raw": "{{N8N_BASE_URL}}/webhook/svd/beta/agree",
+          "host": ["{{N8N_BASE_URL}}"],
+          "path": ["webhook", "svd", "beta", "agree"]
+        }
+      }
+    },
+    {
+      "name": "Support Ticket",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ts\": \"2025-11-18T20:35:00Z\",\n  \"userId\": \"user_xyz789\",\n  \"orgId\": \"org_abc123\",\n  \"email\": \"user@example.com\",\n  \"subject\": \"Need help with OCR\",\n  \"message\": \"OCR is not working for my PDFs\",\n  \"severity\": \"medium\"\n}"
+        },
+        "url": {
+          "raw": "{{N8N_BASE_URL}}/webhook/svd/support",
+          "host": ["{{N8N_BASE_URL}}"],
+          "path": ["webhook", "svd", "support"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "N8N_BASE_URL",
+      "value": "http://localhost:5678",
+      "type": "string"
+    }
+  ]
+}
+

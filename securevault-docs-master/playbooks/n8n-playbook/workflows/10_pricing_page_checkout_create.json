@@ -1,0 +1,109 @@
+{
+  "name": "10_pricing_page_checkout_create",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "svd/checkout/create",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "svd-checkout-create"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$env.SVD_ENV}}",
+              "operation": "equal",
+              "value2": "dev"
+            }
+          ]
+        }
+      },
+      "id": "if-dev",
+      "name": "If Dev",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Return mock checkout URL for dev\nreturn {\n  checkoutUrl: `${$env.APP_API_BASE}/checkout?mock=true&planId=${$input.item.json.body.planId}`\n};"
+      },
+      "id": "mock-url",
+      "name": "Return Mock URL",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 200]
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "amount": "={{$json.body.amount}}",
+        "currency": "={{$json.body.currency || 'cad'}}",
+        "mode": "payment",
+        "successUrl": "={{$env.APP_API_BASE}}/checkout/success?session_id={CHECKOUT_SESSION_ID}",
+        "cancelUrl": "={{$env.APP_API_BASE}}/checkout/cancel",
+        "metadata": {
+          "orgId": "={{$json.body.orgId}}",
+          "planId": "={{$json.body.planId}}"
+        },
+        "options": {}
+      },
+      "id": "stripe-checkout",
+      "name": "Create Stripe Checkout",
+      "type": "n8n-nodes-base.stripe",
+      "typeVersion": 1,
+      "position": [650, 400],
+      "credentials": {
+        "stripeApi": {
+          "id": "svd_stripe_main",
+          "name": "svd_stripe_main"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\":true,\"checkoutUrl\":\"{{$json.url || $('Return Mock URL').item.json.checkoutUrl}}\"}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [850, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{"node": "If Dev", "type": "main", "index": 0}]]
+    },
+    "If Dev": {
+      "main": [[{"node": "Return Mock URL", "type": "main", "index": 0}], [{"node": "Create Stripe Checkout", "type": "main", "index": 0}]]
+    },
+    "Return Mock URL": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    },
+    "Create Stripe Checkout": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-18T20:00:00.000Z",
+  "versionId": "1"
+}
+

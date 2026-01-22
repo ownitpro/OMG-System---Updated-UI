@@ -1,0 +1,52 @@
+{
+  "name": "13 Beta Terms Gate Logger",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "svd/beta/accept",
+        "methods": ["POST"]
+      },
+      "id": "1",
+      "name": "Inbound",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 280]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO audit_shared(ts,user_email,event,meta) VALUES (NOW(), $1, 'beta_accept', $2)",
+        "additionalFields": {
+          "queryParams": "={{JSON.stringify([$json.body.email, {version:$json.body.version}])}}"
+        }
+      },
+      "id": "2",
+      "name": "Audit (PG)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [520, 280],
+      "credentials": {
+        "postgres": {
+          "id": "svd_Postgres",
+          "name": "svd_Postgres"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Inbound": {
+      "main": [
+        [
+          {
+            "node": "Audit (PG)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "version": 2
+}
+

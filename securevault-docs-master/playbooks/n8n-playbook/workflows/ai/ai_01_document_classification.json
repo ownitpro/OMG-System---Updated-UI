@@ -1,0 +1,225 @@
+{
+  "name": "AI Document Classification",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "svd/ai/classify",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook - Document Upload",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "svd-ai-classify"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse incoming webhook data\nconst body = $input.item.json.body || $input.item.json;\n\nreturn {\n  documentId: body.documentId,\n  filename: body.filename,\n  ocrText: body.ocrText || '',\n  fileType: body.fileType,\n  orgId: body.orgId,\n  userId: body.userId\n};"
+      },
+      "id": "parse-input",
+      "name": "Parse Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {
+          "temperature": 0.1,
+          "maxTokens": 200
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a document classification assistant. Classify documents into folders and apply labels. Respond only with valid JSON."
+            },
+            {
+              "role": "user",
+              "content": "=Classify this document:\n\nFilename: {{$json.filename}}\nContent: {{$json.ocrText}}\n\nFolders: ID, Bills, Income, Receipts, Health, Education, Legal, Taxes, Unsorted\n\nLabels: Home, Phone, Utilities, Internet, Food, Entertainment, Travel, Insurance, RX, Tuition, Invoice, Statement, T1, T2, NOA, Other\n\nRespond in JSON:\n{\n  \"folder\": \"folder_name\",\n  \"labels\": [\"label1\", \"label2\"],\n  \"confidence\": 0.0-1.0,\n  \"reasoning\": \"brief explanation\"\n}"
+            }
+          ]
+        }
+      },
+      "id": "ai-classify",
+      "name": "AI Classification (GPT-4o-mini)",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1,
+      "position": [650, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai_api_key",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse AI response and validate\nconst aiResponse = $input.item.json;\nlet classification;\n\ntry {\n  // Extract JSON from response\n  const responseText = typeof aiResponse === 'string' ? aiResponse : JSON.stringify(aiResponse);\n  const jsonMatch = responseText.match(/\\{[\\s\\S]*\\}/);\n  classification = jsonMatch ? JSON.parse(jsonMatch[0]) : aiResponse;\n} catch (e) {\n  // Fallback to default\n  classification = {\n    folder: 'Unsorted',\n    labels: [],\n    confidence: 0.45,\n    reasoning: 'Failed to parse AI response'\n  };\n}\n\n// Validate folder\nconst validFolders = ['ID', 'Bills', 'Income', 'Receipts', 'Health', 'Education', 'Legal', 'Taxes', 'Unsorted'];\nif (!validFolders.includes(classification.folder)) {\n  classification.folder = 'Unsorted';\n}\n\n// Ensure confidence is between 0 and 1\nclassification.confidence = Math.max(0, Math.min(1, classification.confidence || 0.5));\n\nreturn {\n  ...$('Parse Input').item.json,\n  classification: classification,\n  status: classification.confidence >= 0.7 ? 'classified' : 'needs_review'\n};"
+      },
+      "id": "parse-ai-response",
+      "name": "Parse AI Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{$json.classification.confidence}}",
+              "operation": "smaller",
+              "value2": 0.7
+            }
+          ]
+        }
+      },
+      "id": "check-confidence",
+      "name": "Check Confidence",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/api/documents/{{$json.documentId}}/classify",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"folder\": \"{{$json.classification.folder}}\",\n  \"labels\": {{JSON.stringify($json.classification.labels)}},\n  \"confidence\": {{$json.classification.confidence}},\n  \"status\": \"{{$json.status}}\",\n  \"reasoning\": \"{{$json.classification.reasoning}}\"\n}",
+        "options": {}
+      },
+      "id": "update-document",
+      "name": "Update Document",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1250, 200]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/api/notifications/send",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"userId\": \"{{$json.userId}}\",\n  \"type\": \"document_needs_review\",\n  \"title\": \"Document Needs Review\",\n  \"message\": \"Document {{$json.filename}} was classified with low confidence ({{Math.round($json.classification.confidence * 100)}}%). Please review.\",\n  \"documentId\": \"{{$json.documentId}}\"\n}",
+        "options": {}
+      },
+      "id": "notify-review",
+      "name": "Notify Review Needed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1250, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"ok\": true,\n  \"documentId\": \"{{$json.documentId}}\",\n  \"classification\": {\n    \"folder\": \"{{$json.classification.folder}}\",\n    \"labels\": {{JSON.stringify($json.classification.labels)}},\n    \"confidence\": {{$json.classification.confidence}}\n  },\n  \"status\": \"{{$json.status}}\"\n}",
+        "options": {}
+      },
+      "id": "webhook-response",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1450, 300]
+    }
+  ],
+  "connections": {
+    "Webhook - Document Upload": {
+      "main": [
+        [
+          {
+            "node": "Parse Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Input": {
+      "main": [
+        [
+          {
+            "node": "AI Classification (GPT-4o-mini)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Classification (GPT-4o-mini)": {
+      "main": [
+        [
+          {
+            "node": "Parse AI Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse AI Response": {
+      "main": [
+        [
+          {
+            "node": "Check Confidence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Confidence": {
+      "main": [
+        [
+          {
+            "node": "Update Document",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notify Review Needed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Document": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify Review Needed": {
+      "main": [
+        [
+          {
+            "node": "Update Document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-01-15T00:00:00.000Z",
+  "versionId": "1"
+}
+

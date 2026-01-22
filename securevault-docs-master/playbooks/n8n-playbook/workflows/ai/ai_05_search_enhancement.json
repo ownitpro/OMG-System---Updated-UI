@@ -1,0 +1,90 @@
+{
+  "name": "AI Search Query Enhancement",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "svd/ai/enhance-search",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook - Search Query",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "svd-ai-search"
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {
+          "temperature": 0.3,
+          "maxTokens": 200
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a search query enhancer. Extract keywords, dates, and improve search queries for document search."
+            },
+            {
+              "role": "user",
+              "content": "=Enhance this search query: {{$json.query}}\n\nExtract keywords, dates, and improve the query. Respond in JSON:\n{\n  \"enhancedQuery\": \"improved query\",\n  \"keywords\": [\"keyword1\", \"keyword2\"],\n  \"dateRange\": {\"start\": \"YYYY-MM-DD\", \"end\": \"YYYY-MM-DD\"},\n  \"synonyms\": [\"synonym1\", \"synonym2\"]\n}"
+            }
+          ]
+        }
+      },
+      "id": "ai-enhance",
+      "name": "AI Search Enhancement",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{JSON.stringify($json)}}",
+        "options": {}
+      },
+      "id": "webhook-response",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Webhook - Search Query": {
+      "main": [
+        [
+          {
+            "node": "AI Search Enhancement",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Search Enhancement": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-01-15T00:00:00.000Z",
+  "versionId": "1"
+}

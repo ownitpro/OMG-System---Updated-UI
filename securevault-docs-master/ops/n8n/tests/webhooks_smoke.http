@@ -1,0 +1,157 @@
+### VSCode REST Client - n8n Webhook Smoke Tests
+### Set these variables at the top of your workspace settings or in this file:
+### @baseUrl = https://n8n.yourdomain.com
+### @baseUrl = http://localhost:5678
+
+### Health Check
+GET {{baseUrl}}/healthz
+Accept: application/json
+
+### Contact Sales Webhook
+POST {{baseUrl}}/webhook/svd/contact-sales
+Content-Type: application/json
+
+{
+  "ts": "2025-11-18T20:10:00Z",
+  "source": "contact_sales",
+  "name": "Jamie Ops",
+  "email": "jamie@acme.com",
+  "company": "Acme LLP",
+  "size": "5-15",
+  "interest": "Business - Growth",
+  "message": "Need demo + QBO integration"
+}
+
+### Request Docs Created
+POST {{baseUrl}}/webhook/svd/request-docs-created
+Content-Type: application/json
+
+{
+  "ts": "2025-11-18T20:15:00Z",
+  "orgId": "org_abc123",
+  "requestId": "req_xyz789",
+  "requesterEmail": "requester@acme.com",
+  "clientEmail": "client@example.com",
+  "expiresAt": "2025-12-18T20:15:00Z",
+  "message": "Please upload your tax documents",
+  "checklist": ["T1", "T2", "Receipts"]
+}
+
+### Portal Invite
+POST {{baseUrl}}/webhook/svd/portal-invite
+Content-Type: application/json
+
+{
+  "ts": "2025-11-18T20:25:00Z",
+  "orgId": "org_abc123",
+  "portalId": "portal_xyz789",
+  "inviteeEmail": "client@example.com",
+  "inviteeName": "John Client",
+  "inviterEmail": "admin@acme.com",
+  "inviterName": "Jane Admin",
+  "expiresAt": "2025-12-18T20:25:00Z",
+  "message": "Please upload your documents to this secure portal"
+}
+
+### Email to Vault
+POST {{baseUrl}}/webhook/svd/email-to-vault
+Content-Type: application/json
+
+{
+  "ts": "2025-11-18T20:20:00Z",
+  "orgId": "org_abc123",
+  "from": "sender@example.com",
+  "to": "vault+org_abc123@securevaultdocs.com",
+  "subject": "Invoice #12345",
+  "body": "Please find attached invoice.",
+  "attachments": [
+    {
+      "filename": "invoice_12345.pdf",
+      "contentType": "application/pdf",
+      "size": 245678,
+      "content": "base64_encoded_content_here"
+    }
+  ]
+}
+
+### Usage Meters
+POST {{baseUrl}}/webhook/svd/usage/meters
+Content-Type: application/json
+
+{
+  "orgId": "org_abc",
+  "period": "2025-11",
+  "meters": {
+    "uploads_gb": 12.5,
+    "ocr_pages": 760,
+    "egress_gb": 3.2
+  }
+}
+
+### Stripe Webhook
+POST {{baseUrl}}/webhook/svd/stripe
+Content-Type: application/json
+Stripe-Signature: t=1234567890,v1=signature_here
+
+{
+  "id": "evt_1234567890",
+  "type": "checkout.session.completed",
+  "data": {
+    "object": {
+      "id": "cs_test_abc123",
+      "customer": "cus_xyz789",
+      "subscription": "sub_def456",
+      "amount_total": 2900,
+      "currency": "cad",
+      "metadata": {
+        "orgId": "org_abc123",
+        "planId": "business_growth"
+      }
+    }
+  }
+}
+
+### Templates Install
+POST {{baseUrl}}/webhook/svd/templates/install
+Content-Type: application/json
+
+{
+  "orgId": "org_abc123",
+  "templateId": "acct-basic-2025",
+  "userId": "user_xyz789"
+}
+
+### Demo Switch
+POST {{baseUrl}}/webhook/svd/demo/switch
+Content-Type: application/json
+
+{
+  "orgId": "org_demo_123",
+  "dataset": "business"
+}
+
+### Beta Terms Agree
+POST {{baseUrl}}/webhook/svd/beta/agree
+Content-Type: application/json
+
+{
+  "userId": "user_xyz789",
+  "email": "user@example.com",
+  "version": "1.0",
+  "ts": "2025-11-18T20:30:00Z"
+}
+
+### Support Ticket
+POST {{baseUrl}}/webhook/svd/support
+Content-Type: application/json
+
+{
+  "ts": "2025-11-18T20:35:00Z",
+  "userId": "user_xyz789",
+  "orgId": "org_abc123",
+  "email": "user@example.com",
+  "subject": "Need help with OCR",
+  "message": "OCR is not working for my PDFs",
+  "severity": "medium"
+}
+

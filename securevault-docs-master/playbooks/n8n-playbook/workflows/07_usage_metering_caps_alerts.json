@@ -1,0 +1,160 @@
+{
+  "name": "07 Usage Metering & Caps Alerts",
+  "nodes": [
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 15,
+              "unit": "minutes"
+            }
+          ]
+        }
+      },
+      "id": "1",
+      "name": "Cron",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [180, 220]
+    },
+    {
+      "parameters": {
+        "requestMethod": "GET",
+        "url": "={{$env.SVD_BACKOFFICE_BASE}}/usage/rollup",
+        "jsonParameters": true
+      },
+      "id": "2",
+      "name": "Fetch Rollup",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [440, 220]
+    },
+    {
+      "parameters": {
+        "functionCode": "const rows=$json.data||[]; return rows.map(r=>({json:r}));"
+      },
+      "id": "3",
+      "name": "Split",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [680, 220]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "options": [
+            {
+              "rule": "={{$json.usagePct>=95}}",
+              "output": 1
+            },
+            {
+              "rule": "={{$json.usagePct>=90}}",
+              "output": 2
+            },
+            {
+              "rule": "={{$json.usagePct>=80}}",
+              "output": 3
+            },
+            {
+              "rule": "={{$json.usagePct>=70}}",
+              "output": 4
+            }
+          ]
+        }
+      },
+      "id": "4",
+      "name": "Branch by Threshold",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [920, 220]
+    },
+    {
+      "parameters": {
+        "fromEmail": "alerts@securevaultdocs.com",
+        "toEmail": "={{$json.ownerEmail}}",
+        "subject": "Usage alert {{$json.usagePct}}%",
+        "text": "Your usage reached {{$json.usagePct}}% for {{$json.metric}}"
+      },
+      "id": "5",
+      "name": "Email Owner",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [1180, 120],
+      "credentials": {
+        "smtp": {
+          "id": "svd_SES",
+          "name": "svd_SES"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "={{$env.SVD_ALERT_SLACK_WEBHOOK}}",
+        "jsonParameters": true,
+        "bodyParametersJson": "={\"text\": \"{{$json.orgName}} {{$json.metric}} {{$json.usagePct}}%\"}"
+      },
+      "id": "6",
+      "name": "Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1180, 220]
+    }
+  ],
+  "connections": {
+    "Cron": {
+      "main": [
+        [
+          {
+            "node": "Fetch Rollup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Rollup": {
+      "main": [
+        [
+          {
+            "node": "Split",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split": {
+      "main": [
+        [
+          {
+            "node": "Branch by Threshold",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Branch by Threshold": {
+      "main": [
+        [
+          {
+            "node": "Email Owner",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "version": 2
+}
+

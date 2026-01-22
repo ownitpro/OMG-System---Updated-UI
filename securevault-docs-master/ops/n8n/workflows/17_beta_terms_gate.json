@@ -1,0 +1,130 @@
+{
+  "name": "17_beta_terms_gate",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "svd/beta/agree",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "svd-beta-agree"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$env.BETA_TERMS_ENABLED}}",
+              "operation": "equal",
+              "value2": "true"
+            }
+          ]
+        }
+      },
+      "id": "if-enabled",
+      "name": "If Beta Terms Enabled",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "={{$env.GOOGLE_SHEET_ID}}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Beta Terms Acceptances",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{$now}}",
+            "userId": "={{$json.body.userId}}",
+            "email": "={{$json.body.email}}",
+            "version": "={{$json.body.version}}",
+            "acceptedAt": "={{$json.body.ts || $now}}"
+          }
+        },
+        "options": {}
+      },
+      "id": "record",
+      "name": "Record Acceptance",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [650, 300],
+      "credentials": {
+        "googleSheetsOAuth2": {
+          "id": "svd_google_sheets",
+          "name": "svd_google_sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{$env.SES_SMTP_USER}}",
+        "toEmail": "={{$json.body.email}}",
+        "subject": "Beta Terms Accepted",
+        "text": "Hi,\n\nYou've accepted the beta terms (version {{$json.body.version}}).\n\nThank you for being part of SecureVault Docs beta!\n\nBest,\nSecureVault Docs Team",
+        "options": {}
+      },
+      "id": "send-receipt",
+      "name": "Send Receipt Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [850, 300],
+      "credentials": {
+        "smtp": {
+          "id": "svd_ses_smtp",
+          "name": "svd_ses_smtp"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\":true,\"accepted\":true,\"version\":\"{{$json.body.version}}\"}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1050, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{"node": "If Beta Terms Enabled", "type": "main", "index": 0}]]
+    },
+    "If Beta Terms Enabled": {
+      "main": [[{"node": "Record Acceptance", "type": "main", "index": 0}]]
+    },
+    "Record Acceptance": {
+      "main": [[{"node": "Send Receipt Email", "type": "main", "index": 0}]]
+    },
+    "Send Receipt Email": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-18T20:00:00.000Z",
+  "versionId": "1"
+}
+

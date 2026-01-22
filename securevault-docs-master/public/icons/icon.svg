@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="url(#bg-gradient)"/>
+  <!-- Shield -->
+  <path d="M256 80c-60 0-120 30-140 50v180c0 80 60 140 140 170 80-30 140-90 140-170V130c-20-20-80-50-140-50z" fill="#ffffff" fill-opacity="0.15"/>
+  <path d="M256 100c-50 0-100 25-115 40v160c0 65 50 115 115 140 65-25 115-75 115-140V140c-15-15-65-40-115-40z" fill="none" stroke="#ffffff" stroke-width="8"/>
+  <!-- Document icon inside shield -->
+  <rect x="196" y="180" width="120" height="150" rx="8" fill="#ffffff"/>
+  <rect x="212" y="200" width="60" height="8" rx="2" fill="#3b82f6"/>
+  <rect x="212" y="220" width="88" height="6" rx="2" fill="#94a3b8"/>
+  <rect x="212" y="235" width="88" height="6" rx="2" fill="#94a3b8"/>
+  <rect x="212" y="250" width="70" height="6" rx="2" fill="#94a3b8"/>
+  <!-- Checkmark -->
+  <circle cx="280" cy="290" r="30" fill="#22c55e"/>
+  <path d="M265 290l10 10 20-20" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

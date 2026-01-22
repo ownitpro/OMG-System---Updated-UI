@@ -1,0 +1,175 @@
+{
+  "name": "08_usage_metering_emit",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "svd/usage/meters",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "svd-usage-meters"
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "={{$env.GOOGLE_SHEET_ID}}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Usage Meters",
+          "mode": "list"
+        },
+        "options": {
+          "range": "A2:Z1000"
+        }
+      },
+      "id": "read-meters",
+      "name": "Read Existing Meters",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [450, 300],
+      "credentials": {
+        "googleSheetsOAuth2": {
+          "id": "svd_google_sheets",
+          "name": "svd_google_sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Upsert month meter rows and compute % of cap\nconst body = $input.item.json.body;\nconst orgId = body.orgId;\nconst period = body.period;\nconst meters = body.meters;\n\n// Get existing row if any\nconst existing = $('Read Existing Meters').all().find(row => \n  row.json.orgId === orgId && row.json.period === period\n);\n\n// Get plan caps (mock - in prod, fetch from DB)\nconst caps = {\n  uploads_gb: 100,\n  ocr_pages: 1000,\n  egress_gb: 50\n};\n\n// Compute percentages\nconst percentages = {\n  uploads_gb: (meters.uploads_gb / caps.uploads_gb) * 100,\n  ocr_pages: (meters.ocr_pages / caps.ocr_pages) * 100,\n  egress_gb: (meters.egress_gb / caps.egress_gb) * 100\n};\n\n// Find max percentage\nconst maxPercent = Math.max(...Object.values(percentages));\n\nreturn {\n  orgId,\n  period,\n  ...meters,\n  ...percentages,\n  maxPercent,\n  threshold: maxPercent >= 100 ? 'exceeded' : maxPercent >= 95 ? 'critical' : maxPercent >= 90 ? 'warning' : maxPercent >= 80 ? 'notice' : maxPercent >= 70 ? 'info' : 'ok',\n  isUpdate: !!existing\n};"
+      },
+      "id": "compute",
+      "name": "Compute % of Cap",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "={{$env.GOOGLE_SHEET_ID}}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Usage Meters",
+          "mode": "list"
+        },
+        "columnToMatchOn": "orgId",
+        "valueToMatchOn": "={{$json.orgId}}",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{$now}}",
+            "orgId": "={{$json.orgId}}",
+            "period": "={{$json.period}}",
+            "uploads_gb": "={{$json.uploads_gb}}",
+            "ocr_pages": "={{$json.ocr_pages}}",
+            "egress_gb": "={{$json.egress_gb}}",
+            "maxPercent": "={{$json.maxPercent}}",
+            "threshold": "={{$json.threshold}}"
+          }
+        },
+        "options": {}
+      },
+      "id": "upsert",
+      "name": "Upsert Meter Row",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [850, 300],
+      "credentials": {
+        "googleSheetsOAuth2": {
+          "id": "svd_google_sheets",
+          "name": "svd_google_sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{$json.maxPercent}}",
+              "operation": "largerEqual",
+              "value2": 70
+            }
+          ]
+        }
+      },
+      "id": "if-threshold",
+      "name": "If Threshold Crossed",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/api/alerts/caps",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"orgId\":\"{{$json.orgId}}\",\"threshold\":\"{{$json.threshold}}\",\"maxPercent\":\"{{$json.maxPercent}}\"}",
+        "options": {}
+      },
+      "id": "call-alerts",
+      "name": "Call Alerts Workflow",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1250, 200],
+      "notes": "Triggers 09_aws_caps_guardrails_alerts"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\":true,\"upserted\":true,\"threshold\":\"{{$json.threshold}}\"}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1250, 400]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{"node": "Read Existing Meters", "type": "main", "index": 0}]]
+    },
+    "Read Existing Meters": {
+      "main": [[{"node": "Compute % of Cap", "type": "main", "index": 0}]]
+    },
+    "Compute % of Cap": {
+      "main": [[{"node": "Upsert Meter Row", "type": "main", "index": 0}]]
+    },
+    "Upsert Meter Row": {
+      "main": [[{"node": "If Threshold Crossed", "type": "main", "index": 0}]]
+    },
+    "If Threshold Crossed": {
+      "main": [[{"node": "Call Alerts Workflow", "type": "main", "index": 0}], [{"node": "Respond", "type": "main", "index": 0}]]
+    },
+    "Call Alerts Workflow": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-18T20:00:00.000Z",
+  "versionId": "1"
+}
+

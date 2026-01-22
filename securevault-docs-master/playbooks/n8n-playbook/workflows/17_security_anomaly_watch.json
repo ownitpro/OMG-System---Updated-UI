@@ -1,0 +1,95 @@
+{
+  "name": "17 Security Anomaly Watch",
+  "nodes": [
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 10,
+              "unit": "minutes"
+            }
+          ]
+        }
+      },
+      "id": "1",
+      "name": "Cron",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [200, 260]
+    },
+    {
+      "parameters": {
+        "requestMethod": "GET",
+        "url": "={{$env.SVD_BACKOFFICE_BASE}}/security/anomalies"
+      },
+      "id": "2",
+      "name": "Fetch Signals",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [460, 260]
+    },
+    {
+      "parameters": {
+        "functionCode": "const alerts=($json.alerts||[]).filter(a=>a.score>=80); return alerts.map(a=>({json:a}));"
+      },
+      "id": "3",
+      "name": "Filter High Score",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [720, 260]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "={{$env.SVD_ALERT_SLACK_WEBHOOK}}",
+        "jsonParameters": true,
+        "bodyParametersJson": "={\"text\": \"Security Anomaly: {{$json.type}} score {{$json.score}} org {{$json.orgName}}\"}"
+      },
+      "id": "4",
+      "name": "Slack Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [980, 260]
+    }
+  ],
+  "connections": {
+    "Cron": {
+      "main": [
+        [
+          {
+            "node": "Fetch Signals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Signals": {
+      "main": [
+        [
+          {
+            "node": "Filter High Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter High Score": {
+      "main": [
+        [
+          {
+            "node": "Slack Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "version": 2
+}
+

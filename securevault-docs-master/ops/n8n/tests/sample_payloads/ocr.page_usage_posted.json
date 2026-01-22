@@ -1,0 +1,10 @@
+{
+  "orgId": "org_abc",
+  "period": "2025-11",
+  "meters": {
+    "uploads_gb": 12.5,
+    "ocr_pages": 760,
+    "egress_gb": 3.2
+  }
+}
+

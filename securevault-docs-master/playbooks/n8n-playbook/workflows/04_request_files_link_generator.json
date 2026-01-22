@@ -1,0 +1,75 @@
+{
+  "name": "04 Request Files Link Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "svd/requests/new",
+        "methods": ["POST"]
+      },
+      "id": "1",
+      "name": "Inbound",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "={{$env.SVD_API_BASE}}/shares/requests",
+        "jsonParameters": true,
+        "bodyParametersJson": "={\n  \"orgId\": \"{{$json.body.orgId}}\",\n  \"label\": \"{{$json.body.label}}\",\n  \"pin\": {{$json.body.pin}},\n  \"expiryDays\": {{$json.body.expiryDays||7}}\n}"
+      },
+      "id": "2",
+      "name": "Create Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [500, 240]
+    },
+    {
+      "parameters": {
+        "fromEmail": "noreply@securevaultdocs.com",
+        "toEmail": "={{$json.body.recipient}}",
+        "subject": "Document Request",
+        "text": "Upload securely here: {{$json.uploadUrl}} (expires in {{$json.expiryDays}} days)"
+      },
+      "id": "3",
+      "name": "Email Recipient",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [760, 300],
+      "credentials": {
+        "smtp": {
+          "id": "svd_SES",
+          "name": "svd_SES"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Inbound": {
+      "main": [
+        [
+          {
+            "node": "Create Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Request": {
+      "main": [
+        [
+          {
+            "node": "Email Recipient",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "version": 2
+}
+

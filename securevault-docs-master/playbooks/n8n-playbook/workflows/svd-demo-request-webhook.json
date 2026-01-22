@@ -1,0 +1,39 @@
+{
+  "name": "SVD Demo Request",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhooks/n8n/demo-request",
+        "responseMode": "responseNode"
+      },
+      "type": "n8n-nodes-base.webhook",
+      "name": "Webhook"
+    },
+    {
+      "parameters": {
+        "functionCode": "const side = $json.side || 'business';\nconst token = Buffer.from(`${Date.now()}-${$json.email}`).toString('base64');\nreturn [{ side, token, accessUrl: `/demo/${side}?token=${token}` }];"
+      },
+      "type": "n8n-nodes-base.function",
+      "name": "Mint Demo Token (mock)"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{$env.SVD_SES_FROM}}",
+        "toEmail": "={{$json.email}}",
+        "subject": "Your SecureVault Docs Demo",
+        "text": "Here's your demo link: {{$json.accessUrl}}\nThis link is for testing only."
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "name": "Email Demo Link"
+    },
+    {
+      "parameters": {
+        "responseBody": "={\"ok\":true,\"accessUrl\":$json.accessUrl}"
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "name": "Respond"
+    }
+  ]
+}
+

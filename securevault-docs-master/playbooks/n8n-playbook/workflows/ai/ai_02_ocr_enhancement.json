@@ -1,0 +1,164 @@
+{
+  "name": "AI OCR Text Enhancement",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "svd/ai/ocr-enhance",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook - OCR Complete",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "svd-ai-ocr-enhance"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.item.json.body || $input.item.json;\nreturn {\n  documentId: body.documentId,\n  ocrText: body.ocrText,\n  documentType: body.documentType || 'unknown',\n  orgId: body.orgId\n};"
+      },
+      "id": "parse-input",
+      "name": "Parse Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "options": {
+          "temperature": 0.2,
+          "maxTokens": 1000
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are an OCR text correction assistant. Fix OCR errors, extract structured data, and improve text quality. Respond in JSON format."
+            },
+            {
+              "role": "user",
+              "content": "=Enhance this OCR text and extract structured data:\n\n{{$json.ocrText}}\n\nDocument Type: {{$json.documentType}}\n\nRespond in JSON:\n{\n  \"enhancedText\": \"corrected text\",\n  \"structuredData\": {\n    \"merchant\": \"merchant name\",\n    \"date\": \"YYYY-MM-DD\",\n    \"amount\": 0.00,\n    \"currency\": \"USD\"\n  },\n  \"corrections\": [\"list of corrections made\"]\n}"
+            }
+          ]
+        }
+      },
+      "id": "ai-enhance",
+      "name": "AI Enhancement (GPT-4o)",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1,
+      "position": [650, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai_api_key",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const aiResponse = $input.item.json;\nlet enhanced;\n\ntry {\n  const responseText = typeof aiResponse === 'string' ? aiResponse : JSON.stringify(aiResponse);\n  const jsonMatch = responseText.match(/\\{[\\s\\S]*\\}/);\n  enhanced = jsonMatch ? JSON.parse(jsonMatch[0]) : aiResponse;\n} catch (e) {\n  enhanced = {\n    enhancedText: $('Parse Input').item.json.ocrText,\n    structuredData: {},\n    corrections: []\n  };\n}\n\nreturn {\n  ...$('Parse Input').item.json,\n  enhanced: enhanced\n};"
+      },
+      "id": "parse-response",
+      "name": "Parse AI Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/api/documents/{{$json.documentId}}/enhance",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"enhancedText\": \"{{$json.enhanced.enhancedText}}\",\n  \"structuredData\": {{JSON.stringify($json.enhanced.structuredData)}},\n  \"corrections\": {{JSON.stringify($json.enhanced.corrections)}}\n}",
+        "options": {}
+      },
+      "id": "update-document",
+      "name": "Update Document",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"ok\": true,\n  \"documentId\": \"{{$json.documentId}}\",\n  \"enhancedText\": \"{{$json.enhanced.enhancedText}}\",\n  \"structuredData\": {{JSON.stringify($json.enhanced.structuredData)}}\n}",
+        "options": {}
+      },
+      "id": "webhook-response",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1250, 300]
+    }
+  ],
+  "connections": {
+    "Webhook - OCR Complete": {
+      "main": [
+        [
+          {
+            "node": "Parse Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Input": {
+      "main": [
+        [
+          {
+            "node": "AI Enhancement (GPT-4o)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Enhancement (GPT-4o)": {
+      "main": [
+        [
+          {
+            "node": "Parse AI Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse AI Response": {
+      "main": [
+        [
+          {
+            "node": "Update Document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Document": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-01-15T00:00:00.000Z",
+  "versionId": "1"
+}
+

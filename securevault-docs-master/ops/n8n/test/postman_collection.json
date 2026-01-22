@@ -1,0 +1,101 @@
+{
+  "info": {
+    "name": "SecureVault Docs n8n Webhooks",
+    "description": "Test collection for SVD n8n webhooks",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Contact Sales",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-svd-signature",
+            "value": "{{SVD_CONTACT_SALES_SECRET}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Alex Doe\",\n  \"email\": \"alex@example.com\",\n  \"company\": \"Acme Corp\",\n  \"useCase\": \"Document management\",\n  \"planInterest\": \"business\",\n  \"region\": \"CA\"\n}"
+        },
+        "url": {
+          "raw": "{{SVD_WEBHOOK_BASE}}/webhooks/n8n/contact-sales",
+          "host": ["{{SVD_WEBHOOK_BASE}}"],
+          "path": ["webhooks", "n8n", "contact-sales"]
+        }
+      }
+    },
+    {
+      "name": "Demo Request",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Alex\",\n  \"email\": \"alex@example.com\",\n  \"side\": \"business\"\n}"
+        },
+        "url": {
+          "raw": "{{SVD_WEBHOOK_BASE}}/webhooks/n8n/demo-request",
+          "host": ["{{SVD_WEBHOOK_BASE}}"],
+          "path": ["webhooks", "n8n", "demo-request"]
+        }
+      }
+    },
+    {
+      "name": "Request File",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"orgId\": \"org_demo\",\n  \"recipientEmail\": \"client@example.com\",\n  \"label\": \"KYC Documents\"\n}"
+        },
+        "url": {
+          "raw": "{{SVD_WEBHOOK_BASE}}/webhooks/n8n/request-file",
+          "host": ["{{SVD_WEBHOOK_BASE}}"],
+          "path": ["webhooks", "n8n", "request-file"]
+        }
+      }
+    },
+    {
+      "name": "Email to Vault",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"to\": \"ingest@securevaultdocs.com\",\n  \"from\": \"user@example.com\",\n  \"subject\": \"Receipts\",\n  \"text\": \"Please process these receipts\",\n  \"attachments\": [{\n    \"filename\": \"r1.pdf\",\n    \"contentBase64\": \"ZG9n\"\n  }]\n}"
+        },
+        "url": {
+          "raw": "{{SVD_WEBHOOK_BASE}}/webhooks/n8n/email-to-vault",
+          "host": ["{{SVD_WEBHOOK_BASE}}"],
+          "path": ["webhooks", "n8n", "email-to-vault"]
+        }
+      }
+    },
+    {
+      "name": "Marketplace Install",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"templateId\": \"acct-basic\",\n  \"mode\": \"dry-run\"\n}"
+        },
+        "url": {
+          "raw": "{{SVD_WEBHOOK_BASE}}/webhooks/n8n/marketplace/install",
+          "host": ["{{SVD_WEBHOOK_BASE}}"],
+          "path": ["webhooks", "n8n", "marketplace", "install"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "SVD_WEBHOOK_BASE",
+      "value": "http://localhost:5678"
+    },
+    {
+      "key": "SVD_CONTACT_SALES_SECRET",
+      "value": "replace-me"
+    }
+  ]
+}
+

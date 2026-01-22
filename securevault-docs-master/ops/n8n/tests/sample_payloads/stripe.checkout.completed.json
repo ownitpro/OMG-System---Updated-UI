@@ -1,0 +1,18 @@
+{
+  "id": "evt_1234567890",
+  "type": "checkout.session.completed",
+  "data": {
+    "object": {
+      "id": "cs_test_abc123",
+      "customer": "cus_xyz789",
+      "subscription": "sub_def456",
+      "amount_total": 2900,
+      "currency": "cad",
+      "metadata": {
+        "orgId": "org_abc123",
+        "planId": "business_growth"
+      }
+    }
+  }
+}
+

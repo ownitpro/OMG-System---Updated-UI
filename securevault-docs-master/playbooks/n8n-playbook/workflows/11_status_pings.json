@@ -1,0 +1,95 @@
+{
+  "name": "11 Status Pings & Uptime",
+  "nodes": [
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 5,
+              "unit": "minutes"
+            }
+          ]
+        }
+      },
+      "id": "1",
+      "name": "Cron",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [180, 220]
+    },
+    {
+      "parameters": {
+        "requestMethod": "GET",
+        "url": "={{$env.SVD_STATUS_URL||$env.SVD_API_BASE+ '/health'}}"
+      },
+      "id": "2",
+      "name": "Ping API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [440, 220]
+    },
+    {
+      "parameters": {
+        "functionCode": "if($json.status!==200 && !$json.data?.ok){return [{json:{down:true}}]} return [{json:{down:false}}];"
+      },
+      "id": "3",
+      "name": "Check",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [700, 220]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "={{$env.SVD_ALERT_SLACK_WEBHOOK}}",
+        "jsonParameters": true,
+        "bodyParametersJson": "={\"text\": \"SVD status DOWN\"}"
+      },
+      "id": "4",
+      "name": "Alert Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [960, 220]
+    }
+  ],
+  "connections": {
+    "Cron": {
+      "main": [
+        [
+          {
+            "node": "Ping API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ping API": {
+      "main": [
+        [
+          {
+            "node": "Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check": {
+      "main": [
+        [
+          {
+            "node": "Alert Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "version": 2
+}
+

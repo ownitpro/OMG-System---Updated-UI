@@ -1,0 +1,178 @@
+{
+  "name": "14_support_ticket_intake",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "svd/support",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "svd-support"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "={{$env.GOOGLE_SHEET_ID}}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Support Tickets",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{$now}}",
+            "ticketId": "=TICKET-{{$now.toISO().replace(/[^0-9]/g, '').slice(0, 14)}}",
+            "userId": "={{$json.body.userId}}",
+            "orgId": "={{$json.body.orgId}}",
+            "email": "={{$json.body.email}}",
+            "subject": "={{$json.body.subject}}",
+            "message": "={{$json.body.message}}",
+            "severity": "={{$json.body.severity || 'medium'}}",
+            "status": "=open"
+          }
+        },
+        "options": {}
+      },
+      "id": "create-ticket",
+      "name": "Create Ticket (Sheet)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [450, 300],
+      "credentials": {
+        "googleSheetsOAuth2": {
+          "id": "svd_google_sheets",
+          "name": "svd_google_sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{$env.SES_SMTP_USER}}",
+        "toEmail": "={{$json.body.email}}",
+        "subject": "Support Ticket Received - {{$('Create Ticket (Sheet)').item.json.ticketId}}",
+        "text": "Hi,\n\nWe received your support request:\n\nSubject: {{$json.body.subject}}\n\nWe'll get back to you soon.\n\nTicket ID: {{$('Create Ticket (Sheet)').item.json.ticketId}}\n\nBest,\nSecureVault Docs Support",
+        "options": {}
+      },
+      "id": "send-receipt",
+      "name": "Send Receipt",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [650, 300],
+      "credentials": {
+        "smtp": {
+          "id": "svd_ses_smtp",
+          "name": "svd_ses_smtp"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "webhookUrl": "={{$env.SLACK_WEBHOOK_URL}}",
+        "channel": "#support",
+        "text": "New support ticket: {{$('Create Ticket (Sheet').item.json.ticketId}}\nSubject: {{$json.body.subject}}\nSeverity: {{$json.body.severity || 'medium'}}",
+        "options": {}
+      },
+      "id": "slack",
+      "name": "Slack to #support",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [850, 300],
+      "credentials": {
+        "slackApi": {
+          "id": "svd_slack_webhook",
+          "name": "svd_slack_webhook"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.body.severity}}",
+              "operation": "equal",
+              "value2": "high"
+            }
+          ]
+        }
+      },
+      "id": "if-high",
+      "name": "If High Severity",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "webhookUrl": "={{$env.SLACK_WEBHOOK_URL}}",
+        "channel": "#ops",
+        "text": "🚨 HIGH SEVERITY: {{$('Create Ticket (Sheet)').item.json.ticketId}} - {{$json.body.subject}}",
+        "options": {}
+      },
+      "id": "slack-ops",
+      "name": "Slack to #ops",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [1250, 200],
+      "credentials": {
+        "slackApi": {
+          "id": "svd_slack_webhook",
+          "name": "svd_slack_webhook"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\":true,\"ticketId\":\"{{$('Create Ticket (Sheet)').item.json.ticketId}}\"}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1250, 400]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{"node": "Create Ticket (Sheet)", "type": "main", "index": 0}]]
+    },
+    "Create Ticket (Sheet)": {
+      "main": [[{"node": "Send Receipt", "type": "main", "index": 0}]]
+    },
+    "Send Receipt": {
+      "main": [[{"node": "Slack to #support", "type": "main", "index": 0}]]
+    },
+    "Slack to #support": {
+      "main": [[{"node": "If High Severity", "type": "main", "index": 0}]]
+    },
+    "If High Severity": {
+      "main": [[{"node": "Slack to #ops", "type": "main", "index": 0}], [{"node": "Respond", "type": "main", "index": 0}]]
+    },
+    "Slack to #ops": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-18T20:00:00.000Z",
+  "versionId": "1"
+}
+

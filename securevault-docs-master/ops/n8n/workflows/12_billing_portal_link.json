@@ -1,0 +1,68 @@
+{
+  "name": "12_billing_portal_link",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "svd/billing/portal",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "svd-billing-portal"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "customer": "={{$json.body.customerId}}",
+        "returnUrl": "={{$env.APP_API_BASE}}/org/settings/billing",
+        "options": {}
+      },
+      "id": "create-portal",
+      "name": "Create Billing Portal Session",
+      "type": "n8n-nodes-base.stripe",
+      "typeVersion": 1,
+      "position": [450, 300],
+      "credentials": {
+        "stripeApi": {
+          "id": "svd_stripe_main",
+          "name": "svd_stripe_main"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\":true,\"portalUrl\":\"{{$json.url}}\"}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{"node": "Create Billing Portal Session", "type": "main", "index": 0}]]
+    },
+    "Create Billing Portal Session": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-18T20:00:00.000Z",
+  "versionId": "1"
+}
+

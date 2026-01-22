@@ -1,0 +1,153 @@
+{
+  "name": "10 Support Intake Router",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "svd/support",
+        "methods": ["POST"]
+      },
+      "id": "1",
+      "name": "Inbound",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [180, 260]
+    },
+    {
+      "parameters": {
+        "functionCode": "const t=($json.body.type||'general').toLowerCase();return [{json:{...$json.body, bucket: t.match(/billing|payment/)?'billing':t.match(/bug|issue/)?'engineering':'success'}}];"
+      },
+      "id": "2",
+      "name": "Classify",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [460, 260]
+    },
+    {
+      "parameters": {
+        "switchValues": {
+          "string": [
+            {
+              "value1": "billing"
+            },
+            {
+              "value1": "engineering"
+            },
+            {
+              "value1": "success"
+            }
+          ]
+        }
+      },
+      "id": "3",
+      "name": "Route",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 2,
+      "position": [720, 260]
+    },
+    {
+      "parameters": {
+        "fromEmail": "support@securevaultdocs.com",
+        "toEmail": "billing@securevaultdocs.com",
+        "subject": "Billing ticket",
+        "text": "={{$json.summary}}"
+      },
+      "id": "4",
+      "name": "Notify Billing",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [980, 160],
+      "credentials": {
+        "smtp": {
+          "id": "svd_SES",
+          "name": "svd_SES"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "support@securevaultdocs.com",
+        "toEmail": "eng@securevaultdocs.com",
+        "subject": "Engineering ticket",
+        "text": "={{$json.summary}}"
+      },
+      "id": "5",
+      "name": "Notify Eng",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [980, 260],
+      "credentials": {
+        "smtp": {
+          "id": "svd_SES",
+          "name": "svd_SES"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "support@securevaultdocs.com",
+        "toEmail": "success@securevaultdocs.com",
+        "subject": "Customer success",
+        "text": "={{$json.summary}}"
+      },
+      "id": "6",
+      "name": "Notify CS",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [980, 360],
+      "credentials": {
+        "smtp": {
+          "id": "svd_SES",
+          "name": "svd_SES"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Inbound": {
+      "main": [
+        [
+          {
+            "node": "Classify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify": {
+      "main": [
+        [
+          {
+            "node": "Route",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route": {
+      "main": [
+        [
+          {
+            "node": "Notify Billing",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Notify Eng",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Notify CS",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "version": 2
+}
+

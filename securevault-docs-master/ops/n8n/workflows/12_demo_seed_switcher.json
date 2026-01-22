@@ -1,0 +1,66 @@
+{
+  "name": "12 Demo Seed Switcher",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "svd/demo/switch",
+        "methods": ["POST"]
+      },
+      "id": "1",
+      "name": "Inbound",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 280]
+    },
+    {
+      "parameters": {
+        "functionCode": "const v=($json.body.vertical||'business');return [{json:{vertical:v}}];"
+      },
+      "id": "2",
+      "name": "Parse",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [460, 280]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "={{$env.SVD_BACKOFFICE_BASE}}/demo/seed",
+        "jsonParameters": true,
+        "bodyParametersJson": "={{JSON.stringify($json)}}"
+      },
+      "id": "3",
+      "name": "Apply Seed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [720, 280]
+    }
+  ],
+  "connections": {
+    "Inbound": {
+      "main": [
+        [
+          {
+            "node": "Parse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse": {
+      "main": [
+        [
+          {
+            "node": "Apply Seed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "version": 2
+}
+

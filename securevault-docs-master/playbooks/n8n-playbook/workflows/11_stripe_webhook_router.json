@@ -1,0 +1,140 @@
+{
+  "name": "11_stripe_webhook_router",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "svd/stripe",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "svd-stripe"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Verify Stripe signature (simplified - use stripe library in prod)\nconst signature = $input.item.json.headers['stripe-signature'];\nconst body = $input.item.json.body;\n\n// In prod, verify with Stripe webhook secret\n// For now, just pass through\nreturn {\n  verified: true,\n  event: body\n};"
+      },
+      "id": "verify",
+      "name": "Verify Signature",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300],
+      "notes": "Prod: use Stripe SDK to verify"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.event.type}}",
+              "operation": "equal",
+              "value2": "checkout.session.completed"
+            }
+          ]
+        }
+      },
+      "id": "if-checkout",
+      "name": "If checkout.session.completed",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/api/billing/activate",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"orgId\":\"{{$json.event.data.object.metadata.orgId}}\",\"planId\":\"{{$json.event.data.object.metadata.planId}}\",\"subscriptionId\":\"{{$json.event.data.object.subscription}}\",\"customerId\":\"{{$json.event.data.object.customer}}\"}",
+        "options": {}
+      },
+      "id": "activate-plan",
+      "name": "Activate Plan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [850, 200],
+      "notes": "Dev: mock endpoint"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.event.type}}",
+              "operation": "equal",
+              "value2": "customer.subscription.updated"
+            }
+          ]
+        }
+      },
+      "id": "if-sub-updated",
+      "name": "If subscription.updated",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [850, 400]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/api/billing/update",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"subscriptionId\":\"{{$json.event.data.object.id}}\",\"status\":\"{{$json.event.data.object.status}}\"}",
+        "options": {}
+      },
+      "id": "update-plan",
+      "name": "Update Plan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1050, 400],
+      "notes": "Dev: mock endpoint"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\":true,\"processed\":\"{{$json.event.type}}\"}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1250, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{"node": "Verify Signature", "type": "main", "index": 0}]]
+    },
+    "Verify Signature": {
+      "main": [[{"node": "If checkout.session.completed", "type": "main", "index": 0}]]
+    },
+    "If checkout.session.completed": {
+      "main": [[{"node": "Activate Plan", "type": "main", "index": 0}], [{"node": "If subscription.updated", "type": "main", "index": 0}]]
+    },
+    "Activate Plan": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    },
+    "If subscription.updated": {
+      "main": [[{"node": "Update Plan", "type": "main", "index": 0}]]
+    },
+    "Update Plan": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-18T20:00:00.000Z",
+  "versionId": "1"
+}
+

@@ -1,0 +1,52 @@
+feat: Major system enhancements - Dashboard, Auth, Notifications, Profile Image
+
+## Dashboard Improvements
+- Added time period filters for charts (Day/Week/Month/Year)
+- Added Storage Usage chart with MB/GB auto-scaling
+- Added Recent Uploads widget
+- Improved chart responsiveness and dark mode
+
+## Authentication & Authorization
+- Added NextAuth.js integration with credentials provider
+- Added password reset flow (forgot-password, reset-password)
+- Added change password functionality
+- Added account type migration (personal to business)
+
+## Notification System
+- Added notification bell with real-time urgent checks
+- Added cron job for processing notifications (/api/cron)
+- Added email notification service
+- Added storage warning notifications (75%, 90%, 100%)
+
+## Profile & Settings
+- Added profile image upload with selfie camera support
+- Added profile image modal with dark mode
+- Fixed PNG upload issue (changed to JSON dataUrl approach)
+
+## Document Management
+- Added document download endpoint with proper headers
+- Added due date tracking and badge component
+- Added move folder modal with dark mode
+- Wired up version history and upload new version
+
+## API & Database
+- Migrated from Supabase to PostgreSQL with custom db.ts
+- Added db-utils.ts for table name handling
+- Added complete schema migration
+- Removed Supabase-specific files
+
+## New Components
+- StorageUsageChart.tsx
+- DueDateBadge.tsx
+- MoveFolderModal.tsx
+- ProfileImageModal.tsx
+- RecentUploadsWidget.tsx
+
+## Configuration
+- Added vercel.json for cron jobs
+- Updated next.config.js with camera permissions
+- Added Permissions-Policy header for camera access
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>

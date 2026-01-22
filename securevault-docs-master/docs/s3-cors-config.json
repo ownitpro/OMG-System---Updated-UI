@@ -1,0 +1,22 @@
+[
+    {
+        "AllowedHeaders": [
+            "*"
+        ],
+        "AllowedMethods": [
+            "PUT",
+            "POST",
+            "GET",
+            "DELETE",
+            "HEAD"
+        ],
+        "AllowedOrigins": [
+            "http://localhost:3000",
+            "https://securevaultdocs.com"
+        ],
+        "ExposeHeaders": [
+            "ETag",
+            "x-amz-server-side-encryption"
+        ]
+    }
+]

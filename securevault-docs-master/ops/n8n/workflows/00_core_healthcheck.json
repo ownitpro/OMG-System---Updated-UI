@@ -1,0 +1,106 @@
+{
+  "name": "00_core_healthcheck",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      },
+      "id": "cron-trigger",
+      "name": "Cron Trigger",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/health",
+        "options": {
+          "timeout": 5000
+        }
+      },
+      "id": "http-request",
+      "name": "Health Check",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{$json.statusCode}}",
+              "operation": "notEqual",
+              "value2": 200
+            }
+          ]
+        }
+      },
+      "id": "if-failed",
+      "name": "If Failed",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "webhookUrl": "={{$env.SLACK_WEBHOOK_URL}}",
+        "text": "={{$json.statusCode}} - Health check failed at {{$now}}",
+        "options": {}
+      },
+      "id": "slack-notify",
+      "name": "Notify Slack",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [850, 200],
+      "credentials": {
+        "slackApi": {
+          "id": "svd_slack_webhook",
+          "name": "svd_slack_webhook"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{$env.PAGERDUTY_ROUTING_KEY}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"routing_key\":\"{{$env.PAGERDUTY_ROUTING_KEY}}\",\"event_action\":\"trigger\",\"payload\":{\"summary\":\"Health check failed 3 times\"}}",
+        "options": {}
+      },
+      "id": "pagerduty",
+      "name": "PagerDuty Escalate",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [850, 400]
+    }
+  ],
+  "connections": {
+    "Cron Trigger": {
+      "main": [[{"node": "Health Check", "type": "main", "index": 0}]]
+    },
+    "Health Check": {
+      "main": [[{"node": "If Failed", "type": "main", "index": 0}]]
+    },
+    "If Failed": {
+      "main": [[{"node": "Notify Slack", "type": "main", "index": 0}], [{"node": "PagerDuty Escalate", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-18T20:00:00.000Z",
+  "versionId": "1"
+}
+

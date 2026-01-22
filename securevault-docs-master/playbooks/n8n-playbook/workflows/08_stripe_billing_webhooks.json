@@ -1,0 +1,105 @@
+{
+  "name": "08 Stripe Webhooks",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "svd/stripe/webhook",
+        "methods": ["POST"],
+        "responseMode": "lastNode"
+      },
+      "id": "1",
+      "name": "Stripe (Webhook)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [220, 280]
+    },
+    {
+      "parameters": {
+        "functionCode": "const e=$json; return [{json:{type:e.type,data:e.data.object}}];"
+      },
+      "id": "2",
+      "name": "Parse Event",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [480, 280]
+    },
+    {
+      "parameters": {
+        "switchValues": {
+          "number": [],
+          "string": [
+            {
+              "value1": "invoice.payment_succeeded"
+            },
+            {
+              "value1": "customer.subscription.updated"
+            },
+            {
+              "value1": "customer.subscription.deleted"
+            },
+            {
+              "value1": "checkout.session.completed"
+            }
+          ],
+          "boolean": []
+        }
+      },
+      "id": "3",
+      "name": "Route by Type",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 2,
+      "position": [740, 280]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "={{$env.SVD_BACKOFFICE_BASE}}/billing/event",
+        "jsonParameters": true,
+        "bodyParametersJson": "={{JSON.stringify($json)}}"
+      },
+      "id": "4",
+      "name": "Notify Backoffice",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1000, 280]
+    }
+  ],
+  "connections": {
+    "Stripe (Webhook)": {
+      "main": [
+        [
+          {
+            "node": "Parse Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Event": {
+      "main": [
+        [
+          {
+            "node": "Route by Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Type": {
+      "main": [
+        [
+          {
+            "node": "Notify Backoffice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "version": 2
+}
+

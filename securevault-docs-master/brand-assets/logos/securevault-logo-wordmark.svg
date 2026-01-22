@@ -1,0 +1,9 @@
+<svg width="350" height="80" viewBox="0 0 350 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Text Only -->
+  <text x="10" y="45" font-family="Inter, -apple-system, system-ui, sans-serif" font-size="36" font-weight="700" fill="#1A1F36">
+    Secure<tspan fill="#4F46E5">Vault</tspan>
+  </text>
+  <text x="10" y="70" font-family="Inter, -apple-system, system-ui, sans-serif" font-size="12" font-weight="500" fill="#64748B" letter-spacing="2">
+    DOCUMENT SECURITY
+  </text>
+</svg>

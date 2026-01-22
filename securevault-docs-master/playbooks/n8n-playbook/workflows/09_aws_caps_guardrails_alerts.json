@@ -1,0 +1,192 @@
+{
+  "name": "09_aws_caps_guardrails_alerts",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "svd/alerts/caps",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "svd-alerts-caps"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{$json.body.maxPercent}}",
+              "operation": "largerEqual",
+              "value2": 100
+            }
+          ]
+        }
+      },
+      "id": "if-100",
+      "name": "If >= 100%",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "webhookUrl": "={{$env.SLACK_WEBHOOK_URL}}",
+        "text": "🚨 CAP EXCEEDED: Org {{$json.body.orgId}} at {{$json.body.maxPercent}}% ({{$json.body.threshold}})\n\nAction: Soft stop enabled.",
+        "options": {}
+      },
+      "id": "slack-100",
+      "name": "Slack Alert (100%)",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [650, 200],
+      "credentials": {
+        "slackApi": {
+          "id": "svd_slack_webhook",
+          "name": "svd_slack_webhook"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{$env.SES_SMTP_USER}}",
+        "toEmail": "={{$env.ADMIN_EMAIL}}",
+        "subject": "🚨 Usage Cap Exceeded - Org {{$json.body.orgId}}",
+        "text": "Org {{$json.body.orgId}} has exceeded usage cap ({{$json.body.maxPercent}}%).\n\nSoft stop enabled. Review required.",
+        "options": {}
+      },
+      "id": "email-100",
+      "name": "Email Admin (100%)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [650, 400],
+      "credentials": {
+        "smtp": {
+          "id": "svd_ses_smtp",
+          "name": "svd_ses_smtp"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/api/org/{{$json.body.orgId}}/soft-stop",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"enabled\":true,\"reason\":\"cap_exceeded\"}",
+        "options": {}
+      },
+      "id": "soft-stop",
+      "name": "Enable Soft Stop",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [850, 300],
+      "notes": "Dev: mock endpoint"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{$json.body.maxPercent}}",
+              "operation": "largerEqual",
+              "value2": 103
+            }
+          ]
+        }
+      },
+      "id": "if-103",
+      "name": "If >= 103%",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/api/org/{{$json.body.orgId}}/hard-stop",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"enabled\":true,\"reason\":\"cap_exceeded_103\"}",
+        "options": {}
+      },
+      "id": "hard-stop",
+      "name": "Enable Hard Stop",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1250, 300],
+      "notes": "Dev: mock endpoint. Prod: writes back to app"
+    },
+    {
+      "parameters": {
+        "webhookUrl": "={{$env.SLACK_WEBHOOK_URL}}",
+        "text": "⚠️ WARNING: Org {{$json.body.orgId}} at {{$json.body.maxPercent}}% ({{$json.body.threshold}})",
+        "options": {}
+      },
+      "id": "slack-warning",
+      "name": "Slack Warning",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [650, 600],
+      "credentials": {
+        "slackApi": {
+          "id": "svd_slack_webhook",
+          "name": "svd_slack_webhook"
+        }
+      },
+      "notes": "For 70/80/90/95% thresholds"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\":true,\"alerted\":true}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1450, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{"node": "If >= 100%", "type": "main", "index": 0}]]
+    },
+    "If >= 100%": {
+      "main": [[{"node": "Slack Alert (100%)", "type": "main", "index": 0}, {"node": "Email Admin (100%)", "type": "main", "index": 0}], [{"node": "Slack Warning", "type": "main", "index": 0}]]
+    },
+    "Slack Alert (100%)": {
+      "main": [[{"node": "Enable Soft Stop", "type": "main", "index": 0}]]
+    },
+    "Email Admin (100%)": {
+      "main": [[{"node": "Enable Soft Stop", "type": "main", "index": 0}]]
+    },
+    "Enable Soft Stop": {
+      "main": [[{"node": "If >= 103%", "type": "main", "index": 0}]]
+    },
+    "If >= 103%": {
+      "main": [[{"node": "Enable Hard Stop", "type": "main", "index": 0}], [{"node": "Respond", "type": "main", "index": 0}]]
+    },
+    "Enable Hard Stop": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    },
+    "Slack Warning": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-18T20:00:00.000Z",
+  "versionId": "1"
+}
+

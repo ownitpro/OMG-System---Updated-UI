@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(npm install:*)",
+      "Bash(find:*)",
+      "Bash(git diff:*)",
+      "Bash(npx tsc:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(ssh:*)",
+      "Bash(dir:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(findstr:*)",
+      "Bash(\"c:\\\\Antigravity Projects\\\\Secure Vault Docs\\\\SVD dec 20\\\\securevault-docs-master\\\\src\\\\app\\\\api\\\\org\\\\[orgId]\\\\audit-logs\\\\route.ts\")"
+    ]
+  }
+}

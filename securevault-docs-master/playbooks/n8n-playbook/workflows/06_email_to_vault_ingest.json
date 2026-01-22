@@ -1,0 +1,153 @@
+{
+  "name": "06_email_to_vault_ingest",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "svd/email-to-vault",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "svd-email-to-vault"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse inbound email and extract attachments\nconst body = $input.item.json.body;\nconst attachments = body.attachments || [];\n\n// Extract orgId from email address (vault+org_abc123@domain.com)\nconst emailMatch = body.to.match(/vault\\+(\\w+)@/);\nconst orgId = emailMatch ? emailMatch[1] : body.orgId;\n\nreturn {\n  orgId,\n  from: body.from,\n  subject: body.subject,\n  body: body.body,\n  attachments: attachments.map(att => ({\n    filename: att.filename,\n    contentType: att.contentType,\n    size: att.size,\n    content: att.content\n  }))\n};"
+      },
+      "id": "parse",
+      "name": "Parse Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "split-attachments",
+      "name": "Split Attachments",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$env.SVD_ENV}}",
+              "operation": "equal",
+              "value2": "prod"
+            }
+          ]
+        }
+      },
+      "id": "if-prod",
+      "name": "If Prod",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/demo/upload",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"orgId\":\"{{$('Parse Email').item.json.orgId}}\",\"filename\":\"{{$json.filename}}\",\"contentType\":\"{{$json.contentType}}\",\"content\":\"{{$json.content}}\"}",
+        "options": {}
+      },
+      "id": "upload-mock",
+      "name": "Upload (Mock)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1050, 200],
+      "notes": "Dev: mock endpoint"
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "bucketName": "={{$env.S3_BUCKET_NAME}}",
+        "fileName": "={{$json.filename}}",
+        "binaryData": true,
+        "additionalFields": {}
+      },
+      "id": "upload-s3",
+      "name": "Upload to S3",
+      "type": "n8n-nodes-base.aws",
+      "typeVersion": 1,
+      "position": [1050, 400],
+      "credentials": {
+        "aws": {
+          "id": "svd_aws_textract",
+          "name": "svd_aws_textract"
+        }
+      },
+      "notes": "Prod: S3 upload"
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/api/classification/job",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"orgId\":\"{{$('Parse Email').item.json.orgId}}\",\"fileId\":\"{{$json.filename}}\",\"source\":\"email\"}",
+        "options": {}
+      },
+      "id": "emit-classification",
+      "name": "Emit Classification Job",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1250, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\":true,\"stored\":{{$('Parse Email').item.json.attachments.length}}}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1450, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{"node": "Parse Email", "type": "main", "index": 0}]]
+    },
+    "Parse Email": {
+      "main": [[{"node": "Split Attachments", "type": "main", "index": 0}]]
+    },
+    "Split Attachments": {
+      "main": [[{"node": "If Prod", "type": "main", "index": 0}]]
+    },
+    "If Prod": {
+      "main": [[{"node": "Upload (Mock)", "type": "main", "index": 0}], [{"node": "Upload to S3", "type": "main", "index": 0}]]
+    },
+    "Upload (Mock)": {
+      "main": [[{"node": "Emit Classification Job", "type": "main", "index": 0}]]
+    },
+    "Upload to S3": {
+      "main": [[{"node": "Emit Classification Job", "type": "main", "index": 0}]]
+    },
+    "Emit Classification Job": {
+      "main": [[{"node": "Split Attachments", "type": "main", "index": 0}, {"node": "Respond", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-18T20:00:00.000Z",
+  "versionId": "1"
+}
+

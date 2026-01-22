@@ -1,0 +1,75 @@
+{
+  "name": "03 Portal Invite Sender",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "svd/portal/invite",
+        "methods": ["POST"]
+      },
+      "id": "1",
+      "name": "Inbound (Webhook)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "={{$env.SVD_API_BASE}}/portal/invites",
+        "jsonParameters": true,
+        "bodyParametersJson": "={\"orgId\": \"{{$json.body.orgId}}\",\"email\": \"{{$json.body.email}}\",\"name\": \"{{$json.body.name}}\"}"
+      },
+      "id": "2",
+      "name": "Create Invite Token",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [480, 260]
+    },
+    {
+      "parameters": {
+        "fromEmail": "noreply@securevaultdocs.com",
+        "toEmail": "={{$json.body.email}}",
+        "subject": "You've been invited to SecureVault Docs",
+        "text": "Hello {{$json.body.name}},\n\nAccess your portal: {{$json.tokenUrl}}\n\n— SecureVault Docs"
+      },
+      "id": "3",
+      "name": "Send Email (SES)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [760, 300],
+      "credentials": {
+        "smtp": {
+          "id": "svd_SES",
+          "name": "svd_SES"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Inbound (Webhook)": {
+      "main": [
+        [
+          {
+            "node": "Create Invite Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Invite Token": {
+      "main": [
+        [
+          {
+            "node": "Send Email (SES)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "version": 2
+}
+

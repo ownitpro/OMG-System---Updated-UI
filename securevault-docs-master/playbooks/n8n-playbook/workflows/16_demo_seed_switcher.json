@@ -1,0 +1,118 @@
+{
+  "name": "16_demo_seed_switcher",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "svd/demo/switch",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "svd-demo-switch"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.body.dataset}}",
+              "operation": "equal",
+              "value2": "business"
+            }
+          ]
+        }
+      },
+      "id": "if-business",
+      "name": "If Business",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/api/demo/switch",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"orgId\":\"{{$json.body.orgId}}\",\"dataset\":\"{{$json.body.dataset}}\"}",
+        "options": {}
+      },
+      "id": "switch-dataset",
+      "name": "Switch Dataset",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [650, 300],
+      "notes": "Dev: mock endpoint"
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/api/demo/reset-meters",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"orgId\":\"{{$json.body.orgId}}\"}",
+        "options": {}
+      },
+      "id": "reset-meters",
+      "name": "Reset Mock Meters",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [850, 300],
+      "notes": "Dev: reset usage meters"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate preview links\nconst orgId = $input.item.json.body.orgId;\nconst dataset = $input.item.json.body.dataset;\n\nreturn {\n  orgId,\n  dataset,\n  previewLinks: {\n    personal: `${$env.APP_API_BASE}/demo/personal?org=${orgId}`,\n    business: `${$env.APP_API_BASE}/demo/business?org=${orgId}`\n  }\n};"
+      },
+      "id": "generate-links",
+      "name": "Generate Preview Links",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\":true,\"switched\":\"{{$json.body.dataset}}\",\"previewLinks\":{{JSON.stringify($('Generate Preview Links').item.json.previewLinks)}}}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1250, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{"node": "If Business", "type": "main", "index": 0}]]
+    },
+    "If Business": {
+      "main": [[{"node": "Switch Dataset", "type": "main", "index": 0}]]
+    },
+    "Switch Dataset": {
+      "main": [[{"node": "Reset Mock Meters", "type": "main", "index": 0}]]
+    },
+    "Reset Mock Meters": {
+      "main": [[{"node": "Generate Preview Links", "type": "main", "index": 0}]]
+    },
+    "Generate Preview Links": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-18T20:00:00.000Z",
+  "versionId": "1"
+}
+

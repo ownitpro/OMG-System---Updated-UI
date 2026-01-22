@@ -1,0 +1,21 @@
+{
+  "name": "SVD Error Monitor",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.workflowTrigger",
+      "name": "On Workflow Error"
+    },
+    {
+      "parameters": {
+        "url": "={{$env.SVD_SLACK_WEBHOOK_URL}}",
+        "jsonParameters": true,
+        "sendBody": true,
+        "bodyParametersJson": "={text: `n8n Error: {{$json.workflow.name}} — {{$json.execution.id}}`}"
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "name": "Slack Alert"
+    }
+  ]
+}
+

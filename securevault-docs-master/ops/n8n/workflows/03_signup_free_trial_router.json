@@ -1,0 +1,132 @@
+{
+  "name": "03_signup_free_trial_router",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "svd/signup",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "svd-signup"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "={{$env.GOOGLE_SHEET_ID}}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Trials",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{$now}}",
+            "email": "={{$json.body.email}}",
+            "name": "={{$json.body.name}}",
+            "orgId": "={{$json.body.orgId}}",
+            "trialEndsAt": "={{$json.body.trialEndsAt || $now.toISO()}}"
+          }
+        },
+        "options": {}
+      },
+      "id": "create-trial",
+      "name": "Create Trial Row",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [450, 300],
+      "credentials": {
+        "googleSheetsOAuth2": {
+          "id": "svd_google_sheets",
+          "name": "svd_google_sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{$env.SES_SMTP_USER}}",
+        "toEmail": "={{$json.body.email}}",
+        "subject": "Welcome to SecureVault Docs",
+        "text": "Hi {{$json.body.name}},\n\nWelcome! Your free trial has started.\n\nGet started: {{$env.APP_API_BASE}}/post-login\n\nBest,\nSecureVault Docs Team",
+        "options": {}
+      },
+      "id": "welcome-email",
+      "name": "Send Welcome Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [650, 300],
+      "credentials": {
+        "smtp": {
+          "id": "svd_ses_smtp",
+          "name": "svd_ses_smtp"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://app.posthog.com/capture/",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"api_key\":\"{{$env.POSTHOG_API_KEY}}\",\"event\":\"signup_completed\",\"properties\":{\"email\":\"{{$json.body.email}}\",\"orgId\":\"{{$json.body.orgId}}\"}}",
+        "options": {}
+      },
+      "id": "posthog",
+      "name": "PostHog Event",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [850, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "svd_posthog",
+          "name": "svd_posthog"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\":true,\"trialCreated\":true}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1050, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{"node": "Create Trial Row", "type": "main", "index": 0}]]
+    },
+    "Create Trial Row": {
+      "main": [[{"node": "Send Welcome Email", "type": "main", "index": 0}]]
+    },
+    "Send Welcome Email": {
+      "main": [[{"node": "PostHog Event", "type": "main", "index": 0}]]
+    },
+    "PostHog Event": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-18T20:00:00.000Z",
+  "versionId": "1"
+}
+

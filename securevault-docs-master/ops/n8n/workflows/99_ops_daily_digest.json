@@ -1,0 +1,178 @@
+{
+  "name": "99_ops_daily_digest",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
+      },
+      "id": "cron",
+      "name": "Cron (08:00)",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "={{$env.GOOGLE_SHEET_ID}}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Trials",
+          "mode": "list"
+        },
+        "options": {}
+      },
+      "id": "read-signups",
+      "name": "Read Signups",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [450, 200],
+      "credentials": {
+        "googleSheetsOAuth2": {
+          "id": "svd_google_sheets",
+          "name": "svd_google_sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "={{$env.GOOGLE_SHEET_ID}}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Usage Meters",
+          "mode": "list"
+        },
+        "options": {}
+      },
+      "id": "read-caps",
+      "name": "Read Caps Breached",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [450, 400],
+      "credentials": {
+        "googleSheetsOAuth2": {
+          "id": "svd_google_sheets",
+          "name": "svd_google_sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "={{$env.GOOGLE_SHEET_ID}}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Support Tickets",
+          "mode": "list"
+        },
+        "options": {}
+      },
+      "id": "read-tickets",
+      "name": "Read Tickets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [450, 600],
+      "credentials": {
+        "googleSheetsOAuth2": {
+          "id": "svd_google_sheets",
+          "name": "svd_google_sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Summarize daily metrics\nconst yesterday = new Date();\nyesterday.setDate(yesterday.getDate() - 1);\nconst yesterdayStr = yesterday.toISOString().split('T')[0];\n\nconst signups = $('Read Signups').all().filter(row => \n  row.json.timestamp && row.json.timestamp.startsWith(yesterdayStr)\n).length;\n\nconst capsBreached = $('Read Caps Breached').all().filter(row => \n  row.json.threshold && ['critical', 'exceeded'].includes(row.json.threshold)\n).length;\n\nconst ticketsOpened = $('Read Tickets').all().filter(row => \n  row.json.timestamp && row.json.timestamp.startsWith(yesterdayStr) && row.json.status === 'open'\n).length;\n\nreturn {\n  date: yesterdayStr,\n  signups,\n  capsBreached,\n  ticketsOpened\n};"
+      },
+      "id": "summarize",
+      "name": "Summarize Metrics",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 400]
+    },
+    {
+      "parameters": {
+        "webhookUrl": "={{$env.SLACK_WEBHOOK_URL}}",
+        "text": "📊 Daily Digest - {{$('Summarize Metrics').item.json.date}}\n\n✅ Signups: {{$('Summarize Metrics').item.json.signups}}\n⚠️ Caps Breached: {{$('Summarize Metrics').item.json.capsBreached}}\n🎫 Tickets Opened: {{$('Summarize Metrics').item.json.ticketsOpened}}",
+        "options": {}
+      },
+      "id": "slack",
+      "name": "Slack Digest",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [850, 300],
+      "credentials": {
+        "slackApi": {
+          "id": "svd_slack_webhook",
+          "name": "svd_slack_webhook"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{$env.SES_SMTP_USER}}",
+        "toEmail": "={{$env.ADMIN_EMAIL}}",
+        "subject": "Daily Digest - {{$('Summarize Metrics').item.json.date}}",
+        "text": "Daily Digest for {{$('Summarize Metrics').item.json.date}}\n\nSignups: {{$('Summarize Metrics').item.json.signups}}\nCaps Breached: {{$('Summarize Metrics').item.json.capsBreached}}\nTickets Opened: {{$('Summarize Metrics').item.json.ticketsOpened}}",
+        "options": {}
+      },
+      "id": "email",
+      "name": "Email Digest",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [850, 500],
+      "credentials": {
+        "smtp": {
+          "id": "svd_ses_smtp",
+          "name": "svd_ses_smtp"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Cron (08:00)": {
+      "main": [[{"node": "Read Signups", "type": "main", "index": 0}, {"node": "Read Caps Breached", "type": "main", "index": 0}, {"node": "Read Tickets", "type": "main", "index": 0}]]
+    },
+    "Read Signups": {
+      "main": [[{"node": "Summarize Metrics", "type": "main", "index": 0}]]
+    },
+    "Read Caps Breached": {
+      "main": [[{"node": "Summarize Metrics", "type": "main", "index": 0}]]
+    },
+    "Read Tickets": {
+      "main": [[{"node": "Summarize Metrics", "type": "main", "index": 0}]]
+    },
+    "Summarize Metrics": {
+      "main": [[{"node": "Slack Digest", "type": "main", "index": 0}, {"node": "Email Digest", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-18T20:00:00.000Z",
+  "versionId": "1"
+}
+

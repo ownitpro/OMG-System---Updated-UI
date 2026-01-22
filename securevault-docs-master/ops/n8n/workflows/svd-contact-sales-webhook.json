@@ -1,0 +1,66 @@
+{
+  "name": "SVD Contact Sales Webhook",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhooks/n8n/contact-sales",
+        "responseMode": "responseNode",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "name": "Webhook"
+    },
+    {
+      "parameters": {
+        "functionCode": "const Ajv = global.get('ajv');\nconst schema = $json;\nreturn [{ valid: true }];"
+      },
+      "type": "n8n-nodes-base.function",
+      "name": "Validate Schema (mock)",
+      "notes": "Replace with real JSON Schema check if needed."
+    },
+    {
+      "parameters": {
+        "url": "={{$env.SVD_API_BASE}}/demo/crm/ticket",
+        "options": {},
+        "sendBody": true,
+        "jsonParameters": true,
+        "bodyParametersJson": "={\n  \"type\": \"contact-sales\",\n  \"payload\": {{$json}}\n}"
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "name": "Create Ticket (mock)"
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{$env.SVD_SES_FROM}}",
+        "toEmail": "={{$json.email}}",
+        "subject": "We received your request",
+        "text": "Hi {{$json.fullName}}, our team will contact you shortly. — SecureVault Docs"
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "name": "Send Confirmation Email"
+    },
+    {
+      "parameters": {
+        "url": "={{$env.SVD_SLACK_WEBHOOK_URL}}",
+        "options": {},
+        "sendBody": true,
+        "jsonParameters": true,
+        "bodyParametersJson": "={text: `New Contact Sales from ${$json.fullName} <${$json.email}>`}"
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "name": "Slack Notify",
+      "notes": "Optional in tests."
+    },
+    {
+      "parameters": {
+        "responseBody": "={\"ok\":true,\"ticketId\":$node[\"Create Ticket (mock)\"].json.id || \"demo-1\"}"
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "name": "Respond"
+    }
+  ]
+}
+

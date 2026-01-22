@@ -1,0 +1,145 @@
+{
+  "name": "05_request_docs_link_issue",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "svd/request-docs-created",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "svd-request-docs"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Compose request email with checklist\nconst body = $input.item.json.body;\nconst checklist = body.checklist || [];\n\nconst checklistText = checklist.map(item => `- ${item}`).join('\\n');\n\nconst emailBody = `Hi,\n\nPlease upload the following documents:\n\n${checklistText}\n\n${body.message || ''}\n\nLink: ${$env.APP_API_BASE}/s/${body.requestId}\nExpires: ${body.expiresAt}\n\nThank you!`;\n\nreturn { emailBody, checklist };"
+      },
+      "id": "compose-email",
+      "name": "Compose Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{$env.SES_SMTP_USER}}",
+        "toEmail": "={{$json.body.clientEmail}}",
+        "subject": "Document Request from {{$json.body.requesterEmail}}",
+        "text": "={{$('Compose Email').item.json.emailBody}}",
+        "options": {}
+      },
+      "id": "send-email",
+      "name": "Send Request Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [650, 300],
+      "credentials": {
+        "smtp": {
+          "id": "svd_ses_smtp",
+          "name": "svd_ses_smtp"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "={{$env.GOOGLE_SHEET_ID}}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Request Links",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{$now}}",
+            "orgId": "={{$json.body.orgId}}",
+            "requestId": "={{$json.body.requestId}}",
+            "requesterEmail": "={{$json.body.requesterEmail}}",
+            "clientEmail": "={{$json.body.clientEmail}}",
+            "expiresAt": "={{$json.body.expiresAt}}"
+          }
+        },
+        "options": {}
+      },
+      "id": "log-sheet",
+      "name": "Record Expiry",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [850, 300],
+      "credentials": {
+        "googleSheetsOAuth2": {
+          "id": "svd_google_sheets",
+          "name": "svd_google_sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "webhookUrl": "={{$env.SLACK_WEBHOOK_URL}}",
+        "text": "New request link created: {{$json.body.requestId}} (expires {{$json.body.expiresAt}})",
+        "options": {}
+      },
+      "id": "slack",
+      "name": "Slack (Optional)",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [1050, 300],
+      "credentials": {
+        "slackApi": {
+          "id": "svd_slack_webhook",
+          "name": "svd_slack_webhook"
+        }
+      },
+      "notes": "Optional: notify requester"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\":true,\"requestId\":\"{{$json.body.requestId}}\",\"sent\":true}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1250, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{"node": "Compose Email", "type": "main", "index": 0}]]
+    },
+    "Compose Email": {
+      "main": [[{"node": "Send Request Email", "type": "main", "index": 0}]]
+    },
+    "Send Request Email": {
+      "main": [[{"node": "Record Expiry", "type": "main", "index": 0}]]
+    },
+    "Record Expiry": {
+      "main": [[{"node": "Slack (Optional)", "type": "main", "index": 0}]]
+    },
+    "Slack (Optional)": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-18T20:00:00.000Z",
+  "versionId": "1"
+}
+

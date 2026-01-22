@@ -1,0 +1,159 @@
+{
+  "name": "02_lead_enrich_and_crm_sync",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "cron",
+      "name": "Cron (Hourly)",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "={{$env.GOOGLE_SHEET_ID}}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "list"
+        },
+        "options": {
+          "range": "A2:Z1000"
+        }
+      },
+      "id": "read-sheet",
+      "name": "Read Leads Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [450, 300],
+      "credentials": {
+        "googleSheetsOAuth2": {
+          "id": "svd_google_sheets",
+          "name": "svd_google_sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "split",
+      "name": "Split In Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://person.clearbit.com/v2/combined/find?email={{$json.email}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.CLEARBIT_API_KEY}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "enrich",
+      "name": "Enrich Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Score lead based on enrichment data\nconst company = $input.item.json.body?.company;\nconst person = $input.item.json.body?.person;\n\nlet score = 0;\nif (company?.employees >= 50) score += 20;\nif (company?.employees >= 200) score += 30;\nif (person?.seniority === 'exec' || person?.seniority === 'director') score += 30;\nif (company?.category?.industry === 'Technology') score += 20;\n\nreturn { score, enriched: true };"
+      },
+      "id": "score",
+      "name": "Score Lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{$env.GOOGLE_SHEET_ID}}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "list"
+        },
+        "columnToMatchOn": "email",
+        "valueToMatchOn": "={{$('Read Leads Sheet').item.json.email}}",
+        "fields": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "score": "={{$json.score}}",
+            "enriched": "={{$json.enriched}}",
+            "lastEnriched": "={{$now}}"
+          }
+        },
+        "options": {}
+      },
+      "id": "update-sheet",
+      "name": "Update Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [1250, 300],
+      "credentials": {
+        "googleSheetsOAuth2": {
+          "id": "svd_google_sheets",
+          "name": "svd_google_sheets"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Cron (Hourly)": {
+      "main": [[{"node": "Read Leads Sheet", "type": "main", "index": 0}]]
+    },
+    "Read Leads Sheet": {
+      "main": [[{"node": "Split In Batches", "type": "main", "index": 0}]]
+    },
+    "Split In Batches": {
+      "main": [[{"node": "Enrich Lead", "type": "main", "index": 0}]]
+    },
+    "Enrich Lead": {
+      "main": [[{"node": "Score Lead", "type": "main", "index": 0}]]
+    },
+    "Score Lead": {
+      "main": [[{"node": "Update Sheet", "type": "main", "index": 0}]]
+    },
+    "Update Sheet": {
+      "main": [[{"node": "Split In Batches", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-18T20:00:00.000Z",
+  "versionId": "1"
+}
+

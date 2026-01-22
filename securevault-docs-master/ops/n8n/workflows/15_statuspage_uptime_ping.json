@@ -1,0 +1,142 @@
+{
+  "name": "15_statuspage_uptime_ping",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "cron",
+      "name": "Cron (1 min)",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/health",
+        "options": {
+          "timeout": 5000
+        }
+      },
+      "id": "ping-api",
+      "name": "Ping API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}",
+        "options": {
+          "timeout": 5000
+        }
+      },
+      "id": "ping-app",
+      "name": "Ping App",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [450, 500]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Aggregate uptime results\nconst api = $('Ping API').item.json;\nconst app = $('Ping App').item.json;\n\nconst uptime = {\n  timestamp: new Date().toISOString(),\n  api: {\n    status: api.statusCode === 200 ? 'up' : 'down',\n    statusCode: api.statusCode,\n    responseTime: api.responseTime || 0\n  },\n  app: {\n    status: app.statusCode === 200 ? 'up' : 'down',\n    statusCode: app.statusCode,\n    responseTime: app.responseTime || 0\n  }\n};\n\nreturn uptime;"
+      },
+      "id": "aggregate",
+      "name": "Aggregate Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$env.SVD_ENV}}",
+              "operation": "equal",
+              "value2": "prod"
+            }
+          ]
+        }
+      },
+      "id": "if-prod",
+      "name": "If Prod",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [850, 400]
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "bucketName": "={{$env.S3_BUCKET_NAME}}",
+        "fileName": "=uptime/{{$now.toISO().split('T')[0]}}.json",
+        "binaryData": false,
+        "additionalFields": {
+          "contentType": "application/json"
+        }
+      },
+      "id": "write-s3",
+      "name": "Write to S3",
+      "type": "n8n-nodes-base.aws",
+      "typeVersion": 1,
+      "position": [1050, 300],
+      "credentials": {
+        "aws": {
+          "id": "svd_aws_textract",
+          "name": "svd_aws_textract"
+        }
+      },
+      "notes": "Prod: write uptime JSON to S3"
+    },
+    {
+      "parameters": {
+        "url": "={{$env.APP_API_BASE}}/api/status/uptime",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{JSON.stringify($('Aggregate Results').item.json)}}",
+        "options": {}
+      },
+      "id": "write-mock",
+      "name": "Write to Status Mock",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1050, 500],
+      "notes": "Dev: mock status endpoint"
+    }
+  ],
+  "connections": {
+    "Cron (1 min)": {
+      "main": [[{"node": "Ping API", "type": "main", "index": 0}, {"node": "Ping App", "type": "main", "index": 0}]]
+    },
+    "Ping API": {
+      "main": [[{"node": "Aggregate Results", "type": "main", "index": 0}]]
+    },
+    "Ping App": {
+      "main": [[{"node": "Aggregate Results", "type": "main", "index": 0}]]
+    },
+    "Aggregate Results": {
+      "main": [[{"node": "If Prod", "type": "main", "index": 0}]]
+    },
+    "If Prod": {
+      "main": [[{"node": "Write to S3", "type": "main", "index": 0}], [{"node": "Write to Status Mock", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-18T20:00:00.000Z",
+  "versionId": "1"
+}
+

@@ -1,0 +1,52 @@
+{
+  "name": "15 QBO Connect (stub)",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "svd/qbo/connect",
+        "methods": ["POST"]
+      },
+      "id": "1",
+      "name": "Inbound",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 260]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "requestMethod": "POST",
+        "url": "https://quickbooks.api.intuit.com/v3/company/{{ $json.body.realmId }}/query",
+        "jsonParameters": false,
+        "options": {}
+      },
+      "id": "2",
+      "name": "QBO Test Call",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [520, 260],
+      "credentials": {
+        "oAuth2Api": {
+          "id": "svd_QBO",
+          "name": "svd_QBO"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Inbound": {
+      "main": [
+        [
+          {
+            "node": "QBO Test Call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "version": 2
+}
+

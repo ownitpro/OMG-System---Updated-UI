@@ -1,0 +1,29 @@
+{
+  "name": "SVD Marketplace Orchestrator",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhooks/n8n/marketplace/install",
+        "responseMode": "responseNode"
+      },
+      "type": "n8n-nodes-base.webhook",
+      "name": "Webhook"
+    },
+    {
+      "parameters": {
+        "functionCode": "const { templateId, mode } = $json;\nif (mode==='dry-run') {\n  return [{ ok:true, actions:[`Would create folders for ${templateId}`,`Would apply labels`,`Would add checklists`]}];\n}\nreturn [{ ok:true, installed:true, templateId }];"
+      },
+      "type": "n8n-nodes-base.function",
+      "name": "Plan/Apply (mock)"
+    },
+    {
+      "parameters": {
+        "responseBody": "={{$json}}"
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "name": "Respond"
+    }
+  ]
+}
+

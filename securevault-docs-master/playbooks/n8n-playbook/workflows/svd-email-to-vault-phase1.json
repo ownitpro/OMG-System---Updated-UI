@@ -1,0 +1,39 @@
+{
+  "name": "SVD Email to Vault (Phase 1)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhooks/n8n/email-to-vault",
+        "responseMode": "responseNode"
+      },
+      "type": "n8n-nodes-base.webhook",
+      "name": "Webhook"
+    },
+    {
+      "parameters": {
+        "functionCode": "const files = ($json.attachments||[]).map(a=>({\n  key: `mock/${Date.now()}-${a.filename}`,\n  contentType: a.contentType||'application/octet-stream'\n}));\nreturn [{ files }];"
+      },
+      "type": "n8n-nodes-base.function",
+      "name": "Prepare Files (mock)"
+    },
+    {
+      "parameters": {
+        "url": "={{$env.SVD_API_BASE}}/demo/storage/upload",
+        "jsonParameters": true,
+        "sendBody": true,
+        "bodyParametersJson": "={ files: $json.files }"
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "name": "Upload to Mock Store"
+    },
+    {
+      "parameters": {
+        "responseBody": "={ ok: true, stored: $node[\"Upload to Mock Store\"].json.files||[] }"
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "name": "Respond"
+    }
+  ]
+}
+

@@ -1,0 +1,15 @@
+{
+  "ts": "2025-11-18T20:15:00Z",
+  "orgId": "org_abc123",
+  "requestId": "req_xyz789",
+  "requesterEmail": "requester@acme.com",
+  "clientEmail": "client@example.com",
+  "expiresAt": "2025-12-18T20:15:00Z",
+  "message": "Please upload your tax documents",
+  "checklist": [
+    "T1",
+    "T2",
+    "Receipts"
+  ]
+}
+

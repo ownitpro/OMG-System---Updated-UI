@@ -1,0 +1,146 @@
+{
+  "name": "04_portal_invite_dispatch",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "svd/portal-invite",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "svd-portal-invite"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate secure link and PIN\nconst portalId = $input.item.json.body.portalId;\nconst inviteeEmail = $input.item.json.body.inviteeEmail;\nconst expiresAt = $input.item.json.body.expiresAt;\n\n// Generate 6-digit PIN\nconst pin = Math.floor(100000 + Math.random() * 900000).toString();\n\n// Generate secure token (in prod, use crypto)\nconst token = Buffer.from(`${portalId}:${inviteeEmail}:${Date.now()}`).toString('base64');\n\nconst link = `${$env.APP_API_BASE}/portal/${portalId}?token=${token}&pin=${pin}`;\n\nreturn {\n  link,\n  pin,\n  token,\n  expiresAt\n};"
+      },
+      "id": "generate-link",
+      "name": "Generate Link & PIN",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{$env.SES_SMTP_USER}}",
+        "toEmail": "={{$json.body.inviteeEmail}}",
+        "subject": "Secure Document Portal Invitation",
+        "text": "Hi {{$json.body.inviteeName}},\n\n{{$json.body.inviterName}} has invited you to upload documents.\n\nAccess: {{$('Generate Link & PIN').item.json.link}}\nPIN: {{$('Generate Link & PIN').item.json.pin}}\n\nExpires: {{$json.body.expiresAt}}\n\n{{$json.body.message || ''}}\n\nBest,\nSecureVault Docs",
+        "options": {}
+      },
+      "id": "send-email",
+      "name": "Send Invite Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [650, 300],
+      "credentials": {
+        "smtp": {
+          "id": "svd_ses_smtp",
+          "name": "svd_ses_smtp"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "={{$env.GOOGLE_SHEET_ID}}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Portal Invites",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{$now}}",
+            "orgId": "={{$json.body.orgId}}",
+            "portalId": "={{$json.body.portalId}}",
+            "inviteeEmail": "={{$json.body.inviteeEmail}}",
+            "pin": "={{$('Generate Link & PIN').item.json.pin}}",
+            "expiresAt": "={{$json.body.expiresAt}}"
+          }
+        },
+        "options": {}
+      },
+      "id": "log-sheet",
+      "name": "Log to Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [850, 300],
+      "credentials": {
+        "googleSheetsOAuth2": {
+          "id": "svd_google_sheets",
+          "name": "svd_google_sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://app.posthog.com/capture/",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"api_key\":\"{{$env.POSTHOG_API_KEY}}\",\"event\":\"portal_invite_sent\",\"properties\":{\"orgId\":\"{{$json.body.orgId}}\",\"portalId\":\"{{$json.body.portalId}}\"}}",
+        "options": {}
+      },
+      "id": "posthog",
+      "name": "PostHog Event",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1050, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "svd_posthog",
+          "name": "svd_posthog"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\":true,\"portalId\":\"{{$json.body.portalId}}\",\"sent\":true}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1250, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{"node": "Generate Link & PIN", "type": "main", "index": 0}]]
+    },
+    "Generate Link & PIN": {
+      "main": [[{"node": "Send Invite Email", "type": "main", "index": 0}]]
+    },
+    "Send Invite Email": {
+      "main": [[{"node": "Log to Sheet", "type": "main", "index": 0}]]
+    },
+    "Log to Sheet": {
+      "main": [[{"node": "PostHog Event", "type": "main", "index": 0}]]
+    },
+    "PostHog Event": {
+      "main": [[{"node": "Respond", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-18T20:00:00.000Z",
+  "versionId": "1"
+}
+
